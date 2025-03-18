@@ -20,17 +20,20 @@ export const metadata: Metadata = {
 
 const Header = () => {
   return (
-    <header className="flex gap-3 items-end">
+    <header className="flex gap-8 items-end mb-8">
       <Link href={"/"}>
-        <h2 className="text-xl font-medium text-purple-600 ">
+        <h2 className="text-[2rem] font-medium text-purple-600 ">
           Connor's Portfolio
         </h2>
       </Link>
       <Link href={"/"}>
-        <h2 className="">Home</h2>
+        <h2 className="text-[2rem]">Experience</h2>
       </Link>
       <Link href={"/blog"}>
-        <h2 className="">Blog</h2>
+        <h2 className="text-[2rem]">Projects</h2>
+      </Link>
+      <Link href={"/blog"}>
+        <h2 className="text-[2rem]">Blog</h2>
       </Link>
     </header>
   )
