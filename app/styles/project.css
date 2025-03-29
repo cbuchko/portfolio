@@ -1,0 +1,47 @@
+/** Projects Styling **/
+
+.projects-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  margin: 0 40%;
+}
+
+.project-container {
+  box-shadow: 0px 12px 8px 0px rgba(0, 0, 0, 0.4);
+  max-height: 15rem;
+}
+
+.gif {
+  border-radius: 1rem;
+  max-width: 15.5rem;
+}
+
+.project-image {
+  border-radius: 1rem;
+  border-style: none;
+  position: absolute;
+  background: white;
+  max-width: 15.5rem;
+}
+
+.project-info {
+  border-radius: 1rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: rgb(255, 255, 255, 1);
+  max-width: 15.5rem;
+  max-height: 15.5rem;
+  position: absolute;
+  text-align: center;
+}
+
+.project-image:hover {
+  opacity: 0;
+}
+
+.project-link {
+  background-color: white;
+  border-radius: 22px;
+  height: auto;
+  max-width: 3rem;
+}

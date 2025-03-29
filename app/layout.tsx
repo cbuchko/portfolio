@@ -20,20 +20,18 @@ export const metadata: Metadata = {
 
 const Header = () => {
   return (
-    <header className="flex gap-8 items-end mb-8">
+    <header className="flex gap-8 items-end mb-8 text-[1.5rem]">
       <Link href={"/"}>
-        <h2 className="text-[2rem] font-medium text-purple-600 ">
-          Connor's Portfolio
-        </h2>
+        <h2 className="font-medium">Connor Buchko</h2>
       </Link>
       <Link href={"/"}>
-        <h2 className="text-[2rem]">Experience</h2>
+        <h2>Experience</h2>
       </Link>
       <Link href={"/blog"}>
-        <h2 className="text-[2rem]">Projects</h2>
+        <h2>Projects</h2>
       </Link>
       <Link href={"/blog"}>
-        <h2 className="text-[2rem]">Blog</h2>
+        <h2>Blog</h2>
       </Link>
     </header>
   )
@@ -51,7 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`my-8 w-[50vw] mx-auto ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`my-8 max-w-[900px] mx-auto ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
         {children}
