@@ -16,9 +16,9 @@ export const NovaProjects: NovaProjectProps[] = [
     title: "Collaborative Permissions",
     points: [
       "Email invitations for collaborating in Nova",
-      "Role based access control for limiting actions",
+      "Role based access for restricting actions",
       "Secured API routes to prevent permission breaching",
-      "Share specific folders or projects within a Workspace",
+      "Share specific folders or projects directly",
     ],
     imageUrl: "/projects/permissions.png",
   },

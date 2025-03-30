@@ -1,16 +1,17 @@
-import Link from "@/node_modules/next/link"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Source_Sans_3, Poppins } from "next/font/google"
 import "./globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sourceSansPro = Source_Sans_3({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"], // Choose the weights you need
+  display: "swap",
 })
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const poppins = Poppins({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 })
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`my-8 max-w-[900px] mx-auto ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`my-8 max-w-[900px] mx-auto ${sourceSansPro.className} ${poppins.className} antialiased`}
       >
         {children}
       </body>
