@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <>
       <div className="p-6 mb-8">
-        <h2 className="text-4xl font-bold text-center text-[#7851A9] mt-4">
+        <h2 className="text-4xl font-bold text-center text-[#9b5094] mt-4">
           Hello! I'm Connor, a Full Stack Developer
         </h2>
         <p className="text-xl text-center text-gray-700 mt-2">
@@ -109,6 +109,41 @@ export default function Home() {
           </Link>
         </div>
       </section>
+      <div className="p-6 mb-16">
+        <h2 className={"text-4xl font-bold text-center text-[#9b5094] mt-4"}>
+          Thanks for Visiting!
+        </h2>
+        <h4 className="text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
+          If you still wanna learn about me, check out my{" "}
+          <a
+            className="homelink"
+            href="/resume.pdf"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Resume
+          </a>
+          , my{" "}
+          <a
+            className="homelink"
+            href="https://www.linkedin.com/in/connor-buchko-17932116a/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            LinkedIn
+          </a>{" "}
+          or my{" "}
+          <a
+            className="homelink"
+            href="https://github.com/cbuchko"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
+          </a>
+          .
+        </h4>
+      </div>
     </>
   )
 }
