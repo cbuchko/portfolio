@@ -31,17 +31,10 @@ export default function Home() {
         </p>
         <div className="flex justify-around my-4">
           <Image
-            className={imageClassName}
-            src={"/workspace_view.webp"}
+            className={"rounded-lg"}
+            src={"/nova.png"}
             alt="Nova Workspace View"
-            width={350}
-            height={200}
-          />
-          <Image
-            className={imageClassName}
-            src={"/map_view.webp"}
-            alt="Nova Map View"
-            width={350}
+            width={900}
             height={200}
           />
         </div>
