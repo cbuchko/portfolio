@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Survivor 42 Premiere Discussion"
-featuredImage: ../assets/images/Survivor_42/premiere.jpg
+featuredImage: /assets/images/Survivor_42/premiere.jpg
 publishDate: 2022-03-16
 category: survivor
 featured: false

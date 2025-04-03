@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Community Season 4: Better than you Think"
-featuredImage: ../assets/images/season4.webp
+featuredImage: /assets/images/season4.webp
 publishDate: 2021-12-27
 category: tv
 featured: false
@@ -13,7 +13,7 @@ The underlying flaw with season four was the new writing team. They misunderstoo
 
 Let's compare a season two episode with a season four episode. The episode from season two: "Abed's Uncontrollable Christmas", was entirely in claymation. The episode from season four: "Intro to Felt Surrogacy", was done with puppets. Both of these episodes have an obvious gimmick but had much different receptions.
 
-Dan Harmon has said when he wrote scripts it was never about "let's do a claymation episode this week". The message and the character arcs always came first. "Abed's Uncontrollable Christmas" was fundamentally a Christmas special about Abed and his mother. The claymation style came secondary as a natural progression. 
+Dan Harmon has said when he wrote scripts it was never about "let's do a claymation episode this week". The message and the character arcs always came first. "Abed's Uncontrollable Christmas" was fundamentally a Christmas special about Abed and his mother. The claymation style came secondary as a natural progression.
 
 It's blatant that "Intro to Felt Surrogacy" started with the conversation "let's do a puppet episode this week". The rest of the plot is painfully contrived around justifying the puppets. And at the end of the episode, it's still confusing why the story matters at all. The characters don't go through any meaningful growth and they aren't faced with any difficult decisions.
 

@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Survivor 42 First Impressions and Predictions"
-featuredImage: ../assets/images/Survivor_42/Survivor_42_Logo.png
+featuredImage: /assets/images/Survivor_42/Survivor_42_Logo.png
 publishDate: 2022-03-02
 category: survivor
 featured: false
@@ -13,15 +13,15 @@ The theme of this cast is chaos. There are so many people that seem like ticking
 
 ## Zero Chancers
 
-<img class="blog-image" src="../assets/images/Survivor_42/nochance.jpg" alt="protagonists" />
+<img class="blog-image" src="/assets/images/Survivor_42/nochance.jpg" alt="protagonists" />
 
-Like I said, there's a crazy amount of players that seem immediately out of the running. Swati is one that jumps out to me. She is very mature for being 19, but being 19 is always going to be a curse. And I think she's gonna come off as *too* mature and cold. The older players aren't going to relate to her. 
+Like I said, there's a crazy amount of players that seem immediately out of the running. Swati is one that jumps out to me. She is very mature for being 19, but being 19 is always going to be a curse. And I think she's gonna come off as _too_ mature and cold. The older players aren't going to relate to her.
 
 Rocksroy and Mike don't seem chaotic at all. Rocksroy specifically is probably the most chill guy on the cast. But they both seem too straight arrow to win. I can see them being brought into a strong alliance but they won't have a resume.
 
 ## Long Shots
 
-<img class="blog-image" src="../assets/images/Survivor_42/longshot.jpg" alt="protagonists" />
+<img class="blog-image" src="/assets/images/Survivor_42/longshot.jpg" alt="protagonists" />
 
 This is where a lot of the chaotic players live. These are people that could win if they manage to restrain their neurotic tendencies. Daniel and Omar are great examples of this. They both are huge fans and can't contain their excitement to play Survivor. But they'll probably play too aggressively, too frantic and others will quickly lose trust in them. However, I would love for them to prove me wrong
 
@@ -29,15 +29,15 @@ Zach and Lydia seem the most capable out of the younger cast members. Zach might
 
 ## Dark Horses
 
-<img class="blog-image" src="../assets/images/Survivor_42/darkhorses.jpg" alt="protagonists" />
+<img class="blog-image" src="/assets/images/Survivor_42/darkhorses.jpg" alt="protagonists" />
 
 Marya is a huge question mark for me. Her pre-season interviews gave a vague portrait of her. She'll do great socially but I have no idea how she'll do strategically. I like her though, and I think she could slip through.
 
-Every season has obvious winner candidates that fall short just before the end. Last season we had Ricard, and this season we have Hai and Tori. Both of them are sociable, self-aware and are passionate about the game. But I think both of them will have terrible threat management.  Tori is more of a toss up than Hai. She's at risk of being immediately outcasted. I see no scenario where Hai goes home early though, that guy is going far.
+Every season has obvious winner candidates that fall short just before the end. Last season we had Ricard, and this season we have Hai and Tori. Both of them are sociable, self-aware and are passionate about the game. But I think both of them will have terrible threat management. Tori is more of a toss up than Hai. She's at risk of being immediately outcasted. I see no scenario where Hai goes home early though, that guy is going far.
 
 ## Winner Contenders
 
-<img class="blog-image" src="../assets/images/Survivor_42/winners.jpg" alt="protagonists" />
+<img class="blog-image" src="/assets/images/Survivor_42/winners.jpg" alt="protagonists" />
 
 My three winner contenders are all women. In fact my top seven has only one guy in it. Either Hai wins or a woman wins.
 
@@ -50,22 +50,29 @@ And finally I want to talk about Chanelle. Chanelle is the perfect package. She'
 Here is my final ranking:
 
 #### Winner Contenders:
+
 1. Chanelle Howell
 2. Jenny Kim
 3. Lindsay Dolashewich
+
 #### Dark Horses:
+
 4. Hai Giang
 5. Tori Meehan
 6. Drea Wheeler
 7. Marya Sherron
+
 #### Long Shots:
-8. Zach Wurtenberger 
+
+8. Zach Wurtenberger
 9. Lydia Meredith
 10. Omar Zaheer
 11. Daniel Strunk
 12. Romeo Escobar
 13. Jackson Fox
+
 #### Zero Chancers:
+
 14. Maryanne Oketch
 15. Rocksroy Bailey
 16. Mike Turner

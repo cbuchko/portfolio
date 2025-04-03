@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Survivor 44 starts off Strong"
-featuredImage: ../assets/images/Survivor_44/cast.jpg
+featuredImage: /assets/images/Survivor_44/cast.jpg
 publishDate: 2023-03-20
 category: survivor
 featured: false

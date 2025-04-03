@@ -1,13 +1,13 @@
 ---
 layout: blog-post
 title: "Winning New Era Survivor: Embrace the Meta"
-featuredImage: ../assets/images/snuff.jpg
+featuredImage: /assets/images/snuff.jpg
 publishDate: 2024-05-05
 category: survivor
 featured: false
 ---
 
-Welcome to my new series where I analyze Survivor strategy. The goal is to post more and in engage with the show in a more thoughtful way. This series is about my Survivor strategy hot takes, hopefully it will be cutting edge stuff. 
+Welcome to my new series where I analyze Survivor strategy. The goal is to post more and in engage with the show in a more thoughtful way. This series is about my Survivor strategy hot takes, hopefully it will be cutting edge stuff.
 
 We are six seasons deep into the new era. Each season has had three tribes of six, they merge in the same way, there’s a double boot, and there’s forced firemaking at the final four. The format is consistent, and of course, that breeds consistent strategy. We’ve all been watching this New Era meta-game evolve, and there's distinct patterns forming.
 
@@ -23,7 +23,7 @@ This is a lot of theorizing, so let’s talk about examples. Look no further tha
 
 What about the Tika Three from Survivor 44? Carson, Carolyn and Yam Yam locked in basically on day one. They saw their entire tribe get decimated, but at the merge they never wavered from each other. They played the middle of two feuding tribes and the three of them made the final 4, with Yam Yam winning. Survivor 42 had the Taku Four, all four of them made the final six with Maryanne winning. Survivor 41 had the Luvu Four, less official, but all four of them made the final six with Erika winning.
 
-Four out of six new era seasons had a winner from a rock solid Kumbaya alliance. And I would argue the two outliers, 43 and 46, only prove my theory further. These seasons had zero attempt at a Kumbaya. Both are messy, all over the place, and kind of clumsy. It's no surprise someone like Gabler own 43, and I wouldn't be surprised if 46 had a similarly bizarre winner.  If any of these starting tribes stayed loyal, everyone else would be easy pickings. These are just seasons where the dysfunction didn’t get exploited.
+Four out of six new era seasons had a winner from a rock solid Kumbaya alliance. And I would argue the two outliers, 43 and 46, only prove my theory further. These seasons had zero attempt at a Kumbaya. Both are messy, all over the place, and kind of clumsy. It's no surprise someone like Gabler own 43, and I wouldn't be surprised if 46 had a similarly bizarre winner. If any of these starting tribes stayed loyal, everyone else would be easy pickings. These are just seasons where the dysfunction didn’t get exploited.
 
 I acknowledge that I'm disregarding 99% of the nuance that goes into Survivor. Your starting tribe has to be willing to play ball, they have to be cool, and they have to actually be good at the game. You can't win with a Kumbaya if you're with terrible players. This also disregards the end game. What if you can't beat your tribemates at final tribal? There's still a ton of room for nuance and strategy, but that’s for another blog post.
 

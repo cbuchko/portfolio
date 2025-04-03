@@ -1,55 +1,38 @@
+import getPostMetadata from "@/app/utils/getPostMetadata"
+import matter from "gray-matter"
 import Image from "@/node_modules/next/image"
 import Link from "@/node_modules/next/link"
+import fs from "fs"
+import Markdown from "markdown-to-jsx"
+import "./blog.css"
 
-export default function Blog() {
+const getPostContent = (slug: string) => {
+  const folder = "posts/"
+  const file = folder + `${slug}.md`
+  const content = fs.readFileSync(file, "utf8")
+
+  const matterResult = matter(content)
+  return matterResult
+}
+
+export const generateStaticParams = async () => {
+  const posts = getPostMetadata("posts")
+  return posts.map((post) => ({ slug: post.slug }))
+}
+
+export default function Blog({ params }: { params: { slug: string } }) {
+  const post = getPostContent(params.slug)
   const primaryHeaderClass =
-    "text-4xl font-bold text-center text-[#9b5094] mt-4 tracking-wide"
-  const sectionClass = "bg-white p-8 rounded-lg shadow-lg shadow-blue-100 mb-16"
-  const headerClass = "text-3xl tracking-wide font-semibold"
-  const paragraphClass =
-    "mt-4 text-lg tracking-lg leading-relaxed text-gray-800"
+    "!text-4xl font-bold text-[#9b5094] mt-4 mb-8 tracking-wide"
   return (
     <>
-      <div className="py-14">
-        <h2 className={primaryHeaderClass}>Welcome to my Blog!</h2>
-        <h4 className="text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
-          This is where I obsess about Survivor and have semi-interesting
-          opinions about TV shows
-        </h4>
-      </div>
-
-      <div className="p-6 mb-16">
-        <h2 className={primaryHeaderClass}>Thanks for Visiting!</h2>
-        <h4 className="text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
-          If you still wanna learn about me, check out my{" "}
-          <a
-            className="homelink"
-            href="/resume.pdf"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Resume
-          </a>
-          , my{" "}
-          <a
-            className="homelink"
-            href="https://www.linkedin.com/in/connor-buchko-17932116a/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            LinkedIn
-          </a>{" "}
-          or my{" "}
-          <a
-            className="homelink"
-            href="https://github.com/cbuchko"
-            target="_blank"
-            rel="noreferrer"
-          >
-            GitHub
-          </a>
-        </h4>
-      </div>
+      <article className="py-14 blog mr-[20%]">
+        <Link className="hover:underline text-sm absolute top-12" href="/blog">
+          {"< Back"}
+        </Link>
+        <h2 className={primaryHeaderClass}>{post.data.title}</h2>
+        <Markdown>{post.content}</Markdown>
+      </article>
     </>
   )
 }

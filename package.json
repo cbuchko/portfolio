@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "classnames": "^2.5.1",
     "gray-matter": "^4.0.3",
     "markdown-to-jsx": "^7.7.4",
     "next": "15.2.2",

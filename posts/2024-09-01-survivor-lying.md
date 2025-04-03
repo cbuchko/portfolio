@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Winning New Era Survivor: Learn to Lie"
-featuredImage: ../assets/images/lie.png
+featuredImage: /assets/images/lie.png
 publishDate: 2024-09-01
 category: survivor
 featured: false
@@ -9,7 +9,7 @@ featured: false
 
 “Lie, Cheat and Steal” used to be one of Survivors taglines, nearly as synonymous with the show as “Outwit, Outplay, Outlast”. However, Survivor strategy has become a lot more “honest” recently. Players are willing to go to any length to win, except seemingly lying? Twisting the truth is one of the strongest weapons in a social game like Survivor. It baffles me that nobody aggressively leverages it anymore.
 
-First off, there’s different types of lies. I like to think there’s three types: internal, external, and gameplay. Or in other words, lying about yourself, lying about others, or lying about the state of the game. 
+First off, there’s different types of lies. I like to think there’s three types: internal, external, and gameplay. Or in other words, lying about yourself, lying about others, or lying about the state of the game.
 
 Gameplay lies are integral to Survivor. The most baseline lie is lying about who you're voting for. Smokescreening a blindside, preventing a shot in the dark, etc. Another classic is lying about having an idol or planting a fake idol. A lot of this is boilerplate, not creative, and uninspired. More on this later, but the lying doesn’t have to stop at just the basics.
 
@@ -21,10 +21,8 @@ External lies are extremely powerful, but maybe the most dangerous. This is comp
 
 An example of a great and creative gameplay lie is Tony lying about the rules of his special idol. He claimed his super idol protected him during the final four, which it didn’t, but it saved him. Or what about Ciera Eastin lying to Katie about having an idol, causing Katie to spill the beans that she didn’t have an idol herself. Absolute genius, we don’t see that anymore.
 
-My favourite move in Survivor history is Jonny Fairplays dead grandmother lie. Technically this is an internal lie, but holy hell, it is fucking so smart. Fairplay shattered the glass ceiling of what was possible on Survivor. This was an unprecedented stroke of genius, and nothing has ever come close. 
+My favourite move in Survivor history is Jonny Fairplays dead grandmother lie. Technically this is an internal lie, but holy hell, it is fucking so smart. Fairplay shattered the glass ceiling of what was possible on Survivor. This was an unprecedented stroke of genius, and nothing has ever come close.
 
 All of these examples are people trying to innovate with Survivor strategy. Players aren’t creative with their gameplay anymore. Swing for the fences, especially if your back is already against the wall. A good lie can break the entire game open.
 
-There’s a lot of risk in lying. Getting caught is a speedrun to elimination. Someone like Venus comes to mind, where she was labeled as shady and schemy early, and could never play the game. A good liar only lies when it’s necessary. A lie is a hail mary, it’s a tactful tool. If you’re perceived as a loyal straight-arrow, and lie at that golden moment, I promise it’ll work. 
-
-
+There’s a lot of risk in lying. Getting caught is a speedrun to elimination. Someone like Venus comes to mind, where she was labeled as shady and schemy early, and could never play the game. A good liar only lies when it’s necessary. A lie is a hail mary, it’s a tactful tool. If you’re perceived as a loyal straight-arrow, and lie at that golden moment, I promise it’ll work.

@@ -1,0 +1,39 @@
+.blog p {
+  font-size: 18px;
+  margin-top: 1rem;
+  line-height: 1.5;
+}
+
+.blog h2 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  font-weight: 700;
+}
+
+.blog h3 {
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-top: 1rem;
+}
+
+.blog h4 {
+  font-weight: 700;
+  margin-top: 1rem;
+}
+
+.blog img {
+  width: 70%;
+  margin: 2rem auto;
+  border-radius: 1rem;
+}
+
+.blog ol {
+  margin-top: 1rem;
+  margin-left: 1.25rem;
+  list-style-type: decimal;
+  font-family: "Source Sans 3";
+}
+
+.blog li {
+  margin-top: 0.1rem;
+}

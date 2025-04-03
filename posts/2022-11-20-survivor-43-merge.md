@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Survivor 43 Merge Check-in"
-featuredImage: ../assets/images/Survivor_43/merge.webp
+featuredImage: /assets/images/Survivor_43/merge.webp
 publishDate: 2022-11-20
 category: survivor
 featured: false

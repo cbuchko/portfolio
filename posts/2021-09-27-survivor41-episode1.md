@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Survivor 41 Premiere Discussion"
-featuredImage: ../assets/images/Survivor_41/yase-tribal.jpeg
+featuredImage: /assets/images/Survivor_41/yase-tribal.jpeg
 publishDate: 2021-09-27
 category: survivor
 featured: false
@@ -22,4 +22,3 @@ In contrast, I am much more sour on Ricard now. I'm not a fan of the way he spea
 It's hard to say much about the blue Luvu tribe. They didn't go to tribal at all, and so they didn't get much screen time. I'm not confident in Deshawn anymore, he wasn't given much meaningful content. If anyone is gonna win from the blue tribe it will be Sydney or Erika. We are gonna need another episode to see the real Luvu dynamics though.
 
 Overall, I'm still confident in Evvie as my winner pick, but Shan is gonna be a real contender. I'm excited to see how the season plays out. So far I am very impressed.
-

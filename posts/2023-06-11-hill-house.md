@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "The Haunting of Hill House is Why You Should Watch Horror"
-featuredImage: ../assets/images/hillhouse1.jpg
+featuredImage: /assets/images/hillhouse1.jpg
 publishDate: 2023-06-14
 category: tv
 featured: true
@@ -9,7 +9,7 @@ featured: true
 
 I love horror, but it's a genre with a lot of untapped potential. Modern day masterpieces seem far and few between. Mike Flanagan, the creator of The Haunting of Hill House, is currently leading the genre in a huge way. Hill House isn't the first horror TV series, but it's perhaps the first to take full advantage of the medium. The show is a masterpiece, and Mike Flanagan is a genius.
 
-Hill House is a classic ghost story. A family with five kids moves into a creepy mansion, ghosts haunt them, and shit hits the fan.  The compelling aspect is how the show bounces between the past and present. The haunting all occurs in the past, but in the present the adult kids are burdened by their grief and trauma. As the show progresses many mysteries unfold, one of which holds a strong spot in my top ten "WTF" TV moments.
+Hill House is a classic ghost story. A family with five kids moves into a creepy mansion, ghosts haunt them, and shit hits the fan. The compelling aspect is how the show bounces between the past and present. The haunting all occurs in the past, but in the present the adult kids are burdened by their grief and trauma. As the show progresses many mysteries unfold, one of which holds a strong spot in my top ten "WTF" TV moments.
 
 You come for the scares, but you stay for the characters. The five children are heartbreaking. The timelines illustrate the contrast between their childhood innocence and traumatized remorseful husks. Drug abuse, alcoholism and PTSD are rampant, and portrayed very bluntly. The scariest mystery isn't the ghosts or Hill House, but what the kids might do to themselves. This exploration of trauma and coping mechanisms is the shows greatest triumph.
 

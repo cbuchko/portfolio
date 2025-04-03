@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Survivor 47: The New Era's Strategic Awakening"
-featuredImage: ../assets/images/Survivor_47.png
+featuredImage: /assets/images/Survivor_47.png
 publishDate: 2025-01-04
 category: survivor
 featured: false

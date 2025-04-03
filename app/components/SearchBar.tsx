@@ -15,7 +15,7 @@ export const SearchBar = ({
       placeholder={placeholderText}
       value={searchValue}
       data-default=""
-      className={`blog-search roboto-mono normal ba br3 pa2`}
+      className={"border rounded-md px-2 py-1 w-[25%]"}
     />
   )
 }

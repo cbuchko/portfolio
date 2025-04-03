@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Survivor 47 First Impressions and Predictions"
-featuredImage: ../assets/images/Survivor_47.png
+featuredImage: /assets/images/Survivor_47.png
 publishDate: 2024-09-18
 category: survivor
 featured: false
@@ -17,7 +17,7 @@ Rome also speaks about the game as if it’s purely strategy based. He’s a rec
 
 ## Long Shots
 
-Almost everyone in this section, I don’t have a specific reason to place so low. I just don’t think they have the juice to win. Sierra, Kyle, and Kishan especially I think have the personalities to excel, but I can’t see them dominating Survivor. 
+Almost everyone in this section, I don’t have a specific reason to place so low. I just don’t think they have the juice to win. Sierra, Kyle, and Kishan especially I think have the personalities to excel, but I can’t see them dominating Survivor.
 
 Andy I really like, and honestly in a vacuum Andy could win Survivor. Hell, Andy could win Survivor 47. I just think Andy is gonna fall into the vein of Owen, Jake, or Ben. A really affable and likable guy, who will find himself with no agency in the game and probably just be strung along. Watching Andy play a strong Survivor game would be fun, but I don’t think he’ll find himself in that position.
 
@@ -42,7 +42,7 @@ Winner Picks:
 1. Teeny
 2. Sue
 3. Genvieve
-4. Aysha 
+4. Aysha
 
 Dark Horses:
 
@@ -59,7 +59,6 @@ Long Shots:
 12. Caroline
 13. Kyle
 14. Sierra
-
 
 No Chance:
 

@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Survivor 43 First Impressions and Predictions"
-featuredImage: ../assets/images/Survivor_43/logo.webp
+featuredImage: /assets/images/Survivor_43/logo.webp
 publishDate: 2022-09-20
 category: survivor
 featured: false
@@ -13,7 +13,7 @@ There are some hilariously unique characters on this cast. And some super fans t
 
 ## Zero Chancers
 
-<img class="blog-image" src="../assets/images/Survivor_43/noshot.png" alt="protagonists" />
+<img class="blog-image" src="/assets/images/Survivor_43/noshot.png" alt="protagonists" />
 
 I've said it before and I'll say it again, a 19 year old is never winning Survivor. Sorry Sami, you seem like a nice guy, but you've got no life experience. And it doesn't help that he's coming in with a cocky, "of course I'm gonna win attitude". I think he could be fun to watch, but nobody's handing a kid a million dollar cheque.
 
@@ -21,7 +21,7 @@ Geo's pre-game interviews are hard to watch. The guy is clearly coming into Surv
 
 ## Long Shots
 
-<img class="blog-image" src="../assets/images/Survivor_43/longshot.png" alt="protagonists" />
+<img class="blog-image" src="/assets/images/Survivor_43/longshot.png" alt="protagonists" />
 
 Dwight's an insanely smart guy. He's accomplished a ton for a 22 year old. But I'm not confident in his social skills. The way he talks and the answers he gives, I don't know if he will be able to make the bonds necessary. There's definitely opportunity for him to prove me wrong, but he comes off as a robot to me.
 
@@ -29,7 +29,7 @@ Noelle's interesting. She has a great story, a story we are probably going to he
 
 ## Dark Horses
 
-<img class="blog-image" src="../assets/images/Survivor_43/darkhorse.png" alt="protagonists" />
+<img class="blog-image" src="/assets/images/Survivor_43/darkhorse.png" alt="protagonists" />
 
 Predicting Cody so high is definitely a stab in the dark from me. He'll be a challenge beast without a doubt. But I'm also predicting a more loveable, carefree side from him. I think his tribe will like him a lot, and he will easily coast to the merge. My question with Cody is whether he can navigate the merge. If he can break from his archetype and not be labelled a threat, Cody might win.
 
@@ -37,7 +37,7 @@ Elie and Jeanine are similar to me. They are both very prototypical Survivor pla
 
 ## Winner Contenders
 
-<img class="blog-image" src="../assets/images/Survivor_43/contenders.png" alt="protagonists" />
+<img class="blog-image" src="/assets/images/Survivor_43/contenders.png" alt="protagonists" />
 
 In contrast to the last two seasons, I have a lot of people that I think could win.
 
@@ -54,6 +54,7 @@ And for my winner pick, it's Justine. I honestly don't have a ton of reason for 
 Here is my final ranking:
 
 #### Contenders
+
 1. Justine
 2. Owen
 3. James
@@ -61,12 +62,14 @@ Here is my final ranking:
 5. Jesse
 
 #### Dark Horses
+
 6. Lindsay
 7. Jeanine
 8. Elie
 9. Cody
 
 #### Long Shots
+
 10. Ryan
 11. Karla
 12. Noelle
@@ -74,6 +77,7 @@ Here is my final ranking:
 14. Dwight
 
 #### Zero Chancers
+
 15. Morriah
 16. Nneka
 17. Geo

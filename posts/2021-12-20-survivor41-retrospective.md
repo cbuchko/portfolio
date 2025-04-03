@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Against All Odds, Survivor 41 Didn't Suck"
-featuredImage: ../assets/images/Survivor_41/survivor-41-logo.jpg
+featuredImage: /assets/images/Survivor_41/survivor-41-logo.jpg
 publishDate: 2021-12-21
 category: survivor
 featured: false

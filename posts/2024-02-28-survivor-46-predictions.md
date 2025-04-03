@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Survivor 46 First Impressions and Predictions"
-featuredImage: ../assets/images/Survivor_46.png
+featuredImage: /assets/images/Survivor_46.png
 publishDate: 2024-02-26
 category: survivor
 featured: false
@@ -13,17 +13,15 @@ BTW I ran out of time on this one, procrastinated too much before the premiere. 
 
 ## Zero Chancers
 
-Bhanu jumps out to me as the most obvious trainwreck player ever. He's just so over the top, and not really in a personable way. He's gonna have a hard time fitting in, and that's all it takes to be the first boot. 
+Bhanu jumps out to me as the most obvious trainwreck player ever. He's just so over the top, and not really in a personable way. He's gonna have a hard time fitting in, and that's all it takes to be the first boot.
 
 I'm generally too harsh on young players, and I don't want to fall into that fallacy, but Jelinksy is not it. I'm very confident that Jelinsky is out of his depth playing this game, and I don't see how he could make any impact. At best he's a Sami type player.
 
- 
 ## Long Shots
 
 Survivor is a social game. Especially in the new era, if you aren't a social player, you 100% won't win. In this category I've thrown a lot of people who don't emphasize their social game. Venus, Tim, Soda and Jem all stand out to me as people that may excel at other aspects of Survivor, but they don't have that seductive personality to make their alliance members obsessed with them.
 
 I also have Ben and Kenzie in here. Because while I am extremely excited to watch both of them play, they both have too much main character energy to win Survivor. Kenzie especially is just not gonna fly under the radar, she goes mid-merge easily. Ben is amazing, and is my current favourite, but he won't win.
-
 
 ## Dark Horses
 
@@ -41,17 +39,19 @@ Hunter is my quintessential pick where I can acknowledge he has all the ingredie
 
 Tevin is a lot of fun and very personable. In the new era, I can see a player like Tevin doing really well. People will fall in love with him, be dying to work with him, and he's clever. Tevin will need to find a balance between Yam Yam and Dee, because if he goes full Yam Yam I think he gets sniped.
 
-I originally had Q in my No Chance category. Honestly his vibe is not what I normally predict as a winner. BUT, in his interviews Q is so incredibly funny, well-spoken and charismatic. He has 10/10 charisma but it's not obvious like a Kaleb or a Tevin. And he's figured out the new era meta-game. In one question he says he wants to solidify an alliance early and then hold on tight until the endgame. If he manages that, he'll win. 
+I originally had Q in my No Chance category. Honestly his vibe is not what I normally predict as a winner. BUT, in his interviews Q is so incredibly funny, well-spoken and charismatic. He has 10/10 charisma but it's not obvious like a Kaleb or a Tevin. And he's figured out the new era meta-game. In one question he says he wants to solidify an alliance early and then hold on tight until the endgame. If he manages that, he'll win.
 
 Here is my final ranking:
 
 #### Winner Picks
+
 1. Q
 2. Tevin
 3. Hunter
 4. Charlie
 
 #### Dark Horses
+
 5. Jess
 6. Randen
 7. Tiffany
@@ -59,6 +59,7 @@ Here is my final ranking:
 9. Maria
 
 #### Long Shots
+
 10. Tim
 11. Kenzie
 12. Venus
@@ -66,6 +67,7 @@ Here is my final ranking:
 14. Soda
 
 #### No Chance
+
 15. Liz
 16. Jem
 17. Jelinsky

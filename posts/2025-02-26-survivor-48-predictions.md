@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Survivor 48 First Impressions and Predictions"
-featuredImage: ../assets/images/Survivor_48.webp
+featuredImage: /assets/images/Survivor_48.webp
 publishDate: 2025-02-26
 category: survivor
 featured: false
@@ -10,7 +10,6 @@ featured: false
 We're so back baby. My opinion of new era Survivor has never been higher. There's no reason to think we don't have another banger in store. I'm hoping for a messy messy cast. Survivor 47 was all gameplay, let's change the pace a little bit. From what I've seen, I think we got that in store for us.
 
 ## Zero Chancers
-
 
 Kamila has all the makings of a messy queen. In her interviews she’s basically admitting she can’t win. It’s pretty hilarious, I just can’t see Kamila fitting in. Honestly, I’m assuming a lot about her here, but everything she has chosen to show us is very messy but very self-aware. I’m putting Eva in the same category, I don’t think her social game will be strong enough. New era Survivor just hinges on relationships too much.
 
@@ -65,5 +64,3 @@ Zero Chance:
 16. Kamila
 17. David
 18. Eva
-
-

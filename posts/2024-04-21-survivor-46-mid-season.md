@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Survivor 46 Mid Season Check-in"
-featuredImage: ../assets/images/Q.jpg
+featuredImage: /assets/images/Q.jpg
 publishDate: 2024-04-21
 category: survivor
 featured: false
@@ -9,7 +9,7 @@ featured: false
 
 This is my first Survivor 46 post since the season started and I have a lot to say. The season had me nervous in the pre-merge, watching Yanu implode was not fun. Especially since that meant we got Bhanu hogging insane amounts of screen time. But holy cow, this season is really hitting it's stride at the merge.
 
-I won't dwell on the pre-merge too much. The premiere was fantastic, mainly because of Jelinksy. The rest is kind of a nifty self-contained Bhanu arc. I loved Bhanu for awhile, but I grew tired. Maybe one less episode of him crying would have been perfect. Overall pretty straightforward gameplay, with some pretty comedic moments interspersed. 
+I won't dwell on the pre-merge too much. The premiere was fantastic, mainly because of Jelinksy. The rest is kind of a nifty self-contained Bhanu arc. I loved Bhanu for awhile, but I grew tired. Maybe one less episode of him crying would have been perfect. Overall pretty straightforward gameplay, with some pretty comedic moments interspersed.
 
 I will say, this season is so funny. Yanu is full of comedians, Venus is an iconic queen, and Ben rocks hard. Everyone has an attitude, nobody has a filter, and they all kind of hate eachother. It's rare to see castaways so spiteful in the new era. The Kumbaya vibe is hardly there, which means we get real drama. People are picking arguments that are terrible for their game, and they don't care, they just want to argue.
 

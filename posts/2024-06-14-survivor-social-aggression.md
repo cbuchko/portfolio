@@ -1,7 +1,7 @@
 ---
 layout: blog-post
 title: "Winning New Era Survivor: Social Aggression"
-featuredImage: ../assets/images/snuff.jpg
+featuredImage: /assets/images/snuff.jpg
 publishDate: 2024-06-14
 category: survivor
 featured: false
