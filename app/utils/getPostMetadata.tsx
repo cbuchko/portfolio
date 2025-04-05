@@ -6,8 +6,8 @@ function getExcerpt(str: string): string {
     return str
   }
 
-  let substring = str.substring(0, 300)
-  let lastSpaceIndex = substring.lastIndexOf(" ")
+  const substring = str.substring(0, 300)
+  const lastSpaceIndex = substring.lastIndexOf(" ")
   if (lastSpaceIndex !== -1) {
     return substring.substring(0, lastSpaceIndex)
   }

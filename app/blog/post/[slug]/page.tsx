@@ -1,6 +1,5 @@
 import getPostMetadata from "@/app/utils/getPostMetadata"
 import matter from "gray-matter"
-import Image from "@/node_modules/next/image"
 import Link from "@/node_modules/next/link"
 import fs from "fs"
 import Markdown from "markdown-to-jsx"

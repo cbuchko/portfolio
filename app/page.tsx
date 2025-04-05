@@ -16,21 +16,21 @@ export default function Home() {
     <>
       <div className="py-14">
         <h2 className={primaryHeaderClass}>
-          Hello! I'm Connor, a Full Stack Developer
+          {` Hello! I'm Connor, a Full Stack Developer`}
         </h2>
         <h4 className="text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
-          For over 3 years I've been delivering high quality products at a
-          global scale
+          {`For over 3 years I've been delivering high quality products at a
+          global scale`}
         </h4>
       </div>
 
       <section className={sectionClass}>
-        <h3 className={headerClass}>Hummingbird Drones</h3>
+        <h3 className={headerClass}>{`Hummingbird Drones`}</h3>
         <p className={paragraphClass}>
-          Since September 2022, my sole focus has been the Nova platform while
+          {`Since September 2022, my sole focus has been the Nova platform while
           working as a Full Stack Developer at Hummingbird Drones. I've had the
           incredible opportunity of transforming this platform from a proof of
-          concept to a widely adopted industry standard.
+          concept to a widely adopted industry standard.`}
         </p>
         <a
           className="flex justify-around my-6"
@@ -58,19 +58,19 @@ export default function Home() {
           <TechStackLogo url="/stacks/maplibre.png" alt="MapLibre" />
         </div>
         <p className={paragraphClass}>
-          Nova is a Next.js web application made for emergency response teams
+          {`Nova is a Next.js web application made for emergency response teams
           that use drones for data collection. Nova is used across the US and
           Canada, but notably, we helped the LA County Fire Department fight the
-          LA Palisades fires in January of 2025.
+          LA Palisades fires in January of 2025.`}
         </p>
         <p className={paragraphClass}>
-          Nova not only aims to provide easy mapping tools to anyone who needs
+          {`Nova not only aims to provide easy mapping tools to anyone who needs
           them, but it's also the only platform in existence to map hotspots
-          using machine learning.
+          using machine learning.`}
         </p>
         <p className={paragraphClass}>
-          I've worked on a ton of projects I'm super proud of for Nova, here are
-          a few highlights:
+          {`I've worked on a ton of projects I'm super proud of for Nova, here are
+          a few highlights:`}
         </p>
         <div className="flex flex-col md:flex-row items-center mt-6 gap-12 md:gap-0 justify-evenly mb-6">
           {NovaProjects.map((project, idx) => (
@@ -81,9 +81,9 @@ export default function Home() {
       <section className={sectionClass}>
         <h3 className={headerClass}>Personal Projects</h3>
         <p className={paragraphClass}>
-          Back in university I was super into game development and published a
+          {`Back in university I was super into game development and published a
           few small games online. I've honestly not pursued this in a while but
-          I'm still super proud of what I've made!
+          I'm still super proud of what I've made!`}
         </p>
         <div className="flex flex-col md:flex-row gap-8 md:gap-0 items-center mt-8 justify-evenly mb-4">
           {Projects.map((project, idx) => (
@@ -94,10 +94,10 @@ export default function Home() {
       <section className={sectionClass}>
         <h3 className={headerClass}>My Blog</h3>
         <p className={paragraphClass}>
-          I have a passion for television, creative writing, and the reality
+          {`I have a passion for television, creative writing, and the reality
           show Survivor. Since 2020, I've kept a blog as an outlet to dump my
           thoughts. Most of it's television reviews, a lot of it's Survivor
-          related, but I love having this time capsule to look back on.
+          related, but I love having this time capsule to look back on.`}
         </p>
         <div className="bloglink flex justify-end mt4">
           <Link
@@ -110,9 +110,9 @@ export default function Home() {
         </div>
       </section>
       <div className="p-6 mb-16">
-        <h2 className={primaryHeaderClass}>Thanks for Visiting!</h2>
+        <h2 className={primaryHeaderClass}>{`Thanks for Visiting!`}</h2>
         <h4 className="text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
-          If you still wanna learn about me, check out my{" "}
+          {`If you still wanna learn about me, check out my `}
           <a
             className="homelink"
             href="/resume.pdf"

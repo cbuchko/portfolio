@@ -94,7 +94,7 @@ export const BlogContent = ({ posts }: BlogContentProps) => {
         )
       })}
       {filteredPosts.length === 0 && (
-        <h4>Uh... there's nothing here... sorry!</h4>
+        <h4>{`Uh... there's nothing here... sorry!`}</h4>
       )}
     </>
   )
