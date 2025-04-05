@@ -19,8 +19,13 @@ export const generateStaticParams = async () => {
   return posts.map((post) => ({ slug: post.slug }))
 }
 
-export default function Blog({ params }: { params: { slug: string } }) {
-  const post = getPostContent(params.slug)
+export default async function Blog({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const post = getPostContent(slug)
   const primaryHeaderClass =
     "!text-4xl font-bold text-[#9b5094] mt-4 mb-8 tracking-wide"
   return (
