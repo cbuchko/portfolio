@@ -26,7 +26,7 @@ export default function Blog({ params }: { params: { slug: string } }) {
     "!text-4xl font-bold text-[#9b5094] mt-4 mb-8 tracking-wide"
   return (
     <>
-      <article className="py-14 blog mr-[20%]">
+      <article className="py-14 blog md:mr-[20%]">
         <Link className="hover:underline text-sm absolute top-12" href="/blog">
           {"< Back"}
         </Link>

@@ -72,7 +72,7 @@ export default function Home() {
           I've worked on a ton of projects I'm super proud of for Nova, here are
           a few highlights:
         </p>
-        <div className="flex mt-6 justify-evenly mb-6">
+        <div className="flex flex-col md:flex-row items-center mt-6 gap-12 md:gap-0 justify-evenly mb-6">
           {NovaProjects.map((project, idx) => (
             <NovaProject key={idx} {...project} />
           ))}
@@ -85,7 +85,7 @@ export default function Home() {
           few small games online. I've honestly not pursued this in a while but
           I'm still super proud of what I've made!
         </p>
-        <div className="flex mt-8 justify-evenly mb-4">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-0 items-center mt-8 justify-evenly mb-4">
           {Projects.map((project, idx) => (
             <Project key={idx} {...project} />
           ))}
