@@ -8,7 +8,8 @@ import { NovaProjects, Projects } from "./constants"
 export default function Home() {
   const primaryHeaderClass =
     "text-4xl font-bold text-center text-[#9b5094] mt-4 tracking-wide"
-  const sectionClass = "bg-white p-8 rounded-lg shadow-lg shadow-blue-100 mb-16"
+  const sectionClass =
+    "bg-white p-8 rounded-lg shadow-lg shadow-blue-100 mb-16 mx-1 md:mx-0"
   const headerClass = "text-3xl tracking-wide font-semibold"
   const paragraphClass =
     "mt-4 text-lg tracking-lg leading-relaxed text-gray-800"
@@ -39,14 +40,14 @@ export default function Home() {
           rel="noreferrer"
         >
           <Image
-            className={"rounded-lg"}
+            className={"rounded-lg scale-110 md:scale-100 "}
             src={"/nova.png"}
             alt="Nova Workspace View"
             width={900}
             height={200}
           />
         </a>
-        <div className="flex items-center gap-7 my-8 justify-center">
+        <div className="md:flex grid grid-cols-4 place-items-center items-center gap-7 my-8 justify-center ">
           <TechStackLogo url="/stacks/react.png" alt="react" />
           <TechStackLogo url="/stacks/typescript.png" alt="TypeScript" />
           <TechStackLogo url="/stacks/tailwind.png" alt="tailwind" />
@@ -54,7 +55,6 @@ export default function Home() {
           <TechStackLogo url="/stacks/redis.png" alt="redis" />
           <TechStackLogo url="/stacks/graphql.png" alt="GraphQL" />
           <TechStackLogo url="/stacks/dynamodb.png" alt="DynamoDB" />
-          <TechStackLogo url="/stacks/deckgl.png" alt="DeckGL" />
           <TechStackLogo url="/stacks/maplibre.png" alt="MapLibre" />
         </div>
         <p className={paragraphClass}>
