@@ -115,7 +115,7 @@ export default function Home() {
           {`If you still wanna learn about me, check out my `}
           <a
             className="homelink"
-            href="/resume.pdf"
+            href="/connor_resume.pdf"
             target="_blank"
             rel="noreferrer"
           >
