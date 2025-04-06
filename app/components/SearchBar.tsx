@@ -15,7 +15,7 @@ export const SearchBar = ({
       placeholder={placeholderText}
       value={searchValue}
       data-default=""
-      className={"border rounded-md px-2 py-1 w-[25%]"}
+      className={"border rounded-md px-2 py-1 w-[40%] md:w-[25%]"}
     />
   )
 }
