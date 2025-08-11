@@ -17,7 +17,7 @@ export default function Home() {
     <>
       <div className="py-14">
         <h2 className={primaryHeaderClass}>
-          {` Hello! I'm Connor, a Full Stack Developer`}
+          {`Hello! I'm Connor, a Full Stack Developer`}
         </h2>
         <h4 className="text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
           {`For over 3 years I've been delivering high quality products at a
@@ -28,10 +28,9 @@ export default function Home() {
       <section className={sectionClass}>
         <h3 className={headerClass}>{`Hummingbird Drones`}</h3>
         <p className={paragraphClass}>
-          {`Since September 2022, my sole focus has been the Nova platform while
-          working as a Full Stack Developer at Hummingbird Drones. I've had the
-          incredible opportunity of transforming this platform from a proof of
-          concept to a widely adopted industry standard.`}
+          {`From September 2022 to August 2025, my sole focus was the Nova platform while
+          working as a Full Stack Developer at Hummingbird Drones. During my time there I transformed the platform from a proof of
+          concept to a celebrated industry standard. Now I'm searching for my next adventure, wherever that may be.`}
         </p>
         <a
           className="flex justify-around my-6"
@@ -58,7 +57,7 @@ export default function Home() {
           <TechStackLogo url="/stacks/maplibre.png" alt="MapLibre" />
         </div>
         <p className={paragraphClass}>
-          {`Nova is a Next.js web application made for emergency response teams
+          {`Nova is a Next.js web application made for emergency responders
           that use drones for data collection. Nova is used across the US and
           Canada, but notably, we helped the LA County Fire Department fight the
           LA Palisades fires in January of 2025.`}
@@ -69,7 +68,7 @@ export default function Home() {
           using machine learning.`}
         </p>
         <p className={paragraphClass}>
-          {`I've worked on a ton of projects I'm super proud of for Nova, here are
+          {`I worked on a ton of projects I'm super proud of for Nova, here are
           a few highlights:`}
         </p>
         <div className="flex flex-col md:flex-row items-center mt-6 gap-12 md:gap-0 justify-evenly mb-6">
