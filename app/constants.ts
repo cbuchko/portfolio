@@ -3,24 +3,23 @@ import { ProjectProps } from './components/Project'
 
 export const NovaProjects: NovaProjectProps[] = [
   {
-    title: 'Stripe Payments',
+    title: 'PDF Generator',
     points: [
-      'Integrated the Stripe API',
-      'Added data usage tracking',
-      'Restricted app after usage was exceeded',
-      'Worked with Sales to accomodate their workflows',
+      'Converts map layers to a georeferenced PDF export with QGIS',
+      'Multiple size, layout and orientation options',
+      'Add or remove items to the legend',
+      'Shareable with QR Code',
     ],
-    imageUrl: '/projects/payment.png',
+    imageUrl: '/projects/pdf.png',
   },
   {
-    title: 'Collaborative Permissions',
+    title: 'Workspace File Manager',
     points: [
-      'Email invitations for collaborating in Nova',
-      'Role based access for restricting actions',
-      'Secured API routes to prevent permission breaching',
-      'Share specific folders or projects directly',
+      'Google drive inspired file manager',
+      'Create workspaces, folders and projects',
+      'Reorganize files in any way needed',
     ],
-    imageUrl: '/projects/permissions.png',
+    imageUrl: '/projects/workspace.png',
   },
   {
     title: 'Map Annotations',
@@ -33,34 +32,34 @@ export const NovaProjects: NovaProjectProps[] = [
     imageUrl: '/projects/layers.png',
   },
   {
-    title: 'PDF Generator',
+    title: 'Collaborative Permissions',
     points: [
-      'Side Panel interface for management of map layers',
-      'Place icons, draw lines or write text',
-      'Group map layers for easy organization',
-      'CRUD controls for all layer types',
+      'Email invitations for collaborating in Nova',
+      'Role based access for restricting actions',
+      'Secured API routes to prevent permission breaching',
+      'Share specific folders or projects directly',
     ],
-    imageUrl: '/projects/layers.png',
+    imageUrl: '/projects/permissions.png',
   },
   {
     title: 'User Onboarding',
     points: [
-      'Side Panel interface for management of map layers',
-      'Place icons, draw lines or write text',
-      'Group map layers for easy organization',
-      'CRUD controls for all layer types',
+      'Redesigned onboarding with a sleek look',
+      'Registers users through AWS Cognito',
+      'Sends temporary password to verify email',
+      'Increased user conversions by 400%',
     ],
-    imageUrl: '/projects/layers.png',
+    imageUrl: '/projects/onboarding.png',
   },
   {
-    title: 'Workspace File Manager',
+    title: 'Stripe Payments',
     points: [
-      'Side Panel interface for management of map layers',
-      'Place icons, draw lines or write text',
-      'Group map layers for easy organization',
-      'CRUD controls for all layer types',
+      'Integrated the Stripe API',
+      'Added data usage tracking',
+      'Restricted app after usage was exceeded',
+      'Worked with Sales to accomodate their workflows',
     ],
-    imageUrl: '/projects/layers.png',
+    imageUrl: '/projects/payment.png',
   },
 ]
 
