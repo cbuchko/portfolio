@@ -1,4 +1,4 @@
-import Image from "@/node_modules/next/image"
+import Image from '@/node_modules/next/image'
 
 export type NovaProjectProps = {
   title: string
@@ -9,9 +9,7 @@ export type NovaProjectProps = {
 export const NovaProject = ({ title, points, imageUrl }: NovaProjectProps) => {
   return (
     <div className="w-max">
-      <h4 className="text-lg font-semibold text-center mb-1 text-blue-400">
-        {title}
-      </h4>
+      <h4 className="text-lg font-semibold text-center mb-1 text-blue-400">{title}</h4>
       <div className="br2 project-container">
         <a className="w-max block" target="_blank" rel="noreferrer">
           <Image
@@ -30,13 +28,7 @@ export const NovaProject = ({ title, points, imageUrl }: NovaProjectProps) => {
               </ul>
             </div>
           </div>
-          <Image
-            className="gif br5"
-            src={imageUrl}
-            alt="project gif"
-            width={400}
-            height={400}
-          />
+          <Image className="gif br5" src={imageUrl} alt="project gif" width={400} height={400} />
         </a>
       </div>
     </div>

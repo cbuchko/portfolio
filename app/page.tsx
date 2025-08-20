@@ -1,36 +1,33 @@
-import Image from "@/node_modules/next/image"
-import Link from "@/node_modules/next/link"
-import { NovaProject } from "./components/NovaProject"
-import Project from "./components/Project"
-import { TechStackLogo } from "./components/TechStackLogo"
-import { NovaProjects, Projects } from "./constants"
+import Image from '@/node_modules/next/image'
+import Link from '@/node_modules/next/link'
+import { NovaProject } from './components/NovaProject'
+import Project from './components/Project'
+import { NovaProjects, Projects } from './constants'
 
 export default function Home() {
-  const primaryHeaderClass =
-    "text-4xl font-bold text-center text-[#9b5094] mt-4 tracking-wide"
-  const sectionClass =
-    "bg-white p-8 rounded-lg shadow-lg shadow-blue-100 mb-16 mx-1 md:mx-0"
-  const headerClass = "text-3xl tracking-wide font-semibold"
-  const paragraphClass =
-    "mt-4 text-lg tracking-lg leading-relaxed text-gray-800"
+  const primaryHeaderClass = 'text-4xl font-bold text-center text-[#9b5094] mt-4 tracking-wide'
+  const sectionClass = 'bg-white p-8 rounded-lg shadow-lg shadow-blue-100 mb-16 mx-1 md:mx-0'
+  const headerClass = 'text-3xl tracking-wide font-semibold'
+  const paragraphClass = 'mt-4 text-lg tracking-lg leading-relaxed text-gray-800'
   return (
     <>
       <div className="py-14">
-        <h2 className={primaryHeaderClass}>
-          {`Hello! I'm Connor, a Full Stack Developer`}
-        </h2>
+        <h2 className={primaryHeaderClass}>{`Hello! I'm Connor, a Full Stack Developer`}</h2>
         <h4 className="text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
-          {`For over 3 years I've been delivering high quality products at a
-          global scale`}
+          {`I'm currently searching for my next adventure, wherever that may be`}
         </h4>
       </div>
 
       <section className={sectionClass}>
         <h3 className={headerClass}>{`Hummingbird Drones`}</h3>
         <p className={paragraphClass}>
-          {`From September 2022 to August 2025, my sole focus was the Nova platform while
-          working as a Full Stack Developer at Hummingbird Drones. During my time there I transformed the platform from a proof of
-          concept to a celebrated industry standard. Now I'm searching for my next adventure, wherever that may be.`}
+          From September 2022 to August 2025, my sole focus was the{' '}
+          <a className="homelink" href="https://www.mapnova.com/" target="_blank" rel="noreferrer">
+            Nova
+          </a>{' '}
+          platform while working as a Full Stack Developer at Hummingbird Drones. During my time
+          there I transformed the platform from a proof of concept to a celebrated industry
+          standard.
         </p>
         <a
           className="flex justify-around my-6"
@@ -39,23 +36,13 @@ export default function Home() {
           rel="noreferrer"
         >
           <Image
-            className={"rounded-lg scale-110 md:scale-100 "}
-            src={"/nova.png"}
+            className={'rounded-lg scale-110 md:scale-100 '}
+            src={'/nova.png'}
             alt="Nova Workspace View"
             width={900}
             height={200}
           />
         </a>
-        <div className="md:flex grid grid-cols-4 place-items-center items-center gap-7 my-8 justify-center ">
-          <TechStackLogo url="/stacks/react.png" alt="react" />
-          <TechStackLogo url="/stacks/typescript.png" alt="TypeScript" />
-          <TechStackLogo url="/stacks/tailwind.png" alt="tailwind" />
-          <TechStackLogo url="/stacks/redux.svg" alt="redux" />
-          <TechStackLogo url="/stacks/redis.png" alt="redis" />
-          <TechStackLogo url="/stacks/graphql.png" alt="GraphQL" />
-          <TechStackLogo url="/stacks/dynamodb.png" alt="DynamoDB" />
-          <TechStackLogo url="/stacks/maplibre.png" alt="MapLibre" />
-        </div>
         <p className={paragraphClass}>
           {`Nova is a Next.js web application made for emergency responders
           that use drones for data collection. Nova is used across the US and
@@ -71,7 +58,7 @@ export default function Home() {
           {`I worked on a ton of projects I'm super proud of for Nova, here are
           a few highlights:`}
         </p>
-        <div className="flex flex-col md:flex-row items-center mt-6 gap-12 md:gap-0 justify-evenly mb-6">
+        <div className="flex flex-col md:grid md:grid-cols-3 mt-8 gap-12 md:gap-x-4 mb-8 place-items-center">
           {NovaProjects.map((project, idx) => (
             <NovaProject key={idx} {...project} />
           ))}
@@ -104,7 +91,7 @@ export default function Home() {
             title="blog"
             href="/blog"
           >
-            {"Check it out!"}
+            {'Check it out!'}
           </Link>
         </div>
       </section>
@@ -112,15 +99,10 @@ export default function Home() {
         <h2 className={primaryHeaderClass}>{`Thanks for Visiting!`}</h2>
         <h4 className="text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
           {`If you still wanna learn about me, check out my `}
-          <a
-            className="homelink"
-            href="/connor_resume.pdf"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a className="homelink" href="/connor_resume.pdf" target="_blank" rel="noreferrer">
             Resume
           </a>
-          , my{" "}
+          ,{' '}
           <a
             className="homelink"
             href="https://www.linkedin.com/in/connor-buchko-17932116a/"
@@ -128,8 +110,8 @@ export default function Home() {
             rel="noreferrer"
           >
             LinkedIn
-          </a>{" "}
-          or my{" "}
+          </a>{' '}
+          or{' '}
           <a
             className="homelink"
             href="https://github.com/cbuchko"

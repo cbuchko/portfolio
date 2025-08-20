@@ -31,7 +31,7 @@
   margin-top: 1rem;
   margin-left: 1.25rem;
   list-style-type: decimal;
-  font-family: "Source Sans 3";
+  font-family: 'Source Sans 3';
 }
 
 .blog ul {
@@ -39,7 +39,7 @@
   margin-left: 1.25rem;
   font-size: 18px;
   list-style-type: circle;
-  font-family: "Source Sans 3";
+  font-family: 'Source Sans 3';
 }
 
 .blog li {
