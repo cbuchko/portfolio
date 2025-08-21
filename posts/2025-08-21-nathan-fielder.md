@@ -6,7 +6,7 @@ category: tv
 featured: false
 ---
 
-Nathan Fielder is one of my favorite working artists. One of my first few blog posts touched on his flagship show Nathan For You. At the time I said it “might be the funniest show I've ever seen”. And I haven’t wavered on this opinion. Fielder's comedy feels made for _me_, in a way only Tim Robinson has matched. Recently, I had the absolute pleasure of watching two more shows from the mind of Mr. Fielder. Let’s talk about them.
+Nathan Fielder is one of my favorite working artists. Back in 2020, I made a blog post that touched on his flagship show Nathan For You. At the time I said it “might be the funniest show I've ever seen”. And I haven’t wavered on this opinion. Fielder's comedy feels made for _me_, in a way only Tim Robinson has matched. Recently, I had the absolute pleasure of watching two more shows from the mind of Mr. Fielder. Let’s talk about them.
 
 ## The Rehearsal
 
