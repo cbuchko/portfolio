@@ -11,7 +11,7 @@ export const NovaProject = ({ title, points, imageUrl }: NovaProjectProps) => {
     <div className="w-max">
       <h4 className="text-lg font-semibold text-center mb-1 text-blue-400">{title}</h4>
       <div className="br2 project-container">
-        <a className="w-max block" target="_blank" rel="noreferrer">
+        <div className="w-max block">
           <Image
             className="project-image br5 z-4"
             src={imageUrl}
@@ -29,7 +29,7 @@ export const NovaProject = ({ title, points, imageUrl }: NovaProjectProps) => {
             </div>
           </div>
           <Image className="gif br5" src={imageUrl} alt="project gif" width={400} height={400} />
-        </a>
+        </div>
       </div>
     </div>
   )

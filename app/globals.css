@@ -58,6 +58,7 @@ h6 {
   position: absolute;
   background: white;
   max-width: 15.5rem;
+  transition: opacity ease-out 300ms;
 }
 
 .project-info {
