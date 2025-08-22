@@ -1,12 +1,12 @@
 import Image from '@/node_modules/next/image'
-import Link from '@/node_modules/next/link'
 import { NovaProject } from './components/NovaProject'
 import Project from './components/Project'
 import { NovaProjects, Projects } from './constants'
+import { BlogButton } from './components/BlogButton'
 
 export default function Home() {
   const primaryHeaderClass = 'text-4xl font-bold text-center text-[#9b5094] mt-4 tracking-wide'
-  const sectionClass = 'bg-white p-8 rounded-lg shadow-lg shadow-blue-100 mb-16 mx-1 md:mx-0'
+  const sectionClass = 'bg-white p-8 rounded-lg shadow-lg shadow-blue-400/20 mb-16 mx-1 md:mx-0'
   const headerClass = 'text-3xl tracking-wide font-semibold'
   const paragraphClass = 'mt-4 text-lg tracking-lg leading-relaxed text-gray-800'
   return (
@@ -85,15 +85,7 @@ export default function Home() {
           thoughts. Most of it's television reviews, a lot of it's Survivor
           related, but I love having this time capsule to look back on.`}
         </p>
-        <div className="bloglink flex justify-end mt4">
-          <Link
-            className="text-white bg-[#9b5094] mt-4 p-4 py-2 text-center text-xl rounded-md hover:bg-[#863c7f]"
-            title="blog"
-            href="/blog"
-          >
-            {'Check it out!'}
-          </Link>
-        </div>
+        <BlogButton />
       </section>
       <div className="p-6 mb-16">
         <h2 className={primaryHeaderClass}>{`Thanks for Visiting!`}</h2>
