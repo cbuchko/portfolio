@@ -5,15 +5,17 @@ import { NovaProjects, Projects } from './constants'
 import { BlogButton } from './components/BlogButton'
 
 export default function Home() {
-  const primaryHeaderClass = 'text-4xl font-bold text-center text-[#9b5094] mt-4 tracking-wide'
-  const sectionClass = 'bg-white p-8 rounded-lg shadow-lg shadow-blue-400/20 mb-16 mx-1 md:mx-0'
-  const headerClass = 'text-3xl tracking-wide font-semibold'
+  const primaryHeaderClass =
+    'text-3xl md:text-4xl font-bold text-center text-[#9b5094] mt-4 tracking-wide'
+  const sectionClass =
+    'md:bg-white md:p-8 rounded-lg md:shadow-lg md:shadow-blue-400/20 md:mb-16 mb-32 mx-1 md:mx-0 mt-8 md:mt-0'
+  const headerClass = 'text-2xl md:text-3xl tracking-wide font-semibold'
   const paragraphClass = 'mt-4 text-lg tracking-lg leading-relaxed text-gray-800'
   return (
     <>
       <div className="py-14">
         <h2 className={primaryHeaderClass}>{`Hello! I'm Connor, a Full Stack Developer`}</h2>
-        <h4 className="text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
+        <h4 className="text-md md:text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
           {`I'm currently searching for my next adventure, wherever that may be`}
         </h4>
       </div>
@@ -36,7 +38,7 @@ export default function Home() {
           rel="noreferrer"
         >
           <Image
-            className={'rounded-lg scale-110 md:scale-100 '}
+            className={'rounded-lg'}
             src={'/nova.png'}
             alt="Nova Workspace View"
             width={900}
@@ -87,9 +89,9 @@ export default function Home() {
         </p>
         <BlogButton />
       </section>
-      <div className="p-6 mb-16">
+      <div className="md:py-6 mb-16">
         <h2 className={primaryHeaderClass}>{`Thanks for Visiting!`}</h2>
-        <h4 className="text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
+        <h4 className="text-md md:text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
           {`If you still wanna learn about me, check out my `}
           <a className="homelink" href="/connor_resume.pdf" target="_blank" rel="noreferrer">
             Resume

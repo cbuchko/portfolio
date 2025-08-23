@@ -53,7 +53,7 @@ export const BlogContent = ({ posts }: BlogContentProps) => {
           handleSearch={(value) => setSearchValue(value)}
           placeholderText="Search..."
         />
-        <div className="flex items-center text-xl gap-4">
+        <div className="flex items-center text-md md:text-xl gap-4">
           <div
             className={classNames('hover:text-blue-500 cursor-pointer', {
               'text-blue-500': filterValue === 'survivor',
