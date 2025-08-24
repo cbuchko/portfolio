@@ -1,0 +1,21 @@
+.click-button {
+  border: solid black 1px;
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.click-button:hover {
+  background-color: rgba(0, 0, 0, 0.138);
+}
+
+.shop-button {
+  border: solid black 1px;
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.shop-button:hover {
+  background-color: rgba(0, 0, 0, 0.138);
+}
