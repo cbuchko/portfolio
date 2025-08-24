@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react'
 import './styles.css'
 import { ShopButton } from './components/ShopButton'
 
@@ -8,6 +8,8 @@ export default function IdleGame() {
   const [score, setScore] = useState(0)
   const [clickPower, setClickPower] = useState(1)
   const [passivePower, setPassivePower] = useState(0)
+  const [cosmetics, setCosmetics] = useState<CSSProperties>({})
+
   const intervalReference = useRef<NodeJS.Timeout>(null)
 
   const incrementScore = useCallback((amount: number) => {
@@ -31,6 +33,10 @@ export default function IdleGame() {
     [score]
   )
 
+  const purchaseCosmeticStyle = useCallback((styleKey: string, styleValue: string) => {
+    setCosmetics((prevCosmetics) => ({ ...prevCosmetics, [styleKey]: styleValue }))
+  }, [])
+
   //sets up the passive score interval
   useEffect(() => {
     if (!!intervalReference.current) {
@@ -48,7 +54,7 @@ export default function IdleGame() {
   }, [passivePower, incrementScore])
 
   return (
-    <div>
+    <div style={cosmetics}>
       <button className="click-button" onClick={() => incrementScore(clickPower)}>
         Click Me!
       </button>
@@ -66,6 +72,11 @@ export default function IdleGame() {
             title="+1 Passive Score"
             cost={25}
             spendScore={() => spendScore(25, () => improvePassive(1))}
+          />
+          <ShopButton
+            title="Red Background"
+            cost={1}
+            spendScore={() => spendScore(1, () => purchaseCosmeticStyle('background', 'red'))}
           />
         </div>
       </div>

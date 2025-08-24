@@ -26,7 +26,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
   const primaryHeaderClass = '!text-4xl font-bold text-[#9b5094] mt-4 mb-2 tracking-wide'
   const paragraphClass = '!mt-0 text-lg tracking-lg leading-relaxed text-gray-800'
   return (
-    <>
+    <div className="portfolio-content">
       <article className="py-14 blog mx-2 md:mx-0 md:mr-[20%]">
         <Link className="hover:underline text-sm absolute top-12" href="/blog">
           {'< Back'}
@@ -35,6 +35,6 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
         <p className={paragraphClass}>{formatDate(post.data.publishDate)}</p>
         <Markdown>{post.content}</Markdown>
       </article>
-    </>
+    </div>
   )
 }

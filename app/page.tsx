@@ -12,7 +12,7 @@ export default function Home() {
   const headerClass = 'text-2xl md:text-3xl tracking-wide font-semibold'
   const paragraphClass = 'mt-4 text-lg tracking-lg leading-relaxed text-gray-800'
   return (
-    <>
+    <div className="portfolio-content">
       <div className="py-14">
         <h2 className={primaryHeaderClass}>{`Hello! I'm Connor, a Full Stack Developer`}</h2>
         <h4 className="text-md md:text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
@@ -116,6 +116,6 @@ export default function Home() {
           </a>
         </h4>
       </div>
-    </>
+    </div>
   )
 }

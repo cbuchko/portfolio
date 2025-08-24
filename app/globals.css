@@ -20,6 +20,18 @@ body {
   font-family: 'Source Sans 3', Arial, Helvetica, sans-serif;
 }
 
+.portfolio-content {
+  margin: 32px auto;
+  padding: 0;
+  max-width: 900px;
+}
+
+@media (max-width: 900px) {
+  .portfolio-content {
+    padding: 0 8px;
+  }
+}
+
 p {
   font-family: 'Source Sans 3', Arial, Helvetica, sans-serif;
 }

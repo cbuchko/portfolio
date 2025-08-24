@@ -8,7 +8,7 @@ export default function Blog() {
   const primaryHeaderClass =
     'text-3xl md:text-4xl font-bold text-center text-[#9b5094] mt-4 tracking-wide'
   return (
-    <>
+    <div className="portfolio-content">
       <div className="py-14">
         <Link className="hover:underline text-sm absolute top-12" href="/">
           {'< Take me home'}
@@ -19,6 +19,6 @@ export default function Blog() {
         </h4>
       </div>
       <BlogContent posts={postMetadata.reverse()} />
-    </>
+    </div>
   )
 }
