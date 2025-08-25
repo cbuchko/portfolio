@@ -1,25 +1,47 @@
 'use client'
 
-import { CSSProperties, useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import './styles.css'
 import { SidePanel } from './side-panel/SidePanel'
-import { WebsiteElements } from './types'
+import { ShopItemIds } from './side-panel/shop/constants'
+import classNames from 'classnames'
+import { LoremIpsum } from './constants'
 
 export default function IdleGame() {
-  const [cosmetics, setCosmetics] = useState<CSSProperties>({})
-  const [enabledElements, setEnabledElements] = useState<Set<WebsiteElements>>(new Set())
+  const [purchasedShopItems, setPurchasedShopItems] = useState<Set<ShopItemIds>>(new Set())
 
-  const onEnableElement = useCallback((element: WebsiteElements) => {
-    setEnabledElements((prevElements) => prevElements.add(element))
+  const onPurchase = useCallback((id: ShopItemIds) => {
+    setPurchasedShopItems((prevElements) => {
+      const newSet = new Set(prevElements)
+      newSet.add(id)
+      return newSet
+    })
   }, [])
 
-  console.log({ enabledElements })
   return (
     <div className="flex">
-      <div id="view" className="w-[80%]" style={cosmetics}>
-        {enabledElements.has(WebsiteElements.title) && <h5>Welcome to our Website!</h5>}
+      <div
+        id="view"
+        className={classNames('w-[80%] flex flex-col', {
+          'items-center': purchasedShopItems.has(ShopItemIds.centeredTitle),
+          '!bg-red-50': purchasedShopItems.has(ShopItemIds.lightenedColor),
+          'bg-red-500': purchasedShopItems.has(ShopItemIds.basicColor),
+        })}
+      >
+        {purchasedShopItems.has(ShopItemIds.basicTitle) && (
+          <h5
+            className={classNames({
+              'text-center mt-4': purchasedShopItems.has(ShopItemIds.centeredTitle),
+            })}
+          >
+            Welcome to our Website!
+          </h5>
+        )}
+        {purchasedShopItems.has(ShopItemIds.basicBody) && (
+          <div className="max-w-[500px] text-center mt-8">{LoremIpsum}</div>
+        )}
       </div>
-      <SidePanel setCosmetics={setCosmetics} onEnableElement={onEnableElement} />
+      <SidePanel purchasedIds={purchasedShopItems} onPurchase={onPurchase} />
     </div>
   )
 }

@@ -1,14 +1,13 @@
-import { ShopButtonIds } from './constants'
+import { ShopItemIds } from './constants'
 
 export type ShopButtonProps = {
-  id: ShopButtonIds
+  id: ShopItemIds
   title: string
-  cost: number
   spendScore: () => void
-  setHoveredId: (id?: ShopButtonIds) => void
+  setHoveredId: (id?: ShopItemIds) => void
 }
 
-export const ShopButton = ({ id, title, cost, spendScore, setHoveredId }: ShopButtonProps) => {
+export const ShopButton = ({ id, title, spendScore, setHoveredId }: ShopButtonProps) => {
   return (
     <div>
       <button
@@ -19,7 +18,6 @@ export const ShopButton = ({ id, title, cost, spendScore, setHoveredId }: ShopBu
       >
         {title}
       </button>
-      <h5>Costs {cost}</h5>
     </div>
   )
 }
