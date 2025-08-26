@@ -7,6 +7,8 @@ import { ShopItemIds } from './side-panel/shop/constants'
 import classNames from 'classnames'
 import { LoremIpsum } from './constants'
 import { Memes } from './view/Memes'
+import { Title } from './view/Title'
+import { Blog } from './view/Blog'
 
 export default function IdleGame() {
   const [purchasedShopItems, setPurchasedShopItems] = useState<Array<ShopItemIds>>([])
@@ -27,32 +29,25 @@ export default function IdleGame() {
           'bg-red-500': purchasedShopItems.includes(ShopItemIds.basicColor),
         })}
       >
-        {purchasedShopItems.includes(ShopItemIds.basicTitle) &&
-          !purchasedShopItems.includes(ShopItemIds.memeTitle) && (
-            <h1
-              className={classNames({
-                'text-center mt-4': purchasedShopItems.includes(ShopItemIds.centeredTitle),
-              })}
-            >
-              Welcome to our Website!
-            </h1>
-          )}
-        {purchasedShopItems.includes(ShopItemIds.memeTitle) && (
-          <h1
-            className={classNames({
-              'text-center mt-4 text-5xl': purchasedShopItems.includes(ShopItemIds.centeredTitle),
-            })}
-          >
-            THE MEME HALL OF FAME
-          </h1>
-        )}
+        <Title purchasedIds={purchasedShopItems} />
         {purchasedShopItems.includes(ShopItemIds.basicBody) &&
           !purchasedShopItems.includes(ShopItemIds.basicMeme) && (
             <div className="max-w-[500px] text-center mt-8">{LoremIpsum}</div>
           )}
-        {purchasedShopItems.includes(ShopItemIds.basicMeme) && (
-          <Memes purchasedIds={purchasedShopItems} />
-        )}
+        <div
+          className={classNames('', {
+            'grid grid-cols-2 w-full px-8 mt-16': purchasedShopItems.includes(
+              ShopItemIds.basicBlog
+            ),
+          })}
+        >
+          {purchasedShopItems.includes(ShopItemIds.basicMeme) && (
+            <Memes purchasedIds={purchasedShopItems} />
+          )}
+          {purchasedShopItems.includes(ShopItemIds.basicBlog) && (
+            <Blog purchasedIds={purchasedShopItems} />
+          )}
+        </div>
       </div>
       <SidePanel purchasedIds={purchasedShopItems} onPurchase={onPurchase} />
     </div>

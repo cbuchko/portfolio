@@ -11,6 +11,8 @@ export enum ShopItemIds {
   memeRepeatable,
   memeGallery,
   basicBlog,
+  firstPost,
+  postRepeatable,
 }
 
 export type ShopItem = {
@@ -138,6 +140,27 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     message: 'Every website needs a blog right? ...right?',
     clickIncrementPower: 1,
     prerequsiteId: ShopItemIds.memeGallery,
+  },
+  [ShopItemIds.firstPost]: {
+    id: ShopItemIds.firstPost,
+    title: 'Blog Post',
+    cost: 1,
+    message: "The blog needs a blog post. Just don't expect any real content inside",
+    clickIncrementPower: 1,
+    prerequsiteId: ShopItemIds.basicBlog,
+  },
+  [ShopItemIds.postRepeatable]: {
+    id: ShopItemIds.postRepeatable,
+    title: 'More Posts',
+    cost: 1,
+    message: 'Keep the posts coming, someone will read them eventually',
+    clickIncrementPower: 1,
+    prerequsiteId: ShopItemIds.firstPost,
+    isRepeatble: {
+      limit: 5,
+      costMultiplier: 2,
+      powerMultiplier: 1,
+    },
   },
 }
 

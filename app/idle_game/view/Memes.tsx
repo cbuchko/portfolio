@@ -17,7 +17,12 @@ export const Memes = ({ purchasedIds }: MemeProps) => {
       })}
     >
       {MemeUrls.slice(0, memeCount).map((url, idx) => (
-        <div key={idx} className="w-[300px] h-[300px] relative">
+        <div
+          key={idx}
+          className={classNames('w-[300px] h-[300px] relative', {
+            '!w-[200px] !h-[200px]': purchasedIds.includes(ShopItemIds.basicBlog),
+          })}
+        >
           <Image
             src={url}
             alt={'meme'}
