@@ -5,7 +5,7 @@ import { defaultMessage, ShopItemIds, ShopItem, ShopItems } from './shop/constan
 import { Clicker } from './Clicker'
 
 type SidePanelProps = {
-  purchasedIds: Set<ShopItemIds>
+  purchasedIds: Array<ShopItemIds>
   onPurchase: (id: ShopItemIds) => void
 }
 
@@ -22,10 +22,16 @@ export const SidePanel = ({ purchasedIds, onPurchase }: SidePanelProps) => {
 
   const [hoveredShopId, setHoveredShopId] = useState<ShopItemIds | undefined>()
 
+  const calculateCost = (item: ShopItem) => {
+    if (!item.isRepeatble) return item.cost
+    const purchasedAmount = purchasedIds.filter((id) => id === item.id).length + 1
+    return item.cost * purchasedAmount ** item.isRepeatble.costMultiplier
+  }
+
   //spend the score with the appropriate callback
   const handlePurchase = useCallback(
     (button: ShopItem) => {
-      spendScore(button.cost, () => {
+      spendScore(calculateCost(button), () => {
         if (button.clickIncrementPower) incrementClicks(button.clickIncrementPower)
         if (button.passiveIncrementPower) incrementPassive(button.passiveIncrementPower)
         onPurchase(button.id)
@@ -36,11 +42,19 @@ export const SidePanel = ({ purchasedIds, onPurchase }: SidePanelProps) => {
   )
 
   const filteredShopItems = useMemo(() => {
-    return Object.values(ShopItems).filter(
-      (item) =>
-        !purchasedIds.has(item.id) &&
-        (item.prerequsiteId !== undefined ? purchasedIds.has(item.prerequsiteId) : true)
-    )
+    return Object.values(ShopItems).filter((item) => {
+      const hasPreqrequisite =
+        item.prerequsiteId !== undefined ? purchasedIds.includes(item.prerequsiteId) : true
+      if (item.isRepeatble) {
+        if (
+          purchasedIds.filter((id) => id === item.id).length < item.isRepeatble.limit - 1 &&
+          hasPreqrequisite
+        )
+          return true
+        return false
+      }
+      return !purchasedIds.includes(item.id) && hasPreqrequisite
+    })
   }, [purchasedIds])
 
   const hoveredButton =
@@ -78,7 +92,7 @@ export const SidePanel = ({ purchasedIds, onPurchase }: SidePanelProps) => {
           )}
         </div>
         <div className="flex-grow" />
-        {hoveredButton.cost && <div>Costs: {hoveredButton.cost}</div>}
+        {hoveredButton.cost && <div>Costs: {calculateCost(hoveredButton)}</div>}
       </div>
     </div>
   )

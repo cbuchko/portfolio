@@ -6,39 +6,42 @@ import { SidePanel } from './side-panel/SidePanel'
 import { ShopItemIds } from './side-panel/shop/constants'
 import classNames from 'classnames'
 import { LoremIpsum } from './constants'
+import { Memes } from './view/Memes'
 
 export default function IdleGame() {
-  const [purchasedShopItems, setPurchasedShopItems] = useState<Set<ShopItemIds>>(new Set())
+  const [purchasedShopItems, setPurchasedShopItems] = useState<Array<ShopItemIds>>([])
 
   const onPurchase = useCallback((id: ShopItemIds) => {
     setPurchasedShopItems((prevElements) => {
-      const newSet = new Set(prevElements)
-      newSet.add(id)
-      return newSet
+      return [...prevElements, id]
     })
   }, [])
 
   return (
-    <div className="flex">
+    <div className="flex overflow-hidden">
       <div
         id="view"
         className={classNames('w-[80%] flex flex-col', {
-          'items-center': purchasedShopItems.has(ShopItemIds.centeredTitle),
-          '!bg-red-50': purchasedShopItems.has(ShopItemIds.lightenedColor),
-          'bg-red-500': purchasedShopItems.has(ShopItemIds.basicColor),
+          'items-center': purchasedShopItems.includes(ShopItemIds.centeredTitle),
+          '!bg-red-50': purchasedShopItems.includes(ShopItemIds.lightenedColor),
+          'bg-red-500': purchasedShopItems.includes(ShopItemIds.basicColor),
         })}
       >
-        {purchasedShopItems.has(ShopItemIds.basicTitle) && (
+        {purchasedShopItems.includes(ShopItemIds.basicTitle) && (
           <h5
             className={classNames({
-              'text-center mt-4': purchasedShopItems.has(ShopItemIds.centeredTitle),
+              'text-center mt-4': purchasedShopItems.includes(ShopItemIds.centeredTitle),
             })}
           >
             Welcome to our Website!
           </h5>
         )}
-        {purchasedShopItems.has(ShopItemIds.basicBody) && (
-          <div className="max-w-[500px] text-center mt-8">{LoremIpsum}</div>
+        {purchasedShopItems.includes(ShopItemIds.basicBody) &&
+          !purchasedShopItems.includes(ShopItemIds.basicMeme) && (
+            <div className="max-w-[500px] text-center mt-8">{LoremIpsum}</div>
+          )}
+        {purchasedShopItems.includes(ShopItemIds.basicMeme) && (
+          <Memes purchasedIds={purchasedShopItems} />
         )}
       </div>
       <SidePanel purchasedIds={purchasedShopItems} onPurchase={onPurchase} />

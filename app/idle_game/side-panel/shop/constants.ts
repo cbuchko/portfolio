@@ -5,6 +5,9 @@ export enum ShopItemIds {
   basicColor,
   lightenedColor,
   basicButton,
+  basicMeme,
+  memeRepeatable,
+  memeGallery,
 }
 
 export type ShopItem = {
@@ -19,9 +22,15 @@ export type ShopItem = {
   clickIncrementPower?: number
   passiveIncrementPower?: number
   prerequsiteId?: ShopItemIds
+  isRepeatble?: {
+    limit: number
+    costMultiplier: number
+    powerMultiplier: number
+  }
 }
 
 export const ShopItems: Record<ShopItemIds, ShopItem> = {
+  //TITLE
   [ShopItemIds.basicTitle]: {
     id: ShopItemIds.basicTitle,
     title: 'Title',
@@ -31,12 +40,13 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   },
   [ShopItemIds.centeredTitle]: {
     id: ShopItemIds.centeredTitle,
-    title: 'Center Title',
+    title: 'Center Align',
     cost: 1,
     message: 'Oh you wanted it centered? You should have said that.',
     passiveIncrementPower: 1,
     prerequsiteId: ShopItemIds.basicTitle,
   },
+  //BODY TEXT
   [ShopItemIds.basicBody]: {
     id: ShopItemIds.basicBody,
     title: 'Body Text',
@@ -45,6 +55,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     clickIncrementPower: 1,
     prerequsiteId: ShopItemIds.basicTitle,
   },
+  //COLORS
   [ShopItemIds.basicColor]: {
     id: ShopItemIds.basicColor,
     title: 'Make It Pop',
@@ -61,6 +72,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     passiveIncrementPower: 2,
     prerequsiteId: ShopItemIds.basicColor,
   },
+  //CLICKER
   [ShopItemIds.basicButton]: {
     id: ShopItemIds.basicButton,
     title: 'Clicker Upgrade',
@@ -69,13 +81,36 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     clickIncrementPower: 1,
     prerequsiteId: ShopItemIds.basicTitle,
   },
-  // { id: ShopButtonIds.passive, title: 'Passive Score', cost: 25, passiveIncrementPower: 1 },
-  // {
-  //   id: ShopButtonIds.background,
-  //   title: 'Red Background',
-  //   cost: 1,
-  //   cosmeticStyle: { key: 'background', value: 'red' },
-  // },
+  //MEMES
+  [ShopItemIds.basicMeme]: {
+    id: ShopItemIds.basicMeme,
+    title: 'Memes',
+    cost: 1,
+    message: 'This body text is great, but they say a picture is worth a thousand words...',
+    passiveIncrementPower: 1,
+    prerequsiteId: ShopItemIds.basicBody,
+  },
+  [ShopItemIds.memeRepeatable]: {
+    id: ShopItemIds.memeRepeatable,
+    title: 'More memes',
+    cost: 1,
+    message: 'Give the people what they want',
+    passiveIncrementPower: 1,
+    prerequsiteId: ShopItemIds.basicMeme,
+    isRepeatble: {
+      limit: 6,
+      costMultiplier: 2,
+      powerMultiplier: 1,
+    },
+  },
+  [ShopItemIds.memeGallery]: {
+    id: ShopItemIds.memeGallery,
+    title: 'Meme Gallery',
+    cost: 1,
+    message: 'Give these memes the spotlight they deserve',
+    passiveIncrementPower: 1,
+    prerequsiteId: ShopItemIds.memeRepeatable,
+  },
 }
 
 export const defaultMessage = "Making a website is hard... let's do it together!"
