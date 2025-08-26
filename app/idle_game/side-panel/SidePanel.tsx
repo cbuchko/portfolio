@@ -25,8 +25,9 @@ export const SidePanel = ({ purchasedIds, onPurchase }: SidePanelProps) => {
 
   const calculateCost = (item: ShopItem) => {
     if (!item.isRepeatble) return item.cost
-    const purchasedAmount = purchasedIds.filter((id) => id === item.id).length + 1
-    return item.cost * purchasedAmount ** item.isRepeatble.costMultiplier
+    const purchasedAmount = purchasedIds.filter((id) => id === item.id).length
+    if (!purchasedAmount) return item.cost
+    return item.cost * purchasedAmount * item.isRepeatble.costMultiplier
   }
 
   //spend the score with the appropriate callback
@@ -43,19 +44,21 @@ export const SidePanel = ({ purchasedIds, onPurchase }: SidePanelProps) => {
   )
 
   const filteredShopItems = useMemo(() => {
-    return Object.values(ShopItems).filter((item) => {
-      const hasPreqrequisite =
-        item.prerequsiteId !== undefined ? purchasedIds.includes(item.prerequsiteId) : true
-      if (item.isRepeatble) {
-        if (
-          purchasedIds.filter((id) => id === item.id).length < item.isRepeatble.limit - 1 &&
-          hasPreqrequisite
-        )
-          return true
-        return false
-      }
-      return !purchasedIds.includes(item.id) && hasPreqrequisite
-    })
+    return Object.values(ShopItems)
+      .filter((item) => {
+        const hasPreqrequisite =
+          item.prerequsiteId !== undefined ? purchasedIds.includes(item.prerequsiteId) : true
+        if (item.isRepeatble) {
+          if (
+            purchasedIds.filter((id) => id === item.id).length < item.isRepeatble.limit - 1 &&
+            hasPreqrequisite
+          )
+            return true
+          return false
+        }
+        return !purchasedIds.includes(item.id) && hasPreqrequisite
+      })
+      .sort((a, b) => calculateCost(a) - calculateCost(b))
   }, [purchasedIds])
 
   const hoveredButton =
