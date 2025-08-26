@@ -27,14 +27,24 @@ export default function IdleGame() {
           'bg-red-500': purchasedShopItems.includes(ShopItemIds.basicColor),
         })}
       >
-        {purchasedShopItems.includes(ShopItemIds.basicTitle) && (
-          <h5
+        {purchasedShopItems.includes(ShopItemIds.basicTitle) &&
+          !purchasedShopItems.includes(ShopItemIds.memeTitle) && (
+            <h1
+              className={classNames({
+                'text-center mt-4': purchasedShopItems.includes(ShopItemIds.centeredTitle),
+              })}
+            >
+              Welcome to our Website!
+            </h1>
+          )}
+        {purchasedShopItems.includes(ShopItemIds.memeTitle) && (
+          <h1
             className={classNames({
-              'text-center mt-4': purchasedShopItems.includes(ShopItemIds.centeredTitle),
+              'text-center mt-4 text-5xl': purchasedShopItems.includes(ShopItemIds.centeredTitle),
             })}
           >
-            Welcome to our Website!
-          </h5>
+            THE MEME HALL OF FAME
+          </h1>
         )}
         {purchasedShopItems.includes(ShopItemIds.basicBody) &&
           !purchasedShopItems.includes(ShopItemIds.basicMeme) && (

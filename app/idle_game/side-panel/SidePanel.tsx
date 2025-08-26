@@ -3,6 +3,7 @@ import { ShopButton } from './shop/ShopButton'
 import { useScore } from './useScore'
 import { defaultMessage, ShopItemIds, ShopItem, ShopItems } from './shop/constants'
 import { Clicker } from './Clicker'
+import classNames from 'classnames'
 
 type SidePanelProps = {
   purchasedIds: Array<ShopItemIds>
@@ -63,26 +64,30 @@ export const SidePanel = ({ purchasedIds, onPurchase }: SidePanelProps) => {
       : ({ message: defaultMessage } as ShopItem)
   return (
     <div className="flex flex-col h-[100vh] w-[20%] border-l py-4 px-8">
-      <h5 className="mt-2">Current Score: {score}</h5>
-      <h5 className="mt-2">Current Passive Score: {passivePower}</h5>
-      <div className="mt-8">
-        <h5>Shop</h5>
-        <div className="flex gap-4">
-          {filteredShopItems.map((button) => (
+      <div>
+        <h5 className="text-xl mb-2">Shop</h5>
+        <div className="flex gap-4 flex-wrap">
+          {filteredShopItems.slice(0, 3).map((button) => (
             <ShopButton
               key={button.id}
               id={button.id}
               title={button.title}
               setHoveredId={setHoveredShopId}
               spendScore={() => handlePurchase(button)}
+              isDisabled={calculateCost(button) > score}
             />
           ))}
         </div>
       </div>
       <div className="flex-grow" />
+      <h2 className="mt-2 text-3xl">{score} Score</h2>
+      <h5 className={classNames('mb-2', { 'opacity-0': passivePower === 0 })}>
+        {passivePower} score per second
+      </h5>
       <Clicker onClick={() => incrementScore(clickPower)} purchasedIds={purchasedIds} />
       <div className="flex flex-col p-2 border rounded-md h-[200px] mt-2">
-        <div>{hoveredButton.message}</div>
+        <div className="font-medium">{hoveredButton.title}</div>
+        <div className="mt-2">{hoveredButton.message}</div>
         <div className="mt-2">
           {hoveredButton.clickIncrementPower && (
             <div>{`+${hoveredButton.clickIncrementPower} Click Power`}</div>
@@ -92,7 +97,11 @@ export const SidePanel = ({ purchasedIds, onPurchase }: SidePanelProps) => {
           )}
         </div>
         <div className="flex-grow" />
-        {hoveredButton.cost && <div>Costs: {calculateCost(hoveredButton)}</div>}
+        {hoveredButton.cost && (
+          <div className={classNames({ 'text-red-400': calculateCost(hoveredButton) > score })}>
+            Costs: {calculateCost(hoveredButton)} Score
+          </div>
+        )}
       </div>
     </div>
   )

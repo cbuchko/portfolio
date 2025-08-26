@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { ShopItemIds } from './shop/constants'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 type ClickerProps = {
   purchasedIds: Array<ShopItemIds>
@@ -20,6 +20,15 @@ export const Clicker = ({ purchasedIds, onClick }: ClickerProps) => {
     })
   }, [purchasedIds])
 
+  const handleClick = useCallback(() => {
+    if (purchasedIds.includes(ShopItemIds.buttonSFX)) {
+      const audio = new Audio('/idle_game/click.mp3')
+      audio.volume = 0.5 // adjust volume if needed
+      audio.play()
+    }
+    onClick()
+  }, [purchasedIds])
+
   return (
     <button
       ref={clickerRef}
@@ -28,7 +37,7 @@ export const Clicker = ({ purchasedIds, onClick }: ClickerProps) => {
           ShopItemIds.basicButton
         ),
       })}
-      onClick={onClick}
+      onClick={handleClick}
     >
       Click Me!
     </button>

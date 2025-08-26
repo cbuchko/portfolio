@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import { ShopItemIds } from './constants'
 
 export type ShopButtonProps = {
@@ -5,19 +6,26 @@ export type ShopButtonProps = {
   title: string
   spendScore: () => void
   setHoveredId: (id?: ShopItemIds) => void
+  isDisabled?: boolean
 }
 
-export const ShopButton = ({ id, title, spendScore, setHoveredId }: ShopButtonProps) => {
+export const ShopButton = ({
+  id,
+  title,
+  isDisabled,
+  spendScore,
+  setHoveredId,
+}: ShopButtonProps) => {
   return (
-    <div>
-      <button
-        className="shop-button"
-        onClick={spendScore}
-        onMouseEnter={() => setHoveredId(id)}
-        onMouseLeave={() => setHoveredId(undefined)}
-      >
-        {title}
-      </button>
-    </div>
+    <button
+      className={classNames('shop-button whitespace-nowrap hover:bg-gray-300', {
+        '!cursor-default !border-gray-400 hover:!bg-white': isDisabled,
+      })}
+      onClick={spendScore}
+      onMouseEnter={() => setHoveredId(id)}
+      onMouseLeave={() => setHoveredId(undefined)}
+    >
+      {title}
+    </button>
   )
 }

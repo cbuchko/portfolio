@@ -1,13 +1,16 @@
 export enum ShopItemIds {
   basicTitle,
   centeredTitle,
+  memeTitle,
   basicBody,
   basicColor,
   lightenedColor,
   basicButton,
+  buttonSFX,
   basicMeme,
   memeRepeatable,
   memeGallery,
+  basicBlog,
 }
 
 export type ShopItem = {
@@ -46,6 +49,14 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     passiveIncrementPower: 1,
     prerequsiteId: ShopItemIds.basicTitle,
   },
+  [ShopItemIds.memeTitle]: {
+    id: ShopItemIds.memeTitle,
+    title: 'Update Title',
+    cost: 1,
+    message: 'These memes are looking really good, but our title could be more relevent',
+    clickIncrementPower: 1,
+    prerequsiteId: ShopItemIds.memeRepeatable,
+  },
   //BODY TEXT
   [ShopItemIds.basicBody]: {
     id: ShopItemIds.basicBody,
@@ -53,7 +64,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 1,
     message: "A bit empty isn't it? I've got just the thing",
     clickIncrementPower: 1,
-    prerequsiteId: ShopItemIds.basicTitle,
+    prerequsiteId: ShopItemIds.centeredTitle,
   },
   //COLORS
   [ShopItemIds.basicColor]: {
@@ -79,7 +90,15 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 1,
     message: 'If upgrading the button will help you click better, then sure, go for it',
     clickIncrementPower: 1,
-    prerequsiteId: ShopItemIds.basicTitle,
+    prerequsiteId: ShopItemIds.centeredTitle,
+  },
+  [ShopItemIds.buttonSFX]: {
+    id: ShopItemIds.buttonSFX,
+    title: 'Clicker SFX',
+    cost: 1,
+    message: 'Sounds as well? Is that really necessary?',
+    clickIncrementPower: 1,
+    prerequsiteId: ShopItemIds.basicButton,
   },
   //MEMES
   [ShopItemIds.basicMeme]: {
@@ -111,6 +130,16 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     passiveIncrementPower: 1,
     prerequsiteId: ShopItemIds.memeRepeatable,
   },
+  //BLOG
+  [ShopItemIds.basicBlog]: {
+    id: ShopItemIds.basicBlog,
+    title: 'Blog',
+    cost: 1,
+    message: 'Every website needs a blog right? ...right?',
+    clickIncrementPower: 1,
+    prerequsiteId: ShopItemIds.memeGallery,
+  },
 }
 
-export const defaultMessage = "Making a website is hard... let's do it together!"
+export const defaultMessage =
+  "Making a website is hard... let's do it together!\n Start by adding a Title."
