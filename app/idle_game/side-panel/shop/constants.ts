@@ -10,6 +10,8 @@ export enum ShopItemIds {
   basicMeme,
   memeRepeatable,
   memeGallery,
+  memeTrim,
+  memeRotation,
   basicBlog,
   firstPost,
   postRepeatable,
@@ -74,7 +76,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     title: 'Make It Pop',
     cost: 50,
     message: "I'm worried we're not gonna standout. Let's try something BOLD",
-    passiveIncrementPower: 2,
+    passiveIncrementPower: 3,
     prerequsiteId: ShopItemIds.centeredTitle,
   },
   [ShopItemIds.lightenedColor]: {
@@ -82,7 +84,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     title: 'Make It Pop Less',
     cost: 50,
     message: 'OK MY BAD.',
-    passiveIncrementPower: 2,
+    passiveIncrementPower: 3,
     prerequsiteId: ShopItemIds.basicColor,
   },
   //CLICKER
@@ -105,7 +107,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   //MEMES
   [ShopItemIds.basicMeme]: {
     id: ShopItemIds.basicMeme,
-    title: 'Memes',
+    title: 'Imagery',
     cost: 250,
     message: 'This body text is great, but they say a picture is worth a thousand words...',
     passiveIncrementPower: 3,
@@ -128,9 +130,25 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.memeGallery,
     title: 'Meme Gallery',
     cost: 1000,
-    message: 'Give these memes the spotlight they deserve',
+    message: 'We need a better way to showcase these',
     passiveIncrementPower: 5,
     prerequsiteId: ShopItemIds.memeRepeatable,
+  },
+  [ShopItemIds.memeTrim]: {
+    id: ShopItemIds.memeTrim,
+    title: 'Meme Trim',
+    cost: 2500,
+    message: 'Give these memes the spotlight they deserve',
+    passiveIncrementPower: 15,
+    prerequsiteId: ShopItemIds.memeGallery,
+  },
+  [ShopItemIds.memeRotation]: {
+    id: ShopItemIds.memeRotation,
+    title: '3D Memes',
+    cost: 10000,
+    message: 'Take these puppies for a spin',
+    passiveIncrementPower: 50,
+    prerequsiteId: ShopItemIds.memeTrim,
   },
   //BLOG
   [ShopItemIds.basicBlog]: {
@@ -138,7 +156,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     title: 'Blog',
     cost: 1500,
     message: 'Every website needs a blog right? ...right?',
-    clickIncrementPower: 7,
+    clickIncrementPower: 15,
     prerequsiteId: ShopItemIds.memeGallery,
   },
   [ShopItemIds.firstPost]: {

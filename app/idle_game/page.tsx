@@ -6,7 +6,7 @@ import { SidePanel } from './side-panel/SidePanel'
 import { ShopItemIds } from './side-panel/shop/constants'
 import classNames from 'classnames'
 import { LoremIpsum } from './constants'
-import { Memes } from './view/Memes'
+import { Memes } from './view/MemeGallery'
 import { Title } from './view/Title'
 import { Blog } from './view/Blog'
 

@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+const devMode = false
+
 export const useScore = () => {
   const [score, setScore] = useState(0)
   const [clickPower, setClickPower] = useState(1)
@@ -20,7 +22,7 @@ export const useScore = () => {
   //spend score + call a modifier
   const spendScore = useCallback(
     (cost: number, purchaseCallback: () => void) => {
-      if (score - cost < 0) return
+      if (score - cost < 0 && !devMode) return
       setScore((prevScore) => prevScore - cost)
       purchaseCallback()
     },

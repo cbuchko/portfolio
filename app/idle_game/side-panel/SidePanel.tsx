@@ -93,10 +93,10 @@ export const SidePanel = ({ purchasedIds, onPurchase }: SidePanelProps) => {
         <div className="mt-2">{hoveredButton.message}</div>
         <div className="mt-2">
           {hoveredButton.clickIncrementPower && (
-            <div>{`+${hoveredButton.clickIncrementPower} Click Power`}</div>
+            <div>{`+${hoveredButton.clickIncrementPower} score per click`}</div>
           )}
           {hoveredButton.passiveIncrementPower && (
-            <div>{`+${hoveredButton.passiveIncrementPower} Passive Power`}</div>
+            <div>{`+${hoveredButton.passiveIncrementPower} score per second`}</div>
           )}
         </div>
         <div className="flex-grow" />
