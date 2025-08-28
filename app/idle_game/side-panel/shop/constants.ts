@@ -15,6 +15,7 @@ export enum ShopItemIds {
   basicBlog,
   firstPost,
   postRepeatable,
+  basicAds,
 }
 
 export type ShopItem = {
@@ -157,7 +158,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 1500,
     message: 'Every website needs a blog right? ...right?',
     clickIncrementPower: 15,
-    prerequsiteId: ShopItemIds.memeGallery,
+    prerequsiteId: ShopItemIds.basicMeme,
   },
   [ShopItemIds.firstPost]: {
     id: ShopItemIds.firstPost,
@@ -179,6 +180,14 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
       costMultiplier: 1.25,
       powerMultiplier: 1,
     },
+  },
+  [ShopItemIds.basicAds]: {
+    id: ShopItemIds.basicAds,
+    title: 'Ads',
+    cost: 5000,
+    message: "There's got to be a way to make money off this. It's simply too good.",
+    passiveIncrementPower: 50,
+    prerequsiteId: ShopItemIds.firstPost,
   },
 }
 

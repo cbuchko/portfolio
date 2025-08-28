@@ -2,6 +2,16 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 const devMode = false
 
+export type ScoreProps = {
+  score: number
+  clickPower: number
+  passivePower: number
+  incrementClicks: (increase: number) => void
+  incrementPassive: (increase: number) => void
+  incrementScore: (increase: number) => void
+  spendScore: (cost: number, purchaseCallback: () => void) => void
+}
+
 export const useScore = () => {
   const [score, setScore] = useState(0)
   const [clickPower, setClickPower] = useState(1)
@@ -53,5 +63,5 @@ export const useScore = () => {
     incrementPassive,
     incrementScore,
     spendScore,
-  }
+  } as ScoreProps
 }

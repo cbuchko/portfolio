@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import './styles.css'
 import { SidePanel } from './side-panel/SidePanel'
 import { ShopItemIds } from './side-panel/shop/constants'
@@ -9,8 +9,14 @@ import { LoremIpsum } from './constants'
 import { Memes } from './view/MemeGallery'
 import { Title } from './view/Title'
 import { Blog } from './view/Blog'
+import { Ads } from './view/Ads'
+import { useScore } from './side-panel/useScore'
 
 export default function IdleGame() {
+  const scoreProps = useScore()
+
+  const viewRef = useRef<HTMLDivElement | null>(null)
+
   const [purchasedShopItems, setPurchasedShopItems] = useState<Array<ShopItemIds>>([])
 
   const onPurchase = useCallback((id: ShopItemIds) => {
@@ -20,10 +26,11 @@ export default function IdleGame() {
   }, [])
 
   return (
-    <div className="flex overflow-hidden">
+    <div className="flex">
       <div
         id="view"
-        className={classNames('w-[80%] flex flex-col', {
+        ref={viewRef}
+        className={classNames('w-[80%] flex flex-col relative', {
           'items-center': purchasedShopItems.includes(ShopItemIds.centeredTitle),
           '!bg-red-50': purchasedShopItems.includes(ShopItemIds.lightenedColor),
           'bg-red-500': purchasedShopItems.includes(ShopItemIds.basicColor),
@@ -48,8 +55,15 @@ export default function IdleGame() {
             <Blog purchasedIds={purchasedShopItems} />
           )}
         </div>
+        {purchasedShopItems.includes(ShopItemIds.basicAds) && (
+          <Ads viewRef={viewRef} incrementScore={scoreProps.incrementScore} />
+        )}
       </div>
-      <SidePanel purchasedIds={purchasedShopItems} onPurchase={onPurchase} />
+      <SidePanel
+        purchasedIds={purchasedShopItems}
+        onPurchase={onPurchase}
+        scoreProps={scoreProps}
+      />
     </div>
   )
 }

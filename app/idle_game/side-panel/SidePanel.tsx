@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { ShopButton } from './shop/ShopButton'
-import { useScore } from './useScore'
+import { ScoreProps, useScore } from './useScore'
 import { defaultMessage, ShopItemIds, ShopItem, ShopItems } from './shop/constants'
 import { Clicker } from './Clicker'
 import classNames from 'classnames'
@@ -8,9 +8,10 @@ import classNames from 'classnames'
 type SidePanelProps = {
   purchasedIds: Array<ShopItemIds>
   onPurchase: (id: ShopItemIds) => void
+  scoreProps: ScoreProps
 }
 
-export const SidePanel = ({ purchasedIds, onPurchase }: SidePanelProps) => {
+export const SidePanel = ({ purchasedIds, scoreProps, onPurchase }: SidePanelProps) => {
   const {
     score,
     clickPower,
@@ -19,7 +20,7 @@ export const SidePanel = ({ purchasedIds, onPurchase }: SidePanelProps) => {
     incrementPassive,
     incrementScore,
     spendScore,
-  } = useScore()
+  } = scoreProps
 
   const [hoveredShopId, setHoveredShopId] = useState<ShopItemIds | undefined>()
 
@@ -70,7 +71,7 @@ export const SidePanel = ({ purchasedIds, onPurchase }: SidePanelProps) => {
       <div>
         <h5 className="text-xl mb-2">Shop</h5>
         <div className="flex gap-4 flex-wrap">
-          {filteredShopItems.slice(0, 3).map((button) => (
+          {filteredShopItems.slice(0, 5).map((button) => (
             <ShopButton
               key={button.id}
               id={button.id}

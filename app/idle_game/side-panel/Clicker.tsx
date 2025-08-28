@@ -23,7 +23,7 @@ export const Clicker = ({ purchasedIds, onClick }: ClickerProps) => {
   const handleClick = useCallback(() => {
     if (purchasedIds.includes(ShopItemIds.buttonSFX)) {
       const audio = new Audio('/idle_game/click.mp3')
-      audio.volume = 0.5 // adjust volume if needed
+      audio.volume = 0.5
       audio.play()
     }
     onClick()

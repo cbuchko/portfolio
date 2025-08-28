@@ -36,3 +36,14 @@ export const BlogPosts: BlogPost[] = [
     duration: '1200 min',
   },
 ]
+
+export const AdContent = [
+  "Congraluations! You've won our sweepstakes!",
+  'Tired of Ads? Try our Ad Block Service!',
+  'Subscribe to SpywareVPN and get the first 48 months free!',
+  'Warning! Virus detected! Download our Virus to clean your computer!',
+  'ANNOYING POP-UP ANNOYING POP-UP ANNOYING POP-UP',
+  'Special offer just for you and definitely not for anyone else!',
+  'Become an overnight instagram influencer with this 10-week course',
+  'You are the 100,000,000th person to breathe air today. Collect your reward',
+]
