@@ -11,7 +11,7 @@ export const Title = ({ purchasedIds }: MemeProps) => {
       {purchasedIds.includes(ShopItemIds.basicTitle) &&
         !purchasedIds.includes(ShopItemIds.memeTitle) && (
           <h1
-            className={classNames({
+            className={classNames('text-5xl', {
               'text-center mt-4': purchasedIds.includes(ShopItemIds.centeredTitle),
             })}
           >

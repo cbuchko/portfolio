@@ -201,4 +201,4 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
 }
 
 export const defaultMessage =
-  "Making a website is hard... let's do it together!\n Start by adding a Title."
+  "Making a website is hard... let's do it together!\n Start by purchasing a Title from the Shop."
