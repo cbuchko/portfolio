@@ -32,7 +32,7 @@ export const Clicker = ({ purchasedIds, onClick }: ClickerProps) => {
   return (
     <button
       ref={clickerRef}
-      className={classNames('click-button w-full', {
+      className={classNames('click-button w-full select-none', {
         'shadow-md shadow-black/50 hover:scale-105 transition-all': purchasedIds.includes(
           ShopItemIds.basicButton
         ),

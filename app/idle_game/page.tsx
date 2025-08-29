@@ -13,11 +13,11 @@ import { Ads } from './view/Ads'
 import { useScore } from './side-panel/useScore'
 
 export default function IdleGame() {
-  const scoreProps = useScore()
-
   const viewRef = useRef<HTMLDivElement | null>(null)
 
   const [purchasedShopItems, setPurchasedShopItems] = useState<Array<ShopItemIds>>([])
+
+  const scoreProps = useScore(purchasedShopItems)
 
   const onPurchase = useCallback((id: ShopItemIds) => {
     setPurchasedShopItems((prevElements) => {

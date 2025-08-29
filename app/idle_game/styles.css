@@ -105,3 +105,18 @@
 .depth-container:hover * {
   box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.3);
 }
+
+@keyframes floatScore {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) translateX(15px);
+    opacity: 0;
+  }
+}
+
+.float-score {
+  animation: floatScore 1000ms ease-out;
+}

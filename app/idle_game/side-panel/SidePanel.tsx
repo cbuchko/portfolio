@@ -1,9 +1,10 @@
 import { useCallback, useMemo, useState } from 'react'
 import { ShopButton } from './shop/ShopButton'
-import { ScoreProps, useScore } from './useScore'
+import { ScoreProps } from './useScore'
 import { defaultMessage, ShopItemIds, ShopItem, ShopItems } from './shop/constants'
 import { Clicker } from './Clicker'
 import classNames from 'classnames'
+import { Score } from './Score'
 
 type SidePanelProps = {
   purchasedIds: Array<ShopItemIds>
@@ -16,6 +17,7 @@ export const SidePanel = ({ purchasedIds, scoreProps, onPurchase }: SidePanelPro
     score,
     clickPower,
     passivePower,
+    scoreIncrements,
     incrementClicks,
     incrementPassive,
     incrementScore,
@@ -84,12 +86,9 @@ export const SidePanel = ({ purchasedIds, scoreProps, onPurchase }: SidePanelPro
         </div>
       </div>
       <div className="flex-grow" />
-      <h2 className="mt-2 text-3xl">{score} Score</h2>
-      <h5 className={classNames('mb-2', { 'opacity-0': passivePower === 0 })}>
-        {passivePower} score per second
-      </h5>
+      <Score score={score} passivePower={passivePower} scoreIncrements={scoreIncrements} />
       <Clicker onClick={() => incrementScore(clickPower)} purchasedIds={purchasedIds} />
-      <div className="flex flex-col p-2 border rounded-md h-[200px] mt-2">
+      <div className="flex flex-col p-2 border rounded-md h-[200px] mt-2 select-none">
         <div className="font-medium">{hoveredButton.title}</div>
         <div className="mt-2">{hoveredButton.message}</div>
         <div className="mt-2">

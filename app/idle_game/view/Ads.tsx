@@ -56,6 +56,7 @@ export const Ads = ({ viewRef, incrementScore }: AdsProps) => {
       const percentage = Math.min((elapsed / timeoutDurationInMs) * 100, 100)
       setProgress(percentage)
 
+      //cleanup after duration elapses
       if (elapsed >= timeoutDurationInMs) {
         clearInterval(interval)
         ad.style.opacity = '0'
