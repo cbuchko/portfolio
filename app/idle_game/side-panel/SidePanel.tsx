@@ -5,22 +5,31 @@ import { defaultMessage, ShopItemIds, ShopItem, ShopItems } from './shop/constan
 import { Clicker } from './Clicker'
 import classNames from 'classnames'
 import { Score } from './Score'
+import { BlogViewProps } from '../view/useBlogViews'
 
 type SidePanelProps = {
   purchasedIds: Array<ShopItemIds>
   onPurchase: (id: ShopItemIds) => void
   scoreProps: ScoreProps
+  blogViewProps: BlogViewProps
 }
 
-export const SidePanel = ({ purchasedIds, scoreProps, onPurchase }: SidePanelProps) => {
+export const SidePanel = ({
+  purchasedIds,
+  scoreProps,
+  blogViewProps,
+  onPurchase,
+}: SidePanelProps) => {
   const {
     score,
     clickPower,
     passivePower,
+    viewPower,
     scoreIncrements,
     incrementClicks,
     incrementPassive,
     incrementScore,
+    incrementView,
     spendScore,
   } = scoreProps
 
@@ -39,6 +48,7 @@ export const SidePanel = ({ purchasedIds, scoreProps, onPurchase }: SidePanelPro
       spendScore(calculateCost(button), () => {
         if (button.clickIncrementPower) incrementClicks(button.clickIncrementPower)
         if (button.passiveIncrementPower) incrementPassive(button.passiveIncrementPower)
+        if (button.viewIncrementPower) incrementView(button.viewIncrementPower)
         onPurchase(button.id)
         setHoveredShopId(undefined)
       })
@@ -84,7 +94,14 @@ export const SidePanel = ({ purchasedIds, scoreProps, onPurchase }: SidePanelPro
         </div>
       </div>
       <div className="flex-grow" />
-      <Score score={score} passivePower={passivePower} scoreIncrements={scoreIncrements} />
+      <Score
+        score={score}
+        passivePower={passivePower}
+        scoreIncrements={scoreIncrements}
+        viewPower={viewPower}
+        purchasedIds={purchasedIds}
+        blogViewProps={blogViewProps}
+      />
       <Clicker onClick={() => incrementScore(clickPower)} purchasedIds={purchasedIds} />
       <div className="flex flex-col p-2 border rounded-md h-[200px] mt-2 select-none">
         {hoveredButton && (

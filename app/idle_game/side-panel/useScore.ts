@@ -7,15 +7,17 @@ export type ScoreProps = {
   score: number
   clickPower: number
   passivePower: number
+  viewPower: number
   scoreIncrements: ScoreIncrement[]
   incrementClicks: (increase: number) => void
   incrementPassive: (increase: number) => void
+  incrementView: (increase: number) => void
   incrementScore: (increase: number) => void
   spendScore: (cost: number, purchaseCallback: () => void) => void
 }
 
 export type ScoreIncrement = {
-  id: number
+  id: string
   amount: number
   xPosition: number
 }
@@ -25,6 +27,7 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
   const [clickPower, setClickPower] = useState(1)
   const intervalReference = useRef<NodeJS.Timeout>(null)
   const [passivePower, setPassivePower] = useState(0)
+  const [viewPower, setViewPower] = useState(0)
   const [scoreIncrements, setScoreIncrements] = useState<ScoreIncrement[]>([])
 
   //basic functions for adjusting the core state values
@@ -34,6 +37,10 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
   const incrementPassive = useCallback((increase: number) => {
     setPassivePower((prevPower) => prevPower + increase)
   }, [])
+  const incrementView = useCallback((increase: number) => {
+    setViewPower((prevPower) => prevPower + increase)
+  }, [])
+
   const incrementScore = useCallback(
     (amount: number) => {
       if (!(amount > 0)) return
@@ -41,7 +48,7 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
 
       if (!purchasedIds.includes(ShopItemIds.scoreIncrementer)) return
       // add the score to the animation
-      const scoreId = Date.now()
+      const scoreId = crypto.randomUUID()
       setScoreIncrements((prevIncrements) => [
         ...prevIncrements,
         { id: scoreId, amount, xPosition: Math.random() * 80 },
@@ -88,10 +95,12 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
     score,
     clickPower,
     passivePower,
+    viewPower,
     scoreIncrements,
     incrementClicks,
     incrementPassive,
     incrementScore,
+    incrementView,
     spendScore,
   } as ScoreProps
 }

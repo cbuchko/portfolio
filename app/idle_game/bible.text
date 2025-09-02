@@ -9,6 +9,8 @@ AESTHETICS = PASSIVE - KEEPING PEOPLE ON THE PAGE
 
 IDEAS:
 
+SCORE INCREMENTATION SHOULD NOT BE DISCRETE
+
 POP UP ADS
 BLOG
 MEMES
@@ -22,6 +24,7 @@ GAMBA
 COMESTIC CUSTOMIZATION (BG COLOR, COLOR PICKERS, ETC.)
 BLOG POSTS FROM LLM?
 LEADERBOARD
+cookies
 
 UI/UX principles
 - visual heirarchy
@@ -47,6 +50,14 @@ AD IDEAS
 
 BLOGS
 - hashtags
+- multimedia
+- view/comment counters
+- real comments?
+- sorting and filtering
+- ads built into the blog 
+- subscription
+- VIEW BOTS
+  the blog section becomes about random score increases based on views
 
 
 RANDOM BLOGS AND MEMES?

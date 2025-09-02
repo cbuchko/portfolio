@@ -8,7 +8,7 @@ type AdsProps = {
   incrementScore: ScoreProps['incrementScore']
 }
 
-const timeoutDurationInMs = 5000
+const timeoutDurationInMs = 3000
 const addFrequencyInMs = 30000
 const adScore = 1000
 
@@ -90,7 +90,7 @@ export const Ads = ({ viewRef, incrementScore }: AdsProps) => {
   return (
     <div
       ref={adRef}
-      className="opacity-0 pointer-events-none absolute bg-white border-2 border-red-500 w-max h-max p-4 rounded-md shadow-xl pr-8 transition-opacity 5000ms ease-out"
+      className="flex flex-col justify-center opacity-0 pointer-events-none absolute bg-white border-2 border-red-500 w-max h-max p-4 rounded-md shadow-xl pr-8 transition-opacity 5000ms ease-out"
     >
       <Image
         onClick={onClose}
@@ -100,7 +100,13 @@ export const Ads = ({ viewRef, incrementScore }: AdsProps) => {
         height={16}
         width={16}
       />
-      <h5 className="text-yellow-600" />
+      <h5 className="text-yellow-600 mt-1" />
+      <button
+        className="border p-2 rounded-md mt-2 mx-auto cursor-pointer hover:bg-gray-100 shadow shadow-red-500"
+        onClick={onClose}
+      >
+        CLAIM NOW
+      </button>
       <div
         className="absolute bottom-0 z-10 left-0 h-1 bg-blue-500 rounded-bl-md"
         style={{ width: `${100 - progress}%` }}

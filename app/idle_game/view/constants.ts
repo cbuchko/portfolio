@@ -7,7 +7,7 @@ export const MemeUrls = [
   '/idle_game/memes/mike.jpg',
 ]
 
-type BlogPost = {
+export type BlogPost = {
   title: string
   type: string
   duration: string

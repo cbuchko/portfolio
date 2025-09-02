@@ -16,6 +16,9 @@ export enum ShopItemIds {
   basicBlog,
   firstPost,
   postRepeatable,
+  blogDetails,
+  blogViewCount,
+  blogViewBots,
   basicAds,
 }
 
@@ -30,6 +33,7 @@ export type ShopItem = {
   }
   clickIncrementPower?: number
   passiveIncrementPower?: number
+  viewIncrementPower?: number
   prerequsiteId?: ShopItemIds
   isRepeatble?: {
     limit: number
@@ -44,7 +48,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.basicTitle,
     title: 'Title',
     cost: 5,
-    message: "Let's start with a title so people know where they are",
+    message: "Let's start with a title so people know where they are.",
     clickIncrementPower: 1,
   },
   [ShopItemIds.centeredTitle]: {
@@ -59,7 +63,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.memeTitle,
     title: 'Update Title',
     cost: 500,
-    message: 'These memes are looking really good, but our title could be more relevent',
+    message: 'These memes are looking really good, but our title could be more relevent.',
     clickIncrementPower: 5,
     prerequsiteId: ShopItemIds.memeRepeatable,
   },
@@ -68,7 +72,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.basicBody,
     title: 'Body Text',
     cost: 100,
-    message: "A bit empty isn't it? I've got just the thing",
+    message: "A bit empty isn't it? I've got just the thing.",
     clickIncrementPower: 3,
     prerequsiteId: ShopItemIds.centeredTitle,
   },
@@ -77,7 +81,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.basicColor,
     title: 'Make It Pop',
     cost: 50,
-    message: "I'm worried we're not gonna standout. Let's try something BOLD",
+    message: "I'm worried we're not gonna standout. Let's try something BOLD.",
     passiveIncrementPower: 3,
     prerequsiteId: ShopItemIds.centeredTitle,
   },
@@ -94,7 +98,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.basicButton,
     title: 'Clicker Upgrade',
     cost: 100,
-    message: 'If upgrading the button will help you click better, go for it',
+    message: 'If upgrading the button will help you click better, go for it.',
     clickIncrementPower: 2,
     prerequsiteId: ShopItemIds.centeredTitle,
   },
@@ -102,7 +106,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.buttonSFX,
     title: 'Clicker SFX',
     cost: 500,
-    message: 'It is a bit quiet in here',
+    message: 'It is a bit quiet in here.',
     clickIncrementPower: 5,
     prerequsiteId: ShopItemIds.basicButton,
   },
@@ -110,7 +114,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.scoreIncrementer,
     title: 'Score Animation',
     cost: 3000,
-    message: "See exactly what you're earning",
+    message: "See exactly what you're earning.",
     clickIncrementPower: 20,
     prerequsiteId: ShopItemIds.buttonSFX,
   },
@@ -127,7 +131,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.memeRepeatable,
     title: 'More memes',
     cost: 300,
-    message: 'Give the people what they want',
+    message: 'Give the people what they want.',
     passiveIncrementPower: 3,
     prerequsiteId: ShopItemIds.basicMeme,
     isRepeatble: {
@@ -140,7 +144,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.memeGallery,
     title: 'Meme Gallery',
     cost: 1000,
-    message: 'We need a better way to showcase these',
+    message: 'We need a better way to showcase these.',
     passiveIncrementPower: 5,
     prerequsiteId: ShopItemIds.memeRepeatable,
   },
@@ -148,7 +152,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.memeTrim,
     title: 'Meme Trim',
     cost: 2500,
-    message: 'Give these memes the spotlight they deserve',
+    message: 'Give these memes the spotlight they deserve.',
     passiveIncrementPower: 15,
     prerequsiteId: ShopItemIds.memeGallery,
   },
@@ -156,7 +160,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.memeRotation,
     title: '3D Memes',
     cost: 10000,
-    message: 'Take these puppies for a spin',
+    message: 'Take these puppies for a spin.',
     passiveIncrementPower: 50,
     prerequsiteId: ShopItemIds.memeTrim,
   },
@@ -173,7 +177,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.firstPost,
     title: 'Blog Post',
     cost: 1500,
-    message: "The blog needs a blog post. Just don't expect any real content inside",
+    message: "The blog needs a blog post. Just don't expect any real content inside.",
     passiveIncrementPower: 10,
     prerequsiteId: ShopItemIds.basicBlog,
   },
@@ -181,7 +185,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.postRepeatable,
     title: 'More Posts',
     cost: 2000,
-    message: 'Keep the posts coming, someone will read them eventually',
+    message: 'Keep the posts coming, someone will read them eventually.',
     passiveIncrementPower: 10,
     prerequsiteId: ShopItemIds.firstPost,
     isRepeatble: {
@@ -189,6 +193,31 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
       costMultiplier: 1.25,
       powerMultiplier: 1,
     },
+  },
+  [ShopItemIds.blogDetails]: {
+    id: ShopItemIds.blogDetails,
+    title: 'Blog Details',
+    cost: 5000,
+    message: "They look a little pathetic with just the title don't they?",
+    passiveIncrementPower: 20,
+    prerequsiteId: ShopItemIds.firstPost,
+  },
+  [ShopItemIds.blogViewCount]: {
+    id: ShopItemIds.blogViewCount,
+    title: 'Blog View Count',
+    cost: 5000,
+    message: 'Might be a nice morale boost to see how many people are viewing these.',
+    viewIncrementPower: 1,
+    prerequsiteId: ShopItemIds.firstPost,
+  },
+  [ShopItemIds.blogViewBots]: {
+    id: ShopItemIds.blogViewBots,
+    title: 'Blog View Bots',
+    cost: 25000,
+    message:
+      "I guess seeing the view count doesn't magically give us views... we gotta grease the wheels first.",
+    viewIncrementPower: 99,
+    prerequsiteId: ShopItemIds.blogViewCount,
   },
   [ShopItemIds.basicAds]: {
     id: ShopItemIds.basicAds,

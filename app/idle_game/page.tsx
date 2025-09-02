@@ -11,6 +11,7 @@ import { Title } from './view/Title'
 import { Blog } from './view/Blog'
 import { Ads } from './view/Ads'
 import { useScore } from './side-panel/useScore'
+import { useBlogViews } from './view/useBlogViews'
 
 export default function IdleGame() {
   const viewRef = useRef<HTMLDivElement | null>(null)
@@ -18,6 +19,7 @@ export default function IdleGame() {
   const [purchasedShopItems, setPurchasedShopItems] = useState<Array<ShopItemIds>>([])
 
   const scoreProps = useScore(purchasedShopItems)
+  const blogViewProps = useBlogViews()
 
   const onPurchase = useCallback((id: ShopItemIds) => {
     setPurchasedShopItems((prevElements) => {
@@ -52,7 +54,11 @@ export default function IdleGame() {
             <Memes purchasedIds={purchasedShopItems} />
           )}
           {purchasedShopItems.includes(ShopItemIds.basicBlog) && (
-            <Blog purchasedIds={purchasedShopItems} />
+            <Blog
+              purchasedIds={purchasedShopItems}
+              handleBlogView={() => scoreProps.incrementScore(scoreProps.viewPower)}
+              blogViewProps={blogViewProps}
+            />
           )}
         </div>
         {purchasedShopItems.includes(ShopItemIds.basicAds) && (
@@ -63,6 +69,7 @@ export default function IdleGame() {
         purchasedIds={purchasedShopItems}
         onPurchase={onPurchase}
         scoreProps={scoreProps}
+        blogViewProps={blogViewProps}
       />
     </div>
   )
