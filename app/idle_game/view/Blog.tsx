@@ -6,7 +6,7 @@ import { BlogViewProps } from './useBlogViews'
 
 type BlogProps = {
   purchasedIds: Array<ShopItemIds>
-  handleBlogView: () => void
+  handleBlogView: (viewGain: number) => void
   blogViewProps: BlogViewProps
 }
 
@@ -36,7 +36,7 @@ export const Blog = ({ purchasedIds, blogViewProps, handleBlogView }: BlogProps)
 type BlogPostProps = {
   purchasedIds: Array<ShopItemIds>
   post: BlogPostType
-  handleBlogView: () => void
+  handleBlogView: (viewGain: number) => void
   blogViewProps: BlogViewProps
 }
 
@@ -59,7 +59,7 @@ const BlogPost = ({ post, purchasedIds, blogViewProps, handleBlogView }: BlogPos
       const result = Math.floor(Math.random() * viewOdds)
       if (result !== 1) return
       setViewCount((prevCount) => prevCount + viewScoreGain)
-      handleBlogView()
+      handleBlogView(viewScoreGain)
     }, viewFrequencyInMs)
     intervalRef.current = interval
   }, [purchasedIds, viewFrequencyInMs, viewOdds, viewScoreGain])

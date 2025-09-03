@@ -94,14 +94,7 @@ export const SidePanel = ({
         </div>
       </div>
       <div className="flex-grow" />
-      <Score
-        score={score}
-        passivePower={passivePower}
-        scoreIncrements={scoreIncrements}
-        viewPower={viewPower}
-        purchasedIds={purchasedIds}
-        blogViewProps={blogViewProps}
-      />
+      <Score scoreProps={scoreProps} purchasedIds={purchasedIds} blogViewProps={blogViewProps} />
       <Clicker onClick={() => incrementScore(clickPower)} purchasedIds={purchasedIds} />
       <div className="flex flex-col p-2 border rounded-md h-[200px] mt-2 select-none">
         {hoveredButton && (

@@ -56,7 +56,9 @@ export default function IdleGame() {
           {purchasedShopItems.includes(ShopItemIds.basicBlog) && (
             <Blog
               purchasedIds={purchasedShopItems}
-              handleBlogView={() => scoreProps.incrementScore(scoreProps.viewPower)}
+              handleBlogView={(viewGain) =>
+                scoreProps.incrementScore(scoreProps.viewPower * viewGain)
+              }
               blogViewProps={blogViewProps}
             />
           )}

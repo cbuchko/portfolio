@@ -1,27 +1,18 @@
 import classNames from 'classnames'
-import { ScoreIncrement } from './useScore'
+import { ScoreIncrement, ScoreProps } from './useScore'
 import Image from 'next/image'
 import { useState } from 'react'
 import { ShopItemIds } from './shop/constants'
 import { BlogViewProps } from '../view/useBlogViews'
 
-type ScoreProps = {
-  score: number
-  passivePower: number
-  viewPower: number
-  scoreIncrements: ScoreIncrement[]
+type ScoreComponentProps = {
+  scoreProps: ScoreProps
   purchasedIds: Array<ShopItemIds>
   blogViewProps: BlogViewProps
 }
 
-export const Score = ({
-  score,
-  passivePower,
-  scoreIncrements,
-  viewPower,
-  purchasedIds,
-  blogViewProps,
-}: ScoreProps) => {
+export const Score = ({ scoreProps, purchasedIds, blogViewProps }: ScoreComponentProps) => {
+  const { score, viewPower, passivePower, scoreIncrements } = scoreProps
   const [blogHelpOpen, setBlogHelpOpen] = useState(false)
   return (
     <div className="relative">

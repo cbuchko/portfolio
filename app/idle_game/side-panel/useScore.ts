@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ShopItemIds } from './shop/constants'
 
-const devMode = false
+const devMode = true
 
 export type ScoreProps = {
   score: number
@@ -82,7 +82,7 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
     }
 
     const interval = setInterval(() => {
-      incrementScore(passivePower)
+      setScore((prevScore) => prevScore + passivePower)
     }, 1000)
     intervalReference.current = interval
 
