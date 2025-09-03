@@ -5,6 +5,7 @@ const devMode = true
 
 export type ScoreProps = {
   score: number
+  displayScore: number
   clickPower: number
   passivePower: number
   viewPower: number
@@ -24,8 +25,10 @@ export type ScoreIncrement = {
 
 export const useScore = (purchasedIds: ShopItemIds[]) => {
   const [score, setScore] = useState(0)
+  const [displayScore, setDisplayScore] = useState(0)
   const [clickPower, setClickPower] = useState(1)
   const intervalReference = useRef<NodeJS.Timeout>(null)
+  const displayReference = useRef<NodeJS.Timeout>(null)
   const [passivePower, setPassivePower] = useState(0)
   const [viewPower, setViewPower] = useState(0)
   const [scoreIncrements, setScoreIncrements] = useState<ScoreIncrement[]>([])
@@ -45,6 +48,7 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
     (amount: number) => {
       if (!(amount > 0)) return
       setScore((prevScore) => prevScore + amount)
+      setDisplayScore((prevScore) => prevScore + amount)
 
       if (!purchasedIds.includes(ShopItemIds.scoreIncrementer)) return
       // add the score to the animation
@@ -70,6 +74,7 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
     (cost: number, purchaseCallback: () => void) => {
       if (score - cost < 0 && !devMode) return
       setScore((prevScore) => prevScore - cost)
+      setDisplayScore((prevScore) => prevScore - cost)
       purchaseCallback()
     },
     [score]
@@ -91,8 +96,31 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
     }
   }, [passivePower, incrementScore])
 
+  //adjusts the display of the score so that appears to always be ticking up due to the passive increment
+  useEffect(() => {
+    if (displayScore === score) return
+    if (!!displayReference.current) {
+      clearInterval(displayReference.current)
+    }
+    displayReference.current = setInterval(() => {
+      setDisplayScore((prevDisplay) => {
+        if (prevDisplay === score) {
+          if (displayReference.current) clearInterval(displayReference.current)
+          return prevDisplay
+        }
+        const diff = score - prevDisplay
+        const step = Math.ceil(diff / 10)
+        return prevDisplay + step
+      })
+    }, 200)
+    return () => {
+      if (displayReference.current) clearInterval(displayReference.current)
+    }
+  }, [score, displayScore])
+
   return {
     score,
+    displayScore,
     clickPower,
     passivePower,
     viewPower,

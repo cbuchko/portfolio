@@ -20,6 +20,10 @@ body {
   font-family: 'Source Sans 3', Arial, Helvetica, sans-serif;
 }
 
+.mono {
+  font-family: 'IBM Plex Mono';
+}
+
 .portfolio-content {
   margin: 32px auto;
   padding: 0;

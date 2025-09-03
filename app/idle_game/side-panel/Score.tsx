@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { ScoreIncrement, ScoreProps } from './useScore'
+import { ScoreProps } from './useScore'
 import Image from 'next/image'
 import { useState } from 'react'
 import { ShopItemIds } from './shop/constants'
@@ -12,7 +12,7 @@ type ScoreComponentProps = {
 }
 
 export const Score = ({ scoreProps, purchasedIds, blogViewProps }: ScoreComponentProps) => {
-  const { score, viewPower, passivePower, scoreIncrements } = scoreProps
+  const { displayScore, viewPower, passivePower, scoreIncrements } = scoreProps
   const [blogHelpOpen, setBlogHelpOpen] = useState(false)
   return (
     <div className="relative">
@@ -25,7 +25,10 @@ export const Score = ({ scoreProps, purchasedIds, blogViewProps }: ScoreComponen
           +{inc.amount}
         </div>
       ))}
-      <h2 className="mt-2 text-3xl select-none">{score} Score</h2>
+      <div className="flex items-center gap-2 mt-2 text-3xl select-none">
+        <span className="mono">{displayScore}</span>
+        <h2 className="">Score</h2>
+      </div>
       <div className="mb-2">
         <h5 className={classNames('select-none', { 'opacity-0': passivePower === 0 })}>
           {passivePower} score per second
