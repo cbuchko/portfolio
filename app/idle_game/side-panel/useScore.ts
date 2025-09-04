@@ -96,7 +96,7 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
     }
   }, [passivePower, incrementScore])
 
-  //adjusts the display of the score so that appears to always be ticking up due to the passive increment
+  //adjusts the display of the score so that it appears to always be ticking up due to the passive increment
   useEffect(() => {
     if (displayScore === score) return
     if (!!displayReference.current) {

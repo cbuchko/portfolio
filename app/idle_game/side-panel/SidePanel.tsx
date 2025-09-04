@@ -23,15 +23,14 @@ export const SidePanel = ({
   const {
     score,
     clickPower,
-    passivePower,
-    viewPower,
-    scoreIncrements,
     incrementClicks,
     incrementPassive,
     incrementScore,
     incrementView,
     spendScore,
   } = scoreProps
+
+  const { setViewFrequency, setViewGain, setViewOdds } = blogViewProps
 
   const [hoveredShopId, setHoveredShopId] = useState<ShopItemIds | undefined>()
 
@@ -49,6 +48,10 @@ export const SidePanel = ({
         if (button.clickIncrementPower) incrementClicks(button.clickIncrementPower)
         if (button.passiveIncrementPower) incrementPassive(button.passiveIncrementPower)
         if (button.viewIncrementPower) incrementView(button.viewIncrementPower)
+        if (button.blogViewModifier?.frequencyInMs)
+          setViewFrequency(button.blogViewModifier.frequencyInMs)
+        if (button.blogViewModifier?.gain) setViewGain(button.blogViewModifier.gain)
+        if (button.blogViewModifier?.odds) setViewOdds(button.blogViewModifier.odds)
         onPurchase(button.id)
         setHoveredShopId(undefined)
       })
@@ -107,6 +110,9 @@ export const SidePanel = ({
               )}
               {hoveredButton.passiveIncrementPower && (
                 <div>{`+${hoveredButton.passiveIncrementPower} score per second`}</div>
+              )}
+              {(hoveredButton.blogViewModifier || hoveredButton.viewIncrementPower) && (
+                <div>Enhances blog post view generation</div>
               )}
             </div>
             <div className="flex-grow" />

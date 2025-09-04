@@ -14,7 +14,12 @@ export const Blog = ({ purchasedIds, blogViewProps, handleBlogView }: BlogProps)
   const blogCount = purchasedIds.filter((id) => id === ShopItemIds.postRepeatable).length + 1
   return (
     <div className="mt-16">
-      <h4 className="text-2xl">The Meaning Behind the Meme</h4>
+      {!purchasedIds.includes(ShopItemIds.blogTitle) && (
+        <h4 className="text-2xl">The Meaning Behind the Meme</h4>
+      )}
+      {purchasedIds.includes(ShopItemIds.blogTitle) && (
+        <h4 className="text-4xl blog-title">The Meaning Behind the Meme</h4>
+      )}
       {!purchasedIds.includes(ShopItemIds.firstPost) && <h5>0 posts</h5>}
       {purchasedIds.includes(ShopItemIds.firstPost) && (
         <div className="my-4">
@@ -44,11 +49,10 @@ const BlogPost = ({ post, purchasedIds, blogViewProps, handleBlogView }: BlogPos
   const [viewCount, setViewCount] = useState(0)
   const intervalRef = useRef<NodeJS.Timeout>(null)
 
-  const { viewFrequencyInMs, viewOdds, viewScoreGain } = blogViewProps
+  const { viewFrequencyInMs, viewOdds, viewGain } = blogViewProps
   useEffect(() => {
     if (!purchasedIds.includes(ShopItemIds.blogViewBots)) return
 
-    console.log('running effect', post.title, viewFrequencyInMs, viewOdds, viewScoreGain)
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
     }
@@ -58,11 +62,11 @@ const BlogPost = ({ post, purchasedIds, blogViewProps, handleBlogView }: BlogPos
     const interval = setInterval(() => {
       const result = Math.floor(Math.random() * viewOdds)
       if (result !== 1) return
-      setViewCount((prevCount) => prevCount + viewScoreGain)
-      handleBlogView(viewScoreGain)
+      setViewCount((prevCount) => prevCount + viewGain)
+      handleBlogView(viewGain)
     }, viewFrequencyInMs)
     intervalRef.current = interval
-  }, [purchasedIds, viewFrequencyInMs, viewOdds, viewScoreGain])
+  }, [purchasedIds, viewFrequencyInMs, viewOdds, viewGain])
 
   return (
     <div className="py-2 border-b border-gray-400">

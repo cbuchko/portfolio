@@ -133,3 +133,23 @@
 .float-score {
   animation: floatScore 1000ms ease-out;
 }
+
+.blog-title {
+  text-shadow:
+    0px 0px 0 #899cd5,
+    1px 1px 0 #8194cd,
+    2px 2px 0 #788bc4,
+    3px 3px 0 #6f82bb,
+    4px 4px 0 #677ab3,
+    5px 5px 0 #5e71aa,
+    6px 6px 0 #5568a1,
+    7px 7px 0 #4c5f98,
+    8px 8px 0 #445790,
+    9px 9px 0 #3b4e87,
+    10px 10px 0 #32457e,
+    11px 11px 0 #2a3d76,
+    12px 12px 0 #21346d,
+    13px 13px 0 #182b64,
+    0px 0px 20px rgba(0, 0, 0, 0.2);
+  color: #92a5de;
+}

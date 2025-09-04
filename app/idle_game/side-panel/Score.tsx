@@ -64,10 +64,10 @@ const BlogHelp = ({
   purchasedIds: Array<ShopItemIds>
   blogViewProps: BlogViewProps
 }) => {
-  const { viewFrequencyInMs, viewOdds, viewScoreGain } = blogViewProps
+  const { viewFrequencyInMs, viewOdds, viewGain } = blogViewProps
 
   const message = purchasedIds.includes(ShopItemIds.blogViewBots)
-    ? `Blogs have a 1/${viewOdds} chance of gaining ${viewScoreGain} view every ${viewFrequencyInMs / 1000} seconds.`
+    ? `Blogs have a 1/${viewOdds} chance of gaining ${viewGain} view every ${viewFrequencyInMs / 1000} seconds.`
     : defaultMessage
   return (
     <div className="w-[150px] absolute -top-[60px] bg-white border border-black shadow-md px-2 py-1 rounded-md text-xs ">

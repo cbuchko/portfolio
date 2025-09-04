@@ -19,6 +19,7 @@ export enum ShopItemIds {
   blogDetails,
   blogViewCount,
   blogViewBots,
+  blogTitle,
   basicAds,
 }
 
@@ -34,6 +35,11 @@ export type ShopItem = {
   clickIncrementPower?: number
   passiveIncrementPower?: number
   viewIncrementPower?: number
+  blogViewModifier?: {
+    frequencyInMs?: number
+    odds?: number
+    gain?: number
+  }
   prerequsiteId?: ShopItemIds
   isRepeatble?: {
     limit: number
@@ -219,6 +225,17 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     viewIncrementPower: 99,
     prerequsiteId: ShopItemIds.blogViewCount,
   },
+  [ShopItemIds.blogTitle]: {
+    id: ShopItemIds.blogTitle,
+    title: 'Blog Title',
+    cost: 30000,
+    message: 'You know what the blog needs? Character. Gumption. Chutzpah.',
+    blogViewModifier: {
+      frequencyInMs: 4000,
+    },
+    prerequsiteId: ShopItemIds.blogViewBots,
+  },
+  //ADS
   [ShopItemIds.basicAds]: {
     id: ShopItemIds.basicAds,
     title: 'Ads',
