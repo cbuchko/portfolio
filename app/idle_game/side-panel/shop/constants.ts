@@ -225,7 +225,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 5000,
     message: "There's got to be a way to make money off this. It's simply too good.",
     passiveIncrementPower: 50,
-    prerequsiteId: ShopItemIds.firstPost,
+    prerequsiteId: ShopItemIds.basicBlog,
   },
 }
 

@@ -32,7 +32,7 @@ export default function IdleGame() {
       <div
         id="view"
         ref={viewRef}
-        className={classNames('w-[80%] flex flex-col relative', {
+        className={classNames('w-[80%] flex flex-col relative fade-in', {
           'items-center': purchasedShopItems.includes(ShopItemIds.centeredTitle),
           '!bg-red-50': purchasedShopItems.includes(ShopItemIds.lightenedColor),
           'bg-red-500': purchasedShopItems.includes(ShopItemIds.basicColor),

@@ -80,7 +80,7 @@ export const SidePanel = ({
     <div className="flex flex-col h-[100vh] w-[20%] border-l py-4 px-8">
       <div>
         <h5 className="text-2xl font-medium mb-2">Shop</h5>
-        <div className="flex gap-4 flex-wrap">
+        <div className="flex gap-4 flex-wrap fade-in">
           {filteredShopItems.slice(0, 5).map((button) => (
             <ShopButton
               key={button.id}
@@ -96,7 +96,7 @@ export const SidePanel = ({
       <div className="flex-grow" />
       <Score scoreProps={scoreProps} purchasedIds={purchasedIds} blogViewProps={blogViewProps} />
       <Clicker onClick={() => incrementScore(clickPower)} purchasedIds={purchasedIds} />
-      <div className="flex flex-col p-2 border rounded-md h-[200px] mt-2 select-none">
+      <div className="flex flex-col p-2 border rounded-md h-[200px] mt-2 select-none fade-in">
         {hoveredButton && (
           <>
             <div className="font-medium">{hoveredButton.title}</div>

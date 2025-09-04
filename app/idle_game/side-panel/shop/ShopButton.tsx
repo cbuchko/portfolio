@@ -19,7 +19,7 @@ export const ShopButton = ({
   return (
     <button
       className={classNames('shop-button whitespace-nowrap hover:bg-gray-300', {
-        '!cursor-default !border-gray-400 hover:!bg-white': isDisabled,
+        '!cursor-default !border-gray-400 hover:!bg-white hover:!border-red-500': isDisabled,
       })}
       onClick={spendScore}
       onMouseEnter={() => setHoveredId(id)}
