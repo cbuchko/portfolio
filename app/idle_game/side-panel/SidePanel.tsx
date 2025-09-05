@@ -12,6 +12,7 @@ type SidePanelProps = {
   onPurchase: (id: ShopItemIds) => void
   scoreProps: ScoreProps
   blogViewProps: BlogViewProps
+  setUserName: (name: string) => void
 }
 
 export const SidePanel = ({
@@ -19,6 +20,7 @@ export const SidePanel = ({
   scoreProps,
   blogViewProps,
   onPurchase,
+  setUserName,
 }: SidePanelProps) => {
   const {
     score,
@@ -77,13 +79,23 @@ export const SidePanel = ({
       .sort((a, b) => calculateCost(a) - calculateCost(b))
   }, [purchasedIds])
 
-  const hoveredButton = hoveredShopId !== undefined ? ShopItems[hoveredShopId] : undefined
-  const showInitialMessage = hoveredButton === undefined && purchasedIds.length === 0
+  const handleNameChange = useCallback((name: string) => {
+    if (name.length > 30) return
+    setUserName(name)
+  }, [])
+
   return (
-    <div className="flex flex-col h-[100vh] w-[20%] border-l py-4 px-8">
+    <div className="flex flex-col h-[100vh] w-[20%] border-l py-4 px-8 fade-in">
       <div>
+        {purchasedIds.includes(ShopItemIds.blogCustomAuthor) && (
+          <input
+            className="border rounded-lg p-2 mb-4 w-full"
+            onChange={(e) => handleNameChange(e.target.value)}
+            placeholder="Your Name Here"
+          />
+        )}
         <h5 className="text-2xl font-medium mb-2">Shop</h5>
-        <div className="flex gap-4 flex-wrap fade-in">
+        <div className="flex gap-4 flex-wrap">
           {filteredShopItems.slice(0, 5).map((button) => (
             <ShopButton
               key={button.id}
@@ -99,32 +111,55 @@ export const SidePanel = ({
       <div className="flex-grow" />
       <Score scoreProps={scoreProps} purchasedIds={purchasedIds} blogViewProps={blogViewProps} />
       <Clicker onClick={() => incrementScore(clickPower)} purchasedIds={purchasedIds} />
-      <div className="flex flex-col p-2 border rounded-md h-[200px] mt-2 select-none fade-in">
-        {hoveredButton && (
-          <>
-            <div className="font-medium">{hoveredButton.title}</div>
-            <div className="mt-2">{hoveredButton.message}</div>
-            <div className="mt-2">
-              {hoveredButton.clickIncrementPower && (
-                <div>{`+${hoveredButton.clickIncrementPower} score per click`}</div>
-              )}
-              {hoveredButton.passiveIncrementPower && (
-                <div>{`+${hoveredButton.passiveIncrementPower} score per second`}</div>
-              )}
-              {(hoveredButton.blogViewModifier || hoveredButton.viewIncrementPower) && (
-                <div>Enhances blog post view generation</div>
-              )}
-            </div>
-            <div className="flex-grow" />
-            {hoveredButton.cost && (
-              <div className={classNames({ 'text-red-400': calculateCost(hoveredButton) > score })}>
-                Costs: {calculateCost(hoveredButton)} Score
-              </div>
+      <TutorialBox
+        score={score}
+        purchasedIds={purchasedIds}
+        hoveredShopId={hoveredShopId}
+        calculateCost={calculateCost}
+      />
+    </div>
+  )
+}
+
+const TutorialBox = ({
+  score,
+  purchasedIds,
+  hoveredShopId,
+  calculateCost,
+}: {
+  score: number
+  purchasedIds: Array<ShopItemIds>
+  hoveredShopId?: ShopItemIds
+  calculateCost: (item: ShopItem) => number
+}) => {
+  const hoveredButton = hoveredShopId !== undefined ? ShopItems[hoveredShopId] : undefined
+  const showInitialMessage = hoveredButton === undefined && purchasedIds.length === 0
+  return (
+    <div className="flex flex-col p-2 border rounded-md h-[200px] mt-2 select-none fade-in">
+      {hoveredButton && (
+        <>
+          <div className="font-medium">{hoveredButton.title}</div>
+          <div className="mt-2">{hoveredButton.message}</div>
+          <div className="mt-2">
+            {hoveredButton.clickIncrementPower && (
+              <div>{`+${hoveredButton.clickIncrementPower} score per click`}</div>
             )}
-          </>
-        )}
-        {showInitialMessage && defaultMessage}
-      </div>
+            {hoveredButton.passiveIncrementPower && (
+              <div>{`+${hoveredButton.passiveIncrementPower} score per second`}</div>
+            )}
+            {(hoveredButton.blogViewModifier || hoveredButton.viewIncrementPower) && (
+              <div>Enhances blog post view generation</div>
+            )}
+          </div>
+          <div className="flex-grow" />
+          {hoveredButton.cost && (
+            <div className={classNames({ 'text-red-400': calculateCost(hoveredButton) > score })}>
+              Costs: {calculateCost(hoveredButton)} Score
+            </div>
+          )}
+        </>
+      )}
+      {showInitialMessage && defaultMessage}
     </div>
   )
 }

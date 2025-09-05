@@ -17,6 +17,7 @@ export default function IdleGame() {
   const viewRef = useRef<HTMLDivElement | null>(null)
 
   const [purchasedShopItems, setPurchasedShopItems] = useState<Array<ShopItemIds>>([])
+  const [userName, setUserName] = useState('Unknown')
 
   const scoreProps = useScore(purchasedShopItems)
   const blogViewProps = useBlogViews()
@@ -60,6 +61,7 @@ export default function IdleGame() {
                 scoreProps.incrementScore(scoreProps.viewPower * viewGain)
               }
               blogViewProps={blogViewProps}
+              userName={userName}
             />
           )}
         </div>
@@ -72,6 +74,7 @@ export default function IdleGame() {
         onPurchase={onPurchase}
         scoreProps={scoreProps}
         blogViewProps={blogViewProps}
+        setUserName={setUserName}
       />
     </div>
   )

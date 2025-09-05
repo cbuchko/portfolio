@@ -22,6 +22,7 @@ export const Title = ({ purchasedIds }: MemeProps) => {
         <h1
           className={classNames({
             'text-center mt-4 text-5xl': purchasedIds.includes(ShopItemIds.centeredTitle),
+            'blog-title': purchasedIds.includes(ShopItemIds.blogTitle),
           })}
         >
           THE MEME HALL OF FAME

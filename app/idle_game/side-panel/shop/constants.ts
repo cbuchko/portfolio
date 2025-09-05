@@ -20,6 +20,10 @@ export enum ShopItemIds {
   blogViewCount,
   blogViewBots,
   blogTitle,
+  blogAuthor,
+  blogCustomAuthor,
+  blogBio,
+  blogImage,
   basicAds,
 }
 
@@ -225,11 +229,51 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     viewIncrementPower: 99,
     prerequsiteId: ShopItemIds.blogViewCount,
   },
+  [ShopItemIds.blogAuthor]: {
+    id: ShopItemIds.blogAuthor,
+    title: 'Blog Author',
+    cost: 30000,
+    message: 'Time to take some credit for all of our hard work.',
+    blogViewModifier: {
+      gain: 2,
+    },
+    prerequsiteId: ShopItemIds.blogViewBots,
+  },
+  [ShopItemIds.blogCustomAuthor]: {
+    id: ShopItemIds.blogCustomAuthor,
+    title: 'Custom Author',
+    cost: 50000,
+    message: 'This is awkward, we never introduced ourselves. What a hilarious misunderstanding.',
+    blogViewModifier: {
+      gain: 4,
+    },
+    prerequsiteId: ShopItemIds.blogAuthor,
+  },
+  [ShopItemIds.blogBio]: {
+    id: ShopItemIds.blogBio,
+    title: 'About the Author',
+    cost: 100000,
+    message: 'I think some backstory is what the people really need to connect to our writing.',
+    blogViewModifier: {
+      gain: 8,
+    },
+    prerequsiteId: ShopItemIds.blogCustomAuthor,
+  },
+  [ShopItemIds.blogImage]: {
+    id: ShopItemIds.blogImage,
+    title: 'Blog Image',
+    cost: 50000,
+    message: 'I have some stock photos lying around.',
+    blogViewModifier: {
+      odds: 8,
+    },
+    prerequsiteId: ShopItemIds.blogViewBots,
+  },
   [ShopItemIds.blogTitle]: {
     id: ShopItemIds.blogTitle,
-    title: 'Blog Title',
+    title: 'Stylish Title',
     cost: 30000,
-    message: 'You know what the blog needs? Character. Gumption. Chutzpah.',
+    message: 'You know what our website needs? Character. Gumption. Chutzpah.',
     blogViewModifier: {
       frequencyInMs: 4000,
     },
