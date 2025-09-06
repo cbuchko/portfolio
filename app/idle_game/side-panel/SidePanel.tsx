@@ -98,7 +98,7 @@ export const SidePanel = ({
         )}
         <h5 className="text-2xl font-medium mb-2">Shop</h5>
         <div className="flex gap-4 flex-wrap">
-          {filteredShopItems.slice(0, 5).map((button) => (
+          {filteredShopItems.map((button) => (
             <ShopButton
               key={button.id}
               id={button.id}
@@ -151,6 +151,9 @@ const TutorialBox = ({
             )}
             {hoveredButton.passiveIncrementPower && (
               <div>{`+${hoveredButton.passiveIncrementPower} score per second`}</div>
+            )}
+            {hoveredButton.adIncrementPower && (
+              <div>{`+${hoveredButton.adIncrementPower} score when claiming ads`}</div>
             )}
             {(hoveredButton.blogViewModifier || hoveredButton.viewIncrementPower) && (
               <div>Enhances blog post view generation</div>

@@ -226,7 +226,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.blogViewBots]: {
     id: ShopItemIds.blogViewBots,
     title: 'Blog View Bots',
-    cost: 25000,
+    cost: 10000,
     message:
       "I guess seeing the view count doesn't magically give us views... we gotta grease the wheels first.",
     viewIncrementPower: 99,
@@ -245,7 +245,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.blogCustomAuthor]: {
     id: ShopItemIds.blogCustomAuthor,
     title: 'Custom Author',
-    cost: 50000,
+    cost: 17500,
     message: 'This is awkward, we never introduced ourselves. What a hilarious misunderstanding.',
     blogViewModifier: {
       gain: 4,
@@ -255,7 +255,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.blogBio]: {
     id: ShopItemIds.blogBio,
     title: 'About the Author',
-    cost: 100000,
+    cost: 50000,
     message: 'I think some backstory is what the people really need to connect to our writing.',
     blogViewModifier: {
       gain: 8,
@@ -265,7 +265,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.blogImage]: {
     id: ShopItemIds.blogImage,
     title: 'Blog Image',
-    cost: 50000,
+    cost: 40000,
     message: 'I have some stock photos lying around.',
     blogViewModifier: {
       odds: 8,
@@ -275,7 +275,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.blogTitle]: {
     id: ShopItemIds.blogTitle,
     title: 'Stylish Title',
-    cost: 30000,
+    cost: 17500,
     message: 'You know what our website needs? Character. Gumption. Chutzpah.',
     blogViewModifier: {
       frequencyInMs: 4000,
@@ -289,7 +289,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 5000,
     message: "There's got to be a way to make money off this. It's simply too good.",
     passiveIncrementPower: 50,
-    prerequsiteId: ShopItemIds.basicBlog,
+    prerequsiteId: ShopItemIds.basicMeme,
   },
   [ShopItemIds.repeatableAdAmount]: {
     id: ShopItemIds.repeatableAdAmount,
@@ -307,7 +307,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.adSponsor]: {
     id: ShopItemIds.adSponsor,
     title: 'Sponsor Deals',
-    cost: 50000,
+    cost: 15000,
     adIncrementPower: 2000,
     message: 'For legal reasons this site is not actually affiliated with any organization.',
     prerequsiteId: ShopItemIds.basicAds,
