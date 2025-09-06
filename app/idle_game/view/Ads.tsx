@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { AdContent } from './constants'
-import { ScoreProps } from '../side-panel/useScore'
+import { ScoreProps, StatisticType } from '../side-panel/useScore'
 import { ShopItemIds } from '../side-panel/shop/constants'
 
 type AdsProps = {
@@ -110,7 +110,7 @@ export const Ad = ({ scoreProps, viewRef, incrementScore }: AdsProps) => {
     clearInterval(interval)
     ad.style.opacity = '0'
     ad.style.pointerEvents = 'none'
-    incrementScore(adPower)
+    incrementScore(adPower, StatisticType.ad)
   }, [incrementScore])
 
   return (
@@ -136,7 +136,7 @@ export const Ad = ({ scoreProps, viewRef, incrementScore }: AdsProps) => {
       <div
         className="absolute bottom-0 z-10 left-0 h-1 bg-blue-500 rounded-bl-md"
         style={{ width: `${100 - progress}%` }}
-      ></div>
+      />
     </div>
   )
 }

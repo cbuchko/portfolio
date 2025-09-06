@@ -26,7 +26,7 @@ export const Score = ({ scoreProps, purchasedIds, blogViewProps }: ScoreComponen
         </div>
       ))}
       <div className="flex items-center gap-2 mt-2 text-3xl select-none">
-        <span className="mono">{displayScore}</span>
+        <span className="mono">{displayScore.toLocaleString('en-us')}</span>
         <h2 className="">Score</h2>
       </div>
       <div className="mb-2">

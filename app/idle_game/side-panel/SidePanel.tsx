@@ -1,11 +1,13 @@
 import { useCallback, useMemo, useState } from 'react'
 import { ShopButton } from './shop/ShopButton'
-import { ScoreProps } from './useScore'
+import { ScoreProps, StatisticType } from './useScore'
 import { defaultMessage, ShopItemIds, ShopItem, ShopItems } from './shop/constants'
 import { Clicker } from './Clicker'
 import classNames from 'classnames'
 import { Score } from './Score'
 import { BlogViewProps } from '../view/useBlogViews'
+import { ModalNames } from '../menus/modalRegistry'
+import Image from 'next/image'
 
 type SidePanelProps = {
   purchasedIds: Array<ShopItemIds>
@@ -13,6 +15,7 @@ type SidePanelProps = {
   scoreProps: ScoreProps
   blogViewProps: BlogViewProps
   setUserName: (name: string) => void
+  setActiveModal: (modal: ModalNames) => void
 }
 
 export const SidePanel = ({
@@ -21,6 +24,7 @@ export const SidePanel = ({
   blogViewProps,
   onPurchase,
   setUserName,
+  setActiveModal,
 }: SidePanelProps) => {
   const {
     score,
@@ -96,6 +100,15 @@ export const SidePanel = ({
             placeholder="Your Name Here"
           />
         )}
+        {purchasedIds.includes(ShopItemIds.statistics) && (
+          <button
+            className="border p-2 rounded-md mb-4 cursor-pointer flex gap-1 items-center"
+            onClick={() => setActiveModal(ModalNames.Statistics)}
+          >
+            <Image src="/idle_game/stat.svg" height={20} width={20} alt="Stat" />
+            <h5>Statistics</h5>
+          </button>
+        )}
         <h5 className="text-2xl font-medium mb-2">Shop</h5>
         <div className="flex gap-4 flex-wrap">
           {filteredShopItems.map((button) => (
@@ -112,14 +125,17 @@ export const SidePanel = ({
       </div>
       <div className="flex-grow" />
       <Score scoreProps={scoreProps} purchasedIds={purchasedIds} blogViewProps={blogViewProps} />
-      <Clicker onClick={() => incrementScore(clickPower)} purchasedIds={purchasedIds} />
+      <Clicker
+        onClick={() => incrementScore(clickPower, StatisticType.click)}
+        purchasedIds={purchasedIds}
+      />
       <TutorialBox
         score={score}
         purchasedIds={purchasedIds}
         hoveredShopId={hoveredShopId}
         calculateCost={calculateCost}
       />
-      <a className="text-xs text-center mt-2" href="https://logo.dev">
+      <a className="text-xs text-center mt-2" href="https://logo.dev" target="_blank">
         Logos provided by Logo.dev
       </a>
     </div>

@@ -27,6 +27,7 @@ export enum ShopItemIds {
   basicAds,
   repeatableAdAmount,
   adSponsor,
+  statistics,
 }
 
 export type ShopItem = {
@@ -311,6 +312,15 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     adIncrementPower: 2000,
     message: 'For legal reasons this site is not actually affiliated with any organization.',
     prerequsiteId: ShopItemIds.basicAds,
+  },
+  //MISC
+  [ShopItemIds.statistics]: {
+    id: ShopItemIds.statistics,
+    title: 'Statistics',
+    cost: 30000,
+    clickIncrementPower: 100,
+    message: 'Number go up = happy.',
+    prerequsiteId: ShopItemIds.blogViewBots,
   },
 }
 

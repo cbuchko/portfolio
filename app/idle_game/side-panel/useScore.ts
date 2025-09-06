@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ShopItemIds } from './shop/constants'
 
-const devMode = false
+const devMode = true
 
 export type ScoreProps = {
   score: number
@@ -11,10 +11,11 @@ export type ScoreProps = {
   viewPower: number
   adPower: number
   scoreIncrements: ScoreIncrement[]
+  statistics: Statistics
   incrementClicks: (increase: number) => void
   incrementPassive: (increase: number) => void
   incrementView: (increase: number) => void
-  incrementScore: (increase: number) => void
+  incrementScore: (increase: number, statisticType: StatisticType, skipAnimation?: boolean) => void
   incrementAdPower: (increase: number) => void
   spendScore: (cost: number, purchaseCallback: () => void) => void
 }
@@ -23,6 +24,20 @@ export type ScoreIncrement = {
   id: string
   amount: number
   xPosition: number
+}
+
+export type Statistics = {
+  totalClickScore: number
+  totalPassiveScore: number
+  totalAdScore: number
+  totalBlogScore: number
+}
+
+export enum StatisticType {
+  click = 'totalClickScore',
+  passive = 'totalPassiveScore',
+  ad = 'totalAdScore',
+  blog = 'totalBlogScore',
 }
 
 export const useScore = (purchasedIds: ShopItemIds[]) => {
@@ -35,6 +50,13 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
   const [viewPower, setViewPower] = useState(0)
   const [adPower, setAdPower] = useState(1000)
   const [scoreIncrements, setScoreIncrements] = useState<ScoreIncrement[]>([])
+
+  const [statistics, setStatistics] = useState<Statistics>({
+    totalAdScore: 0,
+    totalBlogScore: 0,
+    totalClickScore: 0,
+    totalPassiveScore: 0,
+  })
 
   //basic functions for adjusting the core state values
   const incrementClicks = useCallback((increase: number) => {
@@ -51,12 +73,21 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
   }, [])
 
   const incrementScore = useCallback(
-    (amount: number) => {
+    (amount: number, statisticType: StatisticType, skipAnimation?: boolean) => {
       if (!(amount > 0)) return
       setScore((prevScore) => prevScore + amount)
       setDisplayScore((prevScore) => prevScore + amount)
 
-      if (!purchasedIds.includes(ShopItemIds.scoreIncrementer)) return
+      //update total stats
+      setStatistics((prevStats) => {
+        return {
+          ...prevStats,
+          [statisticType]: prevStats[statisticType] + amount,
+        }
+      })
+
+      if (!purchasedIds.includes(ShopItemIds.scoreIncrementer) || skipAnimation === true) return
+
       // add the score to the animation
       const scoreId = crypto.randomUUID()
       setScoreIncrements((prevIncrements) => [
@@ -93,7 +124,7 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
     }
 
     const interval = setInterval(() => {
-      setScore((prevScore) => prevScore + passivePower)
+      incrementScore(passivePower, StatisticType.passive, true)
     }, 1000)
     intervalReference.current = interval
 
@@ -132,6 +163,7 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
     viewPower,
     adPower,
     scoreIncrements,
+    statistics,
     incrementClicks,
     incrementPassive,
     incrementScore,

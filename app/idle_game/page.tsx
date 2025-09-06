@@ -10,14 +10,18 @@ import { Memes } from './view/MemeGallery'
 import { Title } from './view/Title'
 import { Blog } from './view/Blog'
 import { Ads } from './view/Ads'
-import { useScore } from './side-panel/useScore'
+import { StatisticType, useScore } from './side-panel/useScore'
 import { useBlogViews } from './view/useBlogViews'
 import { Sponsorships } from './view/Sponsor'
+import { ModalNames } from './menus/modalRegistry'
+import { StatisticsModal } from './menus/StatisticsModal'
 
 export default function IdleGame() {
+  const startDateRef = useRef(new Date())
   const viewRef = useRef<HTMLDivElement | null>(null)
 
   const [purchasedShopItems, setPurchasedShopItems] = useState<Array<ShopItemIds>>([])
+  const [activeModal, setActiveModal] = useState<ModalNames.Statistics>()
   const [userName, setUserName] = useState('Unknown')
   const name = userName || 'Unknown'
 
@@ -60,7 +64,7 @@ export default function IdleGame() {
             <Blog
               purchasedIds={purchasedShopItems}
               handleBlogView={(viewGain) =>
-                scoreProps.incrementScore(scoreProps.viewPower * viewGain)
+                scoreProps.incrementScore(scoreProps.viewPower * viewGain, StatisticType.blog)
               }
               blogViewProps={blogViewProps}
               userName={name}
@@ -82,7 +86,15 @@ export default function IdleGame() {
         scoreProps={scoreProps}
         blogViewProps={blogViewProps}
         setUserName={setUserName}
+        setActiveModal={setActiveModal}
       />
+      {activeModal === ModalNames.Statistics && (
+        <StatisticsModal
+          setActiveModal={setActiveModal}
+          statistic={scoreProps.statistics}
+          date={startDateRef}
+        />
+      )}
     </div>
   )
 }
