@@ -9,11 +9,13 @@ export type ScoreProps = {
   clickPower: number
   passivePower: number
   viewPower: number
+  adPower: number
   scoreIncrements: ScoreIncrement[]
   incrementClicks: (increase: number) => void
   incrementPassive: (increase: number) => void
   incrementView: (increase: number) => void
   incrementScore: (increase: number) => void
+  incrementAdPower: (increase: number) => void
   spendScore: (cost: number, purchaseCallback: () => void) => void
 }
 
@@ -31,6 +33,7 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
   const displayReference = useRef<NodeJS.Timeout>(null)
   const [passivePower, setPassivePower] = useState(0)
   const [viewPower, setViewPower] = useState(0)
+  const [adPower, setAdPower] = useState(1000)
   const [scoreIncrements, setScoreIncrements] = useState<ScoreIncrement[]>([])
 
   //basic functions for adjusting the core state values
@@ -42,6 +45,9 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
   }, [])
   const incrementView = useCallback((increase: number) => {
     setViewPower((prevPower) => prevPower + increase)
+  }, [])
+  const incrementAdPower = useCallback((increase: number) => {
+    setAdPower((prevPower) => prevPower + increase)
   }, [])
 
   const incrementScore = useCallback(
@@ -124,11 +130,13 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
     clickPower,
     passivePower,
     viewPower,
+    adPower,
     scoreIncrements,
     incrementClicks,
     incrementPassive,
     incrementScore,
     incrementView,
     spendScore,
+    incrementAdPower,
   } as ScoreProps
 }

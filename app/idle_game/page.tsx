@@ -12,12 +12,14 @@ import { Blog } from './view/Blog'
 import { Ads } from './view/Ads'
 import { useScore } from './side-panel/useScore'
 import { useBlogViews } from './view/useBlogViews'
+import { Sponsorships } from './view/Sponsor'
 
 export default function IdleGame() {
   const viewRef = useRef<HTMLDivElement | null>(null)
 
   const [purchasedShopItems, setPurchasedShopItems] = useState<Array<ShopItemIds>>([])
   const [userName, setUserName] = useState('Unknown')
+  const name = userName || 'Unknown'
 
   const scoreProps = useScore(purchasedShopItems)
   const blogViewProps = useBlogViews()
@@ -40,15 +42,15 @@ export default function IdleGame() {
         })}
       >
         <Title purchasedIds={purchasedShopItems} />
+        {purchasedShopItems.includes(ShopItemIds.adSponsor) && <Sponsorships />}
         {purchasedShopItems.includes(ShopItemIds.basicBody) &&
           !purchasedShopItems.includes(ShopItemIds.basicMeme) && (
             <div className="max-w-[500px] text-center mt-8">{LoremIpsum}</div>
           )}
         <div
           className={classNames('', {
-            'grid grid-cols-2 w-full px-8 mt-16': purchasedShopItems.includes(
-              ShopItemIds.basicBlog
-            ),
+            'grid grid-cols-2 w-full px-8': purchasedShopItems.includes(ShopItemIds.basicBlog),
+            'mt-16': !purchasedShopItems.includes(ShopItemIds.adSponsor),
           })}
         >
           {purchasedShopItems.includes(ShopItemIds.basicMeme) && (
@@ -61,12 +63,17 @@ export default function IdleGame() {
                 scoreProps.incrementScore(scoreProps.viewPower * viewGain)
               }
               blogViewProps={blogViewProps}
-              userName={userName}
+              userName={name}
             />
           )}
         </div>
         {purchasedShopItems.includes(ShopItemIds.basicAds) && (
-          <Ads viewRef={viewRef} incrementScore={scoreProps.incrementScore} />
+          <Ads
+            scoreProps={scoreProps}
+            viewRef={viewRef}
+            incrementScore={scoreProps.incrementScore}
+            purchasedIds={purchasedShopItems}
+          />
         )}
       </div>
       <SidePanel

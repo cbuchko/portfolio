@@ -25,6 +25,8 @@ export enum ShopItemIds {
   blogBio,
   blogImage,
   basicAds,
+  repeatableAdAmount,
+  adSponsor,
 }
 
 export type ShopItem = {
@@ -39,6 +41,7 @@ export type ShopItem = {
   clickIncrementPower?: number
   passiveIncrementPower?: number
   viewIncrementPower?: number
+  adIncrementPower?: number
   blogViewModifier?: {
     frequencyInMs?: number
     odds?: number
@@ -287,6 +290,27 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     message: "There's got to be a way to make money off this. It's simply too good.",
     passiveIncrementPower: 50,
     prerequsiteId: ShopItemIds.basicBlog,
+  },
+  [ShopItemIds.repeatableAdAmount]: {
+    id: ShopItemIds.repeatableAdAmount,
+    title: 'More Ads',
+    cost: 20000,
+    message: "I'm warning you, once you go down this road there is no turning back.",
+    passiveIncrementPower: 50,
+    prerequsiteId: ShopItemIds.basicAds,
+    isRepeatble: {
+      limit: 20,
+      costMultiplier: 1.25,
+      powerMultiplier: 1,
+    },
+  },
+  [ShopItemIds.adSponsor]: {
+    id: ShopItemIds.adSponsor,
+    title: 'Sponsor Deals',
+    cost: 50000,
+    adIncrementPower: 2000,
+    message: 'For legal reasons this site is not actually affiliated with any organization.',
+    prerequsiteId: ShopItemIds.basicAds,
   },
 }
 

@@ -2,17 +2,43 @@ import Image from 'next/image'
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { AdContent } from './constants'
 import { ScoreProps } from '../side-panel/useScore'
+import { ShopItemIds } from '../side-panel/shop/constants'
 
 type AdsProps = {
+  scoreProps: ScoreProps
+  purchasedIds: Array<ShopItemIds>
   viewRef: RefObject<HTMLDivElement | null>
   incrementScore: ScoreProps['incrementScore']
 }
 
 const timeoutDurationInMs = 3000
 const addFrequencyInMs = 30000
-const adScore = 1000
 
-export const Ads = ({ viewRef, incrementScore }: AdsProps) => {
+export const Ads = ({ scoreProps, purchasedIds, viewRef, incrementScore }: AdsProps) => {
+  const ads = purchasedIds.filter((id) => id === ShopItemIds.repeatableAdAmount)
+  return (
+    <>
+      {ads.map((_, idx) => (
+        <Ad
+          key={idx}
+          scoreProps={scoreProps}
+          purchasedIds={purchasedIds}
+          viewRef={viewRef}
+          incrementScore={incrementScore}
+        />
+      ))}
+      <Ad
+        scoreProps={scoreProps}
+        purchasedIds={purchasedIds}
+        viewRef={viewRef}
+        incrementScore={incrementScore}
+      />
+    </>
+  )
+}
+
+export const Ad = ({ scoreProps, viewRef, incrementScore }: AdsProps) => {
+  const { adPower } = scoreProps
   const adRef = useRef<HTMLDivElement | null>(null)
   const intervalRef = useRef<NodeJS.Timeout>(null)
 
@@ -84,8 +110,8 @@ export const Ads = ({ viewRef, incrementScore }: AdsProps) => {
     clearInterval(interval)
     ad.style.opacity = '0'
     ad.style.pointerEvents = 'none'
-    incrementScore(adScore)
-  }, [])
+    incrementScore(adPower)
+  }, [incrementScore])
 
   return (
     <div

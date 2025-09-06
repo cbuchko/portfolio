@@ -29,6 +29,7 @@ export const SidePanel = ({
     incrementPassive,
     incrementScore,
     incrementView,
+    incrementAdPower,
     spendScore,
   } = scoreProps
 
@@ -50,6 +51,7 @@ export const SidePanel = ({
         if (button.clickIncrementPower) incrementClicks(button.clickIncrementPower)
         if (button.passiveIncrementPower) incrementPassive(button.passiveIncrementPower)
         if (button.viewIncrementPower) incrementView(button.viewIncrementPower)
+        if (button.adIncrementPower) incrementAdPower(button.adIncrementPower)
         if (button.blogViewModifier?.frequencyInMs)
           setViewFrequency(button.blogViewModifier.frequencyInMs)
         if (button.blogViewModifier?.gain) setViewGain(button.blogViewModifier.gain)
@@ -117,6 +119,9 @@ export const SidePanel = ({
         hoveredShopId={hoveredShopId}
         calculateCost={calculateCost}
       />
+      <a className="text-xs text-center mt-2" href="https://logo.dev">
+        Logos provided by Logo.dev
+      </a>
     </div>
   )
 }

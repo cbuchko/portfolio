@@ -29,7 +29,7 @@ export const Blog = ({ purchasedIds, blogViewProps, handleBlogView, userName }: 
         </>
       )}
       {purchasedIds.includes(ShopItemIds.firstPost) && (
-        <div className="my-4 overflow-y-auto max-h-[60vh]">
+        <div className="my-4 overflow-y-auto max-h-[55vh]">
           {BlogPosts.slice(0, blogCount).map((post, idx) => (
             <BlogPost
               key={idx}
@@ -119,7 +119,7 @@ const BlogPost = ({
           </div>
         </div>
         {imageUrl && purchasedIds.includes(ShopItemIds.blogImage) && (
-          <img src={imageUrl} className="rounded-lg" alt="eye" height={150} width={300} />
+          <img src={imageUrl} className="rounded-lg" alt="thumbnail" height={150} width={300} />
         )}
       </div>
     </div>
