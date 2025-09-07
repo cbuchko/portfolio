@@ -149,7 +149,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     passiveIncrementPower: 3,
     prerequsiteId: ShopItemIds.basicMeme,
     isRepeatble: {
-      limit: 6,
+      limit: 30,
       costMultiplier: 1.25,
       powerMultiplier: 1,
     },

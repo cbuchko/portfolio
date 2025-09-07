@@ -5,10 +5,11 @@ import Image from 'next/image'
 
 type MemeProps = {
   url: string
+  size: number
   purchasedIds: Array<ShopItemIds>
 }
 
-export const Meme = ({ url, purchasedIds }: MemeProps) => {
+export const Meme = ({ url, size, purchasedIds }: MemeProps) => {
   const isGalleryActive = purchasedIds.includes(ShopItemIds.memeGallery)
   const borderRef = useRef<HTMLDivElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -49,10 +50,13 @@ export const Meme = ({ url, purchasedIds }: MemeProps) => {
     <div
       ref={containerRef}
       className={classNames('w-[300px] h-[300px] relative', {
-        '!w-[198px] !h-[198px]': purchasedIds.includes(ShopItemIds.basicBlog),
         'm-4': isGalleryActive,
         ' depth-container': purchasedIds.includes(ShopItemIds.memeRotation),
       })}
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+      }}
     >
       <Image
         src={url}
@@ -65,9 +69,11 @@ export const Meme = ({ url, purchasedIds }: MemeProps) => {
       {purchasedIds.includes(ShopItemIds.memeTrim) && (
         <div
           ref={borderRef}
-          className={classNames('w-[300px] h-[300px] rounded-lg shimmer-border', {
-            '!w-[200px] !h-[200px]': purchasedIds.includes(ShopItemIds.basicBlog),
-          })}
+          className={classNames('w-[300px] h-[300px] rounded-lg shimmer-border', {})}
+          style={{
+            width: `${size}px`,
+            height: `${size}px`,
+          }}
         />
       )}
     </div>
