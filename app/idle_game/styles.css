@@ -153,3 +153,15 @@
     0px 0px 20px rgba(0, 0, 0, 0.2);
   color: #92a5de;
 }
+
+.active-meme {
+  left: 25% !important;
+  top: 30% !important;
+  width: 300px !important;
+  height: 300px !important;
+}
+
+.active-meme div {
+  width: 300px !important;
+  height: 300px !important;
+}

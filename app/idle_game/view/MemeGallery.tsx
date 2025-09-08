@@ -2,13 +2,14 @@ import { MemeUrls } from './constants'
 import { ShopItemIds } from '../side-panel/shop/constants'
 import classNames from 'classnames'
 import { Meme } from './Meme'
-import { useState } from 'react'
+import { act, useState } from 'react'
 
 type MemeProps = {
   purchasedIds: Array<ShopItemIds>
 }
 
 export const Memes = ({ purchasedIds }: MemeProps) => {
+  const [activeMeme, setActiveMeme] = useState<number>()
   const [memeBank, setMemeBank] = useState(MemeUrls)
 
   const memeCount = purchasedIds.filter((id) => id === ShopItemIds.memeRepeatable).length + 1
@@ -23,20 +24,30 @@ export const Memes = ({ purchasedIds }: MemeProps) => {
   }
 
   return (
-    <div
-      className={classNames('mt-8 p-4 pb-16', {
-        'flex flex-wrap': isGalleryActive,
-      })}
-    >
-      {Array.from({ length: memeCount }, (_, i) => (
-        <Meme
-          key={i}
-          memeBank={memeBank}
-          setMemeBank={setMemeBank}
-          purchasedIds={purchasedIds}
-          size={getMemeSize()}
+    <>
+      <div
+        className={classNames('mt-8 p-4 pb-16', {
+          'flex flex-wrap': isGalleryActive,
+        })}
+      >
+        {Array.from({ length: memeCount }, (_, i) => (
+          <Meme
+            key={i}
+            memeBank={memeBank}
+            setMemeBank={setMemeBank}
+            setActiveMeme={() => setActiveMeme(i)}
+            purchasedIds={purchasedIds}
+            size={getMemeSize()}
+            isActive={activeMeme === i}
+          />
+        ))}
+      </div>
+      {activeMeme !== undefined && (
+        <div
+          className="fixed top-0 left-0 w-screen h-screen bg-black/60 cursor-pointer z-50"
+          onClick={() => setActiveMeme(undefined)}
         />
-      ))}
-    </div>
+      )}
+    </>
   )
 }
