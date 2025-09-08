@@ -26,7 +26,7 @@ export const Memes = ({ purchasedIds }: MemeProps) => {
   return (
     <>
       <div
-        className={classNames('mt-8 p-4 pb-16', {
+        className={classNames('mt-8 p-4 pb-16 h-max', {
           'flex flex-wrap': isGalleryActive,
         })}
       >

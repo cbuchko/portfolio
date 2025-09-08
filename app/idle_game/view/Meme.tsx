@@ -73,6 +73,7 @@ export const Meme = ({
 
   //animate the meme into the center of the screen
   const handleMemeClick = useCallback(() => {
+    if (!purchasedIds.includes(ShopItemIds.memeFocus)) return
     const container = containerRef.current
     if (!container) return
 
@@ -94,7 +95,7 @@ export const Meme = ({
     })
 
     setActiveMeme()
-  }, [])
+  }, [purchasedIds])
 
   //listen for when the meme becomes inactive, and transition it back to its original spot
   useEffect(() => {
@@ -126,6 +127,7 @@ export const Meme = ({
         className={classNames('w-[300px] h-[300px] relative', {
           'm-4': isGalleryActive,
           'depth-container': purchasedIds.includes(ShopItemIds.memeRotation),
+          'cursor-pointer': purchasedIds.includes(ShopItemIds.memeFocus),
         })}
         style={{
           width: `${size}px`,

@@ -13,6 +13,7 @@ export enum ShopItemIds {
   memeGallery,
   memeTrim,
   memeRotation,
+  memeFocus,
   basicBlog,
   firstPost,
   postRepeatable,
@@ -177,6 +178,14 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     message: 'Take these puppies for a spin.',
     passiveIncrementPower: 50,
     prerequsiteId: ShopItemIds.memeTrim,
+  },
+  [ShopItemIds.memeFocus]: {
+    id: ShopItemIds.memeFocus,
+    title: 'Meme Inspection',
+    cost: 30000,
+    message: 'Bring it front and center.',
+    passiveIncrementPower: 100,
+    prerequsiteId: ShopItemIds.memeRotation,
   },
   //BLOG
   [ShopItemIds.basicBlog]: {
