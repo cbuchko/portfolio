@@ -2,12 +2,15 @@ import { MemeUrls } from './constants'
 import { ShopItemIds } from '../side-panel/shop/constants'
 import classNames from 'classnames'
 import { Meme } from './Meme'
+import { useState } from 'react'
 
 type MemeProps = {
   purchasedIds: Array<ShopItemIds>
 }
 
 export const Memes = ({ purchasedIds }: MemeProps) => {
+  const [memeBank, setMemeBank] = useState(MemeUrls)
+
   const memeCount = purchasedIds.filter((id) => id === ShopItemIds.memeRepeatable).length + 1
   const isGalleryActive = purchasedIds.includes(ShopItemIds.memeGallery)
 
@@ -25,8 +28,14 @@ export const Memes = ({ purchasedIds }: MemeProps) => {
         'flex flex-wrap': isGalleryActive,
       })}
     >
-      {MemeUrls.slice(0, memeCount).map((url, idx) => (
-        <Meme key={idx} url={url} purchasedIds={purchasedIds} size={getMemeSize()} />
+      {Array.from({ length: memeCount }, (_, i) => (
+        <Meme
+          key={i}
+          memeBank={memeBank}
+          setMemeBank={setMemeBank}
+          purchasedIds={purchasedIds}
+          size={getMemeSize()}
+        />
       ))}
     </div>
   )

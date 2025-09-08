@@ -20,11 +20,12 @@ export const Sponsor = ({
   setSponsorBank,
 }: {
   sponsorBank: string[]
-  setSponsorBank: (bank: string[]) => void
+  setSponsorBank: React.Dispatch<React.SetStateAction<string[]>>
 }) => {
   const [url, setUrl] = useState<string | undefined>()
 
   useEffect(() => {
+    if (!!url) return
     //select a random brand to fetch from the logodev api
     const idx = Math.floor(Math.random() * brands.length)
     const brandDomain = sponsorBank[idx]
@@ -32,8 +33,7 @@ export const Sponsor = ({
     setUrl(logoUrl)
 
     //remove the brand from the bank so it doesn't get selected again
-    const newBank = sponsorBank.splice(idx, 1)
-    setSponsorBank(newBank)
+    setSponsorBank((prev) => prev.filter((_, i) => i !== idx))
   }, [])
 
   if (!url) return

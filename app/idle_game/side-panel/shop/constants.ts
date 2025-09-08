@@ -79,7 +79,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 500,
     message: 'These memes are looking really good, but our title could be more relevent.',
     clickIncrementPower: 5,
-    prerequsiteId: ShopItemIds.memeRepeatable,
+    prerequsiteId: ShopItemIds.memeGallery,
   },
   //BODY TEXT
   [ShopItemIds.basicBody]: {
@@ -168,7 +168,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 2500,
     message: 'Give these memes the spotlight they deserve.',
     passiveIncrementPower: 15,
-    prerequsiteId: ShopItemIds.memeGallery,
+    prerequsiteId: ShopItemIds.memeTitle,
   },
   [ShopItemIds.memeRotation]: {
     id: ShopItemIds.memeRotation,
@@ -185,7 +185,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 1500,
     message: 'Every website needs a blog right? ...right?',
     clickIncrementPower: 15,
-    prerequsiteId: ShopItemIds.basicMeme,
+    prerequsiteId: ShopItemIds.memeGallery,
   },
   [ShopItemIds.firstPost]: {
     id: ShopItemIds.firstPost,
@@ -290,7 +290,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 5000,
     message: "There's got to be a way to make money off this. It's simply too good.",
     passiveIncrementPower: 50,
-    prerequsiteId: ShopItemIds.basicMeme,
+    prerequsiteId: ShopItemIds.memeGallery,
   },
   [ShopItemIds.repeatableAdAmount]: {
     id: ShopItemIds.repeatableAdAmount,

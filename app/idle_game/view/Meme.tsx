@@ -1,18 +1,32 @@
 import classNames from 'classnames'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ShopItemIds } from '../side-panel/shop/constants'
 import Image from 'next/image'
 
 type MemeProps = {
-  url: string
+  memeBank: string[]
+  setMemeBank: React.Dispatch<React.SetStateAction<string[]>>
   size: number
   purchasedIds: Array<ShopItemIds>
 }
 
-export const Meme = ({ url, size, purchasedIds }: MemeProps) => {
+export const Meme = ({ memeBank, setMemeBank, size, purchasedIds }: MemeProps) => {
+  const [url, setUrl] = useState<string>()
   const isGalleryActive = purchasedIds.includes(ShopItemIds.memeGallery)
   const borderRef = useRef<HTMLDivElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const initializedRef = useRef(false)
+
+  useEffect(() => {
+    if (!!url || initializedRef.current === true) return
+    //select a random meme to be
+    const idx = Math.floor(Math.random() * memeBank.length)
+    setUrl(memeBank[idx])
+
+    //remove the meme from the bank so it doesn't get selected again
+    setMemeBank((prev) => prev.filter((_, i) => i !== idx))
+    initializedRef.current = true
+  }, [url])
 
   //sets up mouse tracking for meme rotation on hover
   useEffect(() => {
@@ -46,6 +60,7 @@ export const Meme = ({ url, size, purchasedIds }: MemeProps) => {
     })
   }, [purchasedIds])
 
+  if (!url) return null
   return (
     <div
       ref={containerRef}
