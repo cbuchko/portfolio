@@ -12,15 +12,16 @@ export const Memes = ({ purchasedIds }: MemeProps) => {
   const isGalleryActive = purchasedIds.includes(ShopItemIds.memeGallery)
 
   const getMemeSize = () => {
-    if (memeCount < 9) return 300
-    if (memeCount < 20) return 150
-    if (memeCount < 32) return 100
-    return 300
+    if (memeCount < 5) return 300
+    if (memeCount < 10) return 200
+    if (memeCount < 17) return 150
+    if (memeCount < 33) return 100
+    return 100
   }
 
   return (
     <div
-      className={classNames('overflow-hidden mt-8 p-4 pb-16', {
+      className={classNames('mt-8 p-4 pb-16', {
         'flex flex-wrap': isGalleryActive,
       })}
     >

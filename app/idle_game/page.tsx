@@ -39,7 +39,7 @@ export default function IdleGame() {
       <div
         id="view"
         ref={viewRef}
-        className={classNames('w-[80%] flex flex-col relative fade-in', {
+        className={classNames('w-[80%] flex flex-col relative fade-in overflow-hidden h-screen', {
           'items-center': purchasedShopItems.includes(ShopItemIds.centeredTitle),
           '!bg-red-50': purchasedShopItems.includes(ShopItemIds.lightenedColor),
           'bg-red-500': purchasedShopItems.includes(ShopItemIds.basicColor),
@@ -71,14 +71,6 @@ export default function IdleGame() {
             />
           )}
         </div>
-        {purchasedShopItems.includes(ShopItemIds.basicAds) && (
-          <Ads
-            scoreProps={scoreProps}
-            viewRef={viewRef}
-            incrementScore={scoreProps.incrementScore}
-            purchasedIds={purchasedShopItems}
-          />
-        )}
       </div>
       <SidePanel
         purchasedIds={purchasedShopItems}
@@ -93,6 +85,14 @@ export default function IdleGame() {
           setActiveModal={setActiveModal}
           statistic={scoreProps.statistics}
           date={startDateRef}
+        />
+      )}
+      {purchasedShopItems.includes(ShopItemIds.basicAds) && (
+        <Ads
+          scoreProps={scoreProps}
+          viewRef={viewRef}
+          incrementScore={scoreProps.incrementScore}
+          purchasedIds={purchasedShopItems}
         />
       )}
     </div>

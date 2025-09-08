@@ -45,7 +45,8 @@ export const SidePanel = ({
     if (!item.isRepeatble) return item.cost
     const purchasedAmount = purchasedIds.filter((id) => id === item.id).length
     if (!purchasedAmount) return item.cost
-    return item.cost * purchasedAmount * item.isRepeatble.costMultiplier
+    if (purchasedAmount === 1) return item.cost * item.isRepeatble.costMultiplier
+    return item.cost * purchasedAmount ** item.isRepeatble.costMultiplier
   }
 
   //spend the score with the appropriate callback

@@ -149,8 +149,8 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     passiveIncrementPower: 3,
     prerequsiteId: ShopItemIds.basicMeme,
     isRepeatble: {
-      limit: 30,
-      costMultiplier: 1.25,
+      limit: 29,
+      costMultiplier: 2,
       powerMultiplier: 1,
     },
   },
@@ -204,7 +204,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     prerequsiteId: ShopItemIds.firstPost,
     isRepeatble: {
       limit: 5,
-      costMultiplier: 1.25,
+      costMultiplier: 2,
       powerMultiplier: 1,
     },
   },
@@ -301,7 +301,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     prerequsiteId: ShopItemIds.basicAds,
     isRepeatble: {
       limit: 20,
-      costMultiplier: 1.25,
+      costMultiplier: 2,
       powerMultiplier: 1,
     },
   },

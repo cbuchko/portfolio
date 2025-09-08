@@ -116,7 +116,7 @@ export const Ad = ({ scoreProps, viewRef, incrementScore }: AdsProps) => {
   return (
     <div
       ref={adRef}
-      className="flex flex-col justify-center opacity-0 pointer-events-none absolute bg-white border-2 border-red-500 w-max h-max p-4 rounded-md shadow-xl pr-8 transition-opacity 5000ms ease-out"
+      className="z-10 flex flex-col justify-center opacity-0 pointer-events-none absolute bg-white border-2 border-red-500 w-max h-max p-4 rounded-md shadow-xl pr-8 transition-opacity 5000ms ease-out"
     >
       <Image
         onClick={onClose}
