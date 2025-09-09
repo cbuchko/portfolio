@@ -2,10 +2,11 @@ import classNames from 'classnames'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ShopItemIds } from '../side-panel/shop/constants'
 import Image from 'next/image'
+import { Meme as MemeType } from './constants'
 
 type MemeProps = {
-  memeBank: string[]
-  setMemeBank: React.Dispatch<React.SetStateAction<string[]>>
+  memeBank: MemeType[]
+  setMemeBank: React.Dispatch<React.SetStateAction<MemeType[]>>
   setActiveMeme: () => void
   size: number
   purchasedIds: Array<ShopItemIds>
@@ -20,7 +21,7 @@ export const Meme = ({
   purchasedIds,
   isActive,
 }: MemeProps) => {
-  const [url, setUrl] = useState<string>()
+  const [meme, setMeme] = useState<MemeType>()
   const [showPlaceholder, setShowPlaceholder] = useState(false)
   const isGalleryActive = purchasedIds.includes(ShopItemIds.memeGallery)
   const borderRef = useRef<HTMLDivElement | null>(null)
@@ -28,11 +29,13 @@ export const Meme = ({
   const positionRef = useRef<{ x: number; y: number } | undefined>(undefined)
   const initializedRef = useRef(false)
 
+  const url = meme?.url
+
   useEffect(() => {
     if (!!url || initializedRef.current === true) return
     //select a random meme to be
     const idx = Math.floor(Math.random() * memeBank.length)
-    setUrl(memeBank[idx])
+    setMeme(memeBank[idx])
 
     //remove the meme from the bank so it doesn't get selected again
     setMemeBank((prev) => prev.filter((_, i) => i !== idx))
@@ -156,6 +159,7 @@ export const Meme = ({
             }}
           />
         )}
+        {isActive && purchasedIds.includes(ShopItemIds.memeFlavor) && <MemeContext meme={meme} />}
       </div>
       {showPlaceholder && (
         <div
@@ -167,5 +171,14 @@ export const Meme = ({
         />
       )}
     </>
+  )
+}
+
+const MemeContext = ({ meme }: { meme: MemeType }) => {
+  return (
+    <div className="absolute top-0 left-[100%] ml-10 z-100 text-white bg-black/20 p-4 rounded-lg backdrop-blur !w-[400px] pop-in">
+      <h5 className="text-3xl mb-2">{meme.title}</h5>
+      <h5 className="tracking-wide">{meme.flavorText}</h5>
+    </div>
   )
 }

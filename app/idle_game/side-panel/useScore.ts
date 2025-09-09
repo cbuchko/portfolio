@@ -76,6 +76,7 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
     (amount: number, statisticType: StatisticType, skipAnimation?: boolean) => {
       if (!(amount > 0)) return
       setScore((prevScore) => prevScore + amount)
+      if (!skipAnimation) setDisplayScore((prevScore) => prevScore + amount)
 
       //update total stats
       setStatistics((prevStats) => {

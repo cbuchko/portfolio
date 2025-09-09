@@ -1,3 +1,5 @@
+import { CommonMemes } from '../../view/constants'
+
 export enum ShopItemIds {
   basicTitle,
   centeredTitle,
@@ -14,6 +16,8 @@ export enum ShopItemIds {
   memeTrim,
   memeRotation,
   memeFocus,
+  memeFlavor,
+  memeRarity,
   basicBlog,
   firstPost,
   postRepeatable,
@@ -150,7 +154,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     passiveIncrementPower: 3,
     prerequsiteId: ShopItemIds.basicMeme,
     isRepeatble: {
-      limit: 29,
+      limit: CommonMemes.length,
       costMultiplier: 2,
       powerMultiplier: 1,
     },
@@ -186,6 +190,15 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     message: 'Bring it front and center.',
     passiveIncrementPower: 100,
     prerequsiteId: ShopItemIds.memeRotation,
+  },
+  [ShopItemIds.memeFlavor]: {
+    id: ShopItemIds.memeFlavor,
+    title: 'Meme Flavor',
+    cost: 50000,
+    message:
+      "All this time I've been wondering, do these memes have names? What are their stories? Let's find out.",
+    passiveIncrementPower: 100,
+    prerequsiteId: ShopItemIds.memeFocus,
   },
   //BLOG
   [ShopItemIds.basicBlog]: {

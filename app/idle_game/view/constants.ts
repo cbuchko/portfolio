@@ -1,33 +1,151 @@
-export const MemeUrls = [
-  '/idle_game/memes/zipline.jpg',
-  '/idle_game/memes/cat.webp',
-  '/idle_game/memes/pickle.png',
-  '/idle_game/memes/dog.webp',
-  '/idle_game/memes/cinema.jpg',
-  '/idle_game/memes/mike.jpg',
-  '/idle_game/memes/angrycat.jpg',
-  '/idle_game/memes/brian.webp',
-  '/idle_game/memes/doge.jpg',
-  '/idle_game/memes/ericandre.jpg',
-  '/idle_game/memes/girlfriend.jpg',
-  '/idle_game/memes/karlhavoc.jpg',
-  '/idle_game/memes/leogatbsy.webp',
-  '/idle_game/memes/leopoint.jpg',
-  '/idle_game/memes/nyancat.png',
-  '/idle_game/memes/pikachu.png',
-  '/idle_game/memes/questionmark.png',
-  '/idle_game/memes/rage.png',
-  '/idle_game/memes/sponge1.webp',
-  '/idle_game/memes/sponge2.jpg',
-  '/idle_game/memes/steveharvey.jpg',
-  '/idle_game/memes/successkid.webp',
-  '/idle_game/memes/timhotdog.jpg',
-  '/idle_game/memes/troll1.jpg',
-  '/idle_game/memes/troll2.jpg',
-  '/idle_game/memes/troll3.webp',
-  '/idle_game/memes/troll4.jpg',
-  '/idle_game/memes/trollface.jpg',
-  '/idle_game/memes/walterwhite.jpg',
+export enum Rarity {
+  common = 'common',
+  rare = 'rare',
+  epic = 'epic',
+  legendary = 'legendary',
+  mythic = 'mythic',
+}
+
+export type Meme = {
+  url: string
+  title: string
+  flavorText: string
+  rarity: Rarity
+}
+
+export const CommonMemes: Meme[] = [
+  {
+    url: '/idle_game/memes/zipline.jpg',
+    title: 'Dating Show Contestant',
+    flavorText: 'Just here for the zipline.',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/cat.webp',
+    title: 'Cat',
+    flavorText: 'The internet’s favorite creature.',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/pickle.png',
+    title: 'Pickle Rick',
+    flavorText: "He turned himself into a pickle. Funniest thing I've ever seen.",
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/dog.webp',
+    title: 'Sideye Dog',
+    flavorText: 'What da dog doin?',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/cinema.jpg',
+    title: 'Cinema',
+    flavorText: 'A hollywood treasure.',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/mike.jpg',
+    title: 'Mike Ehrmantruat',
+    flavorText: 'Waltuh.',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/brian.webp',
+    title: 'Bad Luck Brian',
+    flavorText: "Poor guy can't catch a break.",
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/doge.jpg',
+    title: 'Doge',
+    flavorText: 'Much wow. Such meme.',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/ericandre.jpg',
+    title: 'Eric Andre',
+    flavorText: 'Let’s break the set.',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/karlhavoc.jpg',
+    title: 'Karl Havoc',
+    flavorText: 'What does this do for the greater good?',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/leogatbsy.webp',
+    title: 'Leo Gatsby',
+    flavorText: "Any idea's a good idea if you follow it with this meme.",
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/leopoint.jpg',
+    title: 'Leo Pointing',
+    flavorText: '<- Leo if he ever played this game probably.',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/nyancat.png',
+    title: 'Nyan Cat',
+    flavorText: 'A younger me would have watched this for 10 hours straight.',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/pikachu.png',
+    title: 'Surprised Pikachu',
+    flavorText: 'Shock and awe.',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/rage.png',
+    title: 'Rage Face',
+    flavorText: 'A relic of the old internet.',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/sponge2.jpg',
+    title: 'Mocking SpongeBob',
+    flavorText: "MaKiNg  A wEbSiTe iS hArD... LeT's dO It tOgEtHer!",
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/sponge1.webp',
+    title: 'Imagination',
+    flavorText: "What's in the box?",
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/steveharvey.jpg',
+    title: 'Steve Harvey',
+    flavorText: 'GOOD ANSWER GOOD ANSWER.',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/successkid.webp',
+    title: 'Success Kid',
+    flavorText: 'Once a meme always a meme.',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/timhotdog.jpg',
+    title: 'Hotdog Car Crash',
+    flavorText: 'We’re all trying to find the guy who did this...',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/trollface.jpg',
+    title: 'Troll Face',
+    flavorText: 'Problem?',
+    rarity: Rarity.common,
+  },
+  {
+    url: '/idle_game/memes/walterwhite.jpg',
+    title: 'Walter White',
+    flavorText: 'HANK NOOOOOOOOOOOOOOOOO',
+    rarity: Rarity.common,
+  },
 ]
 
 export type BlogPost = {

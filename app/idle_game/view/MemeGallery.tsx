@@ -1,8 +1,8 @@
-import { MemeUrls } from './constants'
+import { CommonMemes } from './constants'
 import { ShopItemIds } from '../side-panel/shop/constants'
 import classNames from 'classnames'
 import { Meme } from './Meme'
-import { act, useState } from 'react'
+import { useState } from 'react'
 
 type MemeProps = {
   purchasedIds: Array<ShopItemIds>
@@ -10,7 +10,7 @@ type MemeProps = {
 
 export const Memes = ({ purchasedIds }: MemeProps) => {
   const [activeMeme, setActiveMeme] = useState<number>()
-  const [memeBank, setMemeBank] = useState(MemeUrls)
+  const [memeBank, setMemeBank] = useState(CommonMemes)
 
   const memeCount = purchasedIds.filter((id) => id === ShopItemIds.memeRepeatable).length + 1
   const isGalleryActive = purchasedIds.includes(ShopItemIds.memeGallery)
