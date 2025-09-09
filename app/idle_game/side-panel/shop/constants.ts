@@ -200,6 +200,14 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     passiveIncrementPower: 100,
     prerequsiteId: ShopItemIds.memeFocus,
   },
+  [ShopItemIds.memeRarity]: {
+    id: ShopItemIds.memeRarity,
+    title: 'Meme Rarity',
+    cost: 80000,
+    message: 'The memes acquired thus far are only the tip of the iceberg. Time to go deeper.',
+    passiveIncrementPower: 150,
+    prerequsiteId: ShopItemIds.memeFlavor,
+  },
   //BLOG
   [ShopItemIds.basicBlog]: {
     id: ShopItemIds.basicBlog,

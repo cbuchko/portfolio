@@ -1,9 +1,15 @@
 export enum Rarity {
   common = 'common',
   rare = 'rare',
-  epic = 'epic',
   legendary = 'legendary',
   mythic = 'mythic',
+}
+
+export const RarityColors: Record<Rarity, string> = {
+  [Rarity.common]: '#fff47a',
+  [Rarity.rare]: '#8596ff',
+  [Rarity.legendary]: '#fd9595',
+  [Rarity.mythic]: '#de85ff',
 }
 
 export type Meme = {
@@ -18,19 +24,19 @@ export const CommonMemes: Meme[] = [
     url: '/idle_game/memes/zipline.jpg',
     title: 'Dating Show Contestant',
     flavorText: 'Just here for the zipline.',
-    rarity: Rarity.common,
+    rarity: Rarity.mythic,
   },
   {
     url: '/idle_game/memes/cat.webp',
     title: 'Cat',
     flavorText: 'The internet’s favorite creature.',
-    rarity: Rarity.common,
+    rarity: Rarity.legendary,
   },
   {
     url: '/idle_game/memes/pickle.png',
     title: 'Pickle Rick',
     flavorText: "He turned himself into a pickle. Funniest thing I've ever seen.",
-    rarity: Rarity.common,
+    rarity: Rarity.rare,
   },
   {
     url: '/idle_game/memes/dog.webp',

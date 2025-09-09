@@ -2,7 +2,8 @@ import classNames from 'classnames'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ShopItemIds } from '../side-panel/shop/constants'
 import Image from 'next/image'
-import { Meme as MemeType } from './constants'
+import { Meme as MemeType, Rarity, RarityColors } from './constants'
+import StarIcon from '@/public/idle_game/star.svg'
 
 type MemeProps = {
   memeBank: MemeType[]
@@ -150,7 +151,12 @@ export const Meme = ({
         {purchasedIds.includes(ShopItemIds.memeTrim) && (
           <div
             ref={borderRef}
-            className={classNames('w-[300px] h-[300px] rounded-lg shimmer-border')}
+            className={classNames('w-[300px] h-[300px] rounded-lg shimmer-border', {
+              'shimmer-border-common': meme.rarity === Rarity.common,
+              'shimmer-border-rare': meme.rarity === Rarity.rare,
+              'shimmer-border-legendary': meme.rarity === Rarity.legendary,
+              'shimmer-border-mythic': meme.rarity === Rarity.mythic,
+            })}
             style={{
               width: `${size}px`,
               height: `${size}px`,
@@ -159,7 +165,9 @@ export const Meme = ({
             }}
           />
         )}
-        {isActive && purchasedIds.includes(ShopItemIds.memeFlavor) && <MemeContext meme={meme} />}
+        {isActive && purchasedIds.includes(ShopItemIds.memeFlavor) && (
+          <MemeContext meme={meme} purchasedIds={purchasedIds} />
+        )}
       </div>
       {showPlaceholder && (
         <div
@@ -174,11 +182,25 @@ export const Meme = ({
   )
 }
 
-const MemeContext = ({ meme }: { meme: MemeType }) => {
+const MemeContext = ({
+  meme,
+  purchasedIds,
+}: {
+  meme: MemeType
+  purchasedIds: Array<ShopItemIds>
+}) => {
   return (
-    <div className="absolute top-0 left-[100%] ml-10 z-100 text-white bg-black/20 p-4 rounded-lg backdrop-blur !w-[400px] pop-in">
-      <h5 className="text-3xl mb-2">{meme.title}</h5>
-      <h5 className="tracking-wide">{meme.flavorText}</h5>
+    <div className="absolute top-0 left-[100%] flex flex-col justify-between h-full ml-10 z-100 text-white bg-black/20 p-4 rounded-lg backdrop-blur !w-[400px] pop-in">
+      <div>
+        <h5 className="text-3xl mb-2">{meme.title}</h5>
+        <h5 className="tracking-wide">{meme.flavorText}</h5>
+      </div>
+      {purchasedIds.includes(ShopItemIds.memeRarity) && (
+        <div className="flex gap-2 items-center" style={{ color: RarityColors[meme.rarity] }}>
+          <StarIcon className="w-6 h-6" />
+          <h5 className="text-xl tracking-widest uppercase font-semibold">{meme.rarity}</h5>
+        </div>
+      )}
     </div>
   )
 }

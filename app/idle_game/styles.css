@@ -88,6 +88,22 @@
   z-index: 0;
 }
 
+.shimmer-border-common {
+  --shimmer-color: #fff47a;
+}
+
+.shimmer-border-rare {
+  --shimmer-color: #8596ff;
+}
+
+.shimmer-border-legendary {
+  --shimmer-color: #fd9595;
+}
+
+.shimmer-border-mythic {
+  --shimmer-color: #de85ff;
+}
+
 .shimmer-border::before {
   content: '';
   position: absolute;
@@ -98,11 +114,11 @@
   /* Shimmer gradient */
   background: linear-gradient(
     90deg,
-    rgb(255, 244, 122) 0%,
-    rgb(255, 244, 122) 20%,
+    var(--shimmer-color) 0%,
+    var(--shimmer-color) 20%,
     rgba(255, 255, 255, 1) 50%,
-    rgb(255, 244, 122) 80%,
-    rgb(255, 244, 125) 100%
+    var(--shimmer-color) 80%,
+    var(--shimmer-color) 100%
   );
 
   background-size: 200% 100%;
@@ -177,7 +193,7 @@
   height: 300px !important;
 }
 
-.active-meme div {
+.active-meme .shimmer-border {
   width: 300px !important;
   height: 300px !important;
 }
