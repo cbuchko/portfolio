@@ -1,4 +1,4 @@
-import { CommonMemes } from '../../view/constants'
+import { CommonMemes, Rarity } from '../../view/constants'
 
 export enum ShopItemIds {
   basicTitle,
@@ -356,3 +356,24 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
 
 export const defaultMessage =
   "Making a website is hard... let's do it together!\n Start by purchasing a Title from the Shop."
+
+export type BlackMarketPack = {
+  rarity: Rarity
+  title: string
+  description: string
+  price: number
+}
+export const BlackMarketPacks: BlackMarketPack[] = [
+  {
+    rarity: Rarity.common,
+    title: 'Meme Pack',
+    description: "The most standard pack there is. Don't expect to see anything that's not common.",
+    price: 10000,
+  },
+  {
+    rarity: Rarity.rare,
+    title: 'Unusual Pack',
+    description: 'The shopkeeper insists rare memes can be found in these, for a higher price.',
+    price: 100000,
+  },
+]

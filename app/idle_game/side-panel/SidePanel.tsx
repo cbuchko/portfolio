@@ -101,15 +101,24 @@ export const SidePanel = ({
             placeholder="Your Name Here"
           />
         )}
-        {purchasedIds.includes(ShopItemIds.statistics) && (
+        <div className="buttons flex items-center gap-2">
+          {purchasedIds.includes(ShopItemIds.statistics) && (
+            <button
+              className="border p-2 rounded-md mb-4 cursor-pointer flex gap-1 items-center"
+              onClick={() => setActiveModal(ModalNames.Statistics)}
+            >
+              <Image src="/idle_game/stat.svg" height={20} width={20} alt="Stat" />
+              <h5>Statistics</h5>
+            </button>
+          )}
           <button
             className="border p-2 rounded-md mb-4 cursor-pointer flex gap-1 items-center"
-            onClick={() => setActiveModal(ModalNames.Statistics)}
+            onClick={() => setActiveModal(ModalNames.BlackMarket)}
           >
             <Image src="/idle_game/stat.svg" height={20} width={20} alt="Stat" />
-            <h5>Statistics</h5>
+            <h5>Black Market</h5>
           </button>
-        )}
+        </div>
         <h5 className="text-2xl font-medium mb-2">Shop</h5>
         <div className="flex gap-4 flex-wrap">
           {filteredShopItems.map((button) => (

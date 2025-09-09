@@ -15,13 +15,14 @@ import { useBlogViews } from './view/useBlogViews'
 import { Sponsorships } from './view/Sponsor'
 import { ModalNames } from './menus/modalRegistry'
 import { StatisticsModal } from './menus/StatisticsModal'
+import { BlackMarketModal } from './menus/BlackMarketModal'
 
 export default function IdleGame() {
   const startDateRef = useRef(new Date())
   const viewRef = useRef<HTMLDivElement | null>(null)
 
   const [purchasedShopItems, setPurchasedShopItems] = useState<Array<ShopItemIds>>([])
-  const [activeModal, setActiveModal] = useState<ModalNames.Statistics>()
+  const [activeModal, setActiveModal] = useState<ModalNames>()
   const [userName, setUserName] = useState('Unknown')
   const name = userName || 'Unknown'
 
@@ -86,6 +87,9 @@ export default function IdleGame() {
           statistic={scoreProps.statistics}
           date={startDateRef}
         />
+      )}
+      {activeModal === ModalNames.BlackMarket && (
+        <BlackMarketModal setActiveModal={setActiveModal} />
       )}
       {purchasedShopItems.includes(ShopItemIds.basicAds) && (
         <Ads
