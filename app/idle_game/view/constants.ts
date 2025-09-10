@@ -13,6 +13,7 @@ export const RarityColors: Record<Rarity, string> = {
 }
 
 export type Meme = {
+  id: number
   url: string
   title: string
   flavorText: string
@@ -21,138 +22,170 @@ export type Meme = {
 
 export const CommonMemes: Meme[] = [
   {
+    id: 0,
     url: '/idle_game/memes/zipline.jpg',
     title: 'Dating Show Contestant',
     flavorText: 'Just here for the zipline.',
     rarity: Rarity.mythic,
   },
   {
+    id: 1,
     url: '/idle_game/memes/cat.webp',
     title: 'Cat',
     flavorText: 'The internet’s favorite creature.',
     rarity: Rarity.legendary,
   },
+
   {
-    url: '/idle_game/memes/pickle.png',
-    title: 'Pickle Rick',
-    flavorText: "He turned himself into a pickle. Funniest thing I've ever seen.",
-    rarity: Rarity.rare,
-  },
-  {
+    id: 3,
     url: '/idle_game/memes/dog.webp',
     title: 'Sideye Dog',
     flavorText: 'What da dog doin?',
     rarity: Rarity.common,
   },
   {
+    id: 4,
     url: '/idle_game/memes/cinema.jpg',
     title: 'Cinema',
     flavorText: 'A hollywood treasure.',
     rarity: Rarity.common,
   },
   {
+    id: 5,
     url: '/idle_game/memes/mike.jpg',
     title: 'Mike Ehrmantruat',
     flavorText: 'Waltuh.',
     rarity: Rarity.common,
   },
   {
+    id: 6,
     url: '/idle_game/memes/brian.webp',
     title: 'Bad Luck Brian',
     flavorText: "Poor guy can't catch a break.",
     rarity: Rarity.common,
   },
   {
+    id: 7,
     url: '/idle_game/memes/doge.jpg',
     title: 'Doge',
     flavorText: 'Much wow. Such meme.',
     rarity: Rarity.common,
   },
   {
+    id: 8,
     url: '/idle_game/memes/ericandre.jpg',
     title: 'Eric Andre',
     flavorText: 'Let’s break the set.',
     rarity: Rarity.common,
   },
   {
+    id: 9,
     url: '/idle_game/memes/karlhavoc.jpg',
     title: 'Karl Havoc',
     flavorText: 'What does this do for the greater good?',
     rarity: Rarity.common,
   },
   {
+    id: 10,
     url: '/idle_game/memes/leogatbsy.webp',
     title: 'Leo Gatsby',
     flavorText: "Any idea's a good idea if you follow it with this meme.",
     rarity: Rarity.common,
   },
   {
+    id: 11,
     url: '/idle_game/memes/leopoint.jpg',
     title: 'Leo Pointing',
     flavorText: '<- Leo if he ever played this game probably.',
     rarity: Rarity.common,
   },
   {
+    id: 12,
     url: '/idle_game/memes/nyancat.png',
     title: 'Nyan Cat',
     flavorText: 'A younger me would have watched this for 10 hours straight.',
     rarity: Rarity.common,
   },
   {
+    id: 13,
     url: '/idle_game/memes/pikachu.png',
     title: 'Surprised Pikachu',
     flavorText: 'Shock and awe.',
     rarity: Rarity.common,
   },
   {
+    id: 14,
     url: '/idle_game/memes/rage.png',
     title: 'Rage Face',
     flavorText: 'A relic of the old internet.',
     rarity: Rarity.common,
   },
   {
+    id: 15,
     url: '/idle_game/memes/sponge2.jpg',
     title: 'Mocking SpongeBob',
     flavorText: "MaKiNg  A wEbSiTe iS hArD... LeT's dO It tOgEtHer!",
     rarity: Rarity.common,
   },
   {
+    id: 16,
     url: '/idle_game/memes/sponge1.webp',
     title: 'Imagination',
     flavorText: "What's in the box?",
     rarity: Rarity.common,
   },
   {
+    id: 17,
     url: '/idle_game/memes/steveharvey.jpg',
     title: 'Steve Harvey',
     flavorText: 'GOOD ANSWER GOOD ANSWER.',
     rarity: Rarity.common,
   },
   {
+    id: 18,
     url: '/idle_game/memes/successkid.webp',
     title: 'Success Kid',
     flavorText: 'Once a meme always a meme.',
     rarity: Rarity.common,
   },
   {
+    id: 19,
     url: '/idle_game/memes/timhotdog.jpg',
     title: 'Hotdog Car Crash',
     flavorText: 'We’re all trying to find the guy who did this...',
     rarity: Rarity.common,
   },
   {
+    id: 20,
     url: '/idle_game/memes/trollface.jpg',
     title: 'Troll Face',
     flavorText: 'Problem?',
     rarity: Rarity.common,
   },
   {
+    id: 21,
     url: '/idle_game/memes/walterwhite.jpg',
     title: 'Walter White',
     flavorText: 'HANK NOOOOOOOOOOOOOOOOO',
     rarity: Rarity.common,
   },
 ]
+
+export const RareMemes = [
+  {
+    id: 2,
+    url: '/idle_game/memes/pickle.png',
+    title: 'Pickle Rick',
+    flavorText: "He turned himself into a pickle. Funniest thing I've ever seen.",
+    rarity: Rarity.rare,
+  },
+]
+
+export const LegendaryMemes = []
+
+export const MythicMemes = []
+
+export const AllMemes = [...CommonMemes, ...RareMemes, ...LegendaryMemes, ...MythicMemes]
 
 export type BlogPost = {
   title: string

@@ -16,6 +16,7 @@ type SidePanelProps = {
   blogViewProps: BlogViewProps
   setUserName: (name: string) => void
   setActiveModal: (modal: ModalNames) => void
+  addRandomCommonMeme: () => void
 }
 
 export const SidePanel = ({
@@ -25,6 +26,7 @@ export const SidePanel = ({
   onPurchase,
   setUserName,
   setActiveModal,
+  addRandomCommonMeme,
 }: SidePanelProps) => {
   const {
     score,
@@ -61,6 +63,7 @@ export const SidePanel = ({
           setViewFrequency(button.blogViewModifier.frequencyInMs)
         if (button.blogViewModifier?.gain) setViewGain(button.blogViewModifier.gain)
         if (button.blogViewModifier?.odds) setViewOdds(button.blogViewModifier.odds)
+        if (button.isMeme) addRandomCommonMeme()
         onPurchase(button.id)
         setHoveredShopId(undefined)
       })

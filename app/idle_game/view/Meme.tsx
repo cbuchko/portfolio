@@ -6,42 +6,21 @@ import { Meme as MemeType, Rarity, RarityColors } from './constants'
 import StarIcon from '@/public/idle_game/star.svg'
 
 type MemeProps = {
-  memeBank: MemeType[]
-  setMemeBank: React.Dispatch<React.SetStateAction<MemeType[]>>
+  meme: MemeType
   setActiveMeme: () => void
   size: number
   purchasedIds: Array<ShopItemIds>
   isActive: boolean
 }
 
-export const Meme = ({
-  memeBank,
-  setMemeBank,
-  setActiveMeme,
-  size,
-  purchasedIds,
-  isActive,
-}: MemeProps) => {
-  const [meme, setMeme] = useState<MemeType>()
+export const Meme = ({ meme, setActiveMeme, size, purchasedIds, isActive }: MemeProps) => {
   const [showPlaceholder, setShowPlaceholder] = useState(false)
   const isGalleryActive = purchasedIds.includes(ShopItemIds.memeGallery)
   const borderRef = useRef<HTMLDivElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const positionRef = useRef<{ x: number; y: number } | undefined>(undefined)
-  const initializedRef = useRef(false)
 
   const url = meme?.url
-
-  useEffect(() => {
-    if (!!url || initializedRef.current === true) return
-    //select a random meme to be
-    const idx = Math.floor(Math.random() * memeBank.length)
-    setMeme(memeBank[idx])
-
-    //remove the meme from the bank so it doesn't get selected again
-    setMemeBank((prev) => prev.filter((_, i) => i !== idx))
-    initializedRef.current = true
-  }, [url])
 
   //sets up mouse tracking for meme rotation on hover
   useEffect(() => {
@@ -190,7 +169,7 @@ const MemeContext = ({
   purchasedIds: Array<ShopItemIds>
 }) => {
   return (
-    <div className="absolute top-0 left-[100%] flex flex-col justify-between h-full ml-10 z-100 text-white bg-black/20 p-4 rounded-lg backdrop-blur !w-[400px] pop-in">
+    <div className="absolute top-0 left-[100%] flex flex-col justify-between h-full ml-10 z-100 text-white bg-black/20 p-4 rounded-lg backdrop-blur !w-[400px] pop-in pointer-events-none">
       <div>
         <h5 className="text-3xl mb-2">{meme.title}</h5>
         <h5 className="tracking-wide">{meme.flavorText}</h5>

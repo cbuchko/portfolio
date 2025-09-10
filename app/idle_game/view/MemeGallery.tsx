@@ -1,4 +1,4 @@
-import { CommonMemes } from './constants'
+import { Meme as MemeType } from './constants'
 import { ShopItemIds } from '../side-panel/shop/constants'
 import classNames from 'classnames'
 import { Meme } from './Meme'
@@ -6,16 +6,16 @@ import { useState } from 'react'
 
 type MemeProps = {
   purchasedIds: Array<ShopItemIds>
+  ownedMemes: MemeType[]
 }
 
-export const Memes = ({ purchasedIds }: MemeProps) => {
+export const Memes = ({ purchasedIds, ownedMemes }: MemeProps) => {
   const [activeMeme, setActiveMeme] = useState<number>()
-  const [memeBank, setMemeBank] = useState(CommonMemes)
 
-  const memeCount = purchasedIds.filter((id) => id === ShopItemIds.memeRepeatable).length + 1
   const isGalleryActive = purchasedIds.includes(ShopItemIds.memeGallery)
 
   const getMemeSize = () => {
+    const memeCount = ownedMemes.length
     if (memeCount < 5) return 300
     if (memeCount < 10) return 200
     if (memeCount < 17) return 150
@@ -30,15 +30,14 @@ export const Memes = ({ purchasedIds }: MemeProps) => {
           'flex flex-wrap': isGalleryActive,
         })}
       >
-        {Array.from({ length: memeCount }, (_, i) => (
+        {ownedMemes.map((meme) => (
           <Meme
-            key={i}
-            memeBank={memeBank}
-            setMemeBank={setMemeBank}
-            setActiveMeme={() => setActiveMeme(i)}
+            key={meme.id}
+            meme={meme}
+            setActiveMeme={() => setActiveMeme(meme.id)}
             purchasedIds={purchasedIds}
             size={getMemeSize()}
-            isActive={activeMeme === i}
+            isActive={activeMeme === meme.id}
           />
         ))}
       </div>

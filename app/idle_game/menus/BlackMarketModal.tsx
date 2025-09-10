@@ -1,25 +1,39 @@
 import { BlackMarketPacks } from '../side-panel/shop/constants'
+import { ScoreProps } from '../side-panel/useScore'
+import { MemeProps } from '../useMemes'
 import { Rarity, RarityColors } from '../view/constants'
 import { ModalContainer } from './ModalContainer'
 import { ModalNames } from './modalRegistry'
 import StarIcon from '@/public/idle_game/star.svg'
 
 export const BlackMarketModal = ({
+  memeProps,
+  scoreProps,
   setActiveModal,
 }: {
+  memeProps: MemeProps
+  scoreProps: ScoreProps
   setActiveModal: (modal?: ModalNames) => void
 }) => {
   return (
     <ModalContainer setActiveModal={setActiveModal}>
       <h4 className="text-2xl mb-4">Black Market</h4>
       <div className="mt-4">
-        {BlackMarketPacks.map((pack) => {
+        {BlackMarketPacks.map((pack, idx) => {
           return (
             <BlackMarketItem
+              key={idx}
               rarity={pack.rarity}
               title={pack.title}
               description={pack.description}
               price={pack.price}
+              handlePurchase={() => {
+                scoreProps.spendScore(pack.price, () => {
+                  if (pack.rarity === Rarity.common) memeProps.buyStandardPack()
+                  if (pack.rarity === Rarity.rare) memeProps.buyUnusualPack()
+                  setActiveModal(undefined)
+                })
+              }}
             />
           )
         })}
@@ -36,11 +50,13 @@ const BlackMarketItem = ({
   title,
   description,
   price,
+  handlePurchase,
 }: {
   rarity: Rarity
   title: string
   description: string
   price: number
+  handlePurchase: () => void
 }) => {
   return (
     <div className="flex my-4 border-b border-gray-300 pb-4 gap-4 items-center">
@@ -50,7 +66,9 @@ const BlackMarketItem = ({
         <h5 className="text-sm">{description}</h5>
         <div className="flex justify-between items-end mt-4">
           <h5 className="font-medium">{price.toLocaleString('en-us')} Score</h5>
-          <button className="border p-2 rounded-md cursor-pointer">BUY NOW</button>
+          <button className="border p-2 rounded-md cursor-pointer" onClick={handlePurchase}>
+            BUY NOW
+          </button>
         </div>
       </div>
     </div>

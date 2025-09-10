@@ -16,6 +16,7 @@ import { Sponsorships } from './view/Sponsor'
 import { ModalNames } from './menus/modalRegistry'
 import { StatisticsModal } from './menus/StatisticsModal'
 import { BlackMarketModal } from './menus/BlackMarketModal'
+import { useMemes } from './useMemes'
 
 export default function IdleGame() {
   const startDateRef = useRef(new Date())
@@ -28,6 +29,7 @@ export default function IdleGame() {
 
   const scoreProps = useScore(purchasedShopItems)
   const blogViewProps = useBlogViews()
+  const memeProps = useMemes()
 
   const onPurchase = useCallback((id: ShopItemIds) => {
     setPurchasedShopItems((prevElements) => {
@@ -59,7 +61,7 @@ export default function IdleGame() {
           })}
         >
           {purchasedShopItems.includes(ShopItemIds.basicMeme) && (
-            <Memes purchasedIds={purchasedShopItems} />
+            <Memes purchasedIds={purchasedShopItems} ownedMemes={memeProps.ownedMemes} />
           )}
           {purchasedShopItems.includes(ShopItemIds.basicBlog) && (
             <Blog
@@ -80,6 +82,7 @@ export default function IdleGame() {
         blogViewProps={blogViewProps}
         setUserName={setUserName}
         setActiveModal={setActiveModal}
+        addRandomCommonMeme={memeProps.addRandomCommonMeme}
       />
       {activeModal === ModalNames.Statistics && (
         <StatisticsModal
@@ -89,7 +92,11 @@ export default function IdleGame() {
         />
       )}
       {activeModal === ModalNames.BlackMarket && (
-        <BlackMarketModal setActiveModal={setActiveModal} />
+        <BlackMarketModal
+          setActiveModal={setActiveModal}
+          memeProps={memeProps}
+          scoreProps={scoreProps}
+        />
       )}
       {purchasedShopItems.includes(ShopItemIds.basicAds) && (
         <Ads

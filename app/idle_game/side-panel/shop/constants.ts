@@ -59,6 +59,7 @@ export type ShopItem = {
     costMultiplier: number
     powerMultiplier: number
   }
+  isMeme?: boolean
 }
 
 export const ShopItems: Record<ShopItemIds, ShopItem> = {
@@ -145,6 +146,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     message: 'This body text is great, but they say a picture is worth a thousand words...',
     passiveIncrementPower: 3,
     prerequsiteId: ShopItemIds.basicBody,
+    isMeme: true,
   },
   [ShopItemIds.memeRepeatable]: {
     id: ShopItemIds.memeRepeatable,
@@ -158,6 +160,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
       costMultiplier: 2,
       powerMultiplier: 1,
     },
+    isMeme: true,
   },
   [ShopItemIds.memeGallery]: {
     id: ShopItemIds.memeGallery,
