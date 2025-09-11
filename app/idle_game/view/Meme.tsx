@@ -15,7 +15,6 @@ type MemeProps = {
 
 export const Meme = ({ meme, setActiveMeme, size, purchasedIds, isActive }: MemeProps) => {
   const [showPlaceholder, setShowPlaceholder] = useState(false)
-  const isGalleryActive = purchasedIds.includes(ShopItemIds.memeGallery)
   const borderRef = useRef<HTMLDivElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const positionRef = useRef<{ x: number; y: number } | undefined>(undefined)

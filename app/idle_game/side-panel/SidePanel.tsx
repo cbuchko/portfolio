@@ -1,5 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
-import { ShopButton } from './shop/ShopButton'
+import { useCallback, useState } from 'react'
 import { ScoreProps, StatisticType } from './useScore'
 import { defaultMessage, ShopItemIds, ShopItem, ShopItems } from './shop/constants'
 import { Clicker } from './Clicker'
