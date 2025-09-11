@@ -29,7 +29,7 @@ export default function IdleGame() {
 
   const scoreProps = useScore(purchasedShopItems)
   const blogViewProps = useBlogViews()
-  const memeProps = useMemes()
+  const memeProps = useMemes(purchasedShopItems)
 
   const onPurchase = useCallback((id: ShopItemIds) => {
     setPurchasedShopItems((prevElements) => {
@@ -61,7 +61,11 @@ export default function IdleGame() {
           })}
         >
           {purchasedShopItems.includes(ShopItemIds.basicMeme) && (
-            <Memes purchasedIds={purchasedShopItems} ownedMemes={memeProps.ownedMemes} />
+            <Memes
+              purchasedIds={purchasedShopItems}
+              ownedMemes={memeProps.ownedMemes}
+              memeProps={memeProps}
+            />
           )}
           {purchasedShopItems.includes(ShopItemIds.basicBlog) && (
             <Blog

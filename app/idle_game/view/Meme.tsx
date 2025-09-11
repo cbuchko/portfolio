@@ -55,33 +55,40 @@ export const Meme = ({ meme, setActiveMeme, size, purchasedIds, isActive }: Meme
   }, [purchasedIds, url])
 
   //animate the meme into the center of the screen
-  const handleMemeClick = useCallback(() => {
-    if (!purchasedIds.includes(ShopItemIds.memeFocus)) return
-    const container = containerRef.current
-    if (!container) return
+  const handleMemeActivation = useCallback(
+    (skipTransitionIn?: boolean) => {
+      if (!purchasedIds.includes(ShopItemIds.memeFocus) || positionRef.current) return
+      const container = containerRef.current
+      if (!container) return
 
-    const position = container.getBoundingClientRect()
-    const { x, y } = position
+      const position = container.getBoundingClientRect()
+      const { x, y } = position
 
-    //switch it to absolute positioning so we can animate inbetween the new position
-    container.style.position = 'absolute'
-    container.style.left = `${x}px`
-    container.style.top = `${y}px`
-    container.style.margin = `0`
-    container.style.zIndex = '100'
+      //switch it to absolute positioning so we can animate inbetween the new position
+      container.style.position = 'absolute'
+      if (!skipTransitionIn) {
+        container.style.left = `${x}px`
+        container.style.top = `${y}px`
+      }
+      container.style.margin = `0`
+      container.style.zIndex = '100'
 
-    positionRef.current = { x, y }
-    setShowPlaceholder(true)
+      console.log(x, y)
+      positionRef.current = { x, y }
+      setShowPlaceholder(true)
 
-    setTimeout(() => {
-      container?.classList.add('active-meme')
-    })
+      setTimeout(() => {
+        container?.classList.add('active-meme')
+      })
 
-    setActiveMeme()
-  }, [purchasedIds])
+      setActiveMeme()
+    },
+    [purchasedIds, isActive]
+  )
 
-  //listen for when the meme becomes inactive, and transition it back to its original spot
+  //listen for when the meme becomes active/inactive, and transition it back to its original spot
   useEffect(() => {
+    console.log('status changed', isActive)
     if (!isActive) {
       const container = containerRef.current
       if (!container) return
@@ -99,8 +106,10 @@ export const Meme = ({ meme, setActiveMeme, size, purchasedIds, isActive }: Meme
         positionRef.current = undefined
         setShowPlaceholder(false)
       }, 1000)
+    } else {
+      handleMemeActivation(true)
     }
-  }, [isActive])
+  }, [isActive, handleMemeActivation])
 
   if (!url) return null
   return (
@@ -117,7 +126,7 @@ export const Meme = ({ meme, setActiveMeme, size, purchasedIds, isActive }: Meme
           height: `${size}px`,
           transition: 'left 1s, top 1s, width 1s, height 1s',
         }}
-        onClick={handleMemeClick}
+        onClick={() => handleMemeActivation(false)}
       >
         <Image
           src={url}

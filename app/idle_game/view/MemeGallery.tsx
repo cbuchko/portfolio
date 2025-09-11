@@ -2,16 +2,16 @@ import { Meme as MemeType } from './constants'
 import { ShopItemIds } from '../side-panel/shop/constants'
 import classNames from 'classnames'
 import { Meme } from './Meme'
-import { useState } from 'react'
+import { MemeProps } from '../useMemes'
 
-type MemeProps = {
+type MemeGalleryProps = {
   purchasedIds: Array<ShopItemIds>
   ownedMemes: MemeType[]
+  memeProps: MemeProps
 }
 
-export const Memes = ({ purchasedIds, ownedMemes }: MemeProps) => {
-  const [activeMeme, setActiveMeme] = useState<number>()
-
+export const Memes = ({ purchasedIds, ownedMemes, memeProps }: MemeGalleryProps) => {
+  const { activeMemeId, setActiveMemeId } = memeProps
   const isGalleryActive = purchasedIds.includes(ShopItemIds.memeGallery)
 
   const getMemeSize = () => {
@@ -34,17 +34,17 @@ export const Memes = ({ purchasedIds, ownedMemes }: MemeProps) => {
           <Meme
             key={meme.id}
             meme={meme}
-            setActiveMeme={() => setActiveMeme(meme.id)}
+            setActiveMeme={() => setActiveMemeId(meme.id)}
             purchasedIds={purchasedIds}
             size={getMemeSize()}
-            isActive={activeMeme === meme.id}
+            isActive={activeMemeId === meme.id}
           />
         ))}
       </div>
-      {activeMeme !== undefined && (
+      {activeMemeId !== undefined && purchasedIds.includes(ShopItemIds.memeFocus) && (
         <div
           className="fixed top-0 left-0 w-screen h-screen bg-black/60 cursor-pointer z-50"
-          onClick={() => setActiveMeme(undefined)}
+          onClick={() => setActiveMemeId(undefined)}
         />
       )}
     </>

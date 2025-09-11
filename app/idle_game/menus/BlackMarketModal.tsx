@@ -46,7 +46,7 @@ export const BlackMarketModal = ({
         })}
       </div>
       <div className="text-sm text-gray-600 italic">
-        The shopkeeper barely makes eye contact and seems focused on making sure you touch nothing.
+        The shopkeeper barely makes eye contact and seems focused on ensuring you touch nothing.
       </div>
     </ModalContainer>
   )

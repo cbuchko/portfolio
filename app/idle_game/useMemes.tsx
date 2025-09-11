@@ -1,8 +1,11 @@
 import { useMemo, useState } from 'react'
 import { AllMemes, CommonMemes, Meme, RareMemes } from './view/constants'
+import { ShopItemIds } from './side-panel/shop/constants'
 
 export type MemeProps = {
   ownedMemes: Meme[]
+  activeMemeId: number
+  setActiveMemeId: (id?: number) => void
   addMemeById: (id: number) => void
   addRandomCommonMeme: () => void
   buyStandardPack: () => void
@@ -11,7 +14,8 @@ export type MemeProps = {
   isRareMaxed?: boolean
 }
 
-export const useMemes = () => {
+export const useMemes = (purchasedIds: Array<ShopItemIds>) => {
+  const [activeMemeId, setActiveMemeId] = useState<number>()
   const [ownedMemeIds, setOwnedMemeIds] = useState<number[]>([])
 
   const ownedMemes = useMemo(() => {
@@ -29,6 +33,11 @@ export const useMemes = () => {
 
   const addMemeById = (id: number) => {
     setOwnedMemeIds((prevIds) => [...prevIds, id])
+    setActiveMemeId(id)
+    if (!purchasedIds.includes(ShopItemIds.blackMarket)) return
+    const audio = new Audio('/idle_game/purchase.mp3')
+    audio.volume = 0.2
+    audio.play()
   }
 
   const addRandomCommonMeme = () => {
@@ -71,6 +80,8 @@ export const useMemes = () => {
 
   return {
     ownedMemes,
+    activeMemeId,
+    setActiveMemeId,
     addMemeById,
     addRandomCommonMeme,
     buyStandardPack,
