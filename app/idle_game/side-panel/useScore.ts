@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ShopItemIds } from './shop/constants'
 
-const devMode = true
+const devMode = false
 
 export type ScoreProps = {
   score: number

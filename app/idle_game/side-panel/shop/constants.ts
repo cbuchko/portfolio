@@ -84,9 +84,9 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.memeTitle]: {
     id: ShopItemIds.memeTitle,
     title: 'Update Title',
-    cost: 500,
+    cost: 1500,
     message: 'These memes are looking really good, but our title could be more relevent.',
-    clickIncrementPower: 5,
+    clickIncrementPower: 15,
     prerequsiteId: ShopItemIds.memeGallery,
   },
   //BODY TEXT

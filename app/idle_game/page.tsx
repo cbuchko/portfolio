@@ -110,6 +110,7 @@ export default function IdleGame() {
           purchasedIds={purchasedShopItems}
         />
       )}
+      <div className="fixed bottom-2 right-2 text-xs">Alpha v0.4</div>
     </div>
   )
 }
