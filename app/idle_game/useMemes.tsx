@@ -33,8 +33,8 @@ export const useMemes = (purchasedIds: Array<ShopItemIds>) => {
 
   const addMemeById = (id: number) => {
     setOwnedMemeIds((prevIds) => [...prevIds, id])
-    setActiveMemeId(id)
     if (!purchasedIds.includes(ShopItemIds.blackMarket)) return
+    setActiveMemeId(id)
     const audio = new Audio('/idle_game/purchase.mp3')
     audio.volume = 0.2
     audio.play()
