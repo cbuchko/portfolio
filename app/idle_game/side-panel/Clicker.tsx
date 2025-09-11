@@ -22,7 +22,7 @@ export const Clicker = ({ purchasedIds, onClick }: ClickerProps) => {
 
   const getIsCritical = useCallback(() => {
     if (!purchasedIds.includes(ShopItemIds.criticalClicks)) return false
-    const random = Math.floor(Math.random() * 10)
+    const random = Math.floor(Math.random() * 20)
     if (random === 1) return true
     return false
   }, [purchasedIds])
@@ -45,7 +45,7 @@ export const Clicker = ({ purchasedIds, onClick }: ClickerProps) => {
   return (
     <button
       ref={clickerRef}
-      className={classNames('click-button w-full select-none', {
+      className={classNames('click-button w-full select-none cursor-pointer', {
         'shadow-md shadow-black/50 hover:scale-105 transition-all': purchasedIds.includes(
           ShopItemIds.basicButton
         ),

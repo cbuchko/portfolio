@@ -1,3 +1,16 @@
+.cursor-upgraded * {
+  cursor:
+    url('/idle_game/cursors/roblox-cursor.ico') 8 8,
+    auto;
+}
+
+.cursor-upgraded .cursor-pointer,
+.cursor-upgraded .cursor-pointer * {
+  cursor:
+    url('/idle_game/cursors/roblox-pointer.ico') 8 8,
+    pointer !important;
+}
+
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -42,7 +55,6 @@
   border: solid black 1px;
   border-radius: 6px;
   padding: 8px;
-  cursor: pointer;
 }
 
 @keyframes gyrate {

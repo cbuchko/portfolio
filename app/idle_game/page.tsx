@@ -38,7 +38,11 @@ export default function IdleGame() {
   }, [])
 
   return (
-    <div className="flex">
+    <div
+      className={classNames('flex', {
+        'cursor-upgraded': purchasedShopItems.includes(ShopItemIds.cursorUpgrade),
+      })}
+    >
       <div
         id="view"
         ref={viewRef}

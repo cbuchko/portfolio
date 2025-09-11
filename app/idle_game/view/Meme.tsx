@@ -115,7 +115,6 @@ export const Meme = ({ meme, setActiveMeme, size, purchasedIds, isActive }: Meme
         ref={containerRef}
         className={classNames('w-[300px] h-[300px] relative m-4', {
           'depth-container': purchasedIds.includes(ShopItemIds.memeRotation),
-          'cursor-pointer': purchasedIds.includes(ShopItemIds.memeFocus),
         })}
         style={{
           width: `${size}px`,
@@ -140,6 +139,7 @@ export const Meme = ({ meme, setActiveMeme, size, purchasedIds, isActive }: Meme
               'shimmer-border-rare': meme.rarity === Rarity.rare,
               'shimmer-border-legendary': meme.rarity === Rarity.legendary,
               'shimmer-border-mythic': meme.rarity === Rarity.mythic,
+              'cursor-pointer': purchasedIds.includes(ShopItemIds.memeFocus),
             })}
             style={{
               width: `${size}px`,

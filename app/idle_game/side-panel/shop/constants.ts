@@ -11,6 +11,7 @@ export enum ShopItemIds {
   buttonSFX,
   scoreIncrementer,
   criticalClicks,
+  cursorUpgrade,
   basicMeme,
   memeRepeatable,
   memeGallery,
@@ -121,7 +122,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.basicButton,
     title: 'Clicker Upgrade',
     cost: 100,
-    message: 'If upgrading the button will help you click better, go for it.',
+    message: 'If upgrading the clicker will help you click better, go for it.',
     clickIncrementPower: 2,
     prerequsiteId: ShopItemIds.centeredTitle,
   },
@@ -145,9 +146,18 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.criticalClicks,
     title: 'Critical Clicks',
     cost: 10000,
-    message: '10% of the time your clicks will crit every time.',
+    message: '5% of the time your clicks will crit every time.',
     clickIncrementPower: 50,
     prerequsiteId: ShopItemIds.scoreIncrementer,
+  },
+  [ShopItemIds.cursorUpgrade]: {
+    id: ShopItemIds.cursorUpgrade,
+    title: 'Mouse Cursor',
+    cost: 50000,
+    message:
+      "We've spent all this time upgrading the clicker when we could have been upgrading the mouse...",
+    clickIncrementPower: 100,
+    prerequsiteId: ShopItemIds.criticalClicks,
   },
   //MEMES
   [ShopItemIds.basicMeme]: {
