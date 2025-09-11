@@ -82,7 +82,7 @@ export default function IdleGame() {
         blogViewProps={blogViewProps}
         setUserName={setUserName}
         setActiveModal={setActiveModal}
-        addRandomCommonMeme={memeProps.addRandomCommonMeme}
+        memeProps={memeProps}
       />
       {activeModal === ModalNames.Statistics && (
         <StatisticsModal

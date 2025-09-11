@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import { BlackMarketPacks } from '../side-panel/shop/constants'
 import { ScoreProps } from '../side-panel/useScore'
 import { MemeProps } from '../useMemes'
@@ -15,6 +16,11 @@ export const BlackMarketModal = ({
   scoreProps: ScoreProps
   setActiveModal: (modal?: ModalNames) => void
 }) => {
+  const getOutOfStock = (rarity: Rarity) => {
+    if (rarity === Rarity.common) return memeProps.isCommonMaxed
+    if (rarity === Rarity.rare) return memeProps.isRareMaxed
+    return false
+  }
   return (
     <ModalContainer setActiveModal={setActiveModal}>
       <h4 className="text-2xl mb-4">Black Market</h4>
@@ -34,6 +40,7 @@ export const BlackMarketModal = ({
                   setActiveModal(undefined)
                 })
               }}
+              isOutOfStock={getOutOfStock(pack.rarity)}
             />
           )
         })}
@@ -51,12 +58,14 @@ const BlackMarketItem = ({
   description,
   price,
   handlePurchase,
+  isOutOfStock,
 }: {
   rarity: Rarity
   title: string
   description: string
   price: number
   handlePurchase: () => void
+  isOutOfStock?: boolean
 }) => {
   return (
     <div className="flex my-4 border-b border-gray-300 pb-4 gap-4 items-center">
@@ -65,10 +74,19 @@ const BlackMarketItem = ({
         <h5 className="font-medium">{title}</h5>
         <h5 className="text-sm">{description}</h5>
         <div className="flex justify-between items-end mt-4">
-          <h5 className="font-medium">{price.toLocaleString('en-us')} Score</h5>
-          <button className="border p-2 rounded-md cursor-pointer" onClick={handlePurchase}>
-            BUY NOW
-          </button>
+          <h5 className={classNames('font-medium', { 'line-through': isOutOfStock })}>
+            {price.toLocaleString('en-us')} Score
+          </h5>
+
+          {!isOutOfStock && (
+            <button
+              className={classNames('border p-2 rounded-md cursor-pointer')}
+              onClick={handlePurchase}
+            >
+              BUY NOW
+            </button>
+          )}
+          {isOutOfStock && <h5 className="text-red-500 font-medium">OUT OF STOCK</h5>}
         </div>
       </div>
     </div>

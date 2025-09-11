@@ -7,6 +7,8 @@ export type MemeProps = {
   addRandomCommonMeme: () => void
   buyStandardPack: () => void
   buyUnusualPack: () => void
+  isCommonMaxed?: boolean
+  isRareMaxed?: boolean
 }
 
 export const useMemes = () => {
@@ -15,6 +17,15 @@ export const useMemes = () => {
   const ownedMemes = useMemo(() => {
     return ownedMemeIds.map((id) => AllMemes.find((meme) => meme.id === id)!)
   }, [ownedMemeIds])
+
+  const isCommonMaxed = useMemo(
+    () => CommonMemes.every((meme) => ownedMemeIds.includes(meme.id)),
+    [ownedMemeIds]
+  )
+  const isRareMaxed = useMemo(
+    () => RareMemes.every((meme) => ownedMemeIds.includes(meme.id)),
+    [ownedMemeIds]
+  )
 
   const addMemeById = (id: number) => {
     setOwnedMemeIds((prevIds) => [...prevIds, id])
@@ -47,12 +58,15 @@ export const useMemes = () => {
   //50% chance to get a rare
   const buyUnusualPack = () => {
     const randomChance = Math.floor(Math.random() * 20)
-    console.log(randomChance)
     if (randomChance <= 10) {
       addRandomRareMeme()
       return
     }
-    addRandomCommonMeme()
+    try {
+      addRandomCommonMeme()
+    } catch {
+      addRandomRareMeme()
+    }
   }
 
   return {
@@ -61,5 +75,7 @@ export const useMemes = () => {
     addRandomCommonMeme,
     buyStandardPack,
     buyUnusualPack,
+    isCommonMaxed,
+    isRareMaxed,
   } as MemeProps
 }

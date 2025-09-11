@@ -22,21 +22,6 @@ export type Meme = {
 
 export const CommonMemes: Meme[] = [
   {
-    id: 0,
-    url: '/idle_game/memes/zipline.jpg',
-    title: 'Dating Show Contestant',
-    flavorText: 'Just here for the zipline.',
-    rarity: Rarity.mythic,
-  },
-  {
-    id: 1,
-    url: '/idle_game/memes/cat.webp',
-    title: 'Cat',
-    flavorText: 'The internet’s favorite creature.',
-    rarity: Rarity.legendary,
-  },
-
-  {
     id: 3,
     url: '/idle_game/memes/dog.webp',
     title: 'Sideye Dog',
@@ -48,13 +33,6 @@ export const CommonMemes: Meme[] = [
     url: '/idle_game/memes/cinema.jpg',
     title: 'Cinema',
     flavorText: 'A hollywood treasure.',
-    rarity: Rarity.common,
-  },
-  {
-    id: 5,
-    url: '/idle_game/memes/mike.jpg',
-    title: 'Mike Ehrmantruat',
-    flavorText: 'Waltuh.',
     rarity: Rarity.common,
   },
   {
@@ -76,13 +54,6 @@ export const CommonMemes: Meme[] = [
     url: '/idle_game/memes/ericandre.jpg',
     title: 'Eric Andre',
     flavorText: 'Let’s break the set.',
-    rarity: Rarity.common,
-  },
-  {
-    id: 9,
-    url: '/idle_game/memes/karlhavoc.jpg',
-    title: 'Karl Havoc',
-    flavorText: 'What does this do for the greater good?',
     rarity: Rarity.common,
   },
   {
@@ -149,24 +120,10 @@ export const CommonMemes: Meme[] = [
     rarity: Rarity.common,
   },
   {
-    id: 19,
-    url: '/idle_game/memes/timhotdog.jpg',
-    title: 'Hotdog Car Crash',
-    flavorText: 'We’re all trying to find the guy who did this...',
-    rarity: Rarity.common,
-  },
-  {
     id: 20,
     url: '/idle_game/memes/trollface.jpg',
     title: 'Troll Face',
     flavorText: 'Problem?',
-    rarity: Rarity.common,
-  },
-  {
-    id: 21,
-    url: '/idle_game/memes/walterwhite.jpg',
-    title: 'Walter White',
-    flavorText: 'HANK NOOOOOOOOOOOOOOOOO',
     rarity: Rarity.common,
   },
 ]
@@ -177,6 +134,48 @@ export const RareMemes = [
     url: '/idle_game/memes/pickle.png',
     title: 'Pickle Rick',
     flavorText: "He turned himself into a pickle. Funniest thing I've ever seen.",
+    rarity: Rarity.rare,
+  },
+  {
+    id: 0,
+    url: '/idle_game/memes/zipline.jpg',
+    title: 'Dating Show Contestant',
+    flavorText: 'Just here for the zipline.',
+    rarity: Rarity.rare,
+  },
+  {
+    id: 1,
+    url: '/idle_game/memes/cat.webp',
+    title: 'Cat',
+    flavorText: 'The internet’s favorite creature.',
+    rarity: Rarity.rare,
+  },
+  {
+    id: 5,
+    url: '/idle_game/memes/mike.jpg',
+    title: 'Mike Ehrmantruat',
+    flavorText: 'Waltuh.',
+    rarity: Rarity.rare,
+  },
+  {
+    id: 21,
+    url: '/idle_game/memes/walterwhite.jpg',
+    title: 'Walter White',
+    flavorText: 'HANK NOOOOOOOOOOOOOOOOO',
+    rarity: Rarity.rare,
+  },
+  {
+    id: 19,
+    url: '/idle_game/memes/timhotdog.jpg',
+    title: 'Hotdog Car Crash',
+    flavorText: 'We’re all trying to find the guy who did this...',
+    rarity: Rarity.rare,
+  },
+  {
+    id: 9,
+    url: '/idle_game/memes/karlhavoc.jpg',
+    title: 'Karl Havoc',
+    flavorText: 'What does this do for the greater good?',
     rarity: Rarity.rare,
   },
 ]

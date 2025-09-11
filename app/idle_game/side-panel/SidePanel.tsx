@@ -8,6 +8,8 @@ import { Score } from './Score'
 import { BlogViewProps } from '../view/useBlogViews'
 import { ModalNames } from '../menus/modalRegistry'
 import Image from 'next/image'
+import { MemeProps } from '../useMemes'
+import { ShopContainer } from './shop/ShopContainer'
 
 type SidePanelProps = {
   purchasedIds: Array<ShopItemIds>
@@ -16,31 +18,19 @@ type SidePanelProps = {
   blogViewProps: BlogViewProps
   setUserName: (name: string) => void
   setActiveModal: (modal: ModalNames) => void
-  addRandomCommonMeme: () => void
+  memeProps: MemeProps
 }
 
 export const SidePanel = ({
   purchasedIds,
   scoreProps,
   blogViewProps,
-  onPurchase,
   setUserName,
   setActiveModal,
-  addRandomCommonMeme,
+  onPurchase,
+  memeProps,
 }: SidePanelProps) => {
-  const {
-    score,
-    clickPower,
-    incrementClicks,
-    incrementPassive,
-    incrementScore,
-    incrementView,
-    incrementAdPower,
-    spendScore,
-  } = scoreProps
-
-  const { setViewFrequency, setViewGain, setViewOdds } = blogViewProps
-
+  const { score, clickPower, incrementScore } = scoreProps
   const [hoveredShopId, setHoveredShopId] = useState<ShopItemIds | undefined>()
 
   const calculateCost = (item: ShopItem) => {
@@ -50,44 +40,6 @@ export const SidePanel = ({
     if (purchasedAmount === 1) return item.cost * item.isRepeatble.costMultiplier
     return item.cost * purchasedAmount ** item.isRepeatble.costMultiplier
   }
-
-  //spend the score with the appropriate callback
-  const handlePurchase = useCallback(
-    (button: ShopItem) => {
-      spendScore(calculateCost(button), () => {
-        if (button.clickIncrementPower) incrementClicks(button.clickIncrementPower)
-        if (button.passiveIncrementPower) incrementPassive(button.passiveIncrementPower)
-        if (button.viewIncrementPower) incrementView(button.viewIncrementPower)
-        if (button.adIncrementPower) incrementAdPower(button.adIncrementPower)
-        if (button.blogViewModifier?.frequencyInMs)
-          setViewFrequency(button.blogViewModifier.frequencyInMs)
-        if (button.blogViewModifier?.gain) setViewGain(button.blogViewModifier.gain)
-        if (button.blogViewModifier?.odds) setViewOdds(button.blogViewModifier.odds)
-        if (button.isMeme) addRandomCommonMeme()
-        onPurchase(button.id)
-        setHoveredShopId(undefined)
-      })
-    },
-    [spendScore]
-  )
-
-  const filteredShopItems = useMemo(() => {
-    return Object.values(ShopItems)
-      .filter((item) => {
-        const hasPreqrequisite =
-          item.prerequsiteId !== undefined ? purchasedIds.includes(item.prerequsiteId) : true
-        if (item.isRepeatble) {
-          if (
-            purchasedIds.filter((id) => id === item.id).length < item.isRepeatble.limit - 1 &&
-            hasPreqrequisite
-          )
-            return true
-          return false
-        }
-        return !purchasedIds.includes(item.id) && hasPreqrequisite
-      })
-      .sort((a, b) => calculateCost(a) - calculateCost(b))
-  }, [purchasedIds])
 
   const handleNameChange = useCallback((name: string) => {
     if (name.length > 30) return
@@ -114,27 +66,24 @@ export const SidePanel = ({
               <h5>Statistics</h5>
             </button>
           )}
-          <button
-            className="border p-2 rounded-md mb-4 cursor-pointer flex gap-1 items-center"
-            onClick={() => setActiveModal(ModalNames.BlackMarket)}
-          >
-            <Image src="/idle_game/stat.svg" height={20} width={20} alt="Stat" />
-            <h5>Black Market</h5>
-          </button>
+          {purchasedIds.includes(ShopItemIds.blackMarket) && (
+            <button
+              className="border p-2 rounded-md mb-4 cursor-pointer flex gap-1 items-center"
+              onClick={() => setActiveModal(ModalNames.BlackMarket)}
+            >
+              <h5>Black Market</h5>
+            </button>
+          )}
         </div>
-        <h5 className="text-2xl font-medium mb-2">Shop</h5>
-        <div className="flex gap-4 flex-wrap">
-          {filteredShopItems.map((button) => (
-            <ShopButton
-              key={button.id}
-              id={button.id}
-              title={button.title}
-              setHoveredId={setHoveredShopId}
-              spendScore={() => handlePurchase(button)}
-              isDisabled={calculateCost(button) > score}
-            />
-          ))}
-        </div>
+        <ShopContainer
+          blogProps={blogViewProps}
+          scoreProps={scoreProps}
+          memeProps={memeProps}
+          calculateCost={calculateCost}
+          onPurchase={onPurchase}
+          purchasedIds={purchasedIds}
+          setHoveredShopId={setHoveredShopId}
+        />
       </div>
       <div className="flex-grow" />
       <Score scoreProps={scoreProps} purchasedIds={purchasedIds} blogViewProps={blogViewProps} />

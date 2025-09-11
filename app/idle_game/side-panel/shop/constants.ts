@@ -18,6 +18,7 @@ export enum ShopItemIds {
   memeFocus,
   memeFlavor,
   memeRarity,
+  blackMarket,
   basicBlog,
   firstPost,
   postRepeatable,
@@ -58,6 +59,7 @@ export type ShopItem = {
     limit: number
     costMultiplier: number
     powerMultiplier: number
+    limitCallback?: (value: boolean) => boolean
   }
   isMeme?: boolean
 }
@@ -210,6 +212,15 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     message: 'The memes acquired thus far are only the tip of the iceberg. Time to go deeper.',
     passiveIncrementPower: 150,
     prerequsiteId: ShopItemIds.memeFlavor,
+  },
+  [ShopItemIds.blackMarket]: {
+    id: ShopItemIds.blackMarket,
+    title: 'Black Market',
+    cost: 100000,
+    message:
+      'What I feared is true, if we want rarer memes, our methods need to be more... non-traditional.',
+    passiveIncrementPower: 300,
+    prerequsiteId: ShopItemIds.memeRarity,
   },
   //BLOG
   [ShopItemIds.basicBlog]: {
