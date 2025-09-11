@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from 'react'
 
 type ClickerProps = {
   purchasedIds: Array<ShopItemIds>
-  onClick: () => void
+  onClick: (isCritical?: boolean) => void
 }
 
 export const Clicker = ({ purchasedIds, onClick }: ClickerProps) => {
@@ -20,14 +20,27 @@ export const Clicker = ({ purchasedIds, onClick }: ClickerProps) => {
     })
   }, [purchasedIds])
 
+  const getIsCritical = useCallback(() => {
+    if (!purchasedIds.includes(ShopItemIds.criticalClicks)) return false
+    const random = Math.floor(Math.random() * 10)
+    if (random === 1) return true
+    return false
+  }, [purchasedIds])
+
   const handleClick = useCallback(() => {
+    const isCritical = getIsCritical()
     if (purchasedIds.includes(ShopItemIds.buttonSFX)) {
+      if (isCritical) {
+        const audio = new Audio('/idle_game/boom.mp3')
+        audio.volume = 0.1
+        audio.play()
+      }
       const audio = new Audio('/idle_game/click.mp3')
       audio.volume = 0.5
       audio.play()
     }
-    onClick()
-  }, [purchasedIds])
+    onClick(isCritical)
+  }, [purchasedIds, getIsCritical, onClick])
 
   return (
     <button

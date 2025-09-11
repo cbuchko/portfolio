@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ShopItemIds } from './shop/constants'
 
-const devMode = false
+const devMode = true
 
 export type ScoreProps = {
   score: number
@@ -15,7 +15,12 @@ export type ScoreProps = {
   incrementClicks: (increase: number) => void
   incrementPassive: (increase: number) => void
   incrementView: (increase: number) => void
-  incrementScore: (increase: number, statisticType: StatisticType, skipAnimation?: boolean) => void
+  incrementScore: (
+    increase: number,
+    statisticType: StatisticType,
+    skipAnimation?: boolean,
+    isCritical?: boolean
+  ) => void
   incrementAdPower: (increase: number) => void
   spendScore: (cost: number, purchaseCallback: () => void) => void
 }
@@ -24,6 +29,7 @@ export type ScoreIncrement = {
   id: string
   amount: number
   xPosition: number
+  isCritical?: boolean
 }
 
 export type Statistics = {
@@ -73,7 +79,12 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
   }, [])
 
   const incrementScore = useCallback(
-    (amount: number, statisticType: StatisticType, skipAnimation?: boolean) => {
+    (
+      amount: number,
+      statisticType: StatisticType,
+      skipAnimation?: boolean,
+      isCritical?: boolean
+    ) => {
       if (!(amount > 0)) return
       setScore((prevScore) => prevScore + amount)
       if (!skipAnimation) setDisplayScore((prevScore) => prevScore + amount)
@@ -92,7 +103,7 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
       const scoreId = crypto.randomUUID()
       setScoreIncrements((prevIncrements) => [
         ...prevIncrements,
-        { id: scoreId, amount, xPosition: Math.random() * 80 },
+        { id: scoreId, amount, xPosition: Math.random() * 80, isCritical },
       ])
       //remove the score after a delay
       setTimeout(

@@ -72,7 +72,6 @@ export const Meme = ({ meme, setActiveMeme, size, purchasedIds, isActive }: Meme
       container.style.margin = `0`
       container.style.zIndex = '100'
 
-      console.log(x, y)
       positionRef.current = { x, y }
       setShowPlaceholder(true)
 
@@ -87,7 +86,6 @@ export const Meme = ({ meme, setActiveMeme, size, purchasedIds, isActive }: Meme
 
   //listen for when the meme becomes active/inactive, and transition it back to its original spot
   useEffect(() => {
-    console.log('status changed', isActive)
     if (!isActive) {
       const container = containerRef.current
       if (!container) return

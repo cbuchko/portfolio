@@ -10,6 +10,7 @@ export enum ShopItemIds {
   basicButton,
   buttonSFX,
   scoreIncrementer,
+  criticalClicks,
   basicMeme,
   memeRepeatable,
   memeGallery,
@@ -139,6 +140,14 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     message: "See exactly what you're earning.",
     clickIncrementPower: 20,
     prerequsiteId: ShopItemIds.buttonSFX,
+  },
+  [ShopItemIds.criticalClicks]: {
+    id: ShopItemIds.criticalClicks,
+    title: 'Critical Clicks',
+    cost: 10000,
+    message: '10% of the time your clicks will crit every time.',
+    clickIncrementPower: 50,
+    prerequsiteId: ShopItemIds.scoreIncrementer,
   },
   //MEMES
   [ShopItemIds.basicMeme]: {

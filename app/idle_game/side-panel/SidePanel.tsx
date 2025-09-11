@@ -87,7 +87,10 @@ export const SidePanel = ({
       <div className="flex-grow" />
       <Score scoreProps={scoreProps} purchasedIds={purchasedIds} blogViewProps={blogViewProps} />
       <Clicker
-        onClick={() => incrementScore(clickPower, StatisticType.click)}
+        onClick={(isCritical) => {
+          const power = isCritical ? clickPower * 10 : clickPower
+          incrementScore(power, StatisticType.click, false, isCritical)
+        }}
         purchasedIds={purchasedIds}
       />
       <TutorialBox

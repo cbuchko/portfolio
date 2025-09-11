@@ -19,7 +19,9 @@ export const Score = ({ scoreProps, purchasedIds, blogViewProps }: ScoreComponen
       {scoreIncrements.map((inc) => (
         <div
           key={inc.id}
-          className="absolute float-score select-none"
+          className={classNames('absolute float-score select-none', {
+            '!text-3xl': inc.isCritical,
+          })}
           style={{ left: `${inc.xPosition}px` }}
         >
           +{inc.amount}
