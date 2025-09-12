@@ -35,6 +35,7 @@ export enum ShopItemIds {
   basicAds,
   repeatableAdAmount,
   adSponsor,
+  repeatableSponsor,
   statistics,
 }
 
@@ -375,6 +376,20 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     adIncrementPower: 2000,
     message: 'For legal reasons this site is not actually affiliated with any organization.',
     prerequsiteId: ShopItemIds.basicAds,
+  },
+  [ShopItemIds.repeatableSponsor]: {
+    id: ShopItemIds.repeatableSponsor,
+    title: 'More Sponsors',
+    cost: 30000,
+    message:
+      'These sponsor deals are just flooding in. (Once again for legal reasons not real sponsor deals).',
+    adIncrementPower: 3000,
+    prerequsiteId: ShopItemIds.adSponsor,
+    isRepeatble: {
+      limit: 5,
+      costMultiplier: 3,
+      powerMultiplier: 1,
+    },
   },
   //MISC
   [ShopItemIds.statistics]: {

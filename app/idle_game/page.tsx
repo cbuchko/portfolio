@@ -53,15 +53,16 @@ export default function IdleGame() {
         })}
       >
         <Title purchasedIds={purchasedShopItems} />
-        {purchasedShopItems.includes(ShopItemIds.adSponsor) && <Sponsorships />}
+        {purchasedShopItems.includes(ShopItemIds.adSponsor) && (
+          <Sponsorships purchasedIds={purchasedShopItems} />
+        )}
         {purchasedShopItems.includes(ShopItemIds.basicBody) &&
           !purchasedShopItems.includes(ShopItemIds.basicMeme) && (
             <div className="max-w-[500px] text-center mt-8">{LoremIpsum}</div>
           )}
         <div
-          className={classNames('', {
+          className={classNames('mt-24', {
             'grid grid-cols-2 w-full px-8': purchasedShopItems.includes(ShopItemIds.basicBlog),
-            'mt-16': !purchasedShopItems.includes(ShopItemIds.adSponsor),
           })}
         >
           {purchasedShopItems.includes(ShopItemIds.basicMeme) && (
