@@ -1,3 +1,7 @@
+Hello! This is my portfolio website. I intentionally kept it pretty simple and brief. I think simple designs can often be the most beautiful and easy to digest. 
+
+This repository also holds my Idle Game project. This is my current passion project and I've been continually developing it since August 2025. Please check it out at connorbuchko.com/idle_game. The code for this is in /app/idle_game
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
