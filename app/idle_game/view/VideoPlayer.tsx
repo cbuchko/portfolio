@@ -46,7 +46,6 @@ export const VideoPlayer = ({
       const { incrementScore, adPower } = scorePropsRef.current
       incrementScore(adPower, StatisticType.ad)
     }
-    video.removeEventListener('ended', handleEnded)
 
     //randomizes where the video spawns
     const bounds = view.getBoundingClientRect()
@@ -70,7 +69,7 @@ export const VideoPlayer = ({
     audio.volume = 0.5
     audio.play()
 
-    video.addEventListener('ended', handleEnded)
+    video.addEventListener('ended', handleEnded, { once: true })
   }, [])
 
   useEffect(() => {
