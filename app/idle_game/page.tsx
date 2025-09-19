@@ -18,6 +18,7 @@ import { StatisticsModal } from './menus/StatisticsModal'
 import { BlackMarketModal } from './menus/BlackMarketModal'
 import { useMemes } from './useMemes'
 import AudioPlayer from './view/AudioPlayer'
+import { VideoPlayer } from './view/VideoPlayer'
 
 export default function IdleGame() {
   const startDateRef = useRef(new Date())
@@ -118,6 +119,9 @@ export default function IdleGame() {
       )}
       <div className="fixed bottom-2 right-2 text-xs">Alpha v0.4</div>
       {purchasedShopItems.includes(ShopItemIds.backgroundMusic) && <AudioPlayer />}
+      {purchasedShopItems.includes(ShopItemIds.videoAds) && (
+        <VideoPlayer viewRef={viewRef} scoreProps={scoreProps} />
+      )}
     </div>
   )
 }

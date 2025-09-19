@@ -37,6 +37,7 @@ export enum ShopItemIds {
   adSponsor,
   repeatableSponsor,
   backgroundMusic,
+  videoAds,
   statistics,
 }
 
@@ -400,6 +401,15 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     adIncrementPower: 5000,
     prerequsiteId: ShopItemIds.basicAds,
   },
+  [ShopItemIds.videoAds]: {
+    id: ShopItemIds.videoAds,
+    title: 'Multimedia Ads',
+    cost: 100000,
+    message:
+      'Our studies show people love unskippable, unmutable, completely nonsensical videos. Video Ads auto-claim Ad Score.',
+    adIncrementPower: 10000,
+    prerequsiteId: ShopItemIds.adSponsor,
+  },
   //MISC
   [ShopItemIds.statistics]: {
     id: ShopItemIds.statistics,
@@ -407,7 +417,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 30000,
     clickIncrementPower: 100,
     message: 'Number go up = happy.',
-    prerequsiteId: ShopItemIds.blogViewBots,
+    prerequsiteId: ShopItemIds.blogViewCount,
   },
 }
 
