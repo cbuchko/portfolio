@@ -36,6 +36,7 @@ export enum ShopItemIds {
   repeatableAdAmount,
   adSponsor,
   repeatableSponsor,
+  backgroundMusic,
   statistics,
 }
 
@@ -390,6 +391,14 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
       costMultiplier: 3,
       powerMultiplier: 1,
     },
+  },
+  [ShopItemIds.backgroundMusic]: {
+    id: ShopItemIds.backgroundMusic,
+    title: 'Royalty Free Music',
+    cost: 50000,
+    message: 'Maybe if we play music people will be hypnotized into staying.',
+    adIncrementPower: 5000,
+    prerequsiteId: ShopItemIds.basicAds,
   },
   //MISC
   [ShopItemIds.statistics]: {
