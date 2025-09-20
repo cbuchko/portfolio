@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { brands } from './constants'
-import { ShopItemIds } from '../side-panel/shop/constants'
+import { brands } from '../constants'
+import { ShopItemIds } from '../../side-panel/shop/constants'
 
 export const Sponsorships = ({ purchasedIds }: { purchasedIds: Array<ShopItemIds> }) => {
   const extraSponsorAmount = purchasedIds.filter(

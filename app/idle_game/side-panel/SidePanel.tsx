@@ -46,7 +46,7 @@ export const SidePanel = ({
   }, [])
 
   return (
-    <div className="flex flex-col h-[100vh] w-[20%] border-l py-4 px-8 fade-in">
+    <div className="flex flex-col h-[100vh] max-w-[20%] min-w-[20%] border-l py-4 px-8 fade-in">
       <div>
         {purchasedIds.includes(ShopItemIds.blogCustomAuthor) && (
           <input

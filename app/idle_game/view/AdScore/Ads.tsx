@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
-import { AdContent } from './constants'
-import { ScoreProps, StatisticType } from '../side-panel/useScore'
-import { ShopItemIds } from '../side-panel/shop/constants'
+import { AdContent } from '../constants'
+import { ScoreProps, StatisticType } from '../../side-panel/useScore'
+import { ShopItemIds } from '../../side-panel/shop/constants'
 
 type AdsProps = {
   scoreProps: ScoreProps

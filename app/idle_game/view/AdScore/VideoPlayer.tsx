@@ -1,5 +1,5 @@
 import { RefObject, useCallback, useEffect, useRef } from 'react'
-import { ScoreProps, StatisticType } from '../side-panel/useScore'
+import { ScoreProps, StatisticType } from '../../side-panel/useScore'
 
 const videos = [
   '/idle_game/video/pizza.mp4',
@@ -50,7 +50,7 @@ export const VideoPlayer = ({
     //randomizes where the video spawns
     const bounds = view.getBoundingClientRect()
     const { right, bottom } = bounds
-    const x = right
+    const x = right + 6
     const y = Math.random() * bottom * 0.8
 
     //set the content
