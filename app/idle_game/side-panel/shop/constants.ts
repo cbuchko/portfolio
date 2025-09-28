@@ -12,6 +12,7 @@ export enum ShopItemIds {
   scoreIncrementer,
   criticalClicks,
   cursorUpgrade,
+  spaceInvaders,
   basicMeme,
   memeRepeatable,
   memeGallery,
@@ -161,6 +162,14 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
       "We've spent all this time upgrading the clicker when we could have been upgrading the mouse...",
     clickIncrementPower: 100,
     prerequsiteId: ShopItemIds.criticalClicks,
+  },
+  [ShopItemIds.spaceInvaders]: {
+    id: ShopItemIds.spaceInvaders,
+    title: 'Bug Infestation!',
+    cost: 100000,
+    message: 'Oh no! Bugs are coming for your score! Squash them quick!',
+    clickIncrementPower: 250,
+    prerequsiteId: ShopItemIds.cursorUpgrade,
   },
   //MEMES
   [ShopItemIds.basicMeme]: {
@@ -397,7 +406,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.backgroundMusic,
     title: 'Royalty Free Music',
     cost: 50000,
-    message: 'Maybe if we play music people will be hypnotized into staying.',
+    message: `Sit back, relax, and settle in with the smooth soulful tones of Meme Radio TM.`,
     adIncrementPower: 5000,
     prerequsiteId: ShopItemIds.basicAds,
   },

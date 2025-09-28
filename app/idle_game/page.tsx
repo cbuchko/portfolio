@@ -9,16 +9,16 @@ import { LoremIpsum } from './constants'
 import { Memes } from './view/MemeGallery'
 import { Title } from './view/Title'
 import { Blog } from './view/Blog'
-import { Ads } from './view/Ads'
+import { Ads } from './view/AdScore/Ads'
 import { StatisticType, useScore } from './side-panel/useScore'
 import { useBlogViews } from './view/useBlogViews'
-import { Sponsorships } from './view/Sponsor'
+import { Sponsorships } from './view/AdScore/Sponsor'
 import { ModalNames } from './menus/modalRegistry'
 import { StatisticsModal } from './menus/StatisticsModal'
 import { BlackMarketModal } from './menus/BlackMarketModal'
 import { useMemes } from './useMemes'
 import AudioPlayer from './view/AudioPlayer'
-import { VideoPlayer } from './view/VideoPlayer'
+import { VideoPlayer } from './view/AdScore/VideoPlayer'
 
 export default function IdleGame() {
   const startDateRef = useRef(new Date())
@@ -117,7 +117,7 @@ export default function IdleGame() {
           purchasedIds={purchasedShopItems}
         />
       )}
-      <div className="fixed bottom-2 right-2 text-xs">Alpha v0.4</div>
+      <div className="fixed bottom-2 right-2 text-xs">Alpha v0.5</div>
       {purchasedShopItems.includes(ShopItemIds.backgroundMusic) && <AudioPlayer />}
       {purchasedShopItems.includes(ShopItemIds.videoAds) && (
         <VideoPlayer viewRef={viewRef} scoreProps={scoreProps} />

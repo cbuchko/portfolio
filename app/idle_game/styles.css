@@ -209,3 +209,16 @@
   width: 300px !important;
   height: 300px !important;
 }
+
+@keyframes invaderFloat {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(110px);
+  }
+}
+
+.invader {
+  animation: invaderFloat 10s linear;
+}

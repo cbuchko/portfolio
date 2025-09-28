@@ -24,7 +24,7 @@ export const Score = ({ scoreProps, purchasedIds, blogViewProps }: ScoreComponen
           })}
           style={{ left: `${inc.xPosition}px` }}
         >
-          +{inc.amount}
+          +{inc.amount.toLocaleString('en-us')}
         </div>
       ))}
       <div className="flex items-center gap-2 mt-2 text-3xl select-none">

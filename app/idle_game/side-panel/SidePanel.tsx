@@ -9,6 +9,7 @@ import { ModalNames } from '../menus/modalRegistry'
 import Image from 'next/image'
 import { MemeProps } from '../useMemes'
 import { ShopContainer } from './shop/ShopContainer'
+import { SpaceInvaders } from './SpaceInvaders'
 
 type SidePanelProps = {
   purchasedIds: Array<ShopItemIds>
@@ -85,20 +86,25 @@ export const SidePanel = ({
         />
       </div>
       <div className="flex-grow" />
-      <Score scoreProps={scoreProps} purchasedIds={purchasedIds} blogViewProps={blogViewProps} />
-      <Clicker
-        onClick={(isCritical) => {
-          const power = isCritical ? clickPower * 10 : clickPower
-          incrementScore(power, StatisticType.click, false, isCritical)
-        }}
-        purchasedIds={purchasedIds}
-      />
-      <TutorialBox
-        score={score}
-        purchasedIds={purchasedIds}
-        hoveredShopId={hoveredShopId}
-        calculateCost={calculateCost}
-      />
+      <div className="relative">
+        {purchasedIds.includes(ShopItemIds.spaceInvaders) && (
+          <SpaceInvaders scoreProps={scoreProps} />
+        )}
+        <Score scoreProps={scoreProps} purchasedIds={purchasedIds} blogViewProps={blogViewProps} />
+        <Clicker
+          onClick={(isCritical) => {
+            const power = isCritical ? clickPower * 10 : clickPower
+            incrementScore(power, StatisticType.click, false, isCritical)
+          }}
+          purchasedIds={purchasedIds}
+        />
+        <TutorialBox
+          score={score}
+          purchasedIds={purchasedIds}
+          hoveredShopId={hoveredShopId}
+          calculateCost={calculateCost}
+        />
+      </div>
       <a className="text-xs text-center mt-2" href="https://logo.dev" target="_blank">
         Logos provided by Logo.dev
       </a>
