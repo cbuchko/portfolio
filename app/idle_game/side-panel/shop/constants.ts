@@ -128,7 +128,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.basicButton,
     title: 'Clicker Upgrade',
     cost: 100,
-    message: 'If upgrading the clicker will help you click better, go for it.',
+    message: "I don't see how this helps the site we're building, but go for it.",
     clickIncrementPower: 2,
     prerequsiteId: ShopItemIds.centeredTitle,
   },
@@ -151,7 +151,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.criticalClicks]: {
     id: ShopItemIds.criticalClicks,
     title: 'Critical Clicks',
-    cost: 10000,
+    cost: 30000,
     message: '5% of the time your clicks will crit every time.',
     clickIncrementPower: 50,
     prerequsiteId: ShopItemIds.scoreIncrementer,
@@ -159,7 +159,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.cursorUpgrade]: {
     id: ShopItemIds.cursorUpgrade,
     title: 'Mouse Cursor',
-    cost: 50000,
+    cost: 75000,
     message:
       "We've spent all this time upgrading the clicker when we could have been upgrading the mouse...",
     clickIncrementPower: 100,
@@ -168,7 +168,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.spaceInvaders]: {
     id: ShopItemIds.spaceInvaders,
     title: 'Bug Infestation!',
-    cost: 100000,
+    cost: 200000,
     message: 'Oh no! Bugs are coming for your score! Squash them quick!',
     clickIncrementPower: 250,
     prerequsiteId: ShopItemIds.cursorUpgrade,
@@ -241,7 +241,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.memeRarity]: {
     id: ShopItemIds.memeRarity,
     title: 'Meme Rarity',
-    cost: 80000,
+    cost: 100000,
     message: 'The memes acquired thus far are only the tip of the iceberg. Time to go deeper.',
     passiveIncrementPower: 150,
     prerequsiteId: ShopItemIds.memeFlavor,
@@ -249,7 +249,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.blackMarket]: {
     id: ShopItemIds.blackMarket,
     title: 'Black Market',
-    cost: 100000,
+    cost: 250000,
     message:
       'What I feared is true, if we want rarer memes, our methods need to be more... non-traditional.',
     passiveIncrementPower: 300,
@@ -262,7 +262,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 1500,
     message: 'Every website needs a blog right? ...right?',
     clickIncrementPower: 15,
-    prerequsiteId: ShopItemIds.memeGallery,
+    prerequsiteId: ShopItemIds.memeRepeatable,
   },
   [ShopItemIds.firstPost]: {
     id: ShopItemIds.firstPost,
@@ -299,7 +299,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 5000,
     message: 'Might be a nice morale boost to see how many people are viewing these.',
     viewIncrementPower: 1,
-    prerequsiteId: ShopItemIds.firstPost,
+    prerequsiteId: ShopItemIds.blogDetails,
   },
   [ShopItemIds.blogViewBots]: {
     id: ShopItemIds.blogViewBots,
@@ -323,62 +323,62 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.blogCustomAuthor]: {
     id: ShopItemIds.blogCustomAuthor,
     title: 'Custom Author',
-    cost: 17500,
+    cost: 50000,
     message: 'This is awkward, we never introduced ourselves. What a hilarious misunderstanding.',
     blogViewModifier: {
       gain: 4,
     },
     prerequsiteId: ShopItemIds.blogAuthor,
   },
-  [ShopItemIds.blogBio]: {
-    id: ShopItemIds.blogBio,
-    title: 'About the Author',
-    cost: 50000,
-    message: 'I think some backstory is what the people really need to connect to our writing.',
+  [ShopItemIds.blogTitle]: {
+    id: ShopItemIds.blogTitle,
+    title: 'Stylish Title',
+    cost: 75000,
+    message: 'You know what our website needs? Character. Gumption. Chutzpah.',
     blogViewModifier: {
-      gain: 8,
+      frequencyInMs: 4000,
     },
     prerequsiteId: ShopItemIds.blogCustomAuthor,
   },
   [ShopItemIds.blogImage]: {
     id: ShopItemIds.blogImage,
     title: 'Blog Image',
-    cost: 40000,
+    cost: 100000,
     message: 'I have some stock photos lying around.',
     blogViewModifier: {
       odds: 8,
     },
-    prerequsiteId: ShopItemIds.blogViewBots,
+    prerequsiteId: ShopItemIds.blogTitle,
   },
   [ShopItemIds.blogLayout]: {
     id: ShopItemIds.blogLayout,
     title: 'Blog Layout',
-    cost: 75000,
+    cost: 200000,
     message: "I didn't want to say it, but, our blog is ugly. Can we please do something?",
     blogViewModifier: {
       odds: 5,
     },
     prerequsiteId: ShopItemIds.blogImage,
   },
-  [ShopItemIds.blogTitle]: {
-    id: ShopItemIds.blogTitle,
-    title: 'Stylish Title',
-    cost: 17500,
-    message: 'You know what our website needs? Character. Gumption. Chutzpah.',
+  [ShopItemIds.blogBio]: {
+    id: ShopItemIds.blogBio,
+    title: 'About the Author',
+    cost: 250000,
+    message: 'I think some backstory is what the people really need to connect to our writing.',
     blogViewModifier: {
-      frequencyInMs: 4000,
+      gain: 8,
     },
-    prerequsiteId: ShopItemIds.blogViewBots,
+    prerequsiteId: ShopItemIds.blogLayout,
   },
   [ShopItemIds.blogContainer]: {
     id: ShopItemIds.blogContainer,
     title: 'Blog Container',
-    cost: 75000,
+    cost: 500000,
     message: "Floating text is so 2000's coded. Our blog needs a home.",
     blogViewModifier: {
       frequencyInMs: 3000,
     },
-    prerequsiteId: ShopItemIds.blogTitle,
+    prerequsiteId: ShopItemIds.blogBio,
   },
   //ADS
   [ShopItemIds.basicAds]: {
@@ -430,16 +430,16 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 50000,
     message: `Sit back, relax, and settle in with the smooth soulful tones of Meme Radio TM.`,
     adIncrementPower: 5000,
-    prerequsiteId: ShopItemIds.basicAds,
+    prerequsiteId: ShopItemIds.adSponsor,
   },
   [ShopItemIds.videoAds]: {
     id: ShopItemIds.videoAds,
     title: 'Multimedia Ads',
-    cost: 100000,
+    cost: 250000,
     message:
       'Our studies show people love unskippable, unmutable, completely nonsensical videos. Video Ads auto-claim Ad Score.',
     adIncrementPower: 10000,
-    prerequsiteId: ShopItemIds.adSponsor,
+    prerequsiteId: ShopItemIds.backgroundMusic,
   },
   //MISC
   [ShopItemIds.statistics]: {

@@ -152,7 +152,7 @@ const TutorialBox = ({
           <div className="flex-grow" />
           {hoveredButton.cost && (
             <div className={classNames({ 'text-red-400': calculateCost(hoveredButton) > score })}>
-              Costs: {calculateCost(hoveredButton)} Score
+              Costs: {calculateCost(hoveredButton).toLocaleString('en-us')} Score
             </div>
           )}
         </>
