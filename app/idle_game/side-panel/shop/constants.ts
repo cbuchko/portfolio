@@ -34,6 +34,7 @@ export enum ShopItemIds {
   blogBio,
   blogImage,
   blogLayout,
+  blogContainer,
   basicAds,
   repeatableAdAmount,
   adSponsor,
@@ -368,6 +369,16 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
       frequencyInMs: 4000,
     },
     prerequsiteId: ShopItemIds.blogViewBots,
+  },
+  [ShopItemIds.blogContainer]: {
+    id: ShopItemIds.blogContainer,
+    title: 'Blog Container',
+    cost: 75000,
+    message: "Floating text is so 2000's coded. Our blog needs a home.",
+    blogViewModifier: {
+      frequencyInMs: 3000,
+    },
+    prerequsiteId: ShopItemIds.blogTitle,
   },
   //ADS
   [ShopItemIds.basicAds]: {

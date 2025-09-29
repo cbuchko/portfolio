@@ -16,7 +16,12 @@ type BlogProps = {
 export const Blog = ({ purchasedIds, blogViewProps, handleBlogView, userName }: BlogProps) => {
   const blogCount = purchasedIds.filter((id) => id === ShopItemIds.postRepeatable).length + 1
   return (
-    <div className="mt-16">
+    <div
+      className={classNames('mt-16', {
+        '!bg-[#ffebeb] rounded-lg pt-8 px-4 text-black shadow-[inset_2px_2px_5px_rgba(0,0,0,0.2),_inset_-2px_-2px_5px_rgba(255,255,255,0.7)]':
+          purchasedIds.includes(ShopItemIds.blogContainer),
+      })}
+    >
       <h4 className="text-4xl">The Meaning Behind the Meme</h4>
       {!purchasedIds.includes(ShopItemIds.firstPost) && <h5>0 posts</h5>}
       {purchasedIds.includes(ShopItemIds.blogBio) && (
@@ -34,9 +39,8 @@ export const Blog = ({ purchasedIds, blogViewProps, handleBlogView, userName }: 
       {purchasedIds.includes(ShopItemIds.firstPost) && (
         <div
           className={classNames('my-4 overflow-y-auto max-h-[55vh] my-scrollable', {
-            'grid gap-3 grid-cols-[repeat(auto-fit,minmax(225px,1fr))]': purchasedIds.includes(
-              ShopItemIds.blogLayout
-            ),
+            'grid gap-3 grid-cols-[repeat(auto-fit,minmax(225px,1fr))] !max-h-[50vh]':
+              purchasedIds.includes(ShopItemIds.blogLayout),
           })}
         >
           {BlogPosts.slice(0, blogCount).map((post, idx) => (
@@ -102,6 +106,7 @@ const BlogPost = ({
     intervalRef.current = interval
   }, [purchasedIds, viewFrequencyInMs, viewOdds, viewGain])
 
+  if (!imageUrl) return null
   if (purchasedIds.includes(ShopItemIds.blogLayout))
     return (
       <BlogLayoutV2
@@ -179,7 +184,7 @@ const BlogLayoutV2 = ({
 }) => {
   const height = 150
   return (
-    <div className=" relative">
+    <div className="relative">
       <img src={imageUrl} className="rounded-lg h-[150px] w-full" alt="thumbnail" height={height} />
       <div
         className="absolute top-0 z-5 bg-black/70 rounded-lg p-2 text-white flex flex-col w-full"

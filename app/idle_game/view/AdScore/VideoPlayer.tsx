@@ -81,14 +81,12 @@ export const VideoPlayer = ({
   }, [])
 
   return (
-    <div className="absolute h-[300px] w-[400px] rounded-md">
-      <video
-        className="absolute pointer-events-none"
-        ref={videoRef}
-        src={videos[0]}
-        autoPlay
-        muted={true}
-      />
-    </div>
+    <video
+      className="absolute pointer-events-none h-[300px] w-[400px] rounded-md"
+      ref={videoRef}
+      src={videos[0]}
+      autoPlay
+      muted={true}
+    />
   )
 }

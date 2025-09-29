@@ -105,7 +105,11 @@ export const SidePanel = ({
           calculateCost={calculateCost}
         />
       </div>
-      <a className="text-xs text-center mt-2" href="https://logo.dev" target="_blank">
+      <a
+        className="text-xs text-center mt-2 select-none cursor-pointer"
+        href="https://logo.dev"
+        target="_blank"
+      >
         Logos provided by Logo.dev
       </a>
     </div>
