@@ -82,7 +82,7 @@ export const VideoPlayer = ({
 
   return (
     <video
-      className="absolute pointer-events-none h-[300px] w-[400px] rounded-md"
+      className="absolute pointer-events-none w-[400px] rounded-md"
       ref={videoRef}
       src={videos[0]}
       autoPlay

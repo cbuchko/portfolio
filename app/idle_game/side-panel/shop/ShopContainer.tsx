@@ -47,23 +47,27 @@ export const ShopContainer = ({
     [spendScore]
   )
 
-  const filteredShopItems = useMemo(() => {
-    return Object.values(ShopItems)
-      .filter((item) => {
-        if (item.isMeme && memeProps.isCommonMaxed) return false
-        const hasPreqrequisite =
-          item.prerequsiteId !== undefined ? purchasedIds.includes(item.prerequsiteId) : true
-        if (item.isRepeatble) {
-          if (
-            purchasedIds.filter((id) => id === item.id).length < item.isRepeatble.limit - 1 &&
-            hasPreqrequisite
-          )
-            return true
-          return false
-        }
-        return !purchasedIds.includes(item.id) && hasPreqrequisite
-      })
+  const [filteredShopItems, filteredRepeatableItems] = useMemo(() => {
+    const items = Object.values(ShopItems).filter((item) => {
+      if (item.isMeme && memeProps.isCommonMaxed) return false
+      const hasPreqrequisite =
+        item.prerequsiteId !== undefined ? purchasedIds.includes(item.prerequsiteId) : true
+      if (item.isRepeatble) {
+        if (
+          purchasedIds.filter((id) => id === item.id).length < item.isRepeatble.limit - 1 &&
+          hasPreqrequisite
+        )
+          return true
+        return false
+      }
+      return !purchasedIds.includes(item.id) && hasPreqrequisite
+    })
+
+    const normalItems = items
+      .filter((item) => !item.isRepeatble)
       .sort((a, b) => calculateCost(a) - calculateCost(b))
+    const repeatableItems = items.filter((item) => item.isRepeatble)
+    return [normalItems, repeatableItems]
   }, [purchasedIds, memeProps.isCommonMaxed])
 
   return (
@@ -81,6 +85,23 @@ export const ShopContainer = ({
           />
         ))}
       </div>
+      {filteredRepeatableItems.length > 0 && (
+        <>
+          <h5 className="text-lg font-medium mb-2 mt-8">Repeatables</h5>
+          <div className="flex gap-4 flex-wrap">
+            {filteredRepeatableItems.map((button) => (
+              <ShopButton
+                key={button.id}
+                id={button.id}
+                title={button.title}
+                setHoveredId={setHoveredShopId}
+                spendScore={() => handlePurchase(button)}
+                isDisabled={calculateCost(button) > score}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </>
   )
 }

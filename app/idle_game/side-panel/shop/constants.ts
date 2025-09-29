@@ -151,7 +151,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.criticalClicks]: {
     id: ShopItemIds.criticalClicks,
     title: 'Critical Clicks',
-    cost: 30000,
+    cost: 20000,
     message: '5% of the time your clicks will crit every time.',
     clickIncrementPower: 50,
     prerequsiteId: ShopItemIds.scoreIncrementer,
@@ -203,7 +203,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 1000,
     message: 'We need a better way to showcase these.',
     passiveIncrementPower: 5,
-    prerequsiteId: ShopItemIds.memeRepeatable,
+    prerequsiteId: ShopItemIds.basicMeme,
   },
   [ShopItemIds.memeTrim]: {
     id: ShopItemIds.memeTrim,
@@ -224,7 +224,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.memeFocus]: {
     id: ShopItemIds.memeFocus,
     title: 'Meme Inspection',
-    cost: 30000,
+    cost: 25000,
     message: 'Bring it front and center.',
     passiveIncrementPower: 100,
     prerequsiteId: ShopItemIds.memeRotation,
@@ -235,7 +235,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 50000,
     message:
       "All this time I've been wondering, do these memes have names? What are their stories? Let's find out.",
-    passiveIncrementPower: 100,
+    passiveIncrementPower: 200,
     prerequsiteId: ShopItemIds.memeFocus,
   },
   [ShopItemIds.memeRarity]: {
@@ -243,7 +243,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     title: 'Meme Rarity',
     cost: 100000,
     message: 'The memes acquired thus far are only the tip of the iceberg. Time to go deeper.',
-    passiveIncrementPower: 150,
+    passiveIncrementPower: 500,
     prerequsiteId: ShopItemIds.memeFlavor,
   },
   [ShopItemIds.blackMarket]: {
@@ -251,8 +251,8 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     title: 'Black Market',
     cost: 250000,
     message:
-      'What I feared is true, if we want rarer memes, our methods need to be more... non-traditional.',
-    passiveIncrementPower: 300,
+      'What I feared seems to be true. If we want rarer memes, our methods need to be more... non-traditional.',
+    passiveIncrementPower: 1000,
     prerequsiteId: ShopItemIds.memeRarity,
   },
   //BLOG
@@ -262,7 +262,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 1500,
     message: 'Every website needs a blog right? ...right?',
     clickIncrementPower: 15,
-    prerequsiteId: ShopItemIds.memeRepeatable,
+    prerequsiteId: ShopItemIds.basicMeme,
   },
   [ShopItemIds.firstPost]: {
     id: ShopItemIds.firstPost,
@@ -313,10 +313,10 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.blogAuthor]: {
     id: ShopItemIds.blogAuthor,
     title: 'Blog Author',
-    cost: 30000,
+    cost: 20000,
     message: 'Time to take some credit for all of our hard work.',
     blogViewModifier: {
-      gain: 2,
+      gain: 4,
     },
     prerequsiteId: ShopItemIds.blogViewBots,
   },
@@ -326,7 +326,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 50000,
     message: 'This is awkward, we never introduced ourselves. What a hilarious misunderstanding.',
     blogViewModifier: {
-      gain: 4,
+      gain: 8,
     },
     prerequsiteId: ShopItemIds.blogAuthor,
   },
@@ -336,7 +336,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 75000,
     message: 'You know what our website needs? Character. Gumption. Chutzpah.',
     blogViewModifier: {
-      frequencyInMs: 4000,
+      frequencyInMs: 3000,
     },
     prerequsiteId: ShopItemIds.blogCustomAuthor,
   },
@@ -346,17 +346,17 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 100000,
     message: 'I have some stock photos lying around.',
     blogViewModifier: {
-      odds: 8,
+      odds: 6,
     },
     prerequsiteId: ShopItemIds.blogTitle,
   },
   [ShopItemIds.blogLayout]: {
     id: ShopItemIds.blogLayout,
     title: 'Blog Layout',
-    cost: 200000,
+    cost: 150000,
     message: "I didn't want to say it, but, our blog is ugly. Can we please do something?",
     blogViewModifier: {
-      odds: 5,
+      odds: 3,
     },
     prerequsiteId: ShopItemIds.blogImage,
   },
@@ -366,7 +366,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 250000,
     message: 'I think some backstory is what the people really need to connect to our writing.',
     blogViewModifier: {
-      gain: 8,
+      gain: 16,
     },
     prerequsiteId: ShopItemIds.blogLayout,
   },
@@ -376,7 +376,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 500000,
     message: "Floating text is so 2000's coded. Our blog needs a home.",
     blogViewModifier: {
-      frequencyInMs: 3000,
+      frequencyInMs: 1000,
     },
     prerequsiteId: ShopItemIds.blogBio,
   },
