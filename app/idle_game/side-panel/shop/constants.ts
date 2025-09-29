@@ -33,6 +33,7 @@ export enum ShopItemIds {
   blogCustomAuthor,
   blogBio,
   blogImage,
+  blogLayout,
   basicAds,
   repeatableAdAmount,
   adSponsor,
@@ -347,6 +348,16 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
       odds: 8,
     },
     prerequsiteId: ShopItemIds.blogViewBots,
+  },
+  [ShopItemIds.blogLayout]: {
+    id: ShopItemIds.blogLayout,
+    title: 'Blog Layout',
+    cost: 75000,
+    message: "I didn't want to say it, but, our blog is ugly. Can we please do something?",
+    blogViewModifier: {
+      odds: 5,
+    },
+    prerequsiteId: ShopItemIds.blogImage,
   },
   [ShopItemIds.blogTitle]: {
     id: ShopItemIds.blogTitle,

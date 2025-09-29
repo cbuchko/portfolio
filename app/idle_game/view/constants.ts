@@ -205,7 +205,7 @@ export const BlogPosts: BlogPost[] = [
     duration: '5 min',
   },
   {
-    title: 'Imagine Dragons contracts Ligma while perfoming concert to Sugondese crowd',
+    title: 'Imagine Dragons contracts Ligma',
     type: 'breaking news',
     duration: '5 sec',
   },

@@ -3,6 +3,9 @@ import { ShopItemIds } from '../side-panel/shop/constants'
 import { BlogPost as BlogPostType, BlogPosts } from './constants'
 import { useEffect, useRef, useState } from 'react'
 import { BlogViewProps } from './useBlogViews'
+import AuthorIcon from '@/public/idle_game/author.svg'
+import ViewIcon from '@/public/idle_game/eye.svg'
+import classNames from 'classnames'
 
 type BlogProps = {
   purchasedIds: Array<ShopItemIds>
@@ -29,7 +32,11 @@ export const Blog = ({ purchasedIds, blogViewProps, handleBlogView, userName }: 
         </>
       )}
       {purchasedIds.includes(ShopItemIds.firstPost) && (
-        <div className="my-4 overflow-y-auto max-h-[55vh]">
+        <div
+          className={classNames('my-4 overflow-y-auto max-h-[55vh]', {
+            'flex gap-3 flex-wrap': purchasedIds.includes(ShopItemIds.blogLayout),
+          })}
+        >
           {BlogPosts.slice(0, blogCount).map((post, idx) => (
             <BlogPost
               key={idx}
@@ -76,6 +83,7 @@ const BlogPost = ({
   }, [])
 
   const { viewFrequencyInMs, viewOdds, viewGain } = blogViewProps
+  ///increments blog view count based on the various blog view props
   useEffect(() => {
     if (!purchasedIds.includes(ShopItemIds.blogViewBots)) return
 
@@ -92,6 +100,37 @@ const BlogPost = ({
     intervalRef.current = interval
   }, [purchasedIds, viewFrequencyInMs, viewOdds, viewGain])
 
+  if (purchasedIds.includes(ShopItemIds.blogLayout))
+    return (
+      <BlogLayoutV2
+        post={post}
+        purchasedIds={purchasedIds}
+        userName={userName}
+        imageUrl={imageUrl}
+        viewCount={viewCount}
+      />
+    )
+  return (
+    <BlogLayoutV1
+      post={post}
+      purchasedIds={purchasedIds}
+      userName={userName}
+      imageUrl={imageUrl}
+      viewCount={viewCount}
+    />
+  )
+}
+
+const BlogLayoutV1 = ({
+  post,
+  purchasedIds,
+  userName,
+  imageUrl,
+  viewCount,
+}: Omit<BlogPostProps, 'handleBlogView' | 'blogViewProps'> & {
+  imageUrl: string
+  viewCount: number
+}) => {
   return (
     <div className="py-2 border-b border-gray-400">
       <div className="flex justify-between">
@@ -120,6 +159,51 @@ const BlogPost = ({
         </div>
         {imageUrl && purchasedIds.includes(ShopItemIds.blogImage) && (
           <img src={imageUrl} className="rounded-lg" alt="thumbnail" height={150} width={300} />
+        )}
+      </div>
+    </div>
+  )
+}
+
+const BlogLayoutV2 = ({
+  post,
+  purchasedIds,
+  userName,
+  imageUrl,
+  viewCount,
+}: Omit<BlogPostProps, 'handleBlogView' | 'blogViewProps'> & {
+  imageUrl: string
+  viewCount: number
+}) => {
+  const width = 300
+  const height = 150
+  return (
+    <div className="my-2 relative">
+      <img src={imageUrl} className="rounded-lg" alt="thumbnail" height={height} width={width} />
+      <div
+        className="absolute top-0 z-5 bg-black/70 rounded-lg p-2 text-white flex flex-col"
+        style={{ height, width }}
+      >
+        <div className="">
+          <div className="text-xl">{post.title}</div>
+          {purchasedIds.includes(ShopItemIds.blogAuthor) && (
+            <div className="flex items-center gap-1 text-white mt-1">
+              <div className="rounded-full pt-px pb-0.5 pl-px pr-px border w-max">
+                <AuthorIcon alt="author" height={10} width={10} />
+              </div>
+              <h5 className="text-xs">{userName}</h5>
+            </div>
+          )}
+        </div>
+        <div className="grow" />
+        {purchasedIds.includes(ShopItemIds.blogDetails) && (
+          <div className="flex justify-between">
+            <div className="text-xs capitalize">{`${post.type} * ${post.duration} read`}</div>
+            <div className="flex gap-1 items-center">
+              <ViewIcon alt="eye" height={12} width={12} />
+              <small className="text-xs">{viewCount}</small>
+            </div>
+          </div>
         )}
       </div>
     </div>
