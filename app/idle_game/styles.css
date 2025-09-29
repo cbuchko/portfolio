@@ -222,3 +222,24 @@
 .invader {
   animation: invaderFloat 10s linear;
 }
+
+.my-scrollable::-webkit-scrollbar {
+  width: 8px; /* adjust or set to 0 to hide completely */
+  height: 8px;
+}
+
+/* Remove the track (background) */
+.my-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Style the thumb (scroll handle) */
+.my-scrollable::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.4);
+  border-radius: 4px;
+}
+
+/* Hide the arrows */
+.my-scrollable::-webkit-scrollbar-button {
+  display: none;
+}

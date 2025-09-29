@@ -1,4 +1,4 @@
-import { CommonMemes, Rarity } from '../../view/constants'
+import { BlogPosts, CommonMemes, Rarity } from '../../view/constants'
 
 export enum ShopItemIds {
   basicTitle,
@@ -279,7 +279,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     passiveIncrementPower: 10,
     prerequsiteId: ShopItemIds.firstPost,
     isRepeatble: {
-      limit: 5,
+      limit: BlogPosts.length,
       costMultiplier: 2,
       powerMultiplier: 1,
     },

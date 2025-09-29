@@ -33,8 +33,10 @@ export const Blog = ({ purchasedIds, blogViewProps, handleBlogView, userName }: 
       )}
       {purchasedIds.includes(ShopItemIds.firstPost) && (
         <div
-          className={classNames('my-4 overflow-y-auto max-h-[55vh]', {
-            'flex gap-3 flex-wrap': purchasedIds.includes(ShopItemIds.blogLayout),
+          className={classNames('my-4 overflow-y-auto max-h-[55vh] my-scrollable', {
+            'grid gap-3 grid-cols-[repeat(auto-fit,minmax(225px,1fr))]': purchasedIds.includes(
+              ShopItemIds.blogLayout
+            ),
           })}
         >
           {BlogPosts.slice(0, blogCount).map((post, idx) => (
@@ -175,17 +177,16 @@ const BlogLayoutV2 = ({
   imageUrl: string
   viewCount: number
 }) => {
-  const width = 300
   const height = 150
   return (
-    <div className="my-2 relative">
-      <img src={imageUrl} className="rounded-lg" alt="thumbnail" height={height} width={width} />
+    <div className=" relative">
+      <img src={imageUrl} className="rounded-lg h-[150px] w-full" alt="thumbnail" height={height} />
       <div
-        className="absolute top-0 z-5 bg-black/70 rounded-lg p-2 text-white flex flex-col"
-        style={{ height, width }}
+        className="absolute top-0 z-5 bg-black/70 rounded-lg p-2 text-white flex flex-col w-full"
+        style={{ height }}
       >
         <div className="">
-          <div className="text-xl">{post.title}</div>
+          <div className="text-lg">{post.title}</div>
           {purchasedIds.includes(ShopItemIds.blogAuthor) && (
             <div className="flex items-center gap-1 text-white mt-1">
               <div className="rounded-full pt-px pb-0.5 pl-px pr-px border w-max">
@@ -197,8 +198,8 @@ const BlogLayoutV2 = ({
         </div>
         <div className="grow" />
         {purchasedIds.includes(ShopItemIds.blogDetails) && (
-          <div className="flex justify-between">
-            <div className="text-xs capitalize">{`${post.type} * ${post.duration} read`}</div>
+          <div className="flex justify-between items-center text-[10px]">
+            <div className=" capitalize">{`${post.type} * ${post.duration} read`}</div>
             <div className="flex gap-1 items-center">
               <ViewIcon alt="eye" height={12} width={12} />
               <small className="text-xs">{viewCount}</small>

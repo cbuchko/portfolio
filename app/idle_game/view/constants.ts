@@ -191,7 +191,6 @@ export type BlogPost = {
   type: string
   duration: string
 }
-
 export const BlogPosts: BlogPost[] = [
   { title: 'Brian: Bad Luck or Just Desserts?', type: 'case study', duration: '90 min' },
   {
@@ -205,14 +204,44 @@ export const BlogPosts: BlogPost[] = [
     duration: '5 min',
   },
   {
-    title: 'Imagine Dragons contracts Ligma',
+    title: 'Imagine Dragons Contracts Ligma',
     type: 'breaking news',
     duration: '5 sec',
   },
   {
-    title: `Pickle Rick: The Nuance behind the Genius `,
+    title: `Pickle Rick: The Nuance behind the Genius`,
     type: 'case study',
     duration: '1200 min',
+  },
+  {
+    title: 'Dogecoin Millionaire Opens Lemonade Stand',
+    type: 'where are they now',
+    duration: '10 min',
+  },
+  {
+    title: 'Woman Accidentally Becomes AI Influencer',
+    type: 'breaking news',
+    duration: '3 min',
+  },
+  {
+    title: 'Local Man Claims to “Touch Grass,” Scientists Skeptical',
+    type: 'breaking news',
+    duration: '90 min',
+  },
+  {
+    title: 'NFT Ape Joins Labor Union',
+    type: 'breaking news',
+    duration: '6 min',
+  },
+  {
+    title: 'Hide the Pain Harold Starts Smile Coaching Business',
+    type: 'where are they now',
+    duration: '6 min',
+  },
+  {
+    title: 'Man Insists He’s “Totally Fine” While Holding 8 Empty Energy Drinks',
+    type: 'profile',
+    duration: '4 min',
   },
 ]
 
