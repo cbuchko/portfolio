@@ -77,7 +77,7 @@ const Invader = ({
       style={{ left: `${xPos}px` }}
       onClick={squashInvader}
     >
-      <img src="/idle_game/bug.svg" alt="bug" className="rotate-180" />
+      <img src="/idle_game/icons/bug.svg" alt="bug" className="rotate-180" />
     </div>
   )
 }

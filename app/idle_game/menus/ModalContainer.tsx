@@ -13,7 +13,7 @@ export const ModalContainer = ({
       <div className="absolute bg-white max-w-[500px] min-w-[400px] border shadow-lg left-[50%] -translate-x-[50%] top-[35%] -translate-y-[50%] py-4 px-6 rounded-lg z-100">
         <Image
           className="absolute top-6 right-6 cursor-pointer"
-          src="/idle_game/close.svg"
+          src="/idle_game/icons/close.svg"
           alt="close"
           height={20}
           width={20}

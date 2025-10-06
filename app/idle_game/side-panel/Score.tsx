@@ -40,7 +40,7 @@ export const Score = ({ scoreProps, purchasedIds, blogViewProps }: ScoreComponen
             <h5 className={classNames('select-none')}>{viewPower} score per blog view</h5>
             <div className="relative" onMouseLeave={() => setBlogHelpOpen(false)}>
               <Image
-                src="idle_game/help.svg"
+                src="idle_game/icons/help.svg"
                 alt="help"
                 height={16}
                 width={16}

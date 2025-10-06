@@ -5,7 +5,7 @@ import { MemeProps } from '../useMemes'
 import { Rarity, RarityColors } from '../view/constants'
 import { ModalContainer } from './ModalContainer'
 import { ModalNames } from './modalRegistry'
-import StarIcon from '@/public/idle_game/star.svg'
+import StarIcon from '@/public/idle_game/icons/star.svg'
 
 export const BlackMarketModal = ({
   memeProps,

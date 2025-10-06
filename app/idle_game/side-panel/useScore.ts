@@ -104,7 +104,7 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
       const scoreId = crypto.randomUUID()
       const timestamp = new Date().getTime()
       setScoreIncrements((prevIncrements) => {
-        const index = prevIncrements.findIndex((inc) => Math.abs(inc.timestamp - timestamp) <= 10)
+        const index = prevIncrements.findIndex((inc) => Math.abs(inc.timestamp - timestamp) <= 20)
         if (index !== -1) {
           const newArray = [...prevIncrements]
           newArray[index] = { ...newArray[index], amount: newArray[index].amount + amount }

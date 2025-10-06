@@ -62,8 +62,8 @@ export const SidePanel = ({
               className="border p-2 rounded-md mb-4 cursor-pointer flex gap-1 items-center"
               onClick={() => setActiveModal(ModalNames.Statistics)}
             >
-              <Image src="/idle_game/stat.svg" height={20} width={20} alt="Stat" />
-              <h5>Statistics</h5>
+              <Image src="/idle_game/icons/stat.svg" height={20} width={20} alt="Stat" />
+              <h5>Stats</h5>
             </button>
           )}
           {purchasedIds.includes(ShopItemIds.blackMarket) && (
@@ -71,7 +71,8 @@ export const SidePanel = ({
               className="border p-2 rounded-md mb-4 cursor-pointer flex gap-1 items-center"
               onClick={() => setActiveModal(ModalNames.BlackMarket)}
             >
-              <h5>Black Market</h5>
+              <Image src="/idle_game/icons/cart.svg" height={20} width={20} alt="Stat" />
+              <h5>Shop</h5>
             </button>
           )}
         </div>

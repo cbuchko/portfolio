@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ShopItemIds } from '../side-panel/shop/constants'
 import Image from 'next/image'
 import { Meme as MemeType, Rarity, RarityColors } from './constants'
-import StarIcon from '@/public/idle_game/star.svg'
+import StarIcon from '@/public/idle_game/icons/star.svg'
 
 type MemeProps = {
   meme: MemeType

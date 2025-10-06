@@ -121,7 +121,7 @@ export const Ad = ({ scoreProps, viewRef, incrementScore }: AdsProps) => {
       <Image
         onClick={onClose}
         className="absolute top-2 right-2 cursor-pointer"
-        src="/idle_game/close.svg"
+        src="/idle_game/icons/close.svg"
         alt="close"
         height={16}
         width={16}

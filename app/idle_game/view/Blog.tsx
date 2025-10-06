@@ -3,8 +3,8 @@ import { ShopItemIds } from '../side-panel/shop/constants'
 import { BlogPost as BlogPostType, BlogPosts } from './constants'
 import { useEffect, useRef, useState } from 'react'
 import { BlogViewProps } from './useBlogViews'
-import AuthorIcon from '@/public/idle_game/author.svg'
-import ViewIcon from '@/public/idle_game/eye.svg'
+import AuthorIcon from '@/public/idle_game/icons/author.svg'
+import ViewIcon from '@/public/idle_game/icons/eye.svg'
 import classNames from 'classnames'
 
 type BlogProps = {
@@ -146,7 +146,7 @@ const BlogLayoutV1 = ({
           {purchasedIds.includes(ShopItemIds.blogAuthor) && (
             <div className="flex items-center gap-1 mb-1 text-black/60">
               <div className="rounded-full pt-px pb-0.5 pl-px pr-px border w-max">
-                <Image src="/idle_game/author.svg" alt="author" height={10} width={10} />
+                <Image src="/idle_game/icons/author.svg" alt="author" height={10} width={10} />
               </div>
               <h5 className="text-xs">{userName}</h5>
             </div>
@@ -158,7 +158,7 @@ const BlogLayoutV1 = ({
 
             {purchasedIds.includes(ShopItemIds.blogViewCount) && (
               <div className="flex gap-1">
-                <Image src="/idle_game/eye.svg" alt="eye" height={12} width={12} />
+                <Image src="/idle_game/icons/eye.svg" alt="eye" height={12} width={12} />
                 <small className="text-xs">{viewCount}</small>
               </div>
             )}
