@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ShopItemIds } from './shop/constants'
 
-const devMode = false
+const devMode = true
 
 export type ScoreProps = {
   score: number
@@ -29,6 +29,7 @@ export type ScoreIncrement = {
   id: string
   amount: number
   xPosition: number
+  timestamp: number
   isCritical?: boolean
 }
 
@@ -101,10 +102,19 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
 
       // add the score to the animation
       const scoreId = crypto.randomUUID()
-      setScoreIncrements((prevIncrements) => [
-        ...prevIncrements,
-        { id: scoreId, amount, xPosition: Math.random() * 80, isCritical },
-      ])
+      const timestamp = new Date().getTime()
+      setScoreIncrements((prevIncrements) => {
+        const index = prevIncrements.findIndex((inc) => Math.abs(inc.timestamp - timestamp) <= 10)
+        if (index !== -1) {
+          const newArray = [...prevIncrements]
+          newArray[index] = { ...newArray[index], amount: newArray[index].amount + amount }
+          return newArray
+        }
+        return [
+          ...prevIncrements,
+          { id: scoreId, amount, xPosition: Math.random() * 80, isCritical, timestamp },
+        ]
+      })
       //remove the score after a delay
       setTimeout(
         () =>
