@@ -180,7 +180,16 @@ export const RareMemes = [
   },
 ]
 
-export const LegendaryMemes = []
+export const LegendaryMemes = [
+  {
+    id: 22,
+    url: '/portfolio_clicker2.png',
+    title: 'The End',
+    flavorText:
+      "Hello! I'm incredibly honoured you took time out of your day to play this. Sorry for the anti-climactic ending. Portfolio Clicker is an ongoing project,  this is my attempt to add closure to a game that otherwise would have had none. Thank you so much for playing and congratulations.",
+    rarity: Rarity.legendary,
+  },
+]
 
 export const MythicMemes = []
 

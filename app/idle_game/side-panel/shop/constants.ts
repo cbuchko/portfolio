@@ -474,4 +474,10 @@ export const BlackMarketPacks: BlackMarketPack[] = [
     description: 'The shopkeeper insists rare memes can be found in these, for a higher price.',
     price: 100000,
   },
+  {
+    rarity: Rarity.legendary,
+    title: 'The End',
+    description: 'All good things must come to an end.',
+    price: 5000000,
+  },
 ]

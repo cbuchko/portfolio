@@ -19,6 +19,7 @@ export const BlackMarketModal = ({
   const getOutOfStock = (rarity: Rarity) => {
     if (rarity === Rarity.common) return memeProps.isCommonMaxed
     if (rarity === Rarity.rare) return memeProps.isRareMaxed
+    if (rarity === Rarity.legendary) return memeProps.isLegendaryMaxed
     return false
   }
   return (
@@ -37,6 +38,7 @@ export const BlackMarketModal = ({
                 scoreProps.spendScore(pack.price, () => {
                   if (pack.rarity === Rarity.common) memeProps.buyStandardPack()
                   if (pack.rarity === Rarity.rare) memeProps.buyUnusualPack()
+                  if (pack.rarity === Rarity.legendary) memeProps.buyLegendaryPack()
                   setActiveModal(undefined)
                 })
               }}
@@ -68,11 +70,11 @@ const BlackMarketItem = ({
   isOutOfStock?: boolean
 }) => {
   return (
-    <div className="flex my-4 border-b border-gray-300 pb-4 gap-4 items-center">
+    <div className="flex my-4 border-b border-gray-300 pb-4 gap-4 items-center w-full">
       <StarIcon style={{ color: RarityColors[rarity] }} className="w-10 h-10" />
-      <div>
+      <div className="w-full">
         <h5 className="font-medium">{title}</h5>
-        <h5 className="text-sm">{description}</h5>
+        <h5 className="text-sm w-full">{description}</h5>
         <div className="flex justify-between items-end mt-4">
           <h5 className={classNames('font-medium', { 'line-through': isOutOfStock })}>
             {price.toLocaleString('en-us')} Score

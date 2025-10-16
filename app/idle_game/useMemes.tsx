@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { AllMemes, CommonMemes, Meme, RareMemes } from './view/constants'
+import { AllMemes, CommonMemes, LegendaryMemes, Meme, RareMemes } from './view/constants'
 import { ShopItemIds } from './side-panel/shop/constants'
 
 export type MemeProps = {
@@ -10,8 +10,10 @@ export type MemeProps = {
   addRandomCommonMeme: () => void
   buyStandardPack: () => void
   buyUnusualPack: () => void
+  buyLegendaryPack: () => void
   isCommonMaxed?: boolean
   isRareMaxed?: boolean
+  isLegendaryMaxed?: boolean
 }
 
 export const useMemes = (purchasedIds: Array<ShopItemIds>) => {
@@ -28,6 +30,10 @@ export const useMemes = (purchasedIds: Array<ShopItemIds>) => {
   )
   const isRareMaxed = useMemo(
     () => RareMemes.every((meme) => ownedMemeIds.includes(meme.id)),
+    [ownedMemeIds]
+  )
+  const isLegendaryMaxed = useMemo(
+    () => LegendaryMemes.every((meme) => ownedMemeIds.includes(meme.id)),
     [ownedMemeIds]
   )
 
@@ -51,6 +57,13 @@ export const useMemes = (purchasedIds: Array<ShopItemIds>) => {
     const unownedRares = RareMemes.filter((meme) => !ownedMemeIds.includes(meme.id))
     const randomIndex = Math.floor(Math.random() * unownedRares.length)
     const newId = unownedRares[randomIndex].id
+    addMemeById(newId)
+  }
+
+  const addRandomLegendaryMeme = () => {
+    const unownedLegendaries = LegendaryMemes.filter((meme) => !ownedMemeIds.includes(meme.id))
+    const randomIndex = Math.floor(Math.random() * unownedLegendaries.length)
+    const newId = unownedLegendaries[randomIndex].id
     addMemeById(newId)
   }
 
@@ -78,6 +91,11 @@ export const useMemes = (purchasedIds: Array<ShopItemIds>) => {
     }
   }
 
+  //triggers the end of the game
+  const buyLegendaryPack = () => {
+    addRandomLegendaryMeme()
+  }
+
   return {
     ownedMemes,
     activeMemeId,
@@ -86,7 +104,9 @@ export const useMemes = (purchasedIds: Array<ShopItemIds>) => {
     addRandomCommonMeme,
     buyStandardPack,
     buyUnusualPack,
+    buyLegendaryPack,
     isCommonMaxed,
     isRareMaxed,
+    isLegendaryMaxed,
   } as MemeProps
 }

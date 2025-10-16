@@ -75,3 +75,11 @@ export const Projects: ProjectProps[] = [
     link: 'https://cbuchko.itch.io/drillgame',
   },
 ]
+
+export const WebsiteProjects: ProjectProps[] = [
+  {
+    img: '/portfolio_clicker2.png',
+    body: 'An idle game where you incrementally build a website from scratch. Watch chaos ensue as your creation grows!',
+    link: '/idle_game',
+  },
+]
