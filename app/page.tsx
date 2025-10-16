@@ -1,7 +1,7 @@
 import Image from '@/node_modules/next/image'
 import { NovaProject } from './components/NovaProject'
 import Project from './components/Project'
-import { NovaProjects, Projects } from './constants'
+import { NovaProjects, Projects, WebsiteProjects } from './constants'
 import { BlogButton } from './components/BlogButton'
 
 export default function Home() {
@@ -69,13 +69,20 @@ export default function Home() {
       <section className={sectionClass}>
         <h3 className={headerClass}>Personal Projects</h3>
         <p className={paragraphClass}>
+          {`My current focus has been developing web-based games. These are fun and interactive experiences built with React and TypeScript. I've just added my first but many more to come!`}
+        </p>
+        <div className="flex flex-col md:flex-row gap-8 md:gap-0 items-center mt-8 justify-evenly mb-16">
+          {WebsiteProjects.map((project, idx) => (
+            <Project key={idx} {...project} isItch={false} />
+          ))}
+        </div>
+        <p className={paragraphClass}>
           {`Back in university I was super into game development and published a
-          few small games online. I've honestly not pursued this in a while but
-          I'm still super proud of what I've made!`}
+          few small Unity games online:`}
         </p>
         <div className="flex flex-col md:flex-row gap-8 md:gap-0 items-center mt-8 justify-evenly mb-4">
           {Projects.map((project, idx) => (
-            <Project key={idx} {...project} />
+            <Project key={idx} {...project} isItch={true} />
           ))}
         </div>
       </section>
