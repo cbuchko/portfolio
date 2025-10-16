@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { BlogViewProps } from '../../view/useBlogViews'
 import { ScoreProps } from '../useScore'
 import { ShopButton } from './ShopButton'
