@@ -19,8 +19,11 @@ import { BlackMarketModal } from './menus/BlackMarketModal'
 import { useMemes } from './useMemes'
 import AudioPlayer from './view/AudioPlayer'
 import { VideoPlayer } from './view/AdScore/VideoPlayer'
+import { useIsMobile } from '../utils/useIsMobile'
+import Link from 'next/link'
 
 export default function IdleGame() {
+  const isMobile = useIsMobile()
   const startDateRef = useRef(new Date())
   const viewRef = useRef<HTMLDivElement | null>(null)
 
@@ -38,6 +41,16 @@ export default function IdleGame() {
       return [...prevElements, id]
     })
   }, [])
+
+  if (isMobile)
+    return (
+      <div className="flex flex-col items-center h-screen w-screen justify-center text-center">
+        <div className=" text-3xl">Sorry! Portfolio Clicker isn't optimized for mobile devices</div>
+        <Link className="hover:underline text-lg mt-4" href="/">
+          {'< Go Back'}
+        </Link>
+      </div>
+    )
 
   return (
     <div
