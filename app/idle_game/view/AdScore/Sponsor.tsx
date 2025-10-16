@@ -31,8 +31,8 @@ export const Sponsor = ({ sponsor }: { sponsor: string }) => {
     if (!!url) return
     const logoUrl = `https://img.logo.dev/${sponsor}?token=pk_c7WqEA3OQN-C8z6J2BB-QQ&format=png`
     setUrl(logoUrl)
-  }, [sponsor])
+  }, [sponsor, url])
 
   if (!url) return
-  return <img className="rounded-2xl" src={url} height={48} width={48} />
+  return <img className="rounded-2xl" alt={sponsor} src={url} height={48} width={48} />
 }

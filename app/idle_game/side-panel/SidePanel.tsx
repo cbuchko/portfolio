@@ -41,10 +41,13 @@ export const SidePanel = ({
     return item.cost * purchasedAmount ** item.isRepeatble.costMultiplier
   }
 
-  const handleNameChange = useCallback((name: string) => {
-    if (name.length > 30) return
-    setUserName(name)
-  }, [])
+  const handleNameChange = useCallback(
+    (name: string) => {
+      if (name.length > 30) return
+      setUserName(name)
+    },
+    [setUserName]
+  )
 
   return (
     <div className="flex flex-col h-[100vh] max-w-[20%] min-w-[20%] border-l py-4 px-8 fade-in">

@@ -81,7 +81,7 @@ export const Meme = ({ meme, setActiveMeme, size, purchasedIds, isActive }: Meme
 
       setActiveMeme()
     },
-    [purchasedIds, isActive]
+    [purchasedIds, isActive, setActiveMeme]
   )
 
   //listen for when the meme becomes active/inactive, and transition it back to its original spot

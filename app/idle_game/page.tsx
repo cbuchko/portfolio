@@ -45,7 +45,9 @@ export default function IdleGame() {
   if (isMobile)
     return (
       <div className="flex flex-col items-center h-screen w-screen justify-center text-center">
-        <div className=" text-3xl">Sorry! Portfolio Clicker isn't optimized for mobile devices</div>
+        <div className=" text-3xl">
+          {"Sorry! Portfolio Clicker isn't optimized for mobile devices"}
+        </div>
         <Link className="hover:underline text-lg mt-4" href="/">
           {'< Go Back'}
         </Link>

@@ -28,24 +28,21 @@ export const ShopContainer = ({
   const { setViewFrequency, setViewGain, setViewOdds } = blogProps
 
   //spend the score with the appropriate callback
-  const handlePurchase = useCallback(
-    (button: ShopItem) => {
-      spendScore(calculateCost(button), () => {
-        if (button.clickIncrementPower) incrementClicks(button.clickIncrementPower)
-        if (button.passiveIncrementPower) incrementPassive(button.passiveIncrementPower)
-        if (button.viewIncrementPower) incrementView(button.viewIncrementPower)
-        if (button.adIncrementPower) incrementAdPower(button.adIncrementPower)
-        if (button.blogViewModifier?.frequencyInMs)
-          setViewFrequency(button.blogViewModifier.frequencyInMs)
-        if (button.blogViewModifier?.gain) setViewGain(button.blogViewModifier.gain)
-        if (button.blogViewModifier?.odds) setViewOdds(button.blogViewModifier.odds)
-        if (button.isMeme) addRandomCommonMeme()
-        onPurchase(button.id)
-        setHoveredShopId(undefined)
-      })
-    },
-    [spendScore]
-  )
+  const handlePurchase = (button: ShopItem) => {
+    spendScore(calculateCost(button), () => {
+      if (button.clickIncrementPower) incrementClicks(button.clickIncrementPower)
+      if (button.passiveIncrementPower) incrementPassive(button.passiveIncrementPower)
+      if (button.viewIncrementPower) incrementView(button.viewIncrementPower)
+      if (button.adIncrementPower) incrementAdPower(button.adIncrementPower)
+      if (button.blogViewModifier?.frequencyInMs)
+        setViewFrequency(button.blogViewModifier.frequencyInMs)
+      if (button.blogViewModifier?.gain) setViewGain(button.blogViewModifier.gain)
+      if (button.blogViewModifier?.odds) setViewOdds(button.blogViewModifier.odds)
+      if (button.isMeme) addRandomCommonMeme()
+      onPurchase(button.id)
+      setHoveredShopId(undefined)
+    })
+  }
 
   const [filteredShopItems, filteredRepeatableItems] = useMemo(() => {
     const items = Object.values(ShopItems).filter((item) => {
@@ -68,7 +65,7 @@ export const ShopContainer = ({
       .sort((a, b) => calculateCost(a) - calculateCost(b))
     const repeatableItems = items.filter((item) => item.isRepeatble)
     return [normalItems, repeatableItems]
-  }, [purchasedIds, memeProps.isCommonMaxed])
+  }, [purchasedIds, memeProps.isCommonMaxed, calculateCost])
 
   return (
     <>

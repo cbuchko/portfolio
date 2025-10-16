@@ -111,7 +111,7 @@ export const Ad = ({ scoreProps, viewRef, incrementScore }: AdsProps) => {
     ad.style.opacity = '0'
     ad.style.pointerEvents = 'none'
     incrementScore(adPower, StatisticType.ad)
-  }, [incrementScore])
+  }, [incrementScore, adPower])
 
   return (
     <div

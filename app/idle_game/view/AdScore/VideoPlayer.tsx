@@ -30,47 +30,50 @@ export const VideoPlayer = ({
     scorePropsRef.current = scoreProps
   }, [scoreProps])
 
-  const spawnVideo = useCallback((index: number) => {
-    const view = viewRef.current
-    const video = videoRef.current
+  const spawnVideo = useCallback(
+    (index: number) => {
+      const view = viewRef.current
+      const video = videoRef.current
 
-    if (!view || !video) return
+      if (!view || !video) return
 
-    const handleEnded = () => {
-      currentIndex.current = (index + 1) % videos.length
-      audio.pause()
-      video.style.opacity = '0'
-      video.style.pointerEvents = 'none'
+      const handleEnded = () => {
+        currentIndex.current = (index + 1) % videos.length
+        audio.pause()
+        video.style.opacity = '0'
+        video.style.pointerEvents = 'none'
 
-      //use ref to always get latest scoreProps, so we don't have to reset the interval to update these
-      const { incrementScore, adPower } = scorePropsRef.current
-      incrementScore(adPower, StatisticType.ad)
-    }
+        //use ref to always get latest scoreProps, so we don't have to reset the interval to update these
+        const { incrementScore, adPower } = scorePropsRef.current
+        incrementScore(adPower, StatisticType.ad)
+      }
 
-    //randomizes where the video spawns
-    const bounds = view.getBoundingClientRect()
-    const { right, bottom } = bounds
-    const x = right + 6
-    const y = Math.random() * bottom * 0.8
+      //randomizes where the video spawns
+      const bounds = view.getBoundingClientRect()
+      const { right, bottom } = bounds
+      const x = right + 6
+      const y = Math.random() * bottom * 0.8
 
-    //set the content
-    const videoSrc = videos[index]
-    video.src = videoSrc
+      //set the content
+      const videoSrc = videos[index]
+      video.src = videoSrc
 
-    //show the video
-    video.style.top = y + 'px'
-    video.style.left = x + 'px'
-    video.style.opacity = '100'
-    video.style.pointerEvents = 'all'
-    video.style.display = 'visible'
+      //show the video
+      video.style.top = y + 'px'
+      video.style.left = x + 'px'
+      video.style.opacity = '100'
+      video.style.pointerEvents = 'all'
+      video.style.display = 'visible'
 
-    //play sfx
-    const audio = new Audio(audios[index])
-    audio.volume = 0.5
-    audio.play()
+      //play sfx
+      const audio = new Audio(audios[index])
+      audio.volume = 0.5
+      audio.play()
 
-    video.addEventListener('ended', handleEnded, { once: true })
-  }, [])
+      video.addEventListener('ended', handleEnded, { once: true })
+    },
+    [videoRef]
+  )
 
   useEffect(() => {
     if (intervalRef.current !== null) return
