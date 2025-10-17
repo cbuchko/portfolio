@@ -52,7 +52,7 @@ export const VideoPlayer = ({
       const bounds = view.getBoundingClientRect()
       const { right, bottom } = bounds
       const x = right + 6
-      const y = Math.random() * bottom * 0.8
+      const y = Math.random() * bottom * 0.6
 
       //set the content
       const videoSrc = videos[index]

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ShopItemIds } from './shop/constants'
 
-const devMode = false
+const devMode = true
 
 export type ScoreProps = {
   score: number
@@ -130,12 +130,12 @@ export const useScore = (purchasedIds: ShopItemIds[]) => {
   //spend score + call a modifier
   const spendScore = useCallback(
     (cost: number, purchaseCallback: () => void) => {
-      if (score - cost < 0 && !devMode) return
+      if (displayScore - cost < 0 && !devMode) return
       setScore((prevScore) => prevScore - cost)
       setDisplayScore((prevScore) => prevScore - cost)
       purchaseCallback()
     },
-    [score]
+    [displayScore]
   )
 
   //sets up the passive score interval

@@ -75,7 +75,7 @@ export const SidePanel = ({
               onClick={() => setActiveModal(ModalNames.BlackMarket)}
             >
               <Image src="/idle_game/icons/cart.svg" height={20} width={20} alt="Stat" />
-              <h5>Shop</h5>
+              <h5>Black Market</h5>
             </button>
           )}
         </div>

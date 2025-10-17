@@ -78,7 +78,7 @@ export const ShopContainer = ({
             title={button.title}
             setHoveredId={setHoveredShopId}
             spendScore={() => handlePurchase(button)}
-            isDisabled={calculateCost(button) > score}
+            isDisabled={calculateCost(button) > scoreProps.displayScore}
           />
         ))}
       </div>

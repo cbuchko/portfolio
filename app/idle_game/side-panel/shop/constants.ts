@@ -225,7 +225,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     id: ShopItemIds.memeFocus,
     title: 'Meme Inspection',
     cost: 25000,
-    message: 'Bring it front and center.',
+    message: 'Click a Meme to bring it front and center.',
     passiveIncrementPower: 100,
     prerequsiteId: ShopItemIds.memeRotation,
   },
@@ -249,7 +249,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.blackMarket]: {
     id: ShopItemIds.blackMarket,
     title: 'Black Market',
-    cost: 250000,
+    cost: 150000,
     message:
       'What I feared seems to be true. If we want rarer memes, our methods need to be more... non-traditional.',
     passiveIncrementPower: 1000,
@@ -326,7 +326,7 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 50000,
     message: 'This is awkward, we never introduced ourselves. What a hilarious misunderstanding.',
     blogViewModifier: {
-      gain: 8,
+      odds: 6,
     },
     prerequsiteId: ShopItemIds.blogAuthor,
   },
@@ -343,10 +343,10 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
   [ShopItemIds.blogImage]: {
     id: ShopItemIds.blogImage,
     title: 'Blog Image',
-    cost: 100000,
+    cost: 125000,
     message: 'I have some stock photos lying around.',
     blogViewModifier: {
-      odds: 6,
+      gain: 16,
     },
     prerequsiteId: ShopItemIds.blogTitle,
   },
@@ -366,19 +366,19 @@ export const ShopItems: Record<ShopItemIds, ShopItem> = {
     cost: 250000,
     message: 'I think some backstory is what the people really need to connect to our writing.',
     blogViewModifier: {
-      gain: 16,
+      frequencyInMs: 1000,
     },
     prerequsiteId: ShopItemIds.blogLayout,
   },
   [ShopItemIds.blogContainer]: {
     id: ShopItemIds.blogContainer,
     title: 'Blog Container',
-    cost: 500000,
+    cost: 75000,
     message: "Floating text is so 2000's coded. Our blog needs a home.",
     blogViewModifier: {
-      frequencyInMs: 1000,
+      gain: 8,
     },
-    prerequsiteId: ShopItemIds.blogBio,
+    prerequsiteId: ShopItemIds.blogCustomAuthor,
   },
   //ADS
   [ShopItemIds.basicAds]: {
@@ -478,6 +478,6 @@ export const BlackMarketPacks: BlackMarketPack[] = [
     rarity: Rarity.legendary,
     title: 'The End',
     description: 'All good things must come to an end.',
-    price: 5000000,
+    price: 1000000,
   },
 ]
