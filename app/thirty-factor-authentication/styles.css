@@ -1,0 +1,40 @@
+.auth-button {
+  border: solid 1px black;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  background-color: white;
+  max-width: 150px;
+  max-height: 35px;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+}
+
+.auth-button::-webkit-scrollbar {
+  display: none;
+}
+
+.auth-button:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  scale: 1.1;
+}
+
+.auth-button-primary {
+  background-color: rgb(142, 197, 255);
+}
+
+@keyframes text-float-in {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.text-message {
+  animation: text-float-in 2s ease;
+}

@@ -20,6 +20,10 @@ body {
   font-family: 'Source Sans 3', Arial, Helvetica, sans-serif;
 }
 
+.source-sans {
+  font-family: 'Source Sans 3';
+}
+
 .mono {
   font-family: 'IBM Plex Mono';
 }
