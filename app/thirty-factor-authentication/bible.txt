@@ -1,13 +1,10 @@
 Level Ideas:
-Birthday
 Pick city of birth on map
-Enter auth code from phone
-Parse crpytic buttons "not not" 
 3 Gods Type riddles/Parlor room type puzzles
 Really long voice call you have to listen to with verbal code at the end
 "Biometric" scanner where you need to leave your mouse on a area
 "What highschool did you go to" type stuff
 Email auth where you have to parse through a bunch of BS emails to find the needle in the haystack
-Type the name of any dog, and then later be prompted to type the same dogs name again (or some other more complicated phrase)
 Is your Heart in it type stuff?
-Zodiac sign - astrological chart
+"Lights Out" find the button
+

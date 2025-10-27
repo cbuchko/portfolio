@@ -38,3 +38,7 @@
 .text-message {
   animation: text-float-in 2s ease;
 }
+
+#map {
+  height: 300px;
+}

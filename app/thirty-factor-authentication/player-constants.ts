@@ -14,7 +14,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
   [PlayerIds.Biden]: {
     name: 'Joe Biden',
     fullName: 'Joseph Robinette Biden Jr.',
-    birthCity: 'Scranton',
+    birthCity: 'scranton',
     zodiac: 'scorpio-taurus-sagittarius',
   },
   [PlayerIds.Mock]: {
