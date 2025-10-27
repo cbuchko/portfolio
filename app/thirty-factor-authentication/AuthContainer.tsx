@@ -2,6 +2,7 @@ import { JSX, useState } from 'react'
 import { PlayerIds, PlayerInformation } from './player-constants'
 import { ContentProps, ControlProps } from './levels/types'
 import XIcon from '@/public/thirty-factor-authentication/icons/x.svg'
+import { devMode } from './constants'
 
 type AuthContainerProps = {
   playerId: PlayerIds
@@ -11,8 +12,6 @@ type AuthContainerProps = {
   Content: (props: ContentProps) => JSX.Element
   Controls: (props: ControlProps) => JSX.Element
 }
-
-const devMode = true
 
 export const AuthContainer = ({
   playerId,

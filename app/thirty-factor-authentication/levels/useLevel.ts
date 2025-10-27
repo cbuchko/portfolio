@@ -4,8 +4,11 @@ import { TwoContent, TwoControls } from './2'
 import { MessageSpamContent, MessageSpamControls } from './MessageSpam'
 import { ZodiacContent, ZodiacControls } from './Zodiac'
 import { DoubleNegativeContent, DoubleNegativeControls } from './DoubleNegative'
+import { FallbackOneContent, FallbackOneControls } from './Fallback1'
+import { forceLevel } from '../constants'
+import { FallbackTwoContent, FallbackTwoControls } from './Fallback2'
 
-const forceLevel = 0
+//AAAA@@may00
 export const useLevels = () => {
   const [level, setLevel] = useState(1)
 
@@ -55,6 +58,18 @@ export const useLevels = () => {
         ...baseProps,
         content: DoubleNegativeContent,
         controls: DoubleNegativeControls,
+      }
+    case 6:
+      return {
+        ...baseProps,
+        content: FallbackOneContent,
+        controls: FallbackOneControls,
+      }
+    case 7:
+      return {
+        ...baseProps,
+        content: FallbackTwoContent,
+        controls: FallbackTwoControls,
       }
     default:
       return {
