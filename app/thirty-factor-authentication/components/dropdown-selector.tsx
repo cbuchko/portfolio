@@ -33,7 +33,7 @@ export const DropdownSelector = ({
   }
 
   useEffect(() => {
-    const handleOutsideClick = (e: PointerEvent) => {
+    const handleOutsideClick = (e: MouseEvent) => {
       const element = e.target as HTMLElement
       const dropdownElement = document.querySelector(`#${id}`)
       if (element.contains(dropdownElement)) {
