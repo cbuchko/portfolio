@@ -27,7 +27,7 @@ export const PostItContent = ({
 
   return (
     <>
-      <h3>When you created your account 15 years ago, you chose a secret passphrase.</h3>
+      <h3>When you created your account 15 years ago, you chose a secret recovery keyword.</h3>
       <h3>Please enter that now.</h3>
       <input
         className="border w-full rounded-md mt-2 px-2 py-1"
@@ -103,7 +103,7 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
     >
       {!!code ? (
         <>
-          Secret Passphrase:
+          Recovery Keyword:
           <div className="underline font-bold">Don't Lose</div>
           <div className="mt-8 italic">{code}</div>
         </>

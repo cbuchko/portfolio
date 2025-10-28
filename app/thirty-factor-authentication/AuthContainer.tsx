@@ -2,7 +2,7 @@ import { JSX, useState } from 'react'
 import { PlayerIds, PlayerInformation } from './player-constants'
 import { ContentProps, ControlProps } from './levels/types'
 import XIcon from '@/public/thirty-factor-authentication/icons/x.svg'
-import { devMode } from './constants'
+import { devMode, maxLevel } from './constants'
 
 type AuthContainerProps = {
   playerId: PlayerIds
@@ -59,7 +59,7 @@ export const AuthContainer = ({
               ))}
             </div>
           </div>
-          <small>{`${level}/30`}</small>
+          <small>{`${level}/${maxLevel}`}</small>
         </div>
         <div id="auth-body" className="border rounded-sm border-t-0 rounded-t-none">
           <div id="auth-content" className="px-4 py-8">
