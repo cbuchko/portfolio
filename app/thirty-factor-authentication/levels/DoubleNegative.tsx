@@ -40,8 +40,9 @@ function shuffle(array: { text: string; truth?: boolean }[]) {
 export const DoubleNegativeControls = ({ handleLevelAdvance }: ControlProps) => {
   return (
     <div className="max-w-[350px] flex flex-wrap justify-between gap-4">
-      {shuffle(controls).map((control) => (
+      {shuffle(controls).map((control, idx) => (
         <button
+          key={idx}
           className="auth-button min-w-[150px]"
           onClick={() => handleLevelAdvance(control.truth)}
         >

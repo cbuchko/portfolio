@@ -1,9 +1,14 @@
+import { useEffect } from 'react'
 import { PlayerInformation } from '../player-constants'
 import { ContentProps, ControlProps } from './types'
 
 export const OneContent = ({ playerId, validateAdvance }: ContentProps) => {
   const name = PlayerInformation[playerId].name
-  validateAdvance()
+
+  useEffect(() => {
+    validateAdvance()
+  }, [])
+
   return (
     <>
       <h2 className="mb-4 text-3xl">Welcome Back!</h2>
@@ -23,7 +28,7 @@ export const OneControls = ({ handleLevelAdvance, handleGameOver }: ControlProps
       <button className="auth-button" onClick={handleGameOver}>
         That's Not Me!
       </button>
-      <button className="auth-button" onClick={handleLevelAdvance}>
+      <button className="auth-button" onClick={() => handleLevelAdvance()}>
         That's Me!
       </button>
     </>

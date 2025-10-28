@@ -36,6 +36,7 @@ export const AuthContainer = ({
     }
     setIsAdvanceVerified(false)
     handleLevelAdvance()
+    setErrorCount(0)
   }
 
   const validateAdvance = () => setIsAdvanceVerified(true)

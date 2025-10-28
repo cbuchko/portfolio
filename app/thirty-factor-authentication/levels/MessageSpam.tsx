@@ -30,7 +30,7 @@ export const MessageSpamContent = ({
   const [nameInput, setNameInput] = useState('')
 
   const [message, setMessage] = useState<string | null>(null)
-  const codeRef = useRef(makeCode(12))
+  const codeRef = useRef(makeCode(14))
   const messageIndexRef = useRef(0)
   const intervalRef = useRef<NodeJS.Timeout>(null)
 
@@ -109,7 +109,7 @@ export const MessageSpamControls = ({ handleLevelAdvance }: ControlProps) => {
   return (
     <>
       <div className="grow" />
-      <button className="auth-button auth-button-primary" onClick={handleLevelAdvance}>
+      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
         Submit
       </button>
     </>
