@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react'
+import { MouseEvent as ReactMouseEvent, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
-import { PlayerInformation } from '../player-constants'
 import classNames from 'classnames'
+import { clampPositionsToScreen } from '../utils'
 
 const selectCode = () => {
   const index = Math.floor(Math.random() * codes.length)
@@ -9,14 +9,12 @@ const selectCode = () => {
 }
 
 export const PostItContent = ({
-  playerId,
   validateAdvance,
   cancelAdvance,
   handleLevelAdvance,
 }: ContentProps) => {
   const codeRef = useRef(selectCode())
   const [nameInput, setNameInput] = useState('')
-  const inputTarget = PlayerInformation[playerId].fullName
 
   const handleInputChange = (input: string) => {
     setNameInput(input)
@@ -29,8 +27,8 @@ export const PostItContent = ({
 
   return (
     <>
-      <h3>Please enter your secret keyphrase you made when you</h3>
-      <h3> created the acccount 15 years ago.</h3>
+      <h3>When you created your account 15 years ago, you chose a secret passphrase.</h3>
+      <h3>Please enter that now.</h3>
       <input
         className="border w-full rounded-md mt-2 px-2 py-1"
         placeholder="Enter the phrase..."
@@ -48,15 +46,6 @@ export const PostItContent = ({
   )
 }
 
-const clampPositionsToScreen = (newX: number, newY: number, width: number, height: number) => {
-  if (newX < 0) newX = 0
-  if (newX > window.innerWidth - width) newX = window.innerWidth - width
-  if (newY < 0) newY = 0
-  if (newY > window.innerHeight - height) newY = window.innerHeight - height
-
-  return { newX, newY }
-}
-
 const getRandomPosition = () => {
   const halfwayDown = window.innerHeight / 2
   const height = window.innerHeight
@@ -70,7 +59,7 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
   const [position, setPosition] = useState(getRandomPosition())
   const noteRef = useRef<HTMLDivElement>(null)
 
-  const handleDrag = (event: MouseEvent) => {
+  const handleDrag = (event: ReactMouseEvent<HTMLDivElement>) => {
     const note = noteRef.current
     if (!note) return
 
@@ -114,7 +103,7 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
     >
       {!!code ? (
         <>
-          Secret Pass Phrase:
+          Secret Passphrase:
           <div className="underline font-bold">Don't Lose</div>
           <div className="mt-8 italic">{code}</div>
         </>
