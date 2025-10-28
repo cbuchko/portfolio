@@ -8,6 +8,7 @@ import { FallbackOneContent, FallbackOneControls } from './Fallback1'
 import { forceLevel } from '../constants'
 import { FallbackTwoContent, FallbackTwoControls } from './Fallback2'
 import { MapContent, MapControls } from './MapBirthplace'
+import { PostItContent, PostItControls } from './PostIt'
 
 //AAAA@@may00
 export const useLevels = () => {
@@ -73,6 +74,12 @@ export const useLevels = () => {
         controls: MapControls,
       }
     case 8:
+      return {
+        ...baseProps,
+        content: PostItContent,
+        controls: PostItControls,
+      }
+    case 9:
       return {
         ...baseProps,
         content: FallbackTwoContent,

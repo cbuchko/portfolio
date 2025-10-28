@@ -28,10 +28,7 @@ export const MapContent = ({ playerId, validateAdvance, cancelAdvance }: Content
   const handleCitySelect = (city?: string) => {
     setSelectedCity(city)
     const targetCity = PlayerInformation[playerId].birthCity
-    console.log(city, targetCity)
-
     if (targetCity.toLowerCase() === city?.toLowerCase()) {
-      console.log('validating advance')
       validateAdvance()
     } else {
       cancelAdvance()
@@ -46,8 +43,9 @@ export const MapContent = ({ playerId, validateAdvance, cancelAdvance }: Content
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
-        {cities.map((city) => (
+        {cities.map((city, idx) => (
           <Marker
+            key={idx}
             position={city.coordinates as [number, number]}
             icon={selectedCity === city.name ? redIcon : blueIcon}
             eventHandlers={{
