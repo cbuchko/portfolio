@@ -2,10 +2,6 @@ import { useMemo, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { fallbackPassKey } from '../constants'
 
-const monthRe =
-  /(January|February|March|April|May|June|July|August|September|October|November|December)/i
-const consecutiveConsonantsRe = /[B-DF-HJ-NP-TV-X]{2}/i
-
 export const FallbackTwoContent = ({
   validateAdvance,
   cancelAdvance,

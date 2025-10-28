@@ -68,8 +68,8 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
     const handleMove = (moveEvent: MouseEvent) => {
       const dx = moveEvent.clientX - startPosition.x
       const dy = moveEvent.clientY - startPosition.y
-      let newX = position.x + dx
-      let newY = position.y + dy
+      const newX = position.x + dx
+      const newY = position.y + dy
       const clamped = clampPositionsToScreen(newX, newY, note.clientWidth, note.clientHeight)
       const newPos = {
         x: clamped.newX,
@@ -104,7 +104,7 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
       {!!code ? (
         <>
           Recovery Keyword:
-          <div className="underline font-bold">Don't Lose</div>
+          <div className="underline font-bold">{`Don't Lose`}</div>
           <div className="mt-8 italic">{code}</div>
         </>
       ) : (

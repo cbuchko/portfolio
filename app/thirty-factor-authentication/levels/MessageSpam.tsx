@@ -5,7 +5,7 @@ function makeCode(length: number) {
   let result = ''
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   const charactersLength = characters.length
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
   return result
@@ -75,9 +75,9 @@ export const MessageSpamContent = ({
 
   return (
     <>
-      <h3>We've sent a code to your mobile device.</h3>
+      <h3>{`We've sent a code to your mobile device.`}</h3>
       <div className="flex justify-between mt-2">
-        <small>Don't tell this code to anyone</small>
+        <small>{`Don't tell this code to anyone.`}</small>
         <button className="text-xs underline cursor-pointer" onClick={handleResendCode}>
           Resend Code
         </button>

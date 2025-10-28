@@ -8,7 +8,7 @@ import { PlayerIds } from './player-constants'
 import { maxLevel } from './constants'
 
 export default function ThirtyFactorAuthentication() {
-  const [playerId, setPlayerId] = useState(PlayerIds.Biden)
+  const [playerId] = useState(PlayerIds.Biden)
   const [isGameOver, setIsGameOver] = useState(false)
 
   const { content, controls, level, resetLevel, handleLevelAdvance } = useLevels()

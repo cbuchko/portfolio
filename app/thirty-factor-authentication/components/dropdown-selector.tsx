@@ -45,7 +45,7 @@ export const DropdownSelector = ({
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
-  }, [])
+  }, [id, setActiveId])
 
   return (
     <div id={id} className="relative" style={{ width: `${width}px` }}>

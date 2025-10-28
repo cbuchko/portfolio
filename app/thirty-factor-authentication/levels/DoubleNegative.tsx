@@ -6,7 +6,7 @@ export const DoubleNegativeContent = ({ playerId }: ContentProps) => {
   return (
     <>
       <h3 className="w-[350px] mb-2">{`Just double checking... you sure you're really ${name}?`}</h3>
-      <h3>You wouldn't lie to me right?</h3>
+      <h3>{`You wouldn't lie to me right?`}</h3>
     </>
   )
 }
@@ -28,7 +28,7 @@ function shuffle(array: { text: string; truth?: boolean }[]) {
   // While there remain elements to shuffle...
   while (currentIndex != 0) {
     // Pick a remaining element...
-    let randomIndex = Math.floor(Math.random() * currentIndex)
+    const randomIndex = Math.floor(Math.random() * currentIndex)
     currentIndex--
 
     // And swap it with the current element.

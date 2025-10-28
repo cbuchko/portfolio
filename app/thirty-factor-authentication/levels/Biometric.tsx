@@ -9,16 +9,16 @@ export const BiometricContent = ({ validateAdvance }: ContentProps) => {
   const [progress, setProgress] = useState(0)
 
   const isComplete = progress >= 100
-  if (isComplete) {
-    validateAdvance()
-  }
+  useEffect(() => {
+    if (isComplete) validateAdvance()
+  }, [isComplete, validateAdvance])
 
   useEffect(() => {
     if (startRef.current && !startPosition) {
       const rect = startRef.current.getBoundingClientRect()
       setStartPosition({ x: rect.left, y: rect.top })
     }
-  }, [])
+  }, [startPosition])
 
   return (
     <>
@@ -96,7 +96,7 @@ const Scanner = ({
     return () => {
       clearInterval(interval)
     }
-  }, [isOver, isComplete])
+  }, [isOver, isComplete, position, setProgress])
 
   return (
     <div
