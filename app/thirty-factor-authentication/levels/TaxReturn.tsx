@@ -86,7 +86,7 @@ export const TaxReturnContent = ({
             <h3 className="text-sm p-2">Step 3 - Net Income</h3>
             <FormLineItem label="Employment income" amount={taxItems.income} number={33} />
             <FormLineItem label="Income tax deducted" amount={taxItems.incomeTax} number={34} />
-            <FormLineItem label="Employe CPP contributions" amount={taxItems.cpp} number={35} />
+            <FormLineItem label="Employee CPP contributions" amount={taxItems.cpp} number={35} />
             <FormLineItem label="Subtract line 34 and 35 from line 33" number={36} />
             <FormLineItem
               label="RRSP deduction (see Schedule 7 and attach receipts)"
@@ -123,8 +123,8 @@ export const TaxReturnContent = ({
           </div>
         </div>
         <p className="text-[8px] max-w-[450px] px-2 mt-1">
-          This by no means meant to mimick a real government issued tax return and is merely for
-          entertainment purposes.
+          This by no means is meant to mimick a real government issued tax return and is merely for
+          entertainment and parody purposes.
         </p>
       </div>
     </>
