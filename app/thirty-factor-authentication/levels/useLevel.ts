@@ -10,6 +10,7 @@ import { FallbackTwoContent, FallbackTwoControls } from './Fallback2'
 import { MapContent, MapControls } from './MapBirthplace'
 import { PostItContent, PostItControls } from './PostIt'
 import { BiometricContent, BiometricControls } from './Biometric'
+import { TaxReturnContent, TaxReturnControls } from './TaxReturn'
 
 //AAAA@@may00
 export const useLevels = () => {
@@ -87,6 +88,12 @@ export const useLevels = () => {
         controls: BiometricControls,
       }
     case 10:
+      return {
+        ...baseProps,
+        content: TaxReturnContent,
+        controls: TaxReturnControls,
+      }
+    case 11:
       return {
         ...baseProps,
         content: FallbackTwoContent,
