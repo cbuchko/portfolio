@@ -50,7 +50,7 @@ export const MessageSpamContent = ({
       if (messageIndexRef.current >= messages.length - 1) {
         messageIndexRef.current = 1
       } else messageIndexRef.current = messageIndexRef.current + 1
-    }, 5000)
+    }, 7500)
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
