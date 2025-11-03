@@ -60,40 +60,34 @@ export const useLevels = () => {
     case 5:
       return {
         ...baseProps,
-        content: DoubleNegativeContent,
-        controls: DoubleNegativeControls,
-      }
-    case 6:
-      return {
-        ...baseProps,
         content: FallbackOneContent,
         controls: FallbackOneControls,
       }
-    case 7:
+    case 6:
       return {
         ...baseProps,
         content: MapContent,
         controls: MapControls,
       }
-    case 8:
+    case 7:
       return {
         ...baseProps,
         content: PostItContent,
         controls: PostItControls,
       }
-    case 9:
+    case 8:
       return {
         ...baseProps,
         content: BiometricContent,
         controls: BiometricControls,
       }
-    case 10:
+    case 9:
       return {
         ...baseProps,
         content: TaxReturnContent,
         controls: TaxReturnControls,
       }
-    case 11:
+    case 10:
       return {
         ...baseProps,
         content: FallbackTwoContent,
