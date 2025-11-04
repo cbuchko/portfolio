@@ -1,4 +1,5 @@
 import { PlayerInformation } from '../player-constants'
+import { shuffle } from '../utils'
 import { ContentProps, ControlProps } from './types'
 
 export const DoubleNegativeContent = ({ playerId }: ContentProps) => {
@@ -21,21 +22,6 @@ const controls: { text: string; truth?: boolean }[] = [
   { text: "I wouldn't lie to you but in this scenario I am making an exception" },
   { text: "This is a cruel game you're playing with me and I want no part of it any longer" },
 ]
-
-function shuffle(array: { text: string; truth?: boolean }[]) {
-  let currentIndex = array.length
-
-  // While there remain elements to shuffle...
-  while (currentIndex != 0) {
-    // Pick a remaining element...
-    const randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex--
-
-    // And swap it with the current element.
-    ;[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]
-  }
-  return array
-}
 
 export const DoubleNegativeControls = ({ handleLevelAdvance }: ControlProps) => {
   return (

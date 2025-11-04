@@ -1,0 +1,239 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { ContentProps, ControlProps } from './types'
+import { makeAuthCode, shuffle } from '../utils'
+import { createPortal } from 'react-dom'
+
+export const AppCodeContent = ({
+  validateAdvance,
+  cancelAdvance,
+  handleLevelAdvance,
+}: ContentProps) => {
+  const [targetCode, setTargetCode] = useState(makeAuthCode(6))
+  const [codeInput, setCodeInput] = useState('')
+  const [portalElement, setPortalElement] = useState<HTMLElement | null>(null)
+
+  const handleInputChange = (input: string) => {
+    setCodeInput(input)
+    if (targetCode.toLocaleLowerCase() === input.toLocaleLowerCase()) {
+      validateAdvance()
+    } else {
+      cancelAdvance()
+    }
+  }
+
+  useEffect(() => {
+    const portalElement = document.getElementById('extras-portal')
+    setPortalElement(portalElement)
+  }, [])
+
+  const apps = useMemo(() => {
+    return shuffle([...appNames, 'Thirty Factor Auth'])
+  }, [])
+
+  return (
+    <>
+      <h3>Enter the code from your Authenticator App</h3>
+      <input
+        className="border w-full rounded-md mt-1 px-2 py-1"
+        placeholder="Enter your name..."
+        value={codeInput}
+        onChange={(e) => handleInputChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.code === 'Enter') handleLevelAdvance()
+        }}
+      />
+      {portalElement &&
+        createPortal(
+          <div className="flex flex-wrap justify-center mt-6">
+            {apps.map((app, idx) => {
+              const isTarget = app === 'Thirty Factor Auth'
+              return (
+                <AppCode
+                  key={idx}
+                  title={app}
+                  targetCode={isTarget ? targetCode : undefined}
+                  setTargetCode={setTargetCode}
+                />
+              )
+            })}
+          </div>,
+          portalElement
+        )}
+    </>
+  )
+}
+
+type AppCodeProps = {
+  title: string
+  targetCode?: string
+  setTargetCode?: (code: string) => void
+}
+
+const AppCode = ({ title, targetCode, setTargetCode }: AppCodeProps) => {
+  const DURATION = 5 // seconds per full rotation
+  const [elapsed, setElapsed] = useState(0)
+  const [code, setCode] = useState(makeAuthCode(6))
+  const intervalRef = useRef<NodeJS.Timeout>(null)
+  const timeoutRef = useRef<NodeJS.Timeout>(null)
+
+  useEffect(() => {
+    const startDelay = Math.random() * 5000
+
+    timeoutRef.current = setTimeout(() => {
+      const start = Date.now()
+      intervalRef.current = setInterval(() => {
+        const diff = (Date.now() - start) / 1000
+        if (diff % DURATION <= 0.1) {
+          const newCode = makeAuthCode(6)
+          setCode(newCode)
+          if (!!targetCode) setTargetCode?.(newCode)
+        }
+
+        setElapsed(diff % DURATION)
+      }, 100)
+    }, startDelay)
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    }
+  }, [])
+
+  const progress = 0.999999 - elapsed / DURATION // 1 → 0
+
+  const size = 40
+  const radius = 20
+  const cx = size / 2
+  const cy = size / 2
+  const angle = 360 * progress
+
+  // Convert polar angle to cartesian coordinates
+  const radians = ((angle - 90) * Math.PI) / 180
+  const x = cx + radius * Math.cos(radians)
+  const y = cy + radius * Math.sin(radians)
+  const largeArc = angle > 180 ? 1 : 0
+  const color = progress < 0.25 ? '#fb2c36' : '#2b7fff'
+
+  // Path for the filled portion (pie wedge)
+  const pathData = `
+    M ${cx} ${cy}
+    L ${cx} ${cy - radius}
+    A ${radius} ${radius} 0 ${largeArc} 1 ${x} ${y}
+    Z
+  `
+
+  return (
+    <div className="p-2 border flex justify-between items-center gap-4">
+      <div>
+        <div className="text-xs">{title}</div>
+        <div className="mono text-3xl" style={{ color }}>
+          {code}
+        </div>
+      </div>
+      <div>
+        <div>
+          <svg width={size} height={size}>
+            <path d={pathData} fill={color} />
+          </svg>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export const AppCodeControls = ({ handleLevelAdvance }: ControlProps) => {
+  return (
+    <>
+      <div className="grow" />
+      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
+        Submit
+      </button>
+    </>
+  )
+}
+
+const appNames: string[] = [
+  'Google',
+  'Microsoft',
+  'Apple',
+  'Facebook',
+  'Instagram',
+  'X',
+  'GitHub',
+  'GitLab',
+  'Bitbucket',
+  'Slack',
+  'Discord',
+  'Twitch',
+  'Reddit',
+  'Amazon',
+  'Zoom',
+  'Notion',
+  '1Password',
+  'LastPass',
+  'Dashlane',
+  'Coinbase',
+  'Binance',
+  'Kraken',
+  'PayPal',
+  'Stripe',
+  'Shopify',
+  'Squarespace',
+  'WordPress',
+  'Cloudflare',
+  'AWS',
+  'Azure',
+  'GCP',
+  'DigitalOcean',
+  'Heroku',
+  'Okta',
+  'Auth0',
+  'Salesforce',
+  'LinkedIn',
+  'Netflix',
+  'Adobe',
+  'Steam',
+  'Epic',
+  'PlayStation',
+  'Xbox',
+  'EA',
+  'Ubisoft',
+  'ProtonMail',
+  'Tutanota',
+  'Yahoo',
+  'Outlook',
+  'Mega',
+  'NordVPN',
+  'ExpressVPN',
+  'Crypto.com',
+  'Gemini',
+  'OpenAI',
+  'Trello',
+  'Asana',
+  'Jira',
+  'Bitwarden',
+  'Fastmail',
+  'Namecheap',
+  'GoDaddy',
+  'Linode',
+  'Vercel',
+  'Netlify',
+  'Firebase',
+  'HackerOne',
+  'Bugcrowd',
+  'Tesla',
+  'Robinhood',
+  'Wealthsimple',
+  'Revolut',
+  'Wise',
+  'DoorDash',
+  'Uber',
+  'Airbnb',
+  'Dropbox',
+  'Canva',
+  'Figma',
+  'ClickUp',
+  'Linear',
+  'Render',
+  'Cloudways',
+]

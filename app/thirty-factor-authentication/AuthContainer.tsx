@@ -44,7 +44,7 @@ export const AuthContainer = ({
 
   return (
     <>
-      <div id="auth-container" className="relative min-w-[400px] m-auto mt-24 shadow-md">
+      <div id="auth-container" className="relative min-w-[400px] mx-auto mt-24 shadow-md">
         <div
           id="auth-header"
           className="flex justify-between items-center min-w-[400px] py-1 px-4 rounded-t-md bg-blue-300 border"
@@ -59,7 +59,7 @@ export const AuthContainer = ({
               ))}
             </div>
           </div>
-          <small>{`${level}/${maxLevel}`}</small>
+          <small>{`Level ${level}/${maxLevel}`}</small>
         </div>
         <div id="auth-body" className="border rounded-sm border-t-0 rounded-t-none">
           <div id="auth-content" className="px-4 py-8">

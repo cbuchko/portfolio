@@ -16,19 +16,22 @@ export default function ThirtyFactorAuthentication() {
   const isCompleted = level === maxLevel + 1
 
   return (
-    <div className="relative w-screen h-screen flex flex-col">
+    <div className="relative w-screen h-screen flex flex-col overflow-y-auto">
       <div className="absolute left-[50%] -translate-x-[50%] top-8">
         <h1 className="text-2xl">Thirty Factor Authentication</h1>
       </div>
       {!isGameOver && !isCompleted && (
-        <AuthContainer
-          playerId={playerId}
-          level={level}
-          handleLevelAdvance={handleLevelAdvance}
-          setIsGameOver={setIsGameOver}
-          Content={content}
-          Controls={controls}
-        />
+        <>
+          <AuthContainer
+            playerId={playerId}
+            level={level}
+            handleLevelAdvance={handleLevelAdvance}
+            setIsGameOver={setIsGameOver}
+            Content={content}
+            Controls={controls}
+          />
+          <div id="extras-portal" />
+        </>
       )}
       {isCompleted && (
         <div className="absolute top-[25%] -translate-y-[50%] left-[50%] -translate-x-[50%]">
