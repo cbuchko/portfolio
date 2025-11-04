@@ -11,7 +11,7 @@ export default function ThirtyFactorAuthentication() {
   const [playerId] = useState(PlayerIds.Biden)
   const [isGameOver, setIsGameOver] = useState(false)
 
-  const { content, controls, level, resetLevel, handleLevelAdvance } = useLevels()
+  const { content, controls, level, requiresLoad, resetLevel, handleLevelAdvance } = useLevels()
 
   const isCompleted = level === maxLevel + 1
 
@@ -29,6 +29,7 @@ export default function ThirtyFactorAuthentication() {
             setIsGameOver={setIsGameOver}
             Content={content}
             Controls={controls}
+            requiresLoad={requiresLoad}
           />
           <div id="extras-portal" />
         </>

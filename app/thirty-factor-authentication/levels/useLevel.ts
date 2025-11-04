@@ -11,6 +11,7 @@ import { PostItContent, PostItControls } from './PostIt'
 import { BiometricContent, BiometricControls } from './Biometric'
 import { TaxReturnContent, TaxReturnControls } from './TaxReturn'
 import { AppCodeContent, AppCodeControls } from './AppCode'
+import { IMDBContent, IMDBControls } from './IMDB'
 
 //AAAA@@may00
 export const useLevels = () => {
@@ -29,6 +30,7 @@ export const useLevels = () => {
     level,
     handleLevelAdvance,
     resetLevel,
+    requiresLoad: false,
   }
 
   const levelToUse = forceLevel > 0 ? forceLevel : level
@@ -98,6 +100,14 @@ export const useLevels = () => {
         ...baseProps,
         content: AppCodeContent,
         controls: AppCodeControls,
+      }
+    }
+    case 12: {
+      return {
+        ...baseProps,
+        content: IMDBContent,
+        controls: IMDBControls,
+        requiresLoad: true,
       }
     }
     default:

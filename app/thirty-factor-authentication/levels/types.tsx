@@ -11,4 +11,5 @@ export type ContentProps = {
   validateAdvance: () => void
   cancelAdvance: () => void
   handleLevelAdvance: () => void
+  setIsLoading: (loading: boolean) => void
 }

@@ -13,6 +13,7 @@ export type Player = {
     firstName: string
     dob: string
   }
+  imdb: string[]
 }
 
 export const PlayerInformation: Record<PlayerIds, Player> = {
@@ -26,6 +27,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       firstName: 'Joseph R',
       dob: '1942/11/20',
     },
+    imdb: ['parks', 'sesamestreet', 'jimmykimmel', 'lawandorder'],
   },
   [PlayerIds.Mock]: {
     name: 'Connor Buchko',
@@ -37,5 +39,6 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       firstName: 'Connor A',
       dob: '1999/07/31',
     },
+    imdb: [],
   },
 }

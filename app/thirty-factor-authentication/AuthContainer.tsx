@@ -1,12 +1,14 @@
-import { JSX, useState } from 'react'
+import { JSX, useEffect, useState } from 'react'
 import { PlayerIds, PlayerInformation } from './player-constants'
 import { ContentProps, ControlProps } from './levels/types'
 import XIcon from '@/public/thirty-factor-authentication/icons/x.svg'
 import { devMode, maxLevel } from './constants'
+import classNames from 'classnames'
 
 type AuthContainerProps = {
   playerId: PlayerIds
   level: number
+  requiresLoad: boolean
   handleLevelAdvance: () => void
   setIsGameOver: (value: boolean) => void
   Content: (props: ContentProps) => JSX.Element
@@ -16,11 +18,13 @@ type AuthContainerProps = {
 export const AuthContainer = ({
   playerId,
   level,
+  requiresLoad,
   handleLevelAdvance,
   setIsGameOver,
   Content,
   Controls,
 }: AuthContainerProps) => {
+  const [isLoading, setIsLoading] = useState(false)
   const [isAdvanceVerified, setIsAdvanceVerified] = useState(false)
   const [errorCount, setErrorCount] = useState(0)
 
@@ -37,14 +41,24 @@ export const AuthContainer = ({
     setIsAdvanceVerified(false)
     handleLevelAdvance()
     setErrorCount(0)
+    setIsLoading(true)
   }
+
+  useEffect(() => {
+    if (!requiresLoad) setIsLoading(false)
+  }, [level])
 
   const validateAdvance = () => setIsAdvanceVerified(true)
   const cancelAdvance = () => setIsAdvanceVerified(false)
 
   return (
     <>
-      <div id="auth-container" className="relative min-w-[400px] mx-auto mt-24 shadow-md">
+      <div
+        id="auth-container"
+        className={classNames('relative min-w-[400px] mx-auto mt-24 shadow-md', {
+          'opacity-0 pointer-events-none': isLoading && requiresLoad,
+        })}
+      >
         <div
           id="auth-header"
           className="flex justify-between items-center min-w-[400px] py-1 px-4 rounded-t-md bg-blue-300 border"
@@ -68,6 +82,7 @@ export const AuthContainer = ({
               validateAdvance={validateAdvance}
               cancelAdvance={cancelAdvance}
               handleLevelAdvance={onAdvance}
+              setIsLoading={setIsLoading}
             />
           </div>
           <div
