@@ -3,7 +3,6 @@ import { OneContent, OneControls } from './1'
 import { TwoContent, TwoControls } from './2'
 import { MessageSpamContent, MessageSpamControls } from './MessageSpam'
 import { ZodiacContent, ZodiacControls } from './Zodiac'
-import { DoubleNegativeContent, DoubleNegativeControls } from './DoubleNegative'
 import { FallbackOneContent, FallbackOneControls } from './Fallback1'
 import { forceLevel } from '../constants'
 import { FallbackTwoContent, FallbackTwoControls } from './Fallback2'
@@ -11,6 +10,7 @@ import { MapContent, MapControls } from './MapBirthplace'
 import { PostItContent, PostItControls } from './PostIt'
 import { BiometricContent, BiometricControls } from './Biometric'
 import { TaxReturnContent, TaxReturnControls } from './TaxReturn'
+import { AppCodeContent, AppCodeControls } from './AppCode'
 
 //AAAA@@may00
 export const useLevels = () => {
@@ -93,6 +93,13 @@ export const useLevels = () => {
         content: FallbackTwoContent,
         controls: FallbackTwoControls,
       }
+    case 11: {
+      return {
+        ...baseProps,
+        content: AppCodeContent,
+        controls: AppCodeControls,
+      }
+    }
     default:
       return {
         ...baseProps,

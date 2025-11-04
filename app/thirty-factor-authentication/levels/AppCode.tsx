@@ -97,7 +97,7 @@ const AppCode = ({ title, targetCode, setTargetCode }: AppCodeProps) => {
       if (intervalRef.current) clearInterval(intervalRef.current)
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
     }
-  }, [])
+  }, [setTargetCode, targetCode])
 
   const progress = 0.999999 - elapsed / DURATION // 1 → 0
 
