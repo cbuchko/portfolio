@@ -13,7 +13,7 @@ export const IMDBContent = ({
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [mediaShuffled, setMediaShuffled] = useState<{ id: string; url: string }[] | null>(null)
 
-  const targetMediaIds = useMemo(() => PlayerInformation[playerId].imdb.sort(), [])
+  const targetMediaIds = useMemo(() => PlayerInformation[playerId].imdb.sort(), [playerId])
 
   const validateSelect = (input: string[]) => {
     if (
@@ -29,7 +29,7 @@ export const IMDBContent = ({
   useEffect(() => {
     setMediaShuffled(shuffle(media))
     setIsLoading(false)
-  }, [media])
+  }, [setIsLoading])
 
   return (
     <>
@@ -79,6 +79,7 @@ const MovieThumbnail = ({
     <img
       key={media.id}
       src={media.url}
+      alt={media.id}
       className={classNames(
         'h-[200px] aspect-[1/1.5] cursor-pointer transition-transform duration-500',
         { 'outline-6 outline-yellow-300 rounded-md scale-75 shadow-lg': isSelected }
