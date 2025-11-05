@@ -12,6 +12,7 @@ import { BiometricContent, BiometricControls } from './Biometric'
 import { TaxReturnContent, TaxReturnControls } from './TaxReturn'
 import { AppCodeContent, AppCodeControls } from './AppCode'
 import { IMDBContent, IMDBControls } from './IMDB'
+import { BirdCallContent, BirdCallControls } from './BirdCalls'
 
 //AAAA@@may00
 export const useLevels = () => {
@@ -107,6 +108,14 @@ export const useLevels = () => {
         ...baseProps,
         content: IMDBContent,
         controls: IMDBControls,
+        requiresLoad: true,
+      }
+    }
+    case 13: {
+      return {
+        ...baseProps,
+        content: BirdCallContent,
+        controls: BirdCallControls,
         requiresLoad: true,
       }
     }

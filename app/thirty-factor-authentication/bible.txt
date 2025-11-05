@@ -12,3 +12,9 @@ GREAT IDEAS:
 3 Gods Type riddles/Parlor room type puzzles
 Really long voice call you have to listen to with verbal code at the end
 IMDB
+
+
+OTHER IDEAS:
+No game over, just tally mistakes
+Surface time taken and mistake tally at end screen
+Reset button 
