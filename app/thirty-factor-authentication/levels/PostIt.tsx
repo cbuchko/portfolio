@@ -31,7 +31,7 @@ export const PostItContent = ({
       <h3>Please enter that now.</h3>
       <input
         className="border w-full rounded-md mt-2 px-2 py-1"
-        placeholder="Enter the phrase..."
+        placeholder="Enter the keyword..."
         value={nameInput}
         onChange={(e) => handleInputChange(e.target.value)}
         onKeyDown={(e) => {

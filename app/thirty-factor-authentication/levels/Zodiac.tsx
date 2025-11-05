@@ -83,7 +83,7 @@ export const ZodiacContent = ({ playerId, validateAdvance, cancelAdvance }: Cont
           defaultOption={defaultSign}
           onOptionSelect={(option) => handleZodiacSelect(option, 'rising')}
           width={150}
-          label={'Rising'}
+          label={'Rising/Ascendant'}
         />
       </div>
     </>

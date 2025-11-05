@@ -35,7 +35,7 @@ export const AppCodeContent = ({
       <h3>Enter the code from your Authenticator App</h3>
       <input
         className="border w-full rounded-md mt-1 px-2 py-1"
-        placeholder="Enter your name..."
+        placeholder="Enter code..."
         value={codeInput}
         onChange={(e) => handleInputChange(e.target.value)}
         onKeyDown={(e) => {
