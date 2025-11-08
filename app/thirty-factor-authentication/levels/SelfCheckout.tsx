@@ -12,9 +12,14 @@ type ShoppingItem = {
   isScanned?: boolean
 }
 
-const getErrorText = (isUnexpectedError: boolean, isUnbaggedItem: boolean) => {
+const getErrorText = (
+  isUnexpectedError: boolean,
+  isUnbaggedItem: boolean,
+  isAgeVerificationError: boolean
+) => {
   if (isUnexpectedError) return 'UNEXPECTED ITEM IN BAGGING AREA.'
   if (isUnbaggedItem) return 'PLACE ITEM IN BAGGING AREA.'
+  if (isAgeVerificationError) return 'AGE VERIFICATION REQUIRED'
 }
 
 const ShoppingItems: ShoppingItem[] = [
@@ -69,18 +74,10 @@ const ShoppingItems: ShoppingItem[] = [
   },
 ]
 
-/**
- * Error Ideas
- * bagging an item without scanning
- * scan can randomly fail
- * barcode fails, type it in
- * age verification (wine? beer?)
- * Please wait for assistance
- */
-
 export const SelfCheckoutContent = ({ validateAdvance, cancelAdvance }: ContentProps) => {
   const [items, setItems] = useState(ShoppingItems)
   const scannedIdsRef = useRef<Set<string>>(new Set())
+  const [isAgeVerified, setIsAgeVerified] = useState(false)
 
   const handleDrop = (droppedItem: ShoppingItem, isBaggingArea?: boolean) => {
     setItems((prevItems) => {
@@ -127,7 +124,10 @@ export const SelfCheckoutContent = ({ validateAdvance, cancelAdvance }: ContentP
   const isUnbaggedItemError = !Array.from(scannedIdsRef.current).every((id) =>
     baggedItems.find((item) => item.id === id)
   )
-  const isAnyError = isUnexpectedItemError || isUnbaggedItemError
+  const isAgeVerificationError = baggedItems.some(
+    (item) => item.id === 'wine' && item.isScanned && !isAgeVerified
+  )
+  const isAnyError = isUnexpectedItemError || isUnbaggedItemError || isAgeVerificationError
   return (
     <>
       <h3>You recently shopped at Walgreens, please complete the Self Checkout.</h3>
@@ -160,7 +160,11 @@ export const SelfCheckoutContent = ({ validateAdvance, cancelAdvance }: ContentP
         />
       </div>
       {isAnyError && (
-        <ErrorContainer text={getErrorText(isUnexpectedItemError, isUnbaggedItemError)} />
+        <ErrorContainer
+          text={getErrorText(isUnexpectedItemError, isUnbaggedItemError, isAgeVerificationError)}
+          isAgeVerificationError={isAgeVerificationError}
+          setIsAgeVerified={setIsAgeVerified}
+        />
       )}
     </>
   )
@@ -280,7 +284,15 @@ const Scanner = ({
   )
 }
 
-const ErrorContainer = ({ text }: { text?: string }) => {
+const ErrorContainer = ({
+  text,
+  isAgeVerificationError,
+  setIsAgeVerified,
+}: {
+  text?: string
+  isAgeVerificationError?: boolean
+  setIsAgeVerified: (isVerified: boolean) => void
+}) => {
   const audioRef = useRef<HTMLAudioElement>(null)
 
   useEffect(() => {
@@ -292,9 +304,18 @@ const ErrorContainer = ({ text }: { text?: string }) => {
   return (
     <>
       <div className="fixed w-screen h-screen top-0 left-0 bg-red-500 error-container pointer-events-none" />
-      <h5 className="fixed text-[100px] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center text-black z-100  error-container pointer-events-none">
+      <div className="fixed flex flex-col items-center text-[100px] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center text-black z-100 pointer-events-none">
         {text}
-      </h5>
+        {isAgeVerificationError && (
+          <button
+            className="border text-2xl bg-white p-2 rounded-md cursor-pointer w-max !pointer-events-auto"
+            onClick={() => setIsAgeVerified(true)}
+          >
+            REQUEST ASSISTANCE
+          </button>
+        )}
+      </div>
+
       <audio
         ref={audioRef}
         controls={false}
