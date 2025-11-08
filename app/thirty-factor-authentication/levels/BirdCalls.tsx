@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { shuffle } from '../utils'
+import Image from 'next/image'
 
 const selectTargetBird = () => {
   return shuffle(birds)[0].id
@@ -73,16 +74,15 @@ const BirdThumbnail = ({
   }
 
   return (
-    <img
+    <Image
       key={bird.id}
       src={bird.url}
       alt={bird.id}
-      className={classNames(
-        'h-[200px] aspect-square cursor-pointer transition-transform duration-500',
-        {
-          'outline-6 outline-yellow-300 rounded-md scale-75 shadow-lg': isSelected,
-        }
-      )}
+      height={'200'}
+      width={'200'}
+      className={classNames('cursor-pointer transition-transform duration-500', {
+        'outline-6 outline-yellow-300 rounded-md scale-75 shadow-lg': isSelected,
+      })}
       onClick={handleSelect}
     />
   )

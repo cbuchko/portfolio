@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { useDrag, useDrop } from 'react-dnd'
 import classNames from 'classnames'
+import Image from 'next/image'
 
 type ShoppingItem = {
   id: string
@@ -111,14 +112,14 @@ export const SelfCheckoutContent = ({ validateAdvance, cancelAdvance }: ContentP
       return
     }
     cancelAdvance()
-  }, [items])
+  }, [items, cancelAdvance, validateAdvance])
 
   const [cartItems, baggedItems, scannedItems] = useMemo(() => {
     const cartItems = items.filter((item) => !item.isBagged)
     const baggedItems = items.filter((item) => !!item.isBagged)
     const scannedItems = items.filter((item) => !!item.isScanned)
     return [cartItems, baggedItems, scannedItems]
-  }, [items, scannedIdsRef.current])
+  }, [items])
 
   const isUnexpectedItemError = baggedItems.some((item) => !item.isScanned)
   const isUnbaggedItemError = !Array.from(scannedIdsRef.current).every((id) =>
@@ -174,7 +175,9 @@ export const SelfCheckoutContent = ({ validateAdvance, cancelAdvance }: ContentP
 }
 
 const CheckoutItem = ({ item }: { item: ShoppingItem }) => {
-  const [{ opacity }, dragRef] = useDrag(
+  const dragRef = useRef<HTMLImageElement>(null)
+
+  const [{ opacity }, drag] = useDrag(
     () => ({
       type: 'checkout-item',
       item: item,
@@ -184,10 +187,15 @@ const CheckoutItem = ({ item }: { item: ShoppingItem }) => {
     }),
     []
   )
+  drag(dragRef)
+
   return (
     <div className="flex items-center justify-center cursor-pointer">
-      <img
+      <Image
         ref={dragRef}
+        height={'80'}
+        width={'80'}
+        alt={item.title}
         src={item.url}
         className={classNames('h-20 w-max p-2 m-1')}
         style={{ opacity }}
@@ -205,11 +213,13 @@ const DropArea = ({
   items: ShoppingItem[]
   handleDrop: (item: ShoppingItem) => void
 }) => {
-  const [_, dropRef] = useDrop(
+  const dropRef = useRef<HTMLDivElement>(null)
+
+  const [, drop] = useDrop(
     () => ({ accept: 'checkout-item', drop: handleDrop }),
     [handleDrop, items]
   )
-
+  drop(dropRef)
   return (
     <div ref={dropRef}>
       <h5 className="text-center">{title}</h5>
@@ -229,6 +239,8 @@ const Scanner = ({
   scannedIds: Set<string>
   handleScan: (item: ShoppingItem) => void
 }) => {
+  const dropRef = useRef<HTMLDivElement>(null)
+
   const [isSuccess, setIsSuccess] = useState(false)
   //is the scan actively happening
   const [isScanning, setIsScanning] = useState(false)
@@ -255,7 +267,7 @@ const Scanner = ({
     }, timeoutDuration)
   }
 
-  const [{ isOver }, dropRef] = useDrop(
+  const [{ isOver }, drop] = useDrop(
     () => ({
       accept: 'checkout-item',
       hover: attemptScan,
@@ -265,6 +277,7 @@ const Scanner = ({
     }),
     [isScanning, scannedIds]
   )
+  drop(dropRef)
   scanningRef.current = isOver
 
   if (!isOver && isScanning) {
