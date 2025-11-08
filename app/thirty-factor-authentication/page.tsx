@@ -6,6 +6,8 @@ import { useLevels } from './levels/useLevel'
 import { useState } from 'react'
 import { PlayerIds } from './player-constants'
 import { maxLevel } from './constants'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 export default function ThirtyFactorAuthentication() {
   const [playerId] = useState(PlayerIds.Biden)
@@ -22,15 +24,17 @@ export default function ThirtyFactorAuthentication() {
       </div>
       {!isGameOver && !isCompleted && (
         <>
-          <AuthContainer
-            playerId={playerId}
-            level={level}
-            handleLevelAdvance={handleLevelAdvance}
-            setIsGameOver={setIsGameOver}
-            Content={content}
-            Controls={controls}
-            requiresLoad={requiresLoad}
-          />
+          <DndProvider backend={HTML5Backend}>
+            <AuthContainer
+              playerId={playerId}
+              level={level}
+              handleLevelAdvance={handleLevelAdvance}
+              setIsGameOver={setIsGameOver}
+              Content={content}
+              Controls={controls}
+              requiresLoad={requiresLoad}
+            />
+          </DndProvider>
           <div id="extras-portal" />
         </>
       )}

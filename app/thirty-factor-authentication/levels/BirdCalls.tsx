@@ -32,9 +32,7 @@ export const BirdCallContent = ({ validateAdvance, cancelAdvance, setIsLoading }
           controls
           controlsList="nodownload"
           src={`/thirty-factor-authentication/birds/${targetBird}.mp3`}
-        >
-          play
-        </audio>
+        />
       </div>
       <div className="grid grid-cols-3 gap-4 mt-4">
         {birdsShuffled &&

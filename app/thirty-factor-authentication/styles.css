@@ -42,3 +42,37 @@
 #map {
   height: 300px;
 }
+
+@keyframes error-flash {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.error-container {
+  animation-name: error-flash;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes scan-swipe {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(190px);
+  }
+}
+
+.scan-swipe {
+  animation-name: scan-swipe;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}

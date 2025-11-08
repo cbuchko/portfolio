@@ -1,20 +1,20 @@
 Level Ideas:
 "What highschool did you go to" type stuff
-Email auth where you have to parse through a bunch of BS emails to find the needle in the haystack
-Is your Heart in it type stuff?
 "Lights Out" find the button
 Authenticate through third party?
 Elevator music level/system maintenance/"dont touch anything"
 Odd One Out
-Bird calls
+Self-Checkout Ragebait
+Troll someone on twitter?
 
 GREAT IDEAS:
 3 Gods Type riddles/Parlor room type puzzles
 Really long voice call you have to listen to with verbal code at the end
-IMDB
 
 
 OTHER IDEAS:
 No game over, just tally mistakes
 Surface time taken and mistake tally at end screen
 Reset button 
+Link back to portfolio 
+Game name in tab

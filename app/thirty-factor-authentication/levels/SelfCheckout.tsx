@@ -1,0 +1,318 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { ContentProps, ControlProps } from './types'
+import { useDrag, useDrop } from 'react-dnd'
+import classNames from 'classnames'
+
+type ShoppingItem = {
+  id: string
+  url: string
+  title: string
+  cost: number
+  isBagged?: boolean
+  isScanned?: boolean
+}
+
+const getErrorText = (isUnexpectedError: boolean, isUnbaggedItem: boolean) => {
+  if (isUnexpectedError) return 'UNEXPECTED ITEM IN BAGGING AREA.'
+  if (isUnbaggedItem) return 'PLACE ITEM IN BAGGING AREA.'
+}
+
+const ShoppingItems: ShoppingItem[] = [
+  {
+    id: 'banana',
+    title: 'Banana',
+    cost: 10,
+    url: '/thirty-factor-authentication/groceries/banana.webp',
+  },
+  {
+    id: 'milk',
+    title: 'Milk',
+    cost: 5.99,
+    url: '/thirty-factor-authentication/groceries/milk.webp',
+  },
+  { id: 'wine', title: 'Wine', cost: 10, url: '/thirty-factor-authentication/groceries/wine.png' },
+  {
+    id: 'cheese',
+    title: 'Cheese',
+    cost: 11.99,
+    url: '/thirty-factor-authentication/groceries/cheese.png',
+  },
+  {
+    id: 'eggs',
+    title: 'Eggs',
+    cost: 19.99,
+    url: '/thirty-factor-authentication/groceries/egg-carton.png',
+  },
+  {
+    id: 'chocolate',
+    title: 'Chocolate',
+    cost: 3.99,
+    url: '/thirty-factor-authentication/groceries/chocolate.png',
+  },
+  {
+    id: 'peanut',
+    title: 'Peanut Butter',
+    cost: 5.45,
+    url: '/thirty-factor-authentication/groceries/peanut.png',
+  },
+  {
+    id: 'bread',
+    title: 'Bread',
+    cost: 6.99,
+    url: '/thirty-factor-authentication/groceries/bread.png',
+  },
+  {
+    id: 'cookie',
+    title: 'Cookie',
+    cost: 2.5,
+    url: '/thirty-factor-authentication/groceries/cookie.png',
+  },
+]
+
+/**
+ * Error Ideas
+ * bagging an item without scanning
+ * scan can randomly fail
+ * barcode fails, type it in
+ * age verification (wine? beer?)
+ * Please wait for assistance
+ */
+
+export const SelfCheckoutContent = ({ validateAdvance, cancelAdvance }: ContentProps) => {
+  const [items, setItems] = useState(ShoppingItems)
+  const scannedIdsRef = useRef<Set<string>>(new Set())
+
+  const handleDrop = (droppedItem: ShoppingItem, isBaggingArea?: boolean) => {
+    setItems((prevItems) => {
+      const arrayCopy = new Array(...prevItems)
+      const index = arrayCopy.findIndex((item) => item.id === droppedItem.id)
+      arrayCopy[index] = {
+        ...droppedItem,
+        isBagged: isBaggingArea,
+        isScanned: scannedIdsRef.current.has(droppedItem.id),
+      }
+      return arrayCopy
+    })
+  }
+
+  const handleScan = (scannedItem: ShoppingItem) => {
+    const ids = scannedIdsRef.current
+    ids.add(scannedItem.id)
+    scannedIdsRef.current = ids
+    setItems((prevItems) => {
+      const arrayCopy = new Array(...prevItems)
+      const index = arrayCopy.findIndex((item) => item.id === scannedItem.id)
+      arrayCopy[index] = { ...scannedItem, isScanned: true }
+      return arrayCopy
+    })
+  }
+
+  useEffect(() => {
+    const checkoutComplete = items.every((item) => item.isBagged && item.isScanned)
+    if (checkoutComplete) {
+      validateAdvance()
+      return
+    }
+    cancelAdvance()
+  }, [items])
+
+  const [cartItems, baggedItems, scannedItems] = useMemo(() => {
+    const cartItems = items.filter((item) => !item.isBagged)
+    const baggedItems = items.filter((item) => !!item.isBagged)
+    const scannedItems = items.filter((item) => !!item.isScanned)
+    return [cartItems, baggedItems, scannedItems]
+  }, [items, scannedIdsRef.current])
+
+  const isUnexpectedItemError = baggedItems.some((item) => !item.isScanned)
+  const isUnbaggedItemError = !Array.from(scannedIdsRef.current).every((id) =>
+    baggedItems.find((item) => item.id === id)
+  )
+  const isAnyError = isUnexpectedItemError || isUnbaggedItemError
+  return (
+    <>
+      <h3>You recently shopped at Walgreens, please complete the Self Checkout.</h3>
+      <div className="flex gap-10 mt-8">
+        <DropArea
+          title="Shopping Cart"
+          handleDrop={(item) => handleDrop(item, false)}
+          items={cartItems}
+        />
+        <div>
+          <Scanner handleScan={handleScan} scannedIds={scannedIdsRef.current} />
+          <div className="mt-4">
+            <h5 className="text-center">Summary</h5>
+            <div className="border p-2 h-[160px]">
+              {scannedItems.map((item) => {
+                return (
+                  <div key={item.id} className="text-xs flex justify-between">
+                    <p>{item.title}</p>
+                    <p>{`$${item.cost.toFixed(2)}`}</p>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+        <DropArea
+          title="Bagging Area"
+          handleDrop={(item) => handleDrop(item, true)}
+          items={baggedItems}
+        />
+      </div>
+      {isAnyError && (
+        <ErrorContainer text={getErrorText(isUnexpectedItemError, isUnbaggedItemError)} />
+      )}
+    </>
+  )
+}
+
+const CheckoutItem = ({ item }: { item: ShoppingItem }) => {
+  const [{ opacity }, dragRef] = useDrag(
+    () => ({
+      type: 'checkout-item',
+      item: item,
+      collect: (monitor) => ({
+        opacity: monitor.isDragging() ? 0 : 1,
+      }),
+    }),
+    []
+  )
+  return (
+    <div className="flex items-center justify-center cursor-pointer">
+      <img
+        ref={dragRef}
+        src={item.url}
+        className={classNames('h-20 w-max p-2 m-1')}
+        style={{ opacity }}
+      />
+    </div>
+  )
+}
+
+const DropArea = ({
+  title,
+  items,
+  handleDrop,
+}: {
+  title: string
+  items: ShoppingItem[]
+  handleDrop: (item: ShoppingItem) => void
+}) => {
+  const [_, dropRef] = useDrop(
+    () => ({ accept: 'checkout-item', drop: handleDrop }),
+    [handleDrop, items]
+  )
+
+  return (
+    <div ref={dropRef}>
+      <h5 className="text-center">{title}</h5>
+      <div className="border h-[300px] w-[300px] grid grid-cols-3">
+        {items.map((item) => (
+          <CheckoutItem key={item.id} item={item} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+const Scanner = ({
+  scannedIds,
+  handleScan,
+}: {
+  scannedIds: Set<string>
+  handleScan: (item: ShoppingItem) => void
+}) => {
+  const [isSuccess, setIsSuccess] = useState(false)
+  //is the scan actively happening
+  const [isScanning, setIsScanning] = useState(false)
+  //is the item hovered over
+  const scanningRef = useRef(false)
+  const timeoutRef = useRef<NodeJS.Timeout>(null)
+
+  const updateScanning = (isScanning: boolean) => {
+    setIsScanning(isScanning)
+    scanningRef.current = isScanning
+  }
+
+  const attemptScan = (item: ShoppingItem) => {
+    if (scanningRef.current || scannedIds.has(item.id)) return
+    updateScanning(true)
+
+    const max = 6000
+    const min = 2000
+    const timeoutDuration = Math.random() * (max - min) + min
+    timeoutRef.current = setTimeout(() => {
+      if (scanningRef.current) handleScan(item)
+      setIsScanning(false)
+      setIsSuccess(true)
+    }, timeoutDuration)
+  }
+
+  const [{ isOver }, dropRef] = useDrop(
+    () => ({
+      accept: 'checkout-item',
+      hover: attemptScan,
+      collect: (monitor) => ({
+        isOver: monitor.isOver(), // This will be false when unhovered
+      }),
+    }),
+    [isScanning, scannedIds]
+  )
+  scanningRef.current = isOver
+
+  if (!isOver && isScanning) {
+    updateScanning(false)
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+  }
+  if (!isOver && isSuccess) {
+    setIsSuccess(false)
+  }
+
+  return (
+    <div
+      ref={dropRef}
+      className={classNames('border h-[100px] w-[200px] mt-6 bg-gray-500 opacity-50', {
+        '!bg-green-400': isSuccess,
+      })}
+    >
+      {isScanning && <div className="bg-green-400 w-3 h-full scan-swipe pointer-events-none" />}
+    </div>
+  )
+}
+
+const ErrorContainer = ({ text }: { text?: string }) => {
+  const audioRef = useRef<HTMLAudioElement>(null)
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.2
+    }
+  }, [])
+
+  return (
+    <>
+      <div className="fixed w-screen h-screen top-0 left-0 bg-red-500 error-container pointer-events-none" />
+      <h5 className="fixed text-[100px] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center text-black z-100  error-container pointer-events-none">
+        {text}
+      </h5>
+      <audio
+        ref={audioRef}
+        controls={false}
+        src="/thirty-factor-authentication/sounds/siren.mp3"
+        autoPlay
+        loop
+      />
+    </>
+  )
+}
+
+export const SelfCheckoutControls = ({ handleLevelAdvance }: ControlProps) => {
+  return (
+    <>
+      <div className="grow" />
+      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
+        Checkout
+      </button>
+    </>
+  )
+}
