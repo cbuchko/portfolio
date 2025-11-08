@@ -130,7 +130,10 @@ export const SelfCheckoutContent = ({ validateAdvance, cancelAdvance }: ContentP
   const isAnyError = isUnexpectedItemError || isUnbaggedItemError || isAgeVerificationError
   return (
     <>
-      <h3>You recently shopped at Walgreens, please complete the Self Checkout.</h3>
+      <h3>
+        Our records show you frequently shop at Walgreens. Please demonstrate how to use a
+        Self-Checkout.
+      </h3>
       <div className="flex gap-10 mt-8">
         <DropArea
           title="Shopping Cart"

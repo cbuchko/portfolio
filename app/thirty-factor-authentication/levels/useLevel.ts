@@ -125,7 +125,6 @@ export const useLevels = () => {
         ...baseProps,
         content: SelfCheckoutContent,
         controls: SelfCheckoutControls,
-        requiresLoad: true,
       }
     }
     default:
