@@ -5,14 +5,7 @@
   cursor: pointer;
   transition: all 0.2s ease-out;
   background-color: white;
-  max-width: 150px;
   max-height: 35px;
-  overflow-y: auto;
-  -ms-overflow-style: none;
-}
-
-.auth-button::-webkit-scrollbar {
-  display: none;
 }
 
 .auth-button:hover {
