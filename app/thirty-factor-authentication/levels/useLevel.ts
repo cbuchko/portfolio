@@ -14,6 +14,7 @@ import { AppCodeContent, AppCodeControls } from './AppCode'
 import { IMDBContent, IMDBControls } from './IMDB'
 import { BirdCallContent, BirdCallControls } from './BirdCalls'
 import { SelfCheckoutContent, SelfCheckoutControls } from './SelfCheckout'
+import { ParlorRoomContent } from './ParlorRoom'
 
 //AAAA@@may00
 export const useLevels = () => {
@@ -115,12 +116,18 @@ export const useLevels = () => {
     case 13: {
       return {
         ...baseProps,
+        content: ParlorRoomContent,
+      }
+    }
+    case 14: {
+      return {
+        ...baseProps,
         content: BirdCallContent,
         controls: BirdCallControls,
         requiresLoad: true,
       }
     }
-    case 14: {
+    case 15: {
       return {
         ...baseProps,
         content: SelfCheckoutContent,

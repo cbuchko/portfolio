@@ -10,6 +10,6 @@ export type ContentProps = {
   playerId: PlayerIds
   validateAdvance: () => void
   cancelAdvance: () => void
-  handleLevelAdvance: () => void
+  handleLevelAdvance: (skipVerify?: boolean) => void
   setIsLoading: (loading: boolean) => void
 }

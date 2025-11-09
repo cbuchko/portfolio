@@ -9,10 +9,10 @@ type AuthContainerProps = {
   playerId: PlayerIds
   level: number
   requiresLoad: boolean
-  handleLevelAdvance: () => void
+  handleLevelAdvance: (skipVerify?: boolean) => void
   setIsGameOver: (value: boolean) => void
   Content: (props: ContentProps) => JSX.Element
-  Controls: (props: ControlProps) => JSX.Element
+  Controls?: (props: ControlProps) => JSX.Element
 }
 
 export const AuthContainer = ({
@@ -85,16 +85,18 @@ export const AuthContainer = ({
               setIsLoading={setIsLoading}
             />
           </div>
-          <div
-            id="auth-controls"
-            className="px-4 py-3 border-t flex flex-wrap w-full justify-between gap-4 bg-gray-50 rounded-b-sm"
-          >
-            <Controls
-              handleLevelAdvance={onAdvance}
-              handleGameOver={() => setIsGameOver(true)}
-              validateAdvance={validateAdvance}
-            />
-          </div>
+          {Controls && (
+            <div
+              id="auth-controls"
+              className="px-4 py-3 border-t flex flex-wrap w-full justify-between gap-4 bg-gray-50 rounded-b-sm"
+            >
+              <Controls
+                handleLevelAdvance={onAdvance}
+                handleGameOver={() => setIsGameOver(true)}
+                validateAdvance={validateAdvance}
+              />
+            </div>
+          )}
         </div>
       </div>
     </>
