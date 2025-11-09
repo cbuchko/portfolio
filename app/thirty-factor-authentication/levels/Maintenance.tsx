@@ -31,11 +31,12 @@ export const MaintenanceContent = ({ handleLevelAdvance }: ContentProps) => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
       removeEventListener('mousemove', mouseMoveEvent)
     }
-  }, [])
+  }, [handleLevelAdvance])
+
   return (
     <>
-      <h3>Sorry, the Authentication service is currently under maintenance.</h3>
-      <h3>Please don't do anything while we resolve the problem. </h3>
+      <h3>{`Sorry, the Authentication service is currently under maintenance.`}</h3>
+      <h3>{`Please don't do anything while we resolve the problem.`}</h3>
       <div className="flex items-center justify-between mt-8">
         <Image
           src="/thirty-factor-authentication/maintenance.webp"
