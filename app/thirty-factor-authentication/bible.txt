@@ -4,8 +4,8 @@ Level Ideas:
 Authenticate through third party?
 Elevator music level/system maintenance/"dont touch anything"
 Odd One Out
-Self-Checkout Ragebait
 Troll someone on twitter?
+Dexterity   
 
 GREAT IDEAS:
 3 Gods Type riddles/Parlor room type puzzles
@@ -18,3 +18,9 @@ Surface time taken and mistake tally at end screen
 Reset button 
 Link back to portfolio 
 Game name in tab
+
+
+SSO Ideas:
+chess.com
+youtube
+NYT

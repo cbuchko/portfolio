@@ -117,6 +117,8 @@ export const useLevels = () => {
       return {
         ...baseProps,
         content: ParlorRoomContent,
+        controls: undefined,
+        requiesLoad: true,
       }
     }
     case 14: {

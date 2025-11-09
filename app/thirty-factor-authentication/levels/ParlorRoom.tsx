@@ -13,9 +13,7 @@ export const ParlorRoomContent = ({ handleLevelAdvance, setIsLoading }: ContentP
     setIsLoading(false)
   }, [setIsLoading])
 
-  if (!puzzleIndex) return
-  const puzzle = Statements[puzzleIndex]
-
+  const puzzle = Statements[puzzleIndex || 0]
   const onCorrectSelect = (type: 'blue' | 'black' | 'red') => {
     const isSuccess = type === puzzle.solution
     handleLevelAdvance(isSuccess)

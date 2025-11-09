@@ -83,9 +83,12 @@ const MovieThumbnail = ({
       alt={media.id}
       height={'200'}
       width={'150'}
-      className={classNames('cursor-pointer transition-transform duration-500', {
-        'outline-6 outline-yellow-300 rounded-md scale-75 shadow-lg': isSelected,
-      })}
+      className={classNames(
+        'h-[200px] w-[150px] cursor-pointer transition-transform duration-500',
+        {
+          'outline-6 outline-yellow-300 rounded-md scale-75 shadow-lg': isSelected,
+        }
+      )}
       onClick={handleSelect}
     />
   )
