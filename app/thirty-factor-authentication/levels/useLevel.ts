@@ -16,6 +16,7 @@ import { BirdCallContent, BirdCallControls } from './BirdCalls'
 import { SelfCheckoutContent, SelfCheckoutControls } from './SelfCheckout'
 import { ParlorRoomContent } from './ParlorRoom'
 import { MaintenanceContent, MaintenanceControls } from './Maintenance'
+import { QuotesContent, QuotesControl } from './Quotes'
 
 //AAAA@@may00
 export const useLevels = () => {
@@ -142,6 +143,13 @@ export const useLevels = () => {
         ...baseProps,
         content: MaintenanceContent,
         controls: MaintenanceControls,
+      }
+    }
+    case 17: {
+      return {
+        ...baseProps,
+        content: QuotesContent,
+        controls: QuotesControl,
       }
     }
     default:

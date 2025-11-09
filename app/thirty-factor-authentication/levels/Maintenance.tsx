@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import Image from 'next/image'
 
-const levelDuration = 1000 * 30
+const levelDuration = 1000 * 45
 export const MaintenanceContent = ({ handleLevelAdvance }: ContentProps) => {
   const timeoutRef = useRef<NodeJS.Timeout>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -75,13 +75,13 @@ export const MaintenanceControls = ({ handleLevelAdvance }: ControlProps) => {
   })
   return (
     <>
-      <div className="grow" />
-      {timeElapsed > 45 && (
+      {timeElapsed < 46 && <div className="grow" />}
+      {timeElapsed > 46 && (
         <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
           Dude just relax
         </button>
       )}
-      {timeElapsed > 25 && (
+      {timeElapsed > 35 && (
         <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
           Beat Game
         </button>
