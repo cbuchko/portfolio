@@ -6,12 +6,7 @@ import Image from 'next/image'
 
 const palette = ['#F08787', '#FFC7A7', '#FEE2AD', '#F8FAB4']
 
-export const QuotesContent = ({
-  playerId,
-  validateAdvance,
-  cancelAdvance,
-  handleLevelAdvance,
-}: ContentProps) => {
+export const QuotesContent = ({ playerId, validateAdvance, cancelAdvance }: ContentProps) => {
   const [selectedQuotes, setSelectedQuotes] = useState<{ id: string; isValid: boolean }[]>([])
 
   const handleSelect = (id: string, isValid: boolean) => {
@@ -34,12 +29,12 @@ export const QuotesContent = ({
     } else {
       cancelAdvance()
     }
-  }, [selectedQuotes])
+  }, [selectedQuotes, cancelAdvance, validateAdvance, playerId])
 
   const quotes = useMemo(() => {
     const quotes = PlayerInformation[playerId].quotes
     return quotes.sort((a, b) => a.quote.length - b.quote.length)
-  }, [])
+  }, [playerId])
 
   return (
     <>
@@ -65,7 +60,7 @@ export const QuotesContent = ({
                 alt="checkmark"
                 className={classNames('absolute -top-2 -left-2', { 'opacity-0': !isSelected })}
               />
-              <label className="cursor-pointer py-1 text-sm">"{quote.quote}"</label>
+              <label className="cursor-pointer py-1 text-sm">{`"${quote.quote}"`}</label>
             </div>
           )
         })}
