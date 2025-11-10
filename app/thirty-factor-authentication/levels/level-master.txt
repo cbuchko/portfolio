@@ -1,0 +1,88 @@
+Tutorial
+Legal name
+SMS code
+Zodiac
+Create Password Part 1
+Birthplace
+Post-it
+Biometric
+Tax Return
+Create Password Part 2
+Auth App
+IMDB
+Parlor Room
+Bird Calls
+Self Checkout
+Maintenance
+Quotes
+
+GOALS:
+At least 10 Celebrity Trivia Level (1/3 of the game)
+Front half mostly traditional, backhalf mostly imaginative
+Pure Ragebait is scattered throughout
+
+AUTHENTIC AUTH:
+Legal name
+SMS code
+Zodiac
+Birthplace
+Post-it
+Biometric
+Auth App
+
+CELEBRITY TRIVIA:
+Legal name
+Zodiac
+Birthplace
+IMDB
+Quotes
+
+PURE RAGEBAIT:
+Post-it
+Biometric
+Tax Return
+Auth App
+Self Checkout
+Maintenance
+
+IMAGINATIVE:
+Birthplace
+Post-it
+Tax Return
+Self Checkout
+
+TRADITIONAL:
+Legal name
+Create Password Part 1
+Create Password Part 2
+IMDB
+Parlor Room
+Bird Calls
+Quotes
+
+GAME HOMAGES:
+Parlor Room - Blue Prince
+Papers Please
+
+Input Styles:
+    Tutorial
+    Text:
+        Legal name
+        SMS code
+        Create Password Part 1
+        Post-it
+        Tax Return
+        Create Password Part 2
+        Auth App
+    Grid Select: 
+        IMDB
+        Bird Calls
+        Quotes
+        Parlor Room
+    Dropdown Select:
+        Zodiac
+    Completely Unique:
+        Birthplace - Map
+        Biometric - Scanner
+        Self Checkout - Scan items
+        Maintenance - Waiting

@@ -17,6 +17,7 @@ import { SelfCheckoutContent, SelfCheckoutControls } from './SelfCheckout'
 import { ParlorRoomContent } from './ParlorRoom'
 import { MaintenanceContent, MaintenanceControls } from './Maintenance'
 import { QuotesContent, QuotesControl } from './Quotes'
+import { PapersPleaseContent, PapersPleaseControls } from './PapersPlease'
 
 //AAAA@@may00
 export const useLevels = () => {
@@ -150,6 +151,13 @@ export const useLevels = () => {
         ...baseProps,
         content: QuotesContent,
         controls: QuotesControl,
+      }
+    }
+    case 18: {
+      return {
+        ...baseProps,
+        content: PapersPleaseContent,
+        controls: PapersPleaseControls,
       }
     }
     default:

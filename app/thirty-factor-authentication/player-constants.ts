@@ -1,6 +1,5 @@
 export enum PlayerIds {
   Biden,
-  Mock,
 }
 
 export type Player = {
@@ -16,6 +15,17 @@ export type Player = {
   imdb: string[]
   quotes: { quote: string; isValid: boolean }[]
   totalValidQuotes: number
+  license: {
+    issued: string
+    expires: string
+    dob: string
+    height: string
+    weight: string
+    eyes: string
+    hair: string
+    children: string
+  }
+  portrait: string
 }
 
 export const PlayerInformation: Record<PlayerIds, Player> = {
@@ -67,19 +77,16 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
         isValid: false,
       },
     ],
-  },
-  [PlayerIds.Mock]: {
-    name: 'Connor Buchko',
-    fullName: 'Connor Andrew Buchko',
-    birthCity: 'winnipeg',
-    zodiac: 'leo-leo-pisces',
-    taxReturn: {
-      lastName: 'Buchko',
-      firstName: 'Connor A',
-      dob: '1999/07/31',
+    license: {
+      issued: '2018-Jun-16',
+      expires: '2027-Jun-16',
+      dob: '1942-Nov-20',
+      height: '1.83 m',
+      weight: '81 kg',
+      eyes: 'BLU',
+      hair: 'GRA',
+      children: '4',
     },
-    imdb: [],
-    quotes: [],
-    totalValidQuotes: 0,
+    portrait: 'joe.avif',
   },
 }

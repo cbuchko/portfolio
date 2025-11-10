@@ -2,14 +2,16 @@ Level Ideas:
 "What highschool did you go to" type stuff
 "Lights Out" find the button
 Authenticate through third party?
-Elevator music level/system maintenance/"dont touch anything"
 Odd One Out
 Troll someone on twitter?
 Dexterity   
 Color memory test
+NPC Streamer / Donate to NPC Streamer
+Undertale
 
 GREAT IDEAS:
 Really long voice call you have to listen to with verbal code at the end
+PAPERS PLEASE STYLE ID CHECKER
 
 
 OTHER IDEAS:
@@ -24,3 +26,7 @@ SSO Ideas:
 chess.com
 youtube
 NYT
+
+TOO TOUGH:
+signature
+arcade cabinet
