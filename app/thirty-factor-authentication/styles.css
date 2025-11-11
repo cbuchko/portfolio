@@ -131,3 +131,8 @@
 .depth-container:hover {
   box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.3);
 }
+
+.id-inspection:hover {
+  outline: black;
+  border-radius: 8px;
+}
