@@ -73,7 +73,7 @@ const FishTank = ({ maxFish }: { maxFish: number }) => {
     if (maxFish == fishCount && intervalRef.current) {
       clearTimeout(intervalRef.current)
     }
-  }, [fishCount])
+  }, [fishCount, maxFish])
 
   return Array.from({ length: fishCount }).map((_, idx) => <Fish key={idx} />)
 }
@@ -133,14 +133,13 @@ const Fish = () => {
 
 const getInitialPosition = () => {
   let x: number
-  let y: number
   const isLeft = Math.random() > 0.5
   if (isLeft) {
     x = -50
   } else {
     x = window.innerWidth
   }
-  y = Math.random() * window.innerHeight
+  const y = Math.random() * window.innerHeight
   return { initialPosition: { x, y }, isLeft }
 }
 
