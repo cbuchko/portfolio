@@ -17,7 +17,7 @@ import { SelfCheckoutContent, SelfCheckoutControls } from './SelfCheckout'
 import { ParlorRoomContent } from './ParlorRoom'
 import { MaintenanceContent, MaintenanceControls } from './Maintenance'
 import { QuotesContent, QuotesControl } from './Quotes'
-import { PapersPleaseContent, PapersPleaseControls } from './PapersPlease'
+import { PapersPleaseContent } from './PapersPlease'
 
 //AAAA@@may00
 export const useLevels = () => {

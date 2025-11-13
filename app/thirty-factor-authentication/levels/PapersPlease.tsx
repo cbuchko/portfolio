@@ -175,7 +175,7 @@ const DriversLicense = ({
         <h5 className="text-2xl license-title uppercase">
           {PlayerInformation[playerId].license.location}
         </h5>
-        <h5 className="text-xs font-bold">DRIVER'S LICENCE</h5>
+        <h5 className="text-xs font-bold">{"DRIVER'S LICENCE"}</h5>
       </div>
       <div className="flex rounded-md bg w-max relative">
         <div className="flex bg-white/40 p-1 rounded-md bg w-max min-w-[290px]">
@@ -474,7 +474,7 @@ const generateDiscrepancies = (
 
 //generate the info that changes everytime
 const getDynamicInfo = (discrepancyIds?: Set<string>) => {
-  let licenseNumber = makeAuthCode(9)
+  const licenseNumber = makeAuthCode(9)
   let permitNumber = makeAuthCode(9)
 
   if (!discrepancyIds?.has('number')) {
