@@ -1,4 +1,4 @@
-import { MouseEvent as ReactMouseEvent, Ref, RefObject, useEffect, useState } from 'react'
+import { MouseEvent as ReactMouseEvent, RefObject, useEffect, useState } from 'react'
 import { clampPositionsToScreen } from './utils'
 
 export const useElementDrag = (

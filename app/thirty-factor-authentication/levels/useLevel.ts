@@ -157,7 +157,7 @@ export const useLevels = () => {
       return {
         ...baseProps,
         content: PapersPleaseContent,
-        controls: PapersPleaseControls,
+        controls: undefined,
       }
     }
     default:

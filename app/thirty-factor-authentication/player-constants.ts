@@ -16,14 +16,30 @@ export type Player = {
   quotes: { quote: string; isValid: boolean }[]
   totalValidQuotes: number
   license: {
-    issued: string
-    expires: string
+    location: string
+    headshot: string
+    signature: string
+    name: string
     dob: string
     height: string
     weight: string
     eyes: string
     hair: string
     children: string
+    coat: string
+  }
+  fakeLicense: {
+    location: string
+    headshot: string
+    signature: string
+    name: string
+    dob: string
+    height: string
+    weight: string
+    eyes: string
+    hair: string
+    children: string
+    coat: string
   }
   portrait: string
 }
@@ -78,14 +94,30 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       },
     ],
     license: {
-      issued: '2018-Jun-16',
-      expires: '2027-Jun-16',
+      location: 'Pennsylvania',
+      headshot: 'joe.avif',
+      signature: 'biden.png',
+      name: 'Joseph Robinette Biden Jr.',
       dob: '1942-Nov-20',
       height: '1.83 m',
       weight: '81 kg',
       eyes: 'BLU',
       hair: 'GRA',
       children: '4',
+      coat: 'penn.svg',
+    },
+    fakeLicense: {
+      location: 'Kentucky',
+      headshot: 'bush.webp',
+      signature: 'bush.svg',
+      name: 'Joseph Robin Biden Jr.',
+      dob: '1952-Nov-20',
+      height: '1.73 m',
+      weight: '71 kg',
+      eyes: 'BRO',
+      hair: 'BLO',
+      children: '2',
+      coat: 'maryland.svg',
     },
     portrait: 'joe.avif',
   },
