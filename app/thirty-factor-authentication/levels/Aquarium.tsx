@@ -1,0 +1,156 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { ContentProps, ControlProps } from './types'
+import { clampPositionsToScreen } from '../utils'
+import Image from 'next/image'
+import classNames from 'classnames'
+
+const generateMaxFish = () => Math.floor(Math.random() * (55 - 40) + 40)
+export const AquariumContent = ({
+  validateAdvance,
+  cancelAdvance,
+  handleLevelAdvance,
+}: ContentProps) => {
+  const [maxFish, setMaxFish] = useState(generateMaxFish())
+  const [numberInput, setNumberInput] = useState('')
+
+  const handleInputChange = (input: string) => {
+    setNumberInput(input)
+    if (maxFish === parseInt(input)) {
+      validateAdvance()
+    } else {
+      cancelAdvance()
+    }
+  }
+
+  return (
+    <>
+      <h3>Oh no! Our aquarium broke and the fish are loose!</h3>
+      <h3>Please count how many fish swim by!</h3>
+      <div className="w-full flex justify-end">
+        <button
+          className="underline text-sm cursor-pointer"
+          onClick={() => setMaxFish(generateMaxFish())}
+        >
+          Restart
+        </button>
+      </div>
+      <input
+        className="border w-full rounded-md mt-1 px-2 py-1"
+        placeholder="Enter number of fish..."
+        value={numberInput}
+        onChange={(e) => handleInputChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.code === 'Enter') handleLevelAdvance()
+        }}
+      />
+      {typeof window !== 'undefined' && <FishTank maxFish={maxFish} />}
+      <div className="fixed top-0 left-0 h-screen w-screen bg-blue-500/30 pointer-events-none" />
+    </>
+  )
+}
+
+const FishTank = ({ maxFish }: { maxFish: number }) => {
+  const [fishCount, setFishCount] = useState(0)
+  const intervalRef = useRef<NodeJS.Timeout>(null)
+
+  //resets the game
+  useEffect(() => {
+    setFishCount(0)
+    if (intervalRef.current) clearInterval(intervalRef.current)
+  }, [maxFish])
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setFishCount((count) => count + 1)
+    }, 500)
+
+    return () => {
+      if (intervalRef.current) clearTimeout(intervalRef.current)
+    }
+  }, [maxFish])
+
+  useEffect(() => {
+    if (maxFish == fishCount && intervalRef.current) {
+      clearTimeout(intervalRef.current)
+    }
+  }, [fishCount])
+
+  return Array.from({ length: fishCount }).map((_, idx) => <Fish key={idx} />)
+}
+
+const FishOptions = [
+  'Anchovy',
+  'Angelfish',
+  'Bass',
+  'Catfish',
+  'Clownfish',
+  'Pufferfish',
+  'Surgeonfish',
+]
+const Fish = () => {
+  const { initialPosition, isLeft } = useMemo(() => getInitialPosition(), [])
+  const [position, setPosition] = useState<{ x: number; y: number }>(initialPosition)
+  const fishIndex = useMemo(() => Math.floor(Math.random() * FishOptions.length), [])
+
+  useEffect(() => {
+    if (isLeft === undefined) return
+    const interval = setInterval(() => {
+      const oldX = position.x
+      const oldY = position.y
+
+      const upOrDown = Math.random()
+
+      let newX
+      let newY
+      const moveMagnitude = Math.random() * (400 - 100) + 100
+      if (!isLeft) {
+        newX = oldX - moveMagnitude
+      } else newX = oldX + moveMagnitude
+
+      if (upOrDown < 0.5) {
+        newY = oldY - moveMagnitude
+      } else newY = oldY + moveMagnitude
+      const clamped = clampPositionsToScreen(newX, newY, 20, 20)
+      setPosition({ x: newX, y: clamped.newY })
+    }, 100)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [isLeft, position])
+
+  return (
+    <Image
+      src={`/thirty-factor-authentication/fish/${FishOptions[fishIndex]}.png`}
+      alt={FishOptions[fishIndex]}
+      height={48}
+      width={48}
+      className={classNames('fixed transition-all duration-1000', { 'rotate-y-180': !isLeft })}
+      style={{ top: position.y, left: position.x }}
+    />
+  )
+}
+
+const getInitialPosition = () => {
+  let x: number
+  let y: number
+  const isLeft = Math.random() > 0.5
+  if (isLeft) {
+    x = -50
+  } else {
+    x = window.innerWidth
+  }
+  y = Math.random() * window.innerHeight
+  return { initialPosition: { x, y }, isLeft }
+}
+
+export const AquariumControls = ({ handleLevelAdvance }: ControlProps) => {
+  return (
+    <>
+      <div className="grow" />
+      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
+        Submit
+      </button>
+    </>
+  )
+}

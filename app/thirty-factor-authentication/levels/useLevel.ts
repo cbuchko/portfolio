@@ -18,6 +18,7 @@ import { ParlorRoomContent } from './ParlorRoom'
 import { MaintenanceContent, MaintenanceControls } from './Maintenance'
 import { QuotesContent, QuotesControl } from './Quotes'
 import { PapersPleaseContent } from './PapersPlease'
+import { AquariumContent, AquariumControls } from './Aquarium'
 
 //AAAA@@may00
 export const useLevels = () => {
@@ -158,6 +159,13 @@ export const useLevels = () => {
         ...baseProps,
         content: PapersPleaseContent,
         controls: undefined,
+      }
+    }
+    case 19: {
+      return {
+        ...baseProps,
+        content: AquariumContent,
+        controls: AquariumControls,
       }
     }
     default:

@@ -9,7 +9,7 @@ export const useElementDrag = (
 
   useEffect(() => {
     setPosition(initialPosition)
-  }, [initialPosition])
+  }, [])
 
   const handleDrag = (event: ReactMouseEvent<HTMLDivElement>) => {
     const element = ref.current

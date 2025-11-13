@@ -15,6 +15,8 @@ Bird Calls
 Self Checkout
 Maintenance
 Quotes
+Papers Please
+Aquarium
 
 GOALS:
 At least 10 Celebrity Trivia Level (1/3 of the game)
@@ -36,6 +38,7 @@ Zodiac
 Birthplace
 IMDB
 Quotes
+Papers Please
 
 PURE RAGEBAIT:
 Post-it
@@ -50,6 +53,8 @@ Birthplace
 Post-it
 Tax Return
 Self Checkout
+Papers Please
+Aquarium
 
 TRADITIONAL:
 Legal name
@@ -74,6 +79,7 @@ Input Styles:
         Tax Return
         Create Password Part 2
         Auth App
+        Aquarium
     Grid Select: 
         IMDB
         Bird Calls
@@ -86,3 +92,4 @@ Input Styles:
         Biometric - Scanner
         Self Checkout - Scan items
         Maintenance - Waiting
+        Papers Please
