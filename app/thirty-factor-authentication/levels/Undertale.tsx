@@ -1,17 +1,12 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 
 import { useState } from 'react'
-import { ContentProps, ControlProps } from './types'
+import { ContentProps } from './types'
 import { PlayerInformation } from '../player-constants'
 import Image from 'next/image'
 
 const maxHealth = 60
-export const UndertaleContent = ({
-  playerId,
-  validateAdvance,
-  cancelAdvance,
-  handleLevelAdvance,
-}: ContentProps) => {
+export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
   const characterName = PlayerInformation[playerId].name
   const [health, setHealth] = useState(maxHealth)
 
@@ -95,7 +90,7 @@ function BulletHell({
   const lastTime = useRef<number>(0)
   const [bulletTypes, setBulletTypes] = useState<{ standard: boolean }>({ standard: false })
 
-  const resetGame = () => {
+  const resetGame = useCallback(() => {
     bulletsRef.current = []
     keys.current = {}
     lastTime.current = 0
@@ -105,33 +100,13 @@ function BulletHell({
     setGameStarted(false)
     setBulletTypes({ standard: false })
     handleLevelAdvance()
-  }
+  }, [handleLevelAdvance, height, setHealth, width])
 
   useEffect(() => {
     if (health <= 0) resetGame()
-  }, [health])
+  }, [health, resetGame])
 
-  //controls when to start spawning certain bullet types after time thresholds
-  useEffect(() => {
-    if (!gameStarted) return
-    const timeout = setTimeout(
-      () => setBulletTypes((types) => ({ ...types, standard: true })),
-      6400
-    )
-    return () => clearTimeout(timeout)
-  }, [gameStarted])
-
-  // Spawn bullets periodically
-  useEffect(() => {
-    if (!gameStarted || !bulletTypes.standard) return
-    const spawnInterval = setInterval(() => {
-      spawnBullet()
-    }, 700)
-
-    return () => clearInterval(spawnInterval)
-  }, [width, height, gameStarted, bulletTypes])
-
-  const spawnBullet = () => {
+  const spawnBullet = useCallback(() => {
     const side = Math.floor(Math.random() * 4) // 0=top, 1=right, 2=bottom, 3=left
 
     let x = 0
@@ -171,7 +146,27 @@ function BulletHell({
       vx: (dx / len) * speed,
       vy: (dy / len) * speed,
     })
-  }
+  }, [height, width])
+
+  //controls when to start spawning certain bullet types after time thresholds
+  useEffect(() => {
+    if (!gameStarted) return
+    const timeout = setTimeout(
+      () => setBulletTypes((types) => ({ ...types, standard: true })),
+      6400
+    )
+    return () => clearTimeout(timeout)
+  }, [gameStarted])
+
+  // Spawn bullets periodically
+  useEffect(() => {
+    if (!gameStarted || !bulletTypes.standard) return
+    const spawnInterval = setInterval(() => {
+      spawnBullet()
+    }, 700)
+
+    return () => clearInterval(spawnInterval)
+  }, [width, height, gameStarted, bulletTypes, spawnBullet])
 
   // Keyboard input
   useEffect(() => {
@@ -203,7 +198,7 @@ function BulletHell({
       ctx.clearRect(0, 0, width, height)
 
       // Update SOUL position
-      let soul = soulRef.current
+      const soul = soulRef.current
       if (keys.current['w'] || keys.current['W']) soul.y -= SOUL_SPEED * delta
       if (keys.current['s'] || keys.current['S']) soul.y += SOUL_SPEED * delta
       if (keys.current['a'] || keys.current['A']) soul.x -= SOUL_SPEED * delta
