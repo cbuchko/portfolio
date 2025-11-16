@@ -51,21 +51,23 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
   const [code, setCode] = useState('')
 
   const [timer, setTimer] = useState(maxTimeInSeconds)
-  const [gameReset, setGameReset] = useState(0)
+  const [isGameOver, setIsGameOver] = useState(false)
 
   const timerRef = useRef<NodeJS.Timeout>(null)
+  const audioRef = useRef<HTMLAudioElement>(null)
 
   const [instructionStepIndex, setInstructionStepIndex] = useState(0)
   const [instructions, formattedInstructions] = useMemo(() => {
     const instructions = generateInstructions()
     const formattedInstructions = formatInstructions(instructions)
     return [instructions, formattedInstructions]
-  }, [gameReset])
+  }, [isGameOver])
 
   const { message, handleResendCode } = useMessageSpam(messages, formattedInstructions, 4000)
 
   //countdown
   useEffect(() => {
+    if (isGameOver) return
     timerRef.current = setInterval(() => {
       setTimer((time) => time - 1)
     }, 1000)
@@ -73,32 +75,44 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
     }
-  }, [])
+  }, [isGameOver])
 
   const resetGame = useCallback(() => {
     setTimer(maxTimeInSeconds)
     setWires(Wires)
     setCode('')
-    setGameReset((reset) => reset + 1)
+    setIsGameOver(false)
+    if (!audioRef.current) return
+    audioRef.current.currentTime = 0
+    audioRef.current.play()
   }, [])
 
-  useEffect(() => {
-    if (timer <= 0) {
-      handleLevelAdvance()
+  const handleExplosion = useCallback(() => {
+    const audio = new Audio('/thirty-factor-authentication/sounds/explosion.mp3')
+    audio.play()
+    audioRef.current?.pause()
+    if (timerRef.current) clearTimeout(timerRef.current)
+    setIsGameOver(true)
+    handleLevelAdvance()
+    setTimeout(() => {
       resetGame()
+    }, 4000)
+  }, [handleLevelAdvance])
+
+  useEffect(() => {
+    if (timer === 0) {
+      handleExplosion()
     }
-  }, [timer, resetGame])
+  }, [timer, resetGame, handleExplosion])
 
   const handleDefusalStep = (wireId?: WireIds, number?: number) => {
     const expectedInstruction = instructions[instructionStepIndex]
     if (expectedInstruction.wireId !== wireId) {
-      handleLevelAdvance()
-      resetGame()
+      handleExplosion()
       return
     }
     if (expectedInstruction.number !== number) {
-      handleLevelAdvance()
-      resetGame()
+      handleExplosion()
       return
     }
     setInstructionStepIndex((index) => (index = index + 1))
@@ -152,10 +166,9 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
             </div>
             <div className="w-full h-max bg-gray-200 rounded-br-md rounded-tl-md">
               <div className="bg-black text-red-500 mono text-4xl m-4 p-1 text-center">
-                {timer === 60
-                  ? '1:00'
-                  : '0:' +
-                    (timer.toString().length === 1 ? '0' + timer.toString() : timer.toString())}
+                {timer < 0
+                  ? '0:00'
+                  : '0:' + (timer.toString().length === 1 ? '0' + timer : timer.toString())}
               </div>
             </div>
           </div>
@@ -171,6 +184,13 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
           {message}
         </div>
       )}
+      <audio
+        src="/thirty-factor-authentication/sounds/bomb-defusal.m4a"
+        autoPlay
+        loop
+        ref={audioRef}
+      />
+      {isGameOver && <div className="fixed top-0 left-0 h-screen w-screen bg-red-500/50 " />}
     </>
   )
 }

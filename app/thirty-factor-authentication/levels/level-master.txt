@@ -18,6 +18,7 @@ Quotes
 Papers Please
 Aquarium
 Undertale
+Bomb Defusal
 
 GOALS:
 At least 10 Celebrity Trivia Level (1/3 of the game)
@@ -57,6 +58,7 @@ Self Checkout
 Papers Please
 Aquarium
 Undertale
+Bomb Defusal
 
 TRADITIONAL:
 Legal name
@@ -97,3 +99,4 @@ Input Styles:
         Maintenance - Waiting
         Papers Please
         Undertale
+        Bomb Defusal
