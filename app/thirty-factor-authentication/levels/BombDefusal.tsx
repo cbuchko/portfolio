@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
-import { makeCode } from '../utils'
 import classNames from 'classnames'
 import { useMessageSpam } from '../useMessageSpam'
 
@@ -19,7 +18,15 @@ type WireType = {
   isCut?: boolean
 }
 
-const Wires: Record<string, WireType> = {
+enum WireIds {
+  red = 'red',
+  yellow = 'yellow',
+  white = 'white',
+  blue = 'blue',
+  purple = 'purple',
+}
+
+const Wires: Record<WireIds, WireType> = {
   red: { color: 'bg-red-500' },
   yellow: { color: 'bg-yellow-300' },
   white: { color: 'bg-white' },
@@ -27,48 +34,92 @@ const Wires: Record<string, WireType> = {
   purple: { color: 'bg-purple-500' },
 }
 
+type Instruction = {
+  wireId?: WireIds
+  number?: number
+  timeSpecification?: number
+}
+
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-const maxTimeInSeconds = 60
-export const BombDefusalContent = ({
-  validateAdvance,
-  cancelAdvance,
-  handleLevelAdvance,
-}: ContentProps) => {
+
+//five wires and four numpad inputs
+const instructionCount = 9
+
+const maxTimeInSeconds = 30
+export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: ContentProps) => {
   const [wires, setWires] = useState(Wires)
   const [code, setCode] = useState('')
-  const codeRef = useRef(makeCode(12))
 
   const [timer, setTimer] = useState(maxTimeInSeconds)
+  const [gameReset, setGameReset] = useState(0)
 
-  const { message, handleResendCode } = useMessageSpam(
-    messages,
-    `Your authentication code is: ${codeRef.current}\n hello`
-  )
+  const timerRef = useRef<NodeJS.Timeout>(null)
 
+  const [instructionStepIndex, setInstructionStepIndex] = useState(0)
+  const [instructions, formattedInstructions] = useMemo(() => {
+    const instructions = generateInstructions()
+    const formattedInstructions = formatInstructions(instructions)
+    return [instructions, formattedInstructions]
+  }, [gameReset])
+
+  const { message, handleResendCode } = useMessageSpam(messages, formattedInstructions, 4000)
+
+  //countdown
   useEffect(() => {
-    const interval = setInterval(() => {
+    timerRef.current = setInterval(() => {
       setTimer((time) => time - 1)
     }, 1000)
 
-    return () => clearInterval(interval)
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
+  }, [])
+
+  const resetGame = useCallback(() => {
+    setTimer(maxTimeInSeconds)
+    setWires(Wires)
+    setCode('')
+    setGameReset((reset) => reset + 1)
   }, [])
 
   useEffect(() => {
     if (timer <= 0) {
       handleLevelAdvance()
-      setTimer(maxTimeInSeconds)
-      setWires(Wires)
-      setCode('')
+      resetGame()
     }
-  }, [timer])
+  }, [timer, resetGame])
 
-  const cutWire = (id: string) => {
-    setWires((prevWires) => ({ ...prevWires, [id]: { ...prevWires[id], isCut: true } }))
+  const handleDefusalStep = (wireId?: WireIds, number?: number) => {
+    const expectedInstruction = instructions[instructionStepIndex]
+    if (expectedInstruction.wireId !== wireId) {
+      handleLevelAdvance()
+      resetGame()
+      return
+    }
+    if (expectedInstruction.number !== number) {
+      handleLevelAdvance()
+      resetGame()
+      return
+    }
+    setInstructionStepIndex((index) => (index = index + 1))
+    if (instructionStepIndex >= instructions.length - 1) {
+      validateAdvance()
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
+  }
+
+  const cutWire = (id: WireIds) => {
+    setWires((prevWires) => ({
+      ...prevWires,
+      [id]: { ...prevWires[id], isCut: true },
+    }))
+    handleDefusalStep(id)
   }
 
   const inputCode = (number: number) => {
     if (code.length >= 4) return
     setCode((prevCode) => prevCode + number.toString())
+    handleDefusalStep(undefined, number)
   }
 
   const codeDisplay = code.padStart(4, '0')
@@ -85,7 +136,7 @@ export const BombDefusalContent = ({
         <div className="flex justify-between border rounded-md bg-gray-500 w-[500px] h-[300px] shadow-[inset_0px_0px_80px_rgba(0,0,0,1),_inset_-5px_-5px_5px_rgba(255,255,255,0.7)]">
           <div className="h-full ml-16 flex gap-6">
             {Object.entries(wires).map(([id, wire]) => (
-              <Wire key={id} id={id} wire={wire} cutWire={cutWire} />
+              <Wire key={id} id={id as WireIds} wire={wire} cutWire={cutWire} />
             ))}
           </div>
           <div className="h-full w-max flex flex-col justify-between">
@@ -114,7 +165,7 @@ export const BombDefusalContent = ({
       {message && (
         <div
           key={message}
-          className="absolute -bottom-12 left-0 w-full px-4 py-2 rounded-lg text-white text-message select-none shadow-lg whitespace-pre-line origin-bottom"
+          className="absolute -bottom-3 translate-y-[100%] left-0 w-full px-4 py-2 rounded-lg text-white text-message select-none shadow-lg whitespace-pre-line origin-bottom"
           style={{ backgroundColor: '#32D74B' }}
         >
           {message}
@@ -129,9 +180,9 @@ const Wire = ({
   wire,
   cutWire,
 }: {
-  id: string
+  id: WireIds
   wire: WireType
-  cutWire: (id: string) => void
+  cutWire: (id: WireIds) => void
 }) => {
   const { isCut, color } = wire
   const [isHovering, setIsHovering] = useState(false)
@@ -190,4 +241,45 @@ export const BombDefusalControls = ({ handleLevelAdvance }: ControlProps) => {
       </button>
     </>
   )
+}
+
+//generates the win condition by ordering the different steps (need to cut 5 wires and enter 4 numbers)
+const generateInstructions = (): Instruction[] => {
+  const instructions: Instruction[] = []
+  let wireIds = [WireIds.red, WireIds.blue, WireIds.purple, WireIds.yellow, WireIds.white]
+
+  let numbersAdded = 0
+  for (let i = 0; i < instructionCount; i++) {
+    const isWire = wireIds.length > 0 && Math.random() > 0.5
+    //is wire
+    if (isWire || numbersAdded >= 4) {
+      const wireId = wireIds[Math.floor(Math.random() * wireIds.length)]
+      instructions[i] = { wireId }
+      wireIds = wireIds.filter((id) => id !== wireId)
+      continue
+    }
+    //is number
+    const number = numbers[Math.floor(Math.random() * numbers.length)]
+    instructions[i] = { number }
+    numbersAdded++
+  }
+
+  return instructions
+}
+
+//turn the instructions into a string
+const formatInstructions = (instructions: Instruction[]): string => {
+  let instructionsFormatted = 'Carefully follow these instructions to defuse the bomb: \n\n'
+
+  let instructionNumber = 1
+  for (const instruction of instructions) {
+    if (instruction.wireId) {
+      instructionsFormatted += `${instructionNumber}. Cut the ${instruction.wireId} wire.\n`
+    }
+    if (instruction.number) {
+      instructionsFormatted += `${instructionNumber}. Enter the number ${instruction.number}.\n`
+    }
+    instructionNumber++
+  }
+  return instructionsFormatted
 }

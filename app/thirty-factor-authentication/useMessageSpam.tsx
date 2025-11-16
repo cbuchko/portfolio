@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-export const useMessageSpam = (spamMessages: string[], realMessage: string) => {
+export const useMessageSpam = (spamMessages: string[], realMessage: string, delayInMs = 7000) => {
   const [message, setMessage] = useState<string | null>(null)
 
   const messageIndexRef = useRef(-1)
@@ -25,7 +25,7 @@ export const useMessageSpam = (spamMessages: string[], realMessage: string) => {
       if (messageIndexRef.current >= spamMessages.length - 1) {
         messageIndexRef.current = 1
       } else messageIndexRef.current = messageIndexRef.current + 1
-    }, 7000)
+    }, delayInMs)
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
