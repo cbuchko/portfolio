@@ -1,19 +1,18 @@
 Level Ideas:
-"What highschool did you go to" type stuff
-"Lights Out" find the button
 Authenticate through third party
-Odd One Out
 Troll someone on twitter
-Dexterity   
 Color memory test
-NPC Streamer / Donate to NPC Streamer
-Pick Three Roguelite Slop
-Horse Betting
-Disco Elysium
 Dice Rolling
 Balatro
 Tip Screen
-Yearbook
+Simple Single AuthCode level for level 2, for tutorial reasons
+
+
+MORE SIMPLER IDEAS?
+twists on existing levels
+Message Spam with Abstract Art?
+Biometric run back?
+Map run back?
 
 GREAT IDEAS:
 Really long voice call you have to listen to with verbal code at the end
@@ -26,6 +25,7 @@ Reset button
 Link back to portfolio 
 Game name in tab
 In credits thank Neal, and game homage creators
+Cloudflare
 
 
 SSO Ideas:

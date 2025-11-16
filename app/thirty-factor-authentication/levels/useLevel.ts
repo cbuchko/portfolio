@@ -20,6 +20,7 @@ import { QuotesContent, QuotesControl } from './Quotes'
 import { PapersPleaseContent } from './PapersPlease'
 import { AquariumContent, AquariumControls } from './Aquarium'
 import { UndertaleContent } from './Undertale'
+import { BombDefusalContent, BombDefusalControls } from './BombDefusal'
 
 //AAAA@@may00
 export const useLevels = () => {
@@ -174,6 +175,13 @@ export const useLevels = () => {
         ...baseProps,
         content: UndertaleContent,
         controls: undefined,
+      }
+    }
+    case 21: {
+      return {
+        ...baseProps,
+        content: BombDefusalContent,
+        controls: BombDefusalControls,
       }
     }
     default:

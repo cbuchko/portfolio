@@ -26,7 +26,7 @@ export const FallbackTwoContent = ({
     <>
       <h3>Please confirm your new password.</h3>
       <input
-        className="border w-full rounded-md mt-4 px-2 py-1"
+        className="border w-full rounded-md mt-2 px-2 py-1"
         placeholder="Enter password..."
         value={passInput}
         onChange={(e) => handleInputChange(e.target.value)}
