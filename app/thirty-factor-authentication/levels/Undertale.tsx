@@ -53,12 +53,24 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps)
 
 type Vec2 = { x: number; y: number }
 
+type BulletType = 'standard' | 'spear' | 'laser'
 interface Bullet {
   x: number
   y: number
   radius: number
   vx: number
   vy: number
+  type: BulletType
+}
+
+type Laser = {
+  orientation: 'vertical' | 'horizontal'
+  position: number // x or y depending on orientation
+  width: number // thickness of the laser
+  chargeTime: number // ms before firing
+  fireTime: number // ms duration of the damaging beam
+  createdAt: number // timestamp
+  hasFired: boolean
 }
 
 interface BulletHellProps {
@@ -88,7 +100,12 @@ function BulletHell({
   const soulRef = useRef<Vec2>({ x: width / 2, y: height / 2 })
   const keys = useRef<Record<string, boolean>>({})
   const lastTime = useRef<number>(0)
-  const [bulletTypes, setBulletTypes] = useState<{ standard: boolean }>({ standard: false })
+  const [bulletTypes, setBulletTypes] = useState<Record<BulletType, boolean>>({
+    standard: false,
+    spear: false,
+    laser: false,
+  })
+  const lasersRef = useRef<Laser[]>([])
 
   const resetGame = useCallback(() => {
     bulletsRef.current = []
@@ -98,7 +115,7 @@ function BulletHell({
 
     setHealth(maxHealth)
     setGameStarted(false)
-    setBulletTypes({ standard: false })
+    setBulletTypes({ standard: false, spear: false, laser: false })
     handleLevelAdvance()
   }, [handleLevelAdvance, height, setHealth, width])
 
@@ -106,66 +123,115 @@ function BulletHell({
     if (health <= 0) resetGame()
   }, [health, resetGame])
 
-  const spawnBullet = useCallback(() => {
-    const side = Math.floor(Math.random() * 4) // 0=top, 1=right, 2=bottom, 3=left
+  const spawnBullet = useCallback(
+    (type: BulletType) => {
+      const side = Math.floor(Math.random() * 4) // 0=top, 1=right, 2=bottom, 3=left
 
-    let x = 0
-    let y = 0
+      let x = 0
+      let y = 0
 
-    // Spawn position based on which side it comes from
-    switch (side) {
-      case 0: // top
-        x = Math.random() * width
-        y = -20
-        break
-      case 1: // right
-        x = width + 20
-        y = Math.random() * height
-        break
-      case 2: // bottom
-        x = Math.random() * width
-        y = height + 20
-        break
-      case 3: // left
-        x = -20
-        y = Math.random() * height
-        break
-    }
+      // Spawn position based on which side it comes from
+      switch (side) {
+        case 0: // top
+          x = Math.random() * width
+          y = -20
+          break
+        case 1: // right
+          x = width + 20
+          y = Math.random() * height
+          break
+        case 2: // bottom
+          x = Math.random() * width
+          y = height + 20
+          break
+        case 3: // left
+          x = -20
+          y = Math.random() * height
+          break
+      }
 
-    const speed = 2 // adjust as you want
-    const soul = soulRef.current // SOUL position at spawn time
+      let speed = 2 // adjust as you want
+      if (type === 'spear') speed = 4
+      const soul = soulRef.current // SOUL position at spawn time
 
-    const dx = soul.x - x
-    const dy = soul.y - y
-    const len = Math.sqrt(dx * dx + dy * dy)
+      const dx = soul.x - x
+      const dy = soul.y - y
+      const len = Math.sqrt(dx * dx + dy * dy)
 
-    bulletsRef.current.push({
-      x,
-      y,
-      radius: 6,
-      vx: (dx / len) * speed,
-      vy: (dy / len) * speed,
+      bulletsRef.current.push({
+        x,
+        y,
+        radius: 6,
+        vx: (dx / len) * speed,
+        vy: (dy / len) * speed,
+        type: type,
+      })
+    },
+    [height, width]
+  )
+
+  const spawnLaser = () => {
+    const vertical = Math.random() < 0.5
+    const soul = soulRef.current
+
+    lasersRef.current.push({
+      orientation: vertical ? 'vertical' : 'horizontal',
+      position: vertical ? soul.x : soul.y,
+      width: 30,
+      chargeTime: 1500, // 1.5s warning
+      fireTime: 500, // 0.5s active damage
+      createdAt: performance.now(),
+      hasFired: false,
     })
-  }, [height, width])
+  }
 
   //controls when to start spawning certain bullet types after time thresholds
   useEffect(() => {
     if (!gameStarted) return
-    const timeout = setTimeout(
+    const bulletTimeout = setTimeout(
       () => setBulletTypes((types) => ({ ...types, standard: true })),
-      6400
+      1000 * 6
     )
-    return () => clearTimeout(timeout)
+    const spearsTimeout = setTimeout(
+      () => setBulletTypes((types) => ({ ...types, spear: true })),
+      1000 * 24
+    )
+    const laserTimeout = setTimeout(
+      () => setBulletTypes((types) => ({ ...types, laser: true })),
+      1000 * 60
+    )
+    return () => {
+      clearTimeout(bulletTimeout)
+      clearTimeout(spearsTimeout)
+      clearTimeout(laserTimeout)
+    }
   }, [gameStarted])
 
   // Spawn bullets periodically
   useEffect(() => {
-    if (!gameStarted || !bulletTypes.standard) return
-    const spawnInterval = setInterval(() => {
-      spawnBullet()
-    }, 700)
+    if (!gameStarted) return
+    let standardInterval: NodeJS.Timeout
+    let spearInterval: NodeJS.Timeout
+    let laserInterval: NodeJS.Timeout
 
-    return () => clearInterval(spawnInterval)
+    if (bulletTypes.standard)
+      standardInterval = setInterval(() => {
+        spawnBullet('standard')
+      }, 700)
+    if (bulletTypes.spear)
+      spearInterval = setInterval(() => {
+        spawnBullet('spear')
+      }, 1500)
+    if (bulletTypes.laser)
+      laserInterval = setInterval(() => {
+        spawnLaser()
+      }, 5000)
+
+    return () => {
+      clearInterval(standardInterval)
+      clearInterval(spearInterval)
+      clearInterval(laserInterval)
+    }
   }, [width, height, gameStarted, bulletTypes, spawnBullet])
 
   // Keyboard input
@@ -212,14 +278,72 @@ function BulletHell({
       ctx.fillStyle = '#ff2020'
       ctx.fillRect(soul.x - 6, soul.y - 6, 12, 12)
 
+      const now = performance.now()
+
+      //draw lasers
+      lasersRef.current = lasersRef.current.filter((l) => {
+        const elapsed = now - l.createdAt
+
+        // --- 1. CHARGING PHASE ---
+        if (elapsed < l.chargeTime) {
+          // draw faint warning area
+          ctx.fillStyle = 'rgba(255, 0, 0, 0.25)'
+
+          if (l.orientation === 'vertical') {
+            ctx.fillRect(l.position, 0, l.width, height)
+          } else {
+            ctx.fillRect(0, l.position, width, l.width)
+          }
+
+          return true
+        }
+
+        // --- 2. FIRING PHASE ---
+        if (elapsed < l.chargeTime + l.fireTime) {
+          l.hasFired = true
+
+          // draw strong laser beam
+          ctx.fillStyle = 'rgba(255, 0, 0, 0.9)'
+
+          if (l.orientation === 'vertical') {
+            ctx.fillRect(l.position, 0, l.width, height)
+          } else {
+            ctx.fillRect(0, l.position, width, l.width)
+          }
+
+          const soul = soulRef.current
+          const half = 6 // soul size
+
+          const inside =
+            l.orientation === 'vertical'
+              ? soul.x + half > l.position && soul.x - half < l.position + l.width
+              : soul.y + half > l.position && soul.y - half < l.position + l.width
+
+          if (inside) {
+            onPlayerHit?.()
+          }
+
+          return true
+        }
+
+        return false
+      })
+
       // Update + draw bullets
       bulletsRef.current.forEach((b) => {
         b.x += b.vx * delta
         b.y += b.vy * delta
 
         ctx.beginPath()
-        ctx.fillStyle = 'black'
-        ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2)
+        if (b.type === 'standard') {
+          ctx.fillStyle = 'black'
+          ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2)
+        }
+        if (b.type === 'spear') {
+          ctx.fillStyle = 'blue'
+          ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2)
+        }
+
         ctx.fill()
       })
 

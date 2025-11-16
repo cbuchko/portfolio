@@ -16,7 +16,8 @@ Self Checkout
 Maintenance
 Quotes
 Papers Please
-Aquarium 
+Aquarium
+Undertale
 
 GOALS:
 At least 10 Celebrity Trivia Level (1/3 of the game)
@@ -55,6 +56,7 @@ Tax Return
 Self Checkout
 Papers Please
 Aquarium
+Undertale
 
 TRADITIONAL:
 Legal name
@@ -68,6 +70,7 @@ Quotes
 GAME HOMAGES:
 Parlor Room - Blue Prince
 Papers Please
+Undertale
 
 Input Styles:
     Tutorial
@@ -93,3 +96,4 @@ Input Styles:
         Self Checkout - Scan items
         Maintenance - Waiting
         Papers Please
+        Undertale
