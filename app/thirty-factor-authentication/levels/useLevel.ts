@@ -78,5 +78,5 @@ export const useLevels = () => {
       controls: OneControls,
     }
   }
-  return { ...levelDef, ...baseProps }
+  return { ...baseProps, ...levelDef }
 }
