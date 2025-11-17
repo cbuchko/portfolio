@@ -60,7 +60,6 @@ export const ZodiacContent = ({ playerId, validateAdvance, cancelAdvance }: Cont
           activeId={activeDropdownId}
           setActiveId={setActiveDropdownId}
           options={signs}
-          defaultOption={defaultSign}
           onOptionSelect={(option) => handleZodiacSelect(option, 'sun')}
           width={150}
           label={'Sun'}
@@ -70,7 +69,6 @@ export const ZodiacContent = ({ playerId, validateAdvance, cancelAdvance }: Cont
           activeId={activeDropdownId}
           setActiveId={setActiveDropdownId}
           options={signs}
-          defaultOption={defaultSign}
           onOptionSelect={(option) => handleZodiacSelect(option, 'moon')}
           width={150}
           label={'Moon'}
@@ -80,7 +78,6 @@ export const ZodiacContent = ({ playerId, validateAdvance, cancelAdvance }: Cont
           activeId={activeDropdownId}
           setActiveId={setActiveDropdownId}
           options={signs}
-          defaultOption={defaultSign}
           onOptionSelect={(option) => handleZodiacSelect(option, 'rising')}
           width={150}
           label={'Rising/Ascendant'}

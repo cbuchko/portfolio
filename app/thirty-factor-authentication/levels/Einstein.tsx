@@ -18,21 +18,20 @@ export const EinsteinContent = ({ validateAdvance, cancelAdvance }: ContentProps
   }
 
   useEffect(() => {
-    console.log(JSON.stringify(selectedAnswers), JSON.stringify(AnswerKey))
     if (JSON.stringify(AnswerKey) === JSON.stringify(selectedAnswers)) {
       validateAdvance()
     } else {
       cancelAdvance()
     }
-  }, [selectedAnswers])
+  }, [selectedAnswers, cancelAdvance, validateAdvance])
 
   return (
     <>
       <h3>As you may know, per our platforms terms, you must have an IQ of 130+ to enter.</h3>
       <h3 className="mb-4">Please prove you meet our standards by solving this puzzle.</h3>
       <ul className="grid grid-cols-2 text-sm gap-1 gap-x-12 list-disc ml-4">
-        {rules.map((rule) => (
-          <li>{rule}</li>
+        {rules.map((rule, idx) => (
+          <li key={idx}>{rule}</li>
         ))}
       </ul>
       <h3 className="mt-3">
