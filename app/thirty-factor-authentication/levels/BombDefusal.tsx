@@ -101,10 +101,10 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
   }, [handleLevelAdvance, resetGame])
 
   useEffect(() => {
-    if (timer === 0) {
+    if (timer === 0 && !isGameOver) {
       handleExplosion()
     }
-  }, [timer, resetGame, handleExplosion])
+  }, [timer, resetGame, handleExplosion, isGameOver])
 
   const handleDefusalStep = (wireId?: WireIds, number?: number) => {
     const expectedInstruction = instructions[instructionStepIndex]
