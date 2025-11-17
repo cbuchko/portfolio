@@ -21,6 +21,7 @@ import { PapersPleaseContent } from './PapersPlease'
 import { AquariumContent, AquariumControls } from './Aquarium'
 import { UndertaleContent } from './Undertale'
 import { BombDefusalContent, BombDefusalControls } from './BombDefusal'
+import { BasicAppCodeContent, BasicAppCodeControls } from './BasicAppCode'
 
 //AAAA@@may00
 export const useLevels = () => {
@@ -43,152 +44,39 @@ export const useLevels = () => {
   }
 
   const levelToUse = forceLevel > 0 ? forceLevel : level
-  switch (levelToUse) {
-    case 1:
-      return {
-        ...baseProps,
-        content: OneContent,
-        controls: OneControls,
-      }
-    case 2:
-      return {
-        ...baseProps,
-        content: TwoContent,
-        controls: TwoControls,
-      }
-    case 3:
-      return {
-        ...baseProps,
-        content: MessageSpamContent,
-        controls: MessageSpamControls,
-      }
-    case 4:
-      return {
-        ...baseProps,
-        content: ZodiacContent,
-        controls: ZodiacControls,
-      }
-    case 5:
-      return {
-        ...baseProps,
-        content: FallbackOneContent,
-        controls: FallbackOneControls,
-      }
-    case 6:
-      return {
-        ...baseProps,
-        content: MapContent,
-        controls: MapControls,
-      }
-    case 7:
-      return {
-        ...baseProps,
-        content: PostItContent,
-        controls: PostItControls,
-      }
-    case 8:
-      return {
-        ...baseProps,
-        content: BiometricContent,
-        controls: BiometricControls,
-      }
-    case 9:
-      return {
-        ...baseProps,
-        content: TaxReturnContent,
-        controls: TaxReturnControls,
-      }
-    case 10:
-      return {
-        ...baseProps,
-        content: FallbackTwoContent,
-        controls: FallbackTwoControls,
-      }
-    case 11: {
-      return {
-        ...baseProps,
-        content: AppCodeContent,
-        controls: AppCodeControls,
-      }
+  const LEVELS = [
+    { content: OneContent, controls: OneControls },
+    { content: TwoContent, controls: TwoControls },
+    { content: BasicAppCodeContent, controls: BasicAppCodeControls },
+    { content: MessageSpamContent, controls: MessageSpamControls },
+    { content: ZodiacContent, controls: ZodiacControls }, //5
+    { content: FallbackOneContent, controls: FallbackOneControls },
+    { content: MapContent, controls: MapControls },
+    { content: PostItContent, controls: PostItControls },
+    { content: BiometricContent, controls: BiometricControls },
+    { content: TaxReturnContent, controls: TaxReturnControls }, //10
+    { content: FallbackTwoContent, controls: FallbackTwoControls },
+    { content: AppCodeContent, controls: AppCodeControls },
+    { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
+    { content: ParlorRoomContent, controls: undefined, requiresLoad: true },
+    { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true }, //15
+    { content: SelfCheckoutContent, controls: SelfCheckoutControls },
+    { content: MaintenanceContent, controls: MaintenanceControls },
+    { content: QuotesContent, controls: QuotesControl },
+    { content: PapersPleaseContent, controls: undefined },
+    { content: AquariumContent, controls: AquariumControls }, //20
+    { content: BombDefusalContent, controls: BombDefusalControls },
+    { content: UndertaleContent, controls: undefined },
+  ]
+
+  const levelDef = LEVELS[levelToUse - 1]
+  if (!levelDef) {
+    // fallback
+    return {
+      ...baseProps,
+      content: OneContent,
+      controls: OneControls,
     }
-    case 12: {
-      return {
-        ...baseProps,
-        content: IMDBContent,
-        controls: IMDBControls,
-        requiresLoad: true,
-      }
-    }
-    case 13: {
-      return {
-        ...baseProps,
-        content: ParlorRoomContent,
-        controls: undefined,
-        requiesLoad: true,
-      }
-    }
-    case 14: {
-      return {
-        ...baseProps,
-        content: BirdCallContent,
-        controls: BirdCallControls,
-        requiresLoad: true,
-      }
-    }
-    case 15: {
-      return {
-        ...baseProps,
-        content: SelfCheckoutContent,
-        controls: SelfCheckoutControls,
-      }
-    }
-    case 16: {
-      return {
-        ...baseProps,
-        content: MaintenanceContent,
-        controls: MaintenanceControls,
-      }
-    }
-    case 17: {
-      return {
-        ...baseProps,
-        content: QuotesContent,
-        controls: QuotesControl,
-      }
-    }
-    case 18: {
-      return {
-        ...baseProps,
-        content: PapersPleaseContent,
-        controls: undefined,
-      }
-    }
-    case 19: {
-      return {
-        ...baseProps,
-        content: AquariumContent,
-        controls: AquariumControls,
-      }
-    }
-    case 20: {
-      return {
-        ...baseProps,
-        content: UndertaleContent,
-        controls: undefined,
-      }
-    }
-    case 21: {
-      return {
-        ...baseProps,
-        content: BombDefusalContent,
-        controls: BombDefusalControls,
-      }
-    }
-    default:
-      return {
-        ...baseProps,
-        content: OneContent,
-        controls: OneControls,
-      }
   }
+  return { ...levelDef, ...baseProps }
 }

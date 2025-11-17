@@ -53,6 +53,8 @@ export const AppCodeContent = ({
                   title={app}
                   targetCode={isTarget ? targetCode : undefined}
                   setTargetCode={setTargetCode}
+                  duration={5}
+                  isDelayed
                 />
               )
             })}
@@ -67,29 +69,36 @@ type AppCodeProps = {
   title: string
   targetCode?: string
   setTargetCode?: (code: string) => void
+  duration: number
+  isDelayed?: boolean
 }
 
-const AppCode = ({ title, targetCode, setTargetCode }: AppCodeProps) => {
-  const DURATION = 5 // seconds per full rotation
+export const AppCode = ({
+  title,
+  targetCode,
+  setTargetCode,
+  duration,
+  isDelayed,
+}: AppCodeProps) => {
   const [elapsed, setElapsed] = useState(0)
   const [code, setCode] = useState(makeAuthCode(6))
   const intervalRef = useRef<NodeJS.Timeout>(null)
   const timeoutRef = useRef<NodeJS.Timeout>(null)
 
   useEffect(() => {
-    const startDelay = Math.random() * 5000
+    const startDelay = isDelayed ? Math.random() * 5000 : 0
 
     timeoutRef.current = setTimeout(() => {
       const start = Date.now()
       intervalRef.current = setInterval(() => {
         const diff = (Date.now() - start) / 1000
-        if (diff % DURATION <= 0.1) {
+        if (diff % duration <= 0.1) {
           const newCode = makeAuthCode(6)
           setCode(newCode)
           if (!!targetCode) setTargetCode?.(newCode)
         }
 
-        setElapsed(diff % DURATION)
+        setElapsed(diff % duration)
       }, 100)
     }, startDelay)
 
@@ -99,7 +108,7 @@ const AppCode = ({ title, targetCode, setTargetCode }: AppCodeProps) => {
     }
   }, [setTargetCode, targetCode])
 
-  const progress = 0.999999 - elapsed / DURATION // 1 → 0
+  const progress = 0.999999 - elapsed / duration // 1 → 0
 
   const size = 40
   const radius = 20
@@ -123,7 +132,7 @@ const AppCode = ({ title, targetCode, setTargetCode }: AppCodeProps) => {
   `
 
   return (
-    <div className="p-2 border flex justify-between items-center gap-4">
+    <div className="p-2 border flex justify-between items-center gap-4 select-none">
       <div>
         <div className="text-xs">{title}</div>
         <div className="mono text-3xl" style={{ color }}>
