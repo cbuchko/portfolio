@@ -6,7 +6,7 @@ type DropdownSelectorProps = {
   id: string
   activeId?: string
   setActiveId: (id?: string) => void
-  defaultOption: string
+  defaultOption?: string
   options: string[]
   onOptionSelect: (option: string) => void
   width: number
@@ -57,18 +57,18 @@ export const DropdownSelector = ({
         )}
         onClick={() => (isOpen ? setActiveId() : setActiveId(id))}
       >
-        <div>{selectedOption}</div>
+        <div className="min-h-6 capitalize">{selectedOption}</div>
         <div className={classNames('w-3 h-3 transition-transform', { 'rotate-180': isOpen })}>
           <ChevronDown />
         </div>
       </button>
       {isOpen && (
-        <div className="absolute mt-0.5 bg-white w-full border rounded-md">
-          {options.map((sign, idx) => (
+        <div className="absolute mt-0.5 bg-white w-full border rounded-md z-100">
+          {[' ', ...options].map((sign, idx) => (
             <div
               key={idx}
               onClick={() => handleOptionSelect(sign)}
-              className="py-2 px-2 cursor-pointer hover:bg-gray-100"
+              className="py-2 px-2 cursor-pointer hover:bg-gray-100 capitalize min-h-[40px]"
             >
               {sign}
             </div>
