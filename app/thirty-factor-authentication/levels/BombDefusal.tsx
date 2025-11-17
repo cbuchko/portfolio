@@ -60,6 +60,7 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
   const [instructions, formattedInstructions] = useMemo(() => {
     const instructions = generateInstructions()
     const formattedInstructions = formatInstructions(instructions)
+    if (isGameOver) return [instructions, formattedInstructions]
     return [instructions, formattedInstructions]
   }, [isGameOver])
 
@@ -97,7 +98,7 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
     setTimeout(() => {
       resetGame()
     }, 4000)
-  }, [handleLevelAdvance])
+  }, [handleLevelAdvance, resetGame])
 
   useEffect(() => {
     if (timer === 0) {
@@ -119,6 +120,7 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
     if (instructionStepIndex >= instructions.length - 1) {
       validateAdvance()
       if (timerRef.current) clearInterval(timerRef.current)
+      audioRef.current?.pause()
     }
   }
 
