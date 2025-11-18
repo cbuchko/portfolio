@@ -23,6 +23,7 @@ import { UndertaleContent } from './Undertale'
 import { BombDefusalContent, BombDefusalControls } from './BombDefusal'
 import { BasicAppCodeContent, BasicAppCodeControls } from './BasicAppCode'
 import { EinsteinContent, EinsteinControls } from './Einstein'
+import { UPSContent, UPSControls } from './UPS'
 
 //AAAA@@may00
 export const useLevels = () => {
@@ -69,6 +70,7 @@ export const useLevels = () => {
     { content: BombDefusalContent, controls: BombDefusalControls },
     { content: EinsteinContent, controls: EinsteinControls },
     { content: UndertaleContent, controls: undefined },
+    { content: UPSContent, controls: UPSControls, requiresLoad: true },
     // { content: SSOContent, controls: SSOControls },
   ]
 

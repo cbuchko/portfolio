@@ -8,6 +8,7 @@ import { PlayerIds } from './player-constants'
 import { maxLevel } from './constants'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { UPSTracker } from './components/UPSTracker'
 
 export default function ThirtyFactorAuthentication() {
   const [playerId] = useState(PlayerIds.Biden)
@@ -36,6 +37,7 @@ export default function ThirtyFactorAuthentication() {
             />
           </DndProvider>
           <div id="extras-portal" />
+          <UPSTracker />
         </>
       )}
       {isCompleted && (

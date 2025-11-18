@@ -46,3 +46,24 @@ export function shuffle<T>(array: T[]) {
   }
   return array
 }
+
+export function getFormattedDate(date: Date): string {
+  const month = date.toLocaleString('en-US', { month: 'long' })
+  const day = date.getDate()
+  const hours = date.getHours()
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  const ampm = hours >= 12 ? 'PM' : 'AM'
+
+  const hour12 = hours % 12 || 12
+
+  const suffix =
+    day % 10 === 1 && day !== 11
+      ? 'st'
+      : day % 10 === 2 && day !== 12
+        ? 'nd'
+        : day % 10 === 3 && day !== 13
+          ? 'rd'
+          : 'th'
+
+  return `${month} ${day}${suffix} ${hour12}:${minutes} ${ampm}`
+}
