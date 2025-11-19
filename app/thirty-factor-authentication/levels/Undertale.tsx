@@ -5,7 +5,7 @@ import { ContentProps } from './types'
 import { PlayerInformation } from '../player-constants'
 import Image from 'next/image'
 
-const maxHealth = 60
+const maxHealth = 100
 export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
   const characterName = PlayerInformation[playerId].name
   const [health, setHealth] = useState(maxHealth)

@@ -24,6 +24,7 @@ import { BombDefusalContent, BombDefusalControls } from './BombDefusal'
 import { BasicAppCodeContent, BasicAppCodeControls } from './BasicAppCode'
 import { EinsteinContent, EinsteinControls } from './Einstein'
 import { UPSContent, UPSControls } from './UPS'
+import { UPSFinishContent, UPSFinishControls } from './UPSFinish'
 
 export type LevelProps = {
   level: number
@@ -89,6 +90,7 @@ export const useLevels = () => {
     { content: TaxReturnContent, controls: TaxReturnControls },
     { content: BombDefusalContent, controls: BombDefusalControls },
     { content: EinsteinContent, controls: EinsteinControls },
+    { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true },
     { content: UndertaleContent, controls: undefined },
     // { content: SSOContent, controls: SSOControls },
   ]

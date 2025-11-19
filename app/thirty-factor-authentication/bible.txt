@@ -14,7 +14,6 @@ Biometric run back?
 Map run back?
 
 GREAT IDEAS:
-UPS DELIVERAY OF PHYSICAL THING
 Favourite number? "sorry somebody has already selected that as their favourite number"
 
 
@@ -26,7 +25,7 @@ Link back to portfolio
 Game name in tab
 In credits thank Neal, and game homage creators
 Cloudflare
-
+Change out h3's to p's so it uses better font
 
 SSO Ideas:
 chess.com
