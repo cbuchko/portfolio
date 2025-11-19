@@ -44,7 +44,7 @@ export const AuthContainer = ({
 
   useEffect(() => {
     if (!requiresLoad) setIsLoading(false)
-  }, [level])
+  }, [level, requiresLoad])
 
   const validateAdvance = () => setIsAdvanceVerified(true)
   const cancelAdvance = () => setIsAdvanceVerified(false)

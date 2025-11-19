@@ -7,16 +7,15 @@ export const UPSFinishContent = ({
   handleLevelAdvance,
   setIsLoading,
 }: ContentProps) => {
-  const [dynamicText, setDynamicText] = useState<string>()
+  const [dynamicText, setDynamicText] = useState<string>('')
   const [vowelCount, setVowelCount] = useState('')
 
   useEffect(() => {
     const text = dynamicTextOptions[Math.floor(Math.random() * dynamicTextOptions.length)]
     setDynamicText(text)
     setIsLoading(false)
-  }, [])
+  }, [setIsLoading])
 
-  if (!dynamicText) return
   const inputTarget = countVowels(rawText(dynamicText))
 
   const handleInputChange = (input: string) => {
