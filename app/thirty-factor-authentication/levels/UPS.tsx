@@ -1,16 +1,19 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { ContentProps, ControlProps } from './types'
-import { getFormattedDate, makeCode } from '../utils'
+import { addMinutesToDate, getFormattedDate, makeCode } from '../utils'
 import classNames from 'classnames'
 import Image from 'next/image'
-import { upsDeliveryTimeKey, upsKey } from '../constants'
 
-export const UPSContent = ({ validateAdvance, setIsLoading }: ContentProps) => {
-  const [code, setCode] = useState<string>()
+export const UPSContent = ({
+  validateAdvance,
+  setIsLoading,
+  upsTrackingCode: code,
+  setUPSTrackingCode: setCode,
+}: ContentProps) => {
   const [deliveryStart, deliveryEnd] = useMemo(() => {
     const dateNow = new Date()
     const formattedNow = getFormattedDate(dateNow)
-    const plusTenMinutes = new Date(dateNow.setMinutes(dateNow.getMinutes() + 10))
+    const plusTenMinutes = addMinutesToDate(dateNow, 10)
     const formattedPlusTen = getFormattedDate(plusTenMinutes)
     return [formattedNow, formattedPlusTen]
   }, [])
@@ -19,11 +22,6 @@ export const UPSContent = ({ validateAdvance, setIsLoading }: ContentProps) => {
     const code = makeCode(16)
     setCode(code)
     setIsLoading(false)
-    localStorage.setItem(upsKey, code)
-    localStorage.setItem(
-      upsDeliveryTimeKey,
-      new Date().setMinutes(new Date().getMinutes() + 10).toString()
-    )
     validateAdvance()
   }, [])
 
@@ -141,11 +139,18 @@ const DeliveryNode = ({
   )
 }
 
-export const UPSControls = ({ handleLevelAdvance }: ControlProps) => {
+export const UPSControls = ({ handleLevelAdvance, setUPSTrackingTime }: ControlProps) => {
+  const timeStartRef = useRef(new Date())
   return (
     <>
       <div className="grow" />
-      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
+      <button
+        className="auth-button auth-button-primary"
+        onClick={() => {
+          handleLevelAdvance()
+          setUPSTrackingTime(addMinutesToDate(timeStartRef.current, 10))
+        }}
+      >
         Track Your Package
       </button>
     </>

@@ -4,12 +4,11 @@ import { ContentProps, ControlProps } from './levels/types'
 import XIcon from '@/public/thirty-factor-authentication/icons/x.svg'
 import { devMode, maxLevel } from './constants'
 import classNames from 'classnames'
+import { LevelProps } from './levels/useLevel'
 
 type AuthContainerProps = {
   playerId: PlayerIds
-  level: number
-  requiresLoad: boolean
-  handleLevelAdvance: (skipVerify?: boolean) => void
+  baseProps: LevelProps
   setIsGameOver: (value: boolean) => void
   Content: (props: ContentProps) => JSX.Element
   Controls?: (props: ControlProps) => JSX.Element
@@ -17,9 +16,7 @@ type AuthContainerProps = {
 
 export const AuthContainer = ({
   playerId,
-  level,
-  requiresLoad,
-  handleLevelAdvance,
+  baseProps,
   setIsGameOver,
   Content,
   Controls,
@@ -27,6 +24,7 @@ export const AuthContainer = ({
   const [isLoading, setIsLoading] = useState(false)
   const [isAdvanceVerified, setIsAdvanceVerified] = useState(false)
   const [errorCount, setErrorCount] = useState(0)
+  const { handleLevelAdvance, requiresLoad, level } = baseProps
 
   const onAdvance = (skipVerify?: boolean) => {
     if (!isAdvanceVerified && !devMode && !skipVerify) {
@@ -83,6 +81,10 @@ export const AuthContainer = ({
               cancelAdvance={cancelAdvance}
               handleLevelAdvance={onAdvance}
               setIsLoading={setIsLoading}
+              setUPSTrackingCode={baseProps.setUPSTrackingCode}
+              setUPSTrackingTime={baseProps.setUPSTrackingTime}
+              upsTrackingCode={baseProps.upsTrackingCode}
+              upsTrackingTime={baseProps.upsTrackingTime}
             />
           </div>
           {Controls && (
@@ -94,6 +96,7 @@ export const AuthContainer = ({
                 handleLevelAdvance={onAdvance}
                 handleGameOver={() => setIsGameOver(true)}
                 validateAdvance={validateAdvance}
+                setUPSTrackingTime={baseProps.setUPSTrackingTime}
               />
             </div>
           )}

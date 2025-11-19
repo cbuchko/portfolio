@@ -14,7 +14,8 @@ export default function ThirtyFactorAuthentication() {
   const [playerId] = useState(PlayerIds.Biden)
   const [isGameOver, setIsGameOver] = useState(false)
 
-  const { content, controls, level, requiresLoad, resetLevel, handleLevelAdvance } = useLevels()
+  const { content, controls, baseProps } = useLevels()
+  const { level, upsTrackingCode, upsTrackingTime, resetLevel } = baseProps
 
   const isCompleted = level === maxLevel + 1
 
@@ -28,16 +29,16 @@ export default function ThirtyFactorAuthentication() {
           <DndProvider backend={HTML5Backend}>
             <AuthContainer
               playerId={playerId}
-              level={level}
-              handleLevelAdvance={handleLevelAdvance}
               setIsGameOver={setIsGameOver}
               Content={content}
               Controls={controls}
-              requiresLoad={requiresLoad}
+              baseProps={baseProps}
             />
           </DndProvider>
           <div id="extras-portal" />
-          <UPSTracker />
+          {upsTrackingCode && upsTrackingTime && (
+            <UPSTracker code={upsTrackingCode} time={upsTrackingTime} />
+          )}
         </>
       )}
       {isCompleted && (

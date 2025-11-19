@@ -25,9 +25,24 @@ import { BasicAppCodeContent, BasicAppCodeControls } from './BasicAppCode'
 import { EinsteinContent, EinsteinControls } from './Einstein'
 import { UPSContent, UPSControls } from './UPS'
 
+export type LevelProps = {
+  level: number
+  handleLevelAdvance: () => void
+  resetLevel: () => void
+  requiresLoad: boolean
+  upsTrackingCode: string
+  upsTrackingTime: number
+  setUPSTrackingCode: (code: string) => void
+  setUPSTrackingTime: (time: number) => void
+}
+
 //AAAA@@may00
 export const useLevels = () => {
   const [level, setLevel] = useState(1)
+
+  //details for tracking the overarching UPS mechanics
+  const [upsTrackingCode, setUPSTrackingCode] = useState('')
+  const [upsTrackingTime, setUPSTrackingTime] = useState(0)
 
   const handleLevelAdvance = useCallback(() => {
     const audio = new Audio('/thirty-factor-authentication/sounds/success.mp3')
@@ -43,7 +58,11 @@ export const useLevels = () => {
     handleLevelAdvance,
     resetLevel,
     requiresLoad: false,
-  }
+    upsTrackingCode,
+    upsTrackingTime,
+    setUPSTrackingCode,
+    setUPSTrackingTime,
+  } as LevelProps
 
   const levelToUse = forceLevel > 0 ? forceLevel : level
   const LEVELS = [
@@ -56,7 +75,7 @@ export const useLevels = () => {
     { content: MapContent, controls: MapControls },
     { content: PostItContent, controls: PostItControls },
     { content: BiometricContent, controls: BiometricControls },
-    { content: TaxReturnContent, controls: TaxReturnControls }, //10
+    { content: UPSContent, controls: UPSControls, requiresLoad: true }, //10
     { content: FallbackTwoContent, controls: FallbackTwoControls },
     { content: AppCodeContent, controls: AppCodeControls },
     { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
@@ -67,10 +86,10 @@ export const useLevels = () => {
     { content: QuotesContent, controls: QuotesControl },
     { content: PapersPleaseContent, controls: undefined },
     { content: AquariumContent, controls: AquariumControls }, //20
+    { content: TaxReturnContent, controls: TaxReturnControls },
     { content: BombDefusalContent, controls: BombDefusalControls },
     { content: EinsteinContent, controls: EinsteinControls },
     { content: UndertaleContent, controls: undefined },
-    { content: UPSContent, controls: UPSControls, requiresLoad: true },
     // { content: SSOContent, controls: SSOControls },
   ]
 
@@ -78,10 +97,10 @@ export const useLevels = () => {
   if (!levelDef) {
     // fallback
     return {
-      ...baseProps,
+      baseProps,
       content: OneContent,
       controls: OneControls,
     }
   }
-  return { ...baseProps, ...levelDef }
+  return { baseProps, ...levelDef }
 }

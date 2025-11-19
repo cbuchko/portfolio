@@ -4,6 +4,7 @@ export type ControlProps = {
   handleLevelAdvance: (skipVerify?: boolean) => void
   handleGameOver: () => void
   validateAdvance: () => void
+  setUPSTrackingTime: (time: number) => void
 }
 
 export type ContentProps = {
@@ -12,4 +13,8 @@ export type ContentProps = {
   cancelAdvance: () => void
   handleLevelAdvance: (skipVerify?: boolean) => void
   setIsLoading: (loading: boolean) => void
+  upsTrackingCode: string
+  upsTrackingTime: number
+  setUPSTrackingCode: (code: string) => void
+  setUPSTrackingTime: (time: number) => void
 }

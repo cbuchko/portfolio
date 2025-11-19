@@ -47,7 +47,12 @@ export function shuffle<T>(array: T[]) {
   return array
 }
 
-export function getFormattedDate(date: Date): string {
+export function getFormattedDate(d: Date | number | string): string {
+  let date: Date
+  if (typeof d === 'number') date = new Date(d)
+  else if (typeof d === 'string') date = new Date(parseInt(d))
+  else date = d
+
   const month = date.toLocaleString('en-US', { month: 'long' })
   const day = date.getDate()
   const hours = date.getHours()
@@ -66,4 +71,15 @@ export function getFormattedDate(date: Date): string {
           : 'th'
 
   return `${month} ${day}${suffix} ${hour12}:${minutes} ${ampm}`
+}
+
+export function addMinutesToDate(date: Date | number, minutes: number) {
+  let dateToAdd: Date
+  if (typeof date === 'number') dateToAdd = new Date(date)
+  else dateToAdd = date
+  return dateToAdd.setMinutes(dateToAdd.getMinutes() + minutes)
+}
+
+export function addMinutesToDateAndFormat(date: Date | number, minutes: number) {
+  return getFormattedDate(new Date(addMinutesToDate(date, minutes)))
 }
