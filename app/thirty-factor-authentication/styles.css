@@ -155,3 +155,7 @@
 .notification-wiggle {
   animation: notification-wiggle 1s ease;
 }
+
+.boon {
+  background: linear-gradient(to right, #47474c, #000000);
+}

@@ -81,6 +81,7 @@ export const useLevels = () => {
     { content: AppCodeContent, controls: AppCodeControls },
     { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
     { content: ParlorRoomContent, controls: undefined, requiresLoad: true },
+    // { content: HadesContent, controls: HadesControls }, //15
     { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true }, //15
     { content: SelfCheckoutContent, controls: SelfCheckoutControls },
     { content: MaintenanceContent, controls: MaintenanceControls },

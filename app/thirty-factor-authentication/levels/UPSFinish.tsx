@@ -132,7 +132,7 @@ Maybe you could just tell me how many E's are in this body of text?
 To prove you're not a robot or something like that I don't know.
 
 You're saying counting E's is the exact thing a robot would be good at?
-See if I care. Copy and paste this whole thing into ChatGPT then.
+Copy and paste this whole thing into ChatGPT then. See if I care.
 Or use the countless other websites that will tell you the answer.
 I promise there aren't any bonus incentives for doing this honestly.
 
@@ -153,4 +153,5 @@ const dynamicTextOptions = [
   'I believe in you, you can do this',
   'Fun fact: the original draft asked to count EVERY vowel',
   'LLMs are actually hilariously bad at these kinds of problems',
+  'This text changes every time you play',
 ]
