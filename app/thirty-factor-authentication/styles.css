@@ -159,3 +159,16 @@
 .boon {
   background: linear-gradient(to right, #47474c, #000000);
 }
+
+@keyframes osu-outline {
+  0% {
+    outline-offset: 24px;
+  }
+  100% {
+    outline-offset: 0px;
+  }
+}
+
+.osu-outline {
+  animation: osu-outline 2s linear;
+}

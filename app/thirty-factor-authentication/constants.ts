@@ -1,4 +1,4 @@
-export const devMode = true
-export const forceLevel = 15
-export const maxLevel = 25
+export const devMode = false
+export const forceLevel = 26
+export const maxLevel = 26
 export const fallbackPassKey = 'fallback-password'

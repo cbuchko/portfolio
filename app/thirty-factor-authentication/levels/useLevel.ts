@@ -25,6 +25,7 @@ import { BasicAppCodeContent, BasicAppCodeControls } from './BasicAppCode'
 import { EinsteinContent, EinsteinControls } from './Einstein'
 import { UPSContent, UPSControls } from './UPS'
 import { UPSFinishContent, UPSFinishControls } from './UPSFinish'
+import { SSOContent } from './SSO'
 
 export type LevelProps = {
   level: number
@@ -93,7 +94,7 @@ export const useLevels = () => {
     { content: EinsteinContent, controls: EinsteinControls },
     { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true },
     { content: UndertaleContent, controls: undefined },
-    // { content: SSOContent, controls: SSOControls },
+    { content: SSOContent },
   ]
 
   const levelDef = LEVELS[levelToUse - 1]
