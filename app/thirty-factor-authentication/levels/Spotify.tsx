@@ -28,13 +28,13 @@ export const Spotify = ({
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
-  }, [maxRythym, isStarted])
+  }, [isStarted])
 
   useEffect(() => {
     if (maxRythym == rythymCount && intervalRef.current) {
       clearInterval(intervalRef.current)
     }
-  }, [rythymCount, maxRythym])
+  }, [rythymCount])
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ContentProps, ControlProps } from './types'
+import { ContentProps } from './types'
 import { useDrag, useDrop } from 'react-dnd'
 import classNames from 'classnames'
 import Image from 'next/image'
