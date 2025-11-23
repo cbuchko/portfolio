@@ -25,6 +25,7 @@ import { EinsteinContent, EinsteinControls } from './Einstein'
 import { UPSContent, UPSControls } from './UPS'
 import { UPSFinishContent, UPSFinishControls } from './UPSFinish'
 import { SSOContent, SSOIds } from './SSO'
+import { FishingContent, FishingControls } from './Fishing'
 
 export type LevelProps = {
   level: number
@@ -90,7 +91,6 @@ export const useLevels = () => {
     { content: AppCodeContent, controls: AppCodeControls },
     { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
     { content: ParlorRoomContent, controls: undefined, requiresLoad: true },
-    // { content: HadesContent, controls: HadesControls }, //15
     { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true }, //15
     { content: MaintenanceContent, controls: MaintenanceControls },
     { content: QuotesContent, controls: QuotesControl },
@@ -101,6 +101,7 @@ export const useLevels = () => {
     { content: BombDefusalContent, controls: BombDefusalControls },
     { content: EinsteinContent, controls: EinsteinControls },
     { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true },
+    { content: FishingContent, controls: FishingControls },
     { content: UndertaleContent, controls: undefined },
   ]
 
