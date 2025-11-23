@@ -49,7 +49,12 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
 
   useEffect(() => {
     if (progress >= 100) handleLevelAdvance(true)
-    if (progress <= 0) handleLevelAdvance()
+    if (progress <= 0) {
+      setFishPosition(0)
+      setRodPosition(0)
+      setProgress(40)
+      handleLevelAdvance()
+    }
   }, [progress, handleLevelAdvance])
 
   const handleRodMove = useCallback((event: KeyboardEvent) => {

@@ -21,6 +21,8 @@ Undertale
 Bomb Defusal
 UPS
 Einstein
+Fishing
+Osu
 
 GOALS:
 At least 10 Celebrity Trivia Level (1/3 of the game)
@@ -63,6 +65,8 @@ Undertale
 Bomb Defusal
 Einstein
 UPS
+Fishing
+Osu
 
 TRADITIONAL:
 Legal name
@@ -77,6 +81,8 @@ GAME HOMAGES:
 Parlor Room - Blue Prince
 Papers Please
 Undertale
+Fishing - Stardew Valley
+Osu
 
 TUTORIALS (first 10):
 Level 1
@@ -91,6 +97,8 @@ Create Password Part 2
 UPS Part 1
 
 MID-GAME (middle 10):
+SSO 1
+SSO 2
 Post-it
 Auth App Redux
 IMDB
@@ -104,11 +112,11 @@ Aquarium
 Undertale
 Bomb Defusal
 Tax Return
-Self Checkout
 Bird Calls 
 Parlor Room
 Einstein
 UPS Part 2
+Fishing
 
 Input Styles:
     Tutorial
