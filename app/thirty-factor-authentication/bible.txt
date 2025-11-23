@@ -8,16 +8,16 @@ SSO Three-peat:
     pinterest - make a mood board
     spotify - rhythym game
     twitter - build a tweet?
-Osu
 
 MORE SIMPLER IDEAS?
 Biometric run back?
 Map run back?
 
 GREAT IDEAS:
-choose three slop
 maintenance becomes stanley parable?
 SSO
+fishing level
+make checkout a SSO level
 
 OTHER IDEAS:
 No game over, just tally mistakes
@@ -30,9 +30,8 @@ Cloudflare
 Change out h3's to p's so it uses better font
 
 SSO Ideas:
-chess.com
 youtube
-NYT
+
 
 TOO TOUGH:
 signature

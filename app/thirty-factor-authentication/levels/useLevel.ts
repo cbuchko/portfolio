@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { OneContent, OneControls } from './1'
 import { TwoContent, TwoControls } from './2'
 import { MessageSpamContent, MessageSpamControls } from './MessageSpam'
@@ -13,7 +13,6 @@ import { TaxReturnContent, TaxReturnControls } from './TaxReturn'
 import { AppCodeContent, AppCodeControls } from './AppCode'
 import { IMDBContent, IMDBControls } from './IMDB'
 import { BirdCallContent, BirdCallControls } from './BirdCalls'
-import { SelfCheckoutContent, SelfCheckoutControls } from './SelfCheckout'
 import { ParlorRoomContent } from './ParlorRoom'
 import { MaintenanceContent, MaintenanceControls } from './Maintenance'
 import { QuotesContent, QuotesControl } from './Quotes'
@@ -25,10 +24,11 @@ import { BasicAppCodeContent, BasicAppCodeControls } from './BasicAppCode'
 import { EinsteinContent, EinsteinControls } from './Einstein'
 import { UPSContent, UPSControls } from './UPS'
 import { UPSFinishContent, UPSFinishControls } from './UPSFinish'
-import { SSOContent } from './SSO'
+import { SSOContent, SSOIds } from './SSO'
 
 export type LevelProps = {
   level: number
+  setLevel: React.Dispatch<React.SetStateAction<number>>
   handleLevelAdvance: () => void
   resetLevel: () => void
   requiresLoad: boolean
@@ -36,6 +36,8 @@ export type LevelProps = {
   upsTrackingTime: number
   setUPSTrackingCode: (code: string) => void
   setUPSTrackingTime: (time: number) => void
+  selectedSSOIds: Set<SSOIds>
+  setSelectedSSOIds: React.Dispatch<React.SetStateAction<Set<SSOIds>>>
 }
 
 //AAAA@@may00
@@ -45,6 +47,8 @@ export const useLevels = () => {
   //details for tracking the overarching UPS mechanics
   const [upsTrackingCode, setUPSTrackingCode] = useState('')
   const [upsTrackingTime, setUPSTrackingTime] = useState(0)
+
+  const [selectedSSOIds, setSelectedSSOIds] = useState<Set<SSOIds>>(new Set())
 
   const handleLevelAdvance = useCallback(() => {
     const audio = new Audio('/thirty-factor-authentication/sounds/success.mp3')
@@ -57,6 +61,7 @@ export const useLevels = () => {
 
   const baseProps = {
     level,
+    setLevel,
     handleLevelAdvance,
     resetLevel,
     requiresLoad: false,
@@ -64,6 +69,8 @@ export const useLevels = () => {
     upsTrackingTime,
     setUPSTrackingCode,
     setUPSTrackingTime,
+    selectedSSOIds,
+    setSelectedSSOIds,
   } as LevelProps
 
   const levelToUse = forceLevel > 0 ? forceLevel : level
@@ -78,15 +85,16 @@ export const useLevels = () => {
     { content: PostItContent, controls: PostItControls },
     { content: BiometricContent, controls: BiometricControls },
     { content: UPSContent, controls: UPSControls, requiresLoad: true }, //10
+    { content: SSOContent },
     { content: FallbackTwoContent, controls: FallbackTwoControls },
     { content: AppCodeContent, controls: AppCodeControls },
     { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
     { content: ParlorRoomContent, controls: undefined, requiresLoad: true },
     // { content: HadesContent, controls: HadesControls }, //15
     { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true }, //15
-    { content: SelfCheckoutContent, controls: SelfCheckoutControls },
     { content: MaintenanceContent, controls: MaintenanceControls },
     { content: QuotesContent, controls: QuotesControl },
+    { content: SSOContent },
     { content: PapersPleaseContent, controls: undefined },
     { content: AquariumContent, controls: AquariumControls }, //20
     { content: TaxReturnContent, controls: TaxReturnControls },
@@ -94,7 +102,6 @@ export const useLevels = () => {
     { content: EinsteinContent, controls: EinsteinControls },
     { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true },
     { content: UndertaleContent, controls: undefined },
-    { content: SSOContent },
   ]
 
   const levelDef = LEVELS[levelToUse - 1]

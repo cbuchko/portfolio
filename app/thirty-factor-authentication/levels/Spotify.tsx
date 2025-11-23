@@ -17,7 +17,7 @@ export const Spotify = ({
     setIsStarted(false)
     handleLevelAdvance()
     if (intervalRef.current) clearInterval(intervalRef.current)
-  }, [])
+  }, [handleLevelAdvance])
 
   useEffect(() => {
     if (!isStarted) return
@@ -33,13 +33,12 @@ export const Spotify = ({
   useEffect(() => {
     if (maxRythym == rythymCount && intervalRef.current) {
       clearInterval(intervalRef.current)
-      handleLevelAdvance(true)
     }
   }, [rythymCount, maxRythym])
 
   return (
     <>
-      <div>To verify yourself as a Spotify user, please complete this Rhythym challenge.</div>
+      <div>To verify yourself as a Spotify user, please complete this Rhythm challenge.</div>
       <div className="w-full flex justify-center mt-4">
         <button
           className="border-2 py-1 px-3 rounded-md cursor-pointer"
@@ -49,7 +48,17 @@ export const Spotify = ({
         </button>
       </div>
       {Array.from({ length: rythymCount }).map((_, idx) => (
-        <RythymPad key={idx} number={idx + 1} resetGame={resetGame} />
+        <RythymPad
+          key={idx}
+          number={idx + 1}
+          resetGame={resetGame}
+          handleWin={() => {
+            if (idx + 1 === maxRythym) {
+              handleLevelAdvance(true)
+              if (intervalRef.current) clearInterval(intervalRef.current)
+            }
+          }}
+        />
       ))}
     </>
   )
@@ -64,7 +73,15 @@ const getRandomPosition = () => {
   return { x: newX, y: newY }
 }
 
-const RythymPad = ({ number, resetGame }: { number: number; resetGame: () => void }) => {
+const RythymPad = ({
+  number,
+  resetGame,
+  handleWin,
+}: {
+  number: number
+  resetGame: () => void
+  handleWin: () => void
+}) => {
   const [isCleared, setIsCleared] = useState(false)
   const position = useMemo(() => getRandomPosition(), [])
   const timeoutRef = useRef<NodeJS.Timeout>(null)
@@ -86,20 +103,19 @@ const RythymPad = ({ number, resetGame }: { number: number; resetGame: () => voi
   const handleClick = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
     setIsCleared(true)
+    handleWin()
   }
 
-  const backgroundColor = `bg-${colorOptions[number % colorOptions.length]}`
-  const outlineColor = `outline-${colorOptions[number % colorOptions.length]}`
+  const backgroundColor = colorHexArray[number % colorHexArray.length]
+  const outlineColor = colorHexArray[number % colorHexArray.length]
   return (
     <>
       <div
         onClick={handleClick}
-        style={{ left: position.x, top: position.y }}
+        style={{ left: position.x, top: position.y, backgroundColor, outlineColor }}
         className={classNames(
           'fixed top-20 left-20 h-20 w-20 border-6 outline-2 border-black flex items-center justify-center rounded-full osu-outline cursor-pointer',
-          { 'opacity-0 transition-opacity duration-500 pointer-events-none': isCleared },
-          backgroundColor,
-          outlineColor
+          { 'opacity-0 transition-opacity duration-500 pointer-events-none': isCleared }
         )}
       >
         <p className="mono text-3xl text-white select-none">{number}</p>
@@ -108,4 +124,4 @@ const RythymPad = ({ number, resetGame }: { number: number; resetGame: () => voi
   )
 }
 
-const colorOptions = ['orange-400', 'yellow-400', 'green-400', 'blue-400', 'purple-400', 'gray-400']
+const colorHexArray = ['#fb923c', '#facc15', '#4ade80', '#60a5fa', '#a78bfa', '#9ca3af']

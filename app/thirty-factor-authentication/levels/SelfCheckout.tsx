@@ -75,7 +75,7 @@ const ShoppingItems: ShoppingItem[] = [
   },
 ]
 
-export const SelfCheckoutContent = ({ validateAdvance, cancelAdvance }: ContentProps) => {
+export const SelfCheckoutContent = ({ handleLevelAdvance, cancelAdvance }: ContentProps) => {
   const [items, setItems] = useState(ShoppingItems)
   const scannedIdsRef = useRef<Set<string>>(new Set())
   const [isAgeVerified, setIsAgeVerified] = useState(false)
@@ -108,11 +108,11 @@ export const SelfCheckoutContent = ({ validateAdvance, cancelAdvance }: ContentP
   useEffect(() => {
     const checkoutComplete = items.every((item) => item.isBagged && item.isScanned)
     if (checkoutComplete) {
-      validateAdvance()
+      handleLevelAdvance(true)
       return
     }
     cancelAdvance()
-  }, [items, cancelAdvance, validateAdvance])
+  }, [items, cancelAdvance, handleLevelAdvance])
 
   const [cartItems, baggedItems, scannedItems] = useMemo(() => {
     const cartItems = items.filter((item) => !item.isBagged)
@@ -131,10 +131,7 @@ export const SelfCheckoutContent = ({ validateAdvance, cancelAdvance }: ContentP
   const isAnyError = isUnexpectedItemError || isUnbaggedItemError || isAgeVerificationError
   return (
     <>
-      <h3>
-        Our records show you frequently shop at Walgreens. Please demonstrate how to use a
-        Self-Checkout.
-      </h3>
+      <h3>To verify yourself as a Walmart user, please demonstrate how to use a Self-Checkout.</h3>
       <div className="flex gap-10 mt-8">
         <DropArea
           title="Shopping Cart"
@@ -339,17 +336,6 @@ const ErrorContainer = ({
         autoPlay
         loop
       />
-    </>
-  )
-}
-
-export const SelfCheckoutControls = ({ handleLevelAdvance }: ControlProps) => {
-  return (
-    <>
-      <div className="grow" />
-      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
-        Checkout
-      </button>
     </>
   )
 }

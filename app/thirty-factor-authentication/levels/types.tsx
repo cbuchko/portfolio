@@ -1,4 +1,5 @@
 import { PlayerIds } from '../player-constants'
+import { SSOIds } from './SSO'
 
 export type ControlProps = {
   handleLevelAdvance: (skipVerify?: boolean) => void
@@ -17,4 +18,6 @@ export type ContentProps = {
   upsTrackingTime: number
   setUPSTrackingCode: (code: string) => void
   setUPSTrackingTime: (time: number) => void
+  selectedSSOIds: Set<SSOIds>
+  setSelectedSSOIds: React.Dispatch<React.SetStateAction<Set<SSOIds>>>
 }

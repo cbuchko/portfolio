@@ -5,7 +5,7 @@ import './styles.css'
 import { useLevels } from './levels/useLevel'
 import { useState } from 'react'
 import { PlayerIds } from './player-constants'
-import { maxLevel } from './constants'
+import { devMode, maxLevel } from './constants'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { UPSTracker } from './components/UPSTracker'
@@ -15,7 +15,7 @@ export default function ThirtyFactorAuthentication() {
   const [isGameOver, setIsGameOver] = useState(false)
 
   const { content, controls, baseProps } = useLevels()
-  const { level, upsTrackingCode, upsTrackingTime, resetLevel } = baseProps
+  const { level, setLevel, upsTrackingCode, upsTrackingTime, resetLevel } = baseProps
 
   const isCompleted = level === maxLevel + 1
 
@@ -36,7 +36,7 @@ export default function ThirtyFactorAuthentication() {
             />
           </DndProvider>
           <div id="extras-portal" />
-          {upsTrackingCode && upsTrackingTime && (
+          {!!upsTrackingCode && !!upsTrackingTime && (
             <UPSTracker code={upsTrackingCode} time={upsTrackingTime} />
           )}
         </>
@@ -61,6 +61,23 @@ export default function ThirtyFactorAuthentication() {
             }}
           >
             Restart
+          </button>
+        </div>
+      )}
+      {devMode && (
+        <div className="fixed flex flex-col text-left w-max p-2 gap-3">
+          <h2 className="mb-2">Dev Mode:</h2>
+          <button
+            className="border p-1 cursor-pointer"
+            onClick={() => setLevel((level) => level + 1)}
+          >
+            Next Level
+          </button>
+          <button
+            className="border p-1 cursor-pointer"
+            onClick={() => setLevel((level) => level - 1)}
+          >
+            Previous Level
           </button>
         </div>
       )}
