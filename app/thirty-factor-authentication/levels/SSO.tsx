@@ -3,11 +3,12 @@ import { Spotify } from './Spotify'
 import { ContentProps } from './types'
 import Image from 'next/image'
 import { SelfCheckoutContent } from './SelfCheckout'
+import { Twitter } from './Twitter'
 
 export enum SSOIds {
   spotify = 'spotify',
   walmart = 'walmart',
-  facebook = 'facebook',
+  twitter = 'twitter',
 }
 
 export const SSOContent = (props: ContentProps) => {
@@ -37,15 +38,16 @@ export const SSOContent = (props: ContentProps) => {
     <>
       {SSOChoice === null && (
         <>
-          <h3 className="mb-2">{message}</h3>
+          <p className="mb-4 text-lg">{message}</p>
           <div className="w-full flex justify-center">
-            <div className="flex flex-row justify-around gap-y-4 gap-4 text-center">
-              {/* {!selectedSSOIds.has(SSOIds.facebook) && (
+            <div className="flex flex-row justify-around gap-4 text-center">
+              {!selectedSSOIds.has(SSOIds.twitter) && (
                 <SSOProvider
-                  title="Facebook"
-                  url="/thirty-factor-authentication/sso/facebook.png"
+                  title="Twitter"
+                  url="/thirty-factor-authentication/sso/twitter.webp"
+                  onClick={() => handleSSOChoice(SSOIds.twitter)}
                 />
-              )} */}
+              )}
               {!selectedSSOIds.has(SSOIds.spotify) && (
                 <SSOProvider
                   title="Spotify"
@@ -66,6 +68,7 @@ export const SSOContent = (props: ContentProps) => {
       )}
       {SSOChoice === SSOIds.spotify && <Spotify handleLevelAdvance={props.handleLevelAdvance} />}
       {SSOChoice === SSOIds.walmart && <SelfCheckoutContent {...props} />}
+      {SSOChoice === SSOIds.twitter && <Twitter {...props} />}
     </>
   )
 }
@@ -81,7 +84,7 @@ const SSOProvider = ({
 }) => {
   return (
     <div
-      className="flex items-center gap-2 py-1 px-2 border w-max rounded-md capitalize min-w-[125px] select-none cursor-pointer active:bg-gray-200"
+      className="flex items-center justify-center gap-2 py-1 px-2 border w-max rounded-md capitalize min-w-[125px] select-none cursor-pointer active:bg-gray-200"
       onClick={onClick}
     >
       <Image

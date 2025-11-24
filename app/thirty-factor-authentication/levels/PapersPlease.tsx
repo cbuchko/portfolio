@@ -190,6 +190,7 @@ const DriversLicense = ({
                 className="rounded-md h-[120px]"
                 height={120}
                 width={110}
+                draggable={false}
               />
             </InspectableItem>
             <InspectableItem
@@ -202,6 +203,7 @@ const DriversLicense = ({
                 className="h-[30px]"
                 height={30}
                 width={110}
+                draggable={false}
               />
             </InspectableItem>
           </div>
@@ -281,6 +283,7 @@ const DriversLicense = ({
               className="h-[50px]"
               height={50}
               width={80}
+              draggable={false}
             />
           </InspectableItem>
           <InspectableItem
@@ -293,6 +296,7 @@ const DriversLicense = ({
               className="rounded-lg"
               height={25}
               width={25}
+              draggable={false}
             />
           </InspectableItem>
         </div>
@@ -412,6 +416,7 @@ const EntryPermit = ({
           className="h-[50px] mt-2"
           height={50}
           width={80}
+          draggable={false}
         />
       </InspectableItem>
     </div>

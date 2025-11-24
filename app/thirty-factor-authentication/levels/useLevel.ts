@@ -83,26 +83,29 @@ export const useLevels = () => {
     { content: ZodiacContent, controls: ZodiacControls }, //5
     { content: FallbackOneContent, controls: FallbackOneControls },
     { content: MapContent, controls: MapControls },
-    { content: PostItContent, controls: PostItControls },
     { content: BiometricContent, controls: BiometricControls },
-    { content: UPSContent, controls: UPSControls, requiresLoad: true }, //10
+    { content: UPSContent, controls: UPSControls, requiresLoad: true },
+    { content: FallbackTwoContent, controls: FallbackTwoControls }, //10
     { content: SSOContent },
-    { content: FallbackTwoContent, controls: FallbackTwoControls },
     { content: AppCodeContent, controls: AppCodeControls },
+    { content: PostItContent, controls: PostItControls },
     { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
-    { content: ParlorRoomContent, controls: undefined, requiresLoad: true },
-    { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true }, //15
+    { content: SSOContent }, //15
     { content: MaintenanceContent, controls: MaintenanceControls },
     { content: QuotesContent, controls: QuotesControl },
-    { content: SSOContent },
-    { content: PapersPleaseContent, controls: undefined },
-    { content: AquariumContent, controls: AquariumControls }, //20
+    //18
+    //19
+    { content: SSOContent }, //20
+    { content: AquariumContent, controls: AquariumControls },
     { content: TaxReturnContent, controls: TaxReturnControls },
+    { content: ParlorRoomContent, controls: undefined, requiresLoad: true },
+    { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true },
+    { content: FishingContent, controls: FishingControls }, //25
+    { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true },
     { content: BombDefusalContent, controls: BombDefusalControls },
     { content: EinsteinContent, controls: EinsteinControls },
-    { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true },
-    { content: FishingContent, controls: FishingControls },
-    { content: UndertaleContent, controls: undefined },
+    { content: PapersPleaseContent, controls: undefined },
+    { content: UndertaleContent, controls: undefined }, //30
   ]
 
   const levelDef = LEVELS[levelToUse - 1]

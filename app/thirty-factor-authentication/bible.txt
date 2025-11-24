@@ -4,10 +4,7 @@ Color memory test
 Tip Screen
 Security checkpoint/TSA/contraband..
 jumpscare/heartrate monitor
-SSO Three-peat:
-    pinterest - make a mood board
-    spotify - rhythym game
-    twitter - build a tweet?
+
 
 MORE SIMPLER IDEAS?
 Biometric run back?
@@ -15,17 +12,16 @@ Map run back?
 
 GREAT IDEAS:
 maintenance becomes stanley parable?
-SSO
 
 OTHER IDEAS:
 No game over, just tally mistakes
-Surface time taken and mistake tally at end screen
-Reset button 
 Link back to portfolio 
 Game name in tab
 In credits thank Neal, and game homage creators
+Spice up end screen in general
 Cloudflare
 Change out h3's to p's so it uses better font
+"Sauce" Pass. Looks for opportunities for SFX, Animations, general Sauce
 
 SSO Ideas:
 youtube
