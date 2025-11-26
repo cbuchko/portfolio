@@ -26,6 +26,7 @@ import { UPSContent, UPSControls } from './UPS'
 import { UPSFinishContent, UPSFinishControls } from './UPSFinish'
 import { SSOContent, SSOIds } from './SSO'
 import { FishingContent, FishingControls } from './Fishing'
+import { RoadTripContent } from './RoadTrip'
 
 export type LevelProps = {
   level: number
@@ -93,7 +94,7 @@ export const useLevels = () => {
     { content: SSOContent }, //15
     { content: MaintenanceContent, controls: MaintenanceControls },
     { content: QuotesContent, controls: QuotesControl },
-    //18
+    { content: RoadTripContent, requiresLoad: true },
     //19
     { content: SSOContent }, //20
     { content: AquariumContent, controls: AquariumControls },

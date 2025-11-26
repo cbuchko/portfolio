@@ -32,8 +32,12 @@
   animation: text-float-in 2s ease;
 }
 
-#map {
+.map {
   height: 300px;
+}
+
+.map-full {
+  height: 100vh;
 }
 
 @keyframes error-flash {

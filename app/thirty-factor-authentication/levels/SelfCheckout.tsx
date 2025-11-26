@@ -36,7 +36,6 @@ const ShoppingItems: ShoppingItem[] = [
     cost: 5.99,
     url: '/thirty-factor-authentication/groceries/milk.webp',
   },
-  { id: 'wine', title: 'Wine', cost: 10, url: '/thirty-factor-authentication/groceries/wine.png' },
   {
     id: 'cheese',
     title: 'Cheese',
@@ -61,12 +60,14 @@ const ShoppingItems: ShoppingItem[] = [
     cost: 5.45,
     url: '/thirty-factor-authentication/groceries/peanut.png',
   },
+  { id: 'wine', title: 'Wine', cost: 10, url: '/thirty-factor-authentication/groceries/wine.png' },
   {
     id: 'bread',
     title: 'Bread',
     cost: 6.99,
     url: '/thirty-factor-authentication/groceries/bread.png',
   },
+
   {
     id: 'cookie',
     title: 'Cookie',
