@@ -36,7 +36,7 @@ export const RoadTripContent = ({ playerId, handleLevelAdvance, setIsLoading }: 
     setIsLoading(false)
   }, [setIsLoading])
 
-  if (!startingPoint) return null
+  if (!startingPoint || startingPoint.length !== 2) return null
 
   return (
     <div className="fixed top-0 left-0 h-screen w-screen">

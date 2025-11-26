@@ -46,8 +46,8 @@ export const FallbackOneContent = ({
         <div>The password must include:</div>
         <ul className="list-disc ml-4">
           <li>At least 10 total characters</li>
-          <li>Four uppercase characters</li>
-          <li>Two symbols</li>
+          <li>Four uppercase characters total</li>
+          <li>Two symbols total</li>
           <li>No consecutive consonants</li>
           <li>A month of the year</li>
         </ul>

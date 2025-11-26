@@ -86,39 +86,40 @@ Fishing - Stardew Valley
 Osu
 
 TUTORIALS (first 10):
-Level 1
-Legal name
-Auth App Basic
-SMS code
-Zodiac
-Create Password Part 1
-Birthplace
-Biometric
-Create Password Part 2
-UPS Part 1
-
+Level 1 (N/A)
+Legal name (TRIVIA)
+Auth App Basic (RAGE)
+SMS code (RAGE)
+Zodiac (TRIVIA)
+Create Password Part 1 (RAGE)
+Birthplace (TRIVIA)
+Biometric (SKILL)
+Create Password Part 2 (RAGE)
+UPS Part 1 (RAGE)
+ 
 MID-GAME (middle 10):
-SSO 1
-SSO 2
-SSO 3
-Post-it
-Auth App Redux
-IMDB
-Quotes
-Maintenance
+SSO 1 (RAGE)
+SSO 2 (SKILL)
+SSO 3 (RAGE)
+Post-it (RAGE)
+Auth App Redux (RAGE)
+IMDB (TRIVIA)
+Quotes (TRIVIA)
+Road Trip (RAGE/SKILL)
+Maintenance (RAGE)
 
 
 TRUE SHOWSTOPPERS (final 10):
-Papers Please
-Aquarium
-Undertale
-Bomb Defusal
-Tax Return
-Bird Calls 
-Parlor Room
-Einstein
-UPS Part 2
-Fishing
+Papers Please (TRIVIA)
+Aquarium (SKILL)
+Undertale (SKILL)
+Bomb Defusal (RAGE)
+Tax Return (RAGE)
+Bird Calls (SKILL)
+Parlor Room (SKILL)
+Einstein (SKILL)
+UPS Part 2 (RAGE)
+Fishing (SKILL)
 
 Input Styles:
     Tutorial
