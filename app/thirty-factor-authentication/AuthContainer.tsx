@@ -10,7 +10,7 @@ type AuthContainerProps = {
   playerId: PlayerIds
   baseProps: LevelProps
   setIsGameOver: (value: boolean) => void
-  Content: (props: ContentProps) => JSX.Element
+  Content: (props: ContentProps) => JSX.Element | null
   Controls?: (props: ControlProps) => JSX.Element
 }
 

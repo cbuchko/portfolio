@@ -3,7 +3,6 @@ import { ContentProps } from './types'
 import { PlayerInformation } from '../player-constants'
 import dynamic from 'next/dynamic'
 import { MapProps, Marker } from './Map'
-import { start } from 'repl'
 
 //have to lazy load map because leaflet does not support SSR
 const Map = dynamic<MapProps>(() => import('./Map').then((mod) => mod.default), {
@@ -35,7 +34,7 @@ export const RoadTripContent = ({ playerId, handleLevelAdvance, setIsLoading }: 
     setStartingPoint(start.coordinates)
     setMarkers(markers)
     setIsLoading(false)
-  }, [])
+  }, [setIsLoading])
 
   if (!startingPoint) return null
 
