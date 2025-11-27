@@ -22,7 +22,7 @@ export const BiometricContent = ({ validateAdvance }: ContentProps) => {
 
   return (
     <>
-      <h3>Hold your finger on the scanner to complete Biometric Authentication</h3>
+      <h3>Keep your finger on the scanner to complete Biometric Authentication</h3>
       {startPosition && (
         <Scanner
           setProgress={setProgress}
