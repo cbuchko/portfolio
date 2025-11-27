@@ -91,20 +91,18 @@ export const useLevels = () => {
     { content: SSOContent },
     { content: AppCodeContent, controls: AppCodeControls },
     { content: PostItContent, controls: PostItControls },
-    { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
+    { content: QuotesContent, controls: QuotesControl },
     { content: SSOContent }, //15
     { content: MaintenanceContent, controls: MaintenanceControls },
-    { content: QuotesContent, controls: QuotesControl },
-    { content: RoadTripContent, requiresLoad: true },
     { content: BrainScanContent, controls: BrainScanControls },
-
-    //19
+    { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
+    { content: RoadTripContent, requiresLoad: true },
     { content: SSOContent }, //20
+    { content: ParlorRoomContent, controls: undefined, requiresLoad: true },
     { content: AquariumContent, controls: AquariumControls },
     { content: TaxReturnContent, controls: TaxReturnControls },
-    { content: ParlorRoomContent, controls: undefined, requiresLoad: true },
-    { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true },
     { content: FishingContent, controls: FishingControls }, //25
+    { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true },
     { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true },
     { content: BombDefusalContent, controls: BombDefusalControls },
     { content: EinsteinContent, controls: EinsteinControls },

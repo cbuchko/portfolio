@@ -20,7 +20,7 @@ export const BrainScanContent = ({ handleLevelAdvance, validateAdvance }: Conten
       setHealth(100)
     }
     if (isCompleted) validateAdvance()
-  }, [isDead, isCompleted, handleLevelAdvance])
+  }, [isDead, isCompleted, handleLevelAdvance, validateAdvance])
 
   //start and time the game
   useEffect(() => {
@@ -49,7 +49,7 @@ export const BrainScanContent = ({ handleLevelAdvance, validateAdvance }: Conten
       <p className="text-lg">
         To finish Biometric Authentication, we need to retrieve your brain implant.
       </p>
-      <p className="text-lg">This shouldn't hurt as long as you stay in the zone.</p>
+      <p className="text-lg">{`This shouldn't hurt as long as you stay in the zone.`}</p>
       {startPosition && isStarted && !isCompleted && (
         <Scanner
           setHealth={setHealth}
