@@ -62,7 +62,7 @@ export const AuthContainer = ({
           className="flex justify-between items-center min-w-[400px] py-1 px-4 rounded-t-md bg-blue-300 border"
         >
           <div className="flex gap-2 items-center">
-            <small className="w-full">{`Authenticating: ${PlayerInformation[playerId].name}`}</small>
+            <h6 className="w-full text-xs">{`Authenticating: ${PlayerInformation[playerId].name}`}</h6>
             <div className="flex itsems-center w-max">
               {Array.from({ length: errorCount }).map((_, idx) => (
                 <small key={idx} className="text-red-500 h-5 w-5">
@@ -71,7 +71,7 @@ export const AuthContainer = ({
               ))}
             </div>
           </div>
-          <small>{`Level ${level}/${maxLevel}`}</small>
+          <h6 className="text-xs">{`Level ${level}/${maxLevel}`}</h6>
         </div>
         <div id="auth-body" className="border rounded-sm border-t-0 rounded-t-none">
           <div id="auth-content" className="px-4 py-8">

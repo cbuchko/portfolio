@@ -11,6 +11,7 @@ small {
   transition: all 0.2s ease-out;
   background-color: white;
   max-height: 35px;
+  font-family: 'Poppins';
 }
 
 .auth-button:hover {

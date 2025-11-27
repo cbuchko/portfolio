@@ -5,13 +5,13 @@ import Script from 'next/script'
 
 const sourceSansPro = Source_Sans_3({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'], // Choose the weights you need
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 })
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'], // Choose the weights you need
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 })
 
@@ -24,6 +24,10 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: 'Connor Buchko',
   description: "Connor Buchko's Porfolio",
+  assets: `${poppins} ${ibmPlexMono}`,
+  icons: {
+    icon: '/main-favicon.ico',
+  },
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -42,7 +46,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossOrigin=""
       />
-      <body className={`${sourceSansPro.className} antialiased`}>{children}</body>
+      <body className={`${sourceSansPro.className}  antialiased`}>{children}</body>
     </html>
   )
 }
