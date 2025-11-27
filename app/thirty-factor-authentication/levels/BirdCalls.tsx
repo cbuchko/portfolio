@@ -28,7 +28,7 @@ export const BirdCallContent = ({ validateAdvance, cancelAdvance, setIsLoading }
   return (
     <>
       <div className="flex items-center justify-between">
-        <h3>Identify the Bird Call</h3>
+        <p className="text-lg">Identify the Bird Call</p>
         <audio
           controls
           controlsList="nodownload"

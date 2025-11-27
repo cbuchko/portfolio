@@ -42,11 +42,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossOrigin=""
       />
-      <body
-        className={`${sourceSansPro.className} ${poppins.className} ${ibmPlexMono.className} antialiased`}
-      >
-        {children}
-      </body>
+      <body className={`${sourceSansPro.className} antialiased`}>{children}</body>
     </html>
   )
 }

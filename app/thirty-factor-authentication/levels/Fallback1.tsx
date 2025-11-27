@@ -31,8 +31,8 @@ export const FallbackOneContent = ({
 
   return (
     <>
-      <h3>{`We've changed our password policies since your last login.`}</h3>
-      <h3>Please create a new password.</h3>
+      <p className="text-lg">{`We've changed our password policies since your last login.`}</p>
+      <p className="text-lg">Please create a new password.</p>
       <input
         className="border w-full rounded-md mt-4 px-2 py-1"
         placeholder="Enter password..."

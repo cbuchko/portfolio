@@ -34,7 +34,7 @@ export const IMDBContent = ({
 
   return (
     <>
-      <h3>Confirm the media you have appeared in</h3>
+      <p className="text-lg">Confirm the media you have appeared in</p>
       <div className="grid grid-cols-5 gap-4 mt-4">
         {mediaShuffled &&
           mediaShuffled.map((media) => (

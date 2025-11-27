@@ -38,7 +38,9 @@ export const Spotify = ({
 
   return (
     <>
-      <div>To verify yourself as a Spotify user, please complete this Rhythm challenge.</div>
+      <p className="text-lg">
+        To verify yourself as a Spotify user, please complete this Rhythm challenge.
+      </p>
       <div className="w-full flex justify-center mt-4">
         <button
           className="border-2 py-1 px-3 rounded-md cursor-pointer"

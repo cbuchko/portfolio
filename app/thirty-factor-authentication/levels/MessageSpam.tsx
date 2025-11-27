@@ -37,7 +37,7 @@ export const MessageSpamContent = ({
 
   return (
     <>
-      <h3>{`We've sent a code to your mobile device.`}</h3>
+      <p className="text-lg">{`We've sent a code to your mobile device.`}</p>
       <div className="flex justify-between mt-2">
         <small>{`Don't tell this code to anyone.`}</small>
         <button className="text-xs underline cursor-pointer" onClick={handleResendCode}>
@@ -53,7 +53,6 @@ export const MessageSpamContent = ({
           if (e.code === 'Enter') handleLevelAdvance()
         }}
       />
-      <ul></ul>
       {message && (
         <div
           key={message}

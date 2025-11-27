@@ -1,14 +1,11 @@
 Level Ideas:
 Color memory test
 
-MORE SIMPLER IDEAS?
-Biometric run back?
-
 GREAT IDEAS:
 maintenance becomes stanley parable?
 
 OTHER IDEAS:
-No game over, just tally mistakes
+Logo Design and Portfolio 
 Link back to portfolio 
 Game name in tab
 In credits thank Neal, and game homage creators
@@ -16,6 +13,9 @@ Spice up end screen in general
 Cloudflare
 Change out h3's to p's so it uses better font
 "Sauce" Pass. Looks for opportunities for SFX, Animations, general Sauce
+Sentry for monitoring
+Constant timer
 
 STRECH GOALS:
 Mobile
+Character randomizer

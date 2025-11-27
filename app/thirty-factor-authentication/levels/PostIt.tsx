@@ -27,8 +27,10 @@ export const PostItContent = ({
 
   return (
     <>
-      <h3>When you created your account 15 years ago, you chose a secret recovery keyword.</h3>
-      <h3>Please enter that now.</h3>
+      <p className="text-lg">
+        When you created your account 15 years ago, you chose a secret recovery keyword.
+      </p>
+      <p className="text-lg">Please enter that now.</p>
       <input
         className="border w-full rounded-md mt-2 px-2 py-1"
         placeholder="Enter the keyword..."

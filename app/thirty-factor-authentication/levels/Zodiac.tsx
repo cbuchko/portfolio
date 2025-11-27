@@ -53,7 +53,7 @@ export const ZodiacContent = ({ playerId, validateAdvance, cancelAdvance }: Cont
 
   return (
     <>
-      <h3 className="mb-4">Please confirm your zodiac alignment.</h3>
+      <p className="mb-4 text-lg">Please confirm your zodiac alignment.</p>
       <div className="flex justify-between gap-4">
         <DropdownSelector
           id={'zodiac-sun'}

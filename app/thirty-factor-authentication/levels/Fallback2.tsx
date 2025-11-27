@@ -24,7 +24,7 @@ export const FallbackTwoContent = ({
 
   return (
     <>
-      <h3>Please confirm your new password.</h3>
+      <p className="text-lg">Please confirm your new password.</p>
       <input
         className="border w-full rounded-md mt-2 px-2 py-1"
         placeholder="Enter password..."

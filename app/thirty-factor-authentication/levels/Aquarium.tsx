@@ -24,8 +24,8 @@ export const AquariumContent = ({
 
   return (
     <>
-      <h3>Oh no! Our aquarium broke and the fish are loose!</h3>
-      <h3>Please count how many fish swim by!</h3>
+      <p className="text-lg">Oh no! Our aquarium broke and the fish are loose!</p>
+      <p className="text-lg">Please count how many fish swim by!</p>
       <div className="w-full flex justify-end">
         <button
           className="underline text-sm cursor-pointer"

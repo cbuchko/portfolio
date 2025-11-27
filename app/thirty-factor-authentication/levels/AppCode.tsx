@@ -32,7 +32,7 @@ export const AppCodeContent = ({
 
   return (
     <>
-      <h3>Enter the code from your Authenticator App</h3>
+      <p className="text-lg">Enter the code from your Authenticator App</p>
       <input
         className="border w-full rounded-md mt-1 px-2 py-1"
         placeholder="Enter code..."

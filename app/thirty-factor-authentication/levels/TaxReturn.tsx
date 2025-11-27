@@ -64,7 +64,7 @@ export const TaxReturnContent = ({
 
   return (
     <>
-      <h3>Enter your net income from your 2025 tax return.</h3>
+      <p className="text-lg">Enter your net income from your 2025 tax return.</p>
       <input
         className="border w-full rounded-md mt-1 px-2 py-1"
         placeholder="Enter income..."
@@ -74,7 +74,7 @@ export const TaxReturnContent = ({
           if (e.code === 'Enter') handleLevelAdvance()
         }}
       />
-      <div className="absolute -bottom-12 border w-[475px] h-[470px] -translate-x-[50%] translate-y-[100%] left-[50%] shadow-xl p-2 bg-gray-100">
+      <div className="absolute -bottom-12 border  h-[470px] -translate-x-[50%] translate-y-[100%] left-[50%] shadow-xl p-2 bg-gray-100">
         <div className="text-center mb-2">2025 Income Tax Return</div>
         <div className="border w-max h-max">
           <div className="flex">
@@ -122,10 +122,6 @@ export const TaxReturnContent = ({
             <FormLineItem label="NET INCOME: Add line 36 and line 47" number={48} />
           </div>
         </div>
-        <p className="text-[8px] max-w-[450px] px-2 mt-1">
-          This by no means is meant to mimick a real government issued tax return and is merely for
-          entertainment and parody purposes.
-        </p>
       </div>
     </>
   )

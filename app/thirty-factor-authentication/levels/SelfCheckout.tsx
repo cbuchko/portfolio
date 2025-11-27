@@ -132,7 +132,9 @@ export const SelfCheckoutContent = ({ handleLevelAdvance, cancelAdvance }: Conte
   const isAnyError = isUnexpectedItemError || isUnbaggedItemError || isAgeVerificationError
   return (
     <>
-      <h3>To verify yourself as a Walmart user, please demonstrate how to use a Self-Checkout.</h3>
+      <p className="text-lg">
+        To verify yourself as a Walmart user, please demonstrate how to use a Self-Checkout.
+      </p>
       <div className="flex gap-10 mt-8">
         <DropArea
           title="Shopping Cart"

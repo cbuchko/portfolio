@@ -141,7 +141,7 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
   const codeDisplay = code.padStart(4, '0')
   return (
     <>
-      <h3>{`We've sent instructions to defuse this bomb to your mobile device.`}</h3>
+      <p className="text-lg">{`We've sent instructions to defuse this bomb to your mobile device.`}</p>
       <div className="flex justify-between mt-2">
         <small>{`Don't tell the instructions to anyone.`}</small>
         <button className="text-xs underline cursor-pointer" onClick={handleResendCode}>

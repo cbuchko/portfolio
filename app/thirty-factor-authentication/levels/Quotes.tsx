@@ -38,7 +38,7 @@ export const QuotesContent = ({ playerId, validateAdvance, cancelAdvance }: Cont
 
   return (
     <>
-      <h3>Which of these quotes have you said?</h3>
+      <p className="text-lg">Which of these quotes have you said?</p>
       <div className="flex flex-wrap gap-4 w-[1100px] mt-8">
         {quotes.map((quote, idx) => {
           const key = idx.toString()

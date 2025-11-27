@@ -12,12 +12,12 @@ export const OneContent = ({ playerId, validateAdvance }: ContentProps) => {
   return (
     <>
       <h2 className="mb-4 text-3xl">Welcome Back!</h2>
-      <h3 className="w-[350px]">
+      <p className="w-[350px] text-lg">
         {`It's been a while since we've seen you. Please confirm your identity to continue.`}
-      </h3>
-      <h3 className="mt-4">
+      </p>
+      <p className="mt-4 text-lg">
         {`Previously Signed In As:`} <span className="mono pl-2 font-semibold">{name}</span>
-      </h3>
+      </p>
     </>
   )
 }

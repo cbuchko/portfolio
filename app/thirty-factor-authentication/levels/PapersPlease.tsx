@@ -76,18 +76,18 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
 
   return (
     <>
-      <h3 className="mb-4">
+      <p className="mb-4 text-lg">
         Our authenticators are at their limit. Please manually authenticate this user for us.
-      </h3>
-      <div className="flex justify-between">
+      </p>
+      <div className="flex justify-between gap-8">
         <div>
-          <h3 className="mb-2">Identify all discrepancies, if there are any.</h3>
-          <h3>If approved:</h3>
+          <p className="mb-2 text-lg">Identify all discrepancies, if there are any.</p>
+          <p className="text-lg">If approved:</p>
           <ol className="list-decimal ml-4">
             <li>Identify no discrepancies</li>
             <li>Click APPROVED</li>
           </ol>
-          <h3 className="mt-2">If Denied:</h3>
+          <p className="mt-2 text-lg">If Denied:</p>
           <ol className="list-decimal ml-4">
             <li>Identify all discrepancies</li>
             <li>Click DENIED</li>

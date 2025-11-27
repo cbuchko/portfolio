@@ -21,10 +21,10 @@ export const ParlorRoomContent = ({ handleLevelAdvance, setIsLoading }: ContentP
   }
   return (
     <>
-      <div>
+      <p className="text-lg">
         You spent much of your childhood engaging in puzzles and riddles. Why not try one now?
-      </div>
-      <div>Select the box that contains the prize.</div>
+      </p>
+      <p className="text-lg">Select the box that contains the prize.</p>
       <div className="mono my-10 text-sm">
         <h3 className="mono font-bold">
           THERE WILL ALWAYS BE AT LEAST ONE BOX WHICH DISPLAYS ONLY TRUE STATEMENTS.

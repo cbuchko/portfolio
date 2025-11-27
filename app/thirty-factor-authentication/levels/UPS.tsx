@@ -28,12 +28,14 @@ export const UPSContent = ({
 
   return (
     <>
-      <h3>
+      <p className="text-lg">
         To ensure the most secure authentication possible, we will be mailing a physical
         authentication key to you.
-      </h3>
-      <h3>This should only take up to 10 business minutes.</h3>
-      <h3>You may proceed with the next levels while you wait. We appreciate your patience.</h3>
+      </p>
+      <p className="text-lg">This should only take up to 10 business minutes.</p>
+      <p className="text-lg">
+        You may proceed with the next levels while you wait. We appreciate your patience.
+      </p>
       <div className="flex gap-12 mt-8 p-8 bg-gray-100 w-max mx-auto">
         <div>
           <small>Your shipment</small>

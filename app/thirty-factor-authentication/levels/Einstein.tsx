@@ -27,16 +27,18 @@ export const EinsteinContent = ({ validateAdvance, cancelAdvance }: ContentProps
 
   return (
     <>
-      <h3>As you may know, per our platforms terms, you must have an IQ of 130+ to enter.</h3>
-      <h3 className="mb-4">Please prove you meet our standards by solving this puzzle.</h3>
+      <p className="text-lg">
+        As you may know, per our platforms terms, you must have an IQ of 130+ to enter.
+      </p>
+      <p className="text-lg mb-4">Please prove you meet our standards by solving this puzzle.</p>
       <ul className="grid grid-cols-2 text-sm gap-1 gap-x-12 list-disc ml-4">
         {rules.map((rule, idx) => (
           <li key={idx}>{rule}</li>
         ))}
       </ul>
-      <h3 className="mt-3">
+      <p className="text-lg mt-3">
         Submit only after <span className="font-bold">all</span> dropdowns are correctly filled.
-      </h3>
+      </p>
       <div className="grid grid-cols-6 gap-4 items-center justify-center -translate-x-4 mt-8 select-none">
         <div />
         <h5 className="text-center font-medium translate-y-2">House #1</h5>

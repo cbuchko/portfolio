@@ -24,7 +24,7 @@ export const MapContent = ({ playerId, validateAdvance, cancelAdvance }: Content
 
   return (
     <div className="w-[500px]">
-      <h3>Please confirm your city of birth.</h3>
+      <p className="text-lg">Please confirm your city of birth.</p>
       <Map
         handleCitySelect={handleCitySelect}
         selectedCity={selectedCity}

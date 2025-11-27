@@ -12,12 +12,12 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps)
 
   return (
     <>
-      <h3>{`Hold on... you aren't ${characterName}. You lied. You've been lying this whole time.`}</h3>
-      <h3>{`You came so close, but this level will be your last.`}</h3>
-      <h3>{`GUARDS!`}</h3>
-      <h3 className="italic text-sm mt-4">
+      <p className="text-lg">{`Hold on... you aren't ${characterName}. You lied. You've been lying this whole time.`}</p>
+      <p className="text-lg">{`You came so close, but this level will be your last.`}</p>
+      <p className="text-lg">{`GUARDS!`}</p>
+      <p className="italic text-sm mt-4">
         Knowing you are so close to finishing... it fills you with deterimination.
-      </h3>
+      </p>
       <div className="relative w-full flex items-center justify-center mt-8">
         <div>
           <BulletHell
