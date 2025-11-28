@@ -86,7 +86,7 @@ export function addMinutesToDateAndFormat(date: Date | number, minutes: number) 
 
 export function formatElapsedTime(timestamp: number): string {
   const now = Date.now()
-  let diff = Math.max(0, now - timestamp) // milliseconds
+  const diff = Math.max(0, now - timestamp) // milliseconds
 
   const seconds = Math.floor(diff / 1000)
   const minutes = Math.floor(seconds / 60)
