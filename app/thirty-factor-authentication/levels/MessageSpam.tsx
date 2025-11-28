@@ -56,8 +56,7 @@ export const MessageSpamContent = ({
       {message && (
         <div
           key={message}
-          className="absolute -bottom-12 left-0 w-full px-4 py-2 rounded-lg text-white text-message select-none shadow-lg "
-          style={{ backgroundColor: '#32D74B' }}
+          className="absolute -bottom-12 left-0 w-full px-4 py-2 rounded-lg text-white text-message select-none shadow-lg bg-[#27ad3b]"
         >
           {message}
         </div>

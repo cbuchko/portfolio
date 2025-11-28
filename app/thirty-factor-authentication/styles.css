@@ -172,7 +172,7 @@ small {
 
 @keyframes osu-outline {
   0% {
-    outline-offset: 24px;
+    outline-offset: 48px;
   }
   100% {
     outline-offset: 0px;
@@ -180,5 +180,5 @@ small {
 }
 
 .osu-outline {
-  animation: osu-outline 2s linear;
+  animation: osu-outline 1s linear;
 }

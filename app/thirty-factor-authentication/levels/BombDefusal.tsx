@@ -180,8 +180,7 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
       {message && (
         <div
           key={message}
-          className="absolute -bottom-3 translate-y-[100%] left-0 w-full px-4 py-2 rounded-lg text-white text-message select-none shadow-lg whitespace-pre-line origin-bottom"
-          style={{ backgroundColor: '#32D74B' }}
+          className="absolute -bottom-3 translate-y-[100%] left-0 w-full px-4 py-2 rounded-lg text-white text-message select-none shadow-lg whitespace-pre-line origin-bottom bg-[#27ad3b]"
         >
           {message}
         </div>

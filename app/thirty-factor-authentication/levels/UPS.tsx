@@ -32,7 +32,6 @@ export const UPSContent = ({
         To ensure the most secure authentication possible, we will be mailing a physical
         authentication key to you.
       </p>
-      <p className="text-lg">This should only take up to 10 business minutes.</p>
       <p className="text-lg">
         You may proceed with the next levels while you wait. We appreciate your patience.
       </p>

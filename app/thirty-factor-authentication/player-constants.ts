@@ -5,6 +5,7 @@ export enum PlayerIds {
 export type Player = {
   name: string
   fullName: string
+  fullNameAliases: string[]
   birthCity: string
   zodiac: string
   taxReturn: {
@@ -48,6 +49,11 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
   [PlayerIds.Biden]: {
     name: 'Joe Biden',
     fullName: 'Joseph Robinette Biden Jr.',
+    fullNameAliases: [
+      'Joseph Robinette Biden Jr.',
+      'Joseph Robinette Biden Jr',
+      'Joseph Robinette Biden Junior',
+    ],
     birthCity: 'scranton',
     zodiac: 'scorpio-taurus-sagittarius',
     taxReturn: {

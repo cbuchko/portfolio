@@ -9,11 +9,11 @@ export const TwoContent = ({
   handleLevelAdvance,
 }: ContentProps) => {
   const [nameInput, setNameInput] = useState('')
-  const inputTarget = PlayerInformation[playerId].fullName
+  const inputTarget = PlayerInformation[playerId].fullNameAliases
 
   const handleInputChange = (input: string) => {
     setNameInput(input)
-    if (inputTarget.toLocaleLowerCase() === input.toLocaleLowerCase()) {
+    if (inputTarget.find((alias) => alias.toLocaleLowerCase() === input.toLocaleLowerCase())) {
       validateAdvance()
     } else {
       cancelAdvance()

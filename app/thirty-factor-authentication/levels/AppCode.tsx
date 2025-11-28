@@ -32,7 +32,7 @@ export const AppCodeContent = ({
 
   return (
     <>
-      <p className="text-lg">Enter the code from your Authenticator App</p>
+      <p className="text-lg">Enter the code from your Authenticator App.</p>
       <input
         className="border w-full rounded-md mt-1 px-2 py-1"
         placeholder="Enter code..."
@@ -51,7 +51,7 @@ export const AppCodeContent = ({
                 <AppCode
                   key={idx}
                   title={app}
-                  targetCode={isTarget ? targetCode : undefined}
+                  isTarget={isTarget}
                   setTargetCode={setTargetCode}
                   duration={5}
                   isDelayed
@@ -67,19 +67,13 @@ export const AppCodeContent = ({
 
 type AppCodeProps = {
   title: string
-  targetCode?: string
+  isTarget?: boolean
   setTargetCode?: (code: string) => void
   duration: number
   isDelayed?: boolean
 }
 
-export const AppCode = ({
-  title,
-  targetCode,
-  setTargetCode,
-  duration,
-  isDelayed,
-}: AppCodeProps) => {
+export const AppCode = ({ title, isTarget, setTargetCode, duration, isDelayed }: AppCodeProps) => {
   const [elapsed, setElapsed] = useState(0)
   const [code, setCode] = useState(makeAuthCode(6))
   const intervalRef = useRef<NodeJS.Timeout>(null)
@@ -95,7 +89,7 @@ export const AppCode = ({
         if (diff % duration <= 0.1) {
           const newCode = makeAuthCode(6)
           setCode(newCode)
-          if (!!targetCode) setTargetCode?.(newCode)
+          if (isTarget) setTargetCode?.(newCode)
         }
 
         setElapsed(diff % duration)
@@ -106,7 +100,7 @@ export const AppCode = ({
       if (intervalRef.current) clearInterval(intervalRef.current)
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
     }
-  }, [setTargetCode, targetCode, isDelayed, duration])
+  }, [isDelayed, isTarget, duration])
 
   const progress = 0.999999 - elapsed / duration // 1 → 0
 

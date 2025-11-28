@@ -29,7 +29,7 @@ export const BasicAppCodeContent = ({
 
   return (
     <>
-      <p className="text-lg">Enter the code from your Authenticator App</p>
+      <p className="text-lg">Enter the code from your Authenticator App.</p>
       <input
         className="border w-full rounded-md mt-1 px-2 py-1"
         placeholder="Enter code..."
@@ -44,7 +44,7 @@ export const BasicAppCodeContent = ({
           <div className="flex flex-wrap justify-center mt-6">
             <AppCode
               title={'Thirty Factor Auth'}
-              targetCode={targetCode}
+              isTarget={true}
               setTargetCode={setTargetCode}
               duration={3}
             />
