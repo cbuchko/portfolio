@@ -82,7 +82,7 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
       <div className="flex justify-between gap-8">
         <div>
           <p className="mb-2 text-lg">Identify all discrepancies, if there are any.</p>
-          <p className="text-lg">If approved:</p>
+          <p className="text-lg">If Approved:</p>
           <ol className="list-decimal ml-4">
             <li>Identify no discrepancies</li>
             <li>Click APPROVED</li>
@@ -453,12 +453,9 @@ const generateDiscrepancies = (
   const discrepancyIds: Set<string> = new Set()
 
   let info = PlayerInformation[playerId].license
-  const isApprove = Math.random() > 0.8
-  if (isApprove)
-    return { gameInfo: { ...info, ...getDynamicInfo() }, discrepancyKeys: discrepancyIds }
 
-  //between 1-3 (N) discrepencies
-  const numberOfDiscrepencies = Math.ceil(Math.random() * 3)
+  //between 2-4 (N) discrepencies
+  const numberOfDiscrepencies = Math.ceil(Math.random() * (4 - 2) + 2)
   const discrepancyKeys = shuffle(Object.keys(DiscrepancyBase))
 
   //the first N indexes get turned into Errors

@@ -8,7 +8,6 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
   const [fishPosition, setFishPosition] = useState(0)
   const [rodPosition, setRodPosition] = useState(0)
   const [progress, setProgress] = useState(40)
-
   const ticksSinceLastSpace = useRef(2)
 
   useEffect(() => {
@@ -38,7 +37,7 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
       if (fishPosition > rodPosition && fishPosition < rodPosition + rodHeight) {
         setProgress((progress) => progress + 0.5)
       } else if (progress > 0) {
-        setProgress((progress) => progress - 0.4)
+        setProgress((progress) => progress - 0.5)
       }
     }, 100)
 

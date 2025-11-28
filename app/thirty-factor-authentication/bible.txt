@@ -13,3 +13,13 @@ STRECH GOALS:
 Mobile
 Character randomizer
 Constant timer
+
+LEVEL MODIFICATION IDEAS:
+bomb defusal complications 
+    - dont press
+    - wait some time
+undertale 
+    - i-frames
+    - must be easier
+maintenance
+    - is noticeably the worst level

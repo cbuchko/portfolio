@@ -11,11 +11,12 @@ export const AquariumContent = ({
   handleLevelAdvance,
 }: ContentProps) => {
   const [maxFish, setMaxFish] = useState(generateMaxFish())
+  const [fishCount, setFishCount] = useState(0)
   const [numberInput, setNumberInput] = useState('')
 
   const handleInputChange = (input: string) => {
     setNumberInput(input)
-    if (maxFish === parseInt(input)) {
+    if (fishCount === parseInt(input)) {
       validateAdvance()
     } else {
       cancelAdvance()
@@ -43,14 +44,23 @@ export const AquariumContent = ({
           if (e.code === 'Enter') handleLevelAdvance()
         }}
       />
-      {typeof window !== 'undefined' && <FishTank maxFish={maxFish} />}
+      {typeof window !== 'undefined' && (
+        <FishTank maxFish={maxFish} fishCount={fishCount} setFishCount={setFishCount} />
+      )}
       <div className="fixed top-0 left-0 h-screen w-screen bg-blue-500/30 pointer-events-none" />
     </>
   )
 }
 
-const FishTank = ({ maxFish }: { maxFish: number }) => {
-  const [fishCount, setFishCount] = useState(0)
+const FishTank = ({
+  fishCount,
+  setFishCount,
+  maxFish,
+}: {
+  fishCount: number
+  setFishCount: React.Dispatch<React.SetStateAction<number>>
+  maxFish: number
+}) => {
   const intervalRef = useRef<NodeJS.Timeout>(null)
 
   //resets the game
@@ -61,17 +71,19 @@ const FishTank = ({ maxFish }: { maxFish: number }) => {
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
-      setFishCount((count) => count + 1)
+      const increase = Math.random() < 0.3 ? 2 : 1
+      setFishCount((count) => count + increase)
     }, 500)
 
     return () => {
-      if (intervalRef.current) clearTimeout(intervalRef.current)
+      if (intervalRef.current) clearInterval(intervalRef.current)
     }
   }, [maxFish])
 
   useEffect(() => {
-    if (maxFish == fishCount && intervalRef.current) {
-      clearTimeout(intervalRef.current)
+    if (maxFish <= fishCount && intervalRef.current) {
+      console.log('game is done')
+      clearInterval(intervalRef.current)
     }
   }, [fishCount, maxFish])
 
@@ -102,7 +114,7 @@ const Fish = () => {
 
       let newX
       let newY
-      const moveMagnitude = Math.random() * (400 - 100) + 100
+      const moveMagnitude = Math.random() * (600 - 100) + 600
       if (!isLeft) {
         newX = oldX - moveMagnitude
       } else newX = oldX + moveMagnitude

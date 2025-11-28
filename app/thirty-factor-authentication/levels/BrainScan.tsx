@@ -161,7 +161,7 @@ const Scanner = ({
     }
 
     const interval = setInterval(() => {
-      setHealth((prevHealth) => prevHealth - 0.5)
+      setHealth((prevHealth) => prevHealth - 0.4)
     }, 100)
 
     return () => {

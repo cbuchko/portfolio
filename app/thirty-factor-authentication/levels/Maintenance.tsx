@@ -78,12 +78,12 @@ export const MaintenanceControls = ({ handleLevelAdvance }: ControlProps) => {
       {timeElapsed < 46 && <div className="grow" />}
       {timeElapsed > 46 && (
         <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
-          Dude just relax
+          Relax
         </button>
       )}
       {timeElapsed > 35 && (
         <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
-          Beat Game
+          Win Game
         </button>
       )}
       {timeElapsed > 15 && (

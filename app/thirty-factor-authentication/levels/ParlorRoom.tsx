@@ -22,19 +22,17 @@ export const ParlorRoomContent = ({ handleLevelAdvance, setIsLoading }: ContentP
   return (
     <>
       <p className="text-lg">
-        You spent much of your childhood engaging in puzzles and riddles. Why not try one now?
+        In front of you sits three boxes. Select the box that contains the prize.
       </p>
-      <p className="text-lg">Select the box that contains the prize.</p>
-      <div className="mono my-10 text-sm">
-        <h3 className="mono font-bold">
+      <div className="text-lg my-8">
+        <p className="mono font-bold mb-2">RULES:</p>
+        <p className="font-bold">
           THERE WILL ALWAYS BE AT LEAST ONE BOX WHICH DISPLAYS ONLY TRUE STATEMENTS.
-        </h3>
-        <h3 className="mono font-bold my-2">
+        </p>
+        <p className=" font-bold my-2">
           THERE WILL ALWAYS BE AT LEAST ONE BOX WHICH DISPLAYS ONLY FALSE STATEMENTS.
-        </h3>
-        <h3 className="mono font-bold">
-          ONLY ONE BOX HAS A PRIZE WITHIN. THE OTHER 2 ARE ALWAYS EMPTY.
-        </h3>
+        </p>
+        <p className=" font-bold">ONLY ONE BOX HAS A PRIZE WITHIN. THE OTHER 2 ARE ALWAYS EMPTY.</p>
       </div>
       <div className="flex justify-between px-4">
         <ParlorBox
