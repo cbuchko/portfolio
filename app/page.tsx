@@ -69,17 +69,13 @@ export default function Home() {
       <section className={sectionClass}>
         <h3 className={headerClass}>Personal Projects</h3>
         <p className={paragraphClass}>
-          {`My current focus has been developing web-based games. These are fun and interactive experiences built with React and TypeScript. I've just added my first but many more to come!`}
+          {`My current focus has been developing web-based games. These are fun and interactive experiences built with React and TypeScript.`}
         </p>
         <div className="flex flex-col md:flex-row gap-8 md:gap-0 items-center mt-8 justify-evenly mb-16">
           {WebsiteProjects.map((project, idx) => (
             <Project key={idx} {...project} isItch={false} />
           ))}
         </div>
-        <p className={paragraphClass}>
-          {`Back in university I was super into game development and published a
-          few small Unity games online:`}
-        </p>
         <div className="flex flex-col md:flex-row gap-8 md:gap-0 items-center mt-8 justify-evenly mb-4">
           {Projects.map((project, idx) => (
             <Project key={idx} {...project} isItch={true} />

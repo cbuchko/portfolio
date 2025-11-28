@@ -78,6 +78,11 @@ export const Projects: ProjectProps[] = [
 
 export const WebsiteProjects: ProjectProps[] = [
   {
+    img: '/thirty-factor-authentication/full-logo.png',
+    body: 'Verify yourself by completing thirty different authentication methods. Each method being increasingly more bizarre than the last. ',
+    link: '/thirty-factor-authentication',
+  },
+  {
     img: '/portfolio_clicker2.png',
     body: 'An idle game where you incrementally build a website from scratch. Watch chaos ensue as your creation grows!',
     link: '/idle_game',

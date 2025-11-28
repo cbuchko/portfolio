@@ -26,12 +26,11 @@ export default function ThirtyFactorAuthentication() {
       <div className="relative w-screen h-screen flex flex-col overflow-y-auto">
         <div className="absolute left-[50%] -translate-x-[50%] top-8 flex items-center gap-2">
           <Image
-            src="/thirty-factor-authentication/lock-logo.png"
+            src="/thirty-factor-authentication/horizontal-logo.png"
             alt="logo"
-            height={24}
-            width={24}
+            height={48}
+            width={516}
           />
-          <h1 className="text-2xl font-medium tracking-wide">Thirty Factor Authentication</h1>
         </div>
         {!isGameOver && !isCompleted && (
           <>

@@ -53,7 +53,7 @@ export const AuthContainer = ({
     <>
       <div
         id="auth-container"
-        className={classNames('relative min-w-[400px] mx-auto mt-24 shadow-md', {
+        className={classNames('relative min-w-[400px] mx-auto mt-28 shadow-md', {
           'opacity-0 pointer-events-none': isLoading && requiresLoad,
         })}
       >
