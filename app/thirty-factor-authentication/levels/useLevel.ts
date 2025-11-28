@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { OneContent, OneControls } from './1'
 import { TwoContent, TwoControls } from './2'
 import { MessageSpamContent, MessageSpamControls } from './MessageSpam'
@@ -41,11 +41,14 @@ export type LevelProps = {
   setUPSTrackingTime: (time: number) => void
   selectedSSOIds: Set<SSOIds>
   setSelectedSSOIds: React.Dispatch<React.SetStateAction<Set<SSOIds>>>
+  startTime: number
 }
 
 //AAAA@@may00
 export const useLevels = () => {
   const [level, setLevel] = useState(1)
+
+  const timeRef = useRef(new Date().getTime())
 
   //details for tracking the overarching UPS mechanics
   const [upsTrackingCode, setUPSTrackingCode] = useState('')
@@ -60,7 +63,10 @@ export const useLevels = () => {
     setLevel((level) => level + 1)
   }, [])
 
-  const resetLevel = () => setLevel(1)
+  const resetLevel = () => {
+    setLevel(1)
+    timeRef.current = new Date().getTime()
+  }
 
   const baseProps = {
     level,
@@ -74,6 +80,7 @@ export const useLevels = () => {
     setUPSTrackingTime,
     selectedSSOIds,
     setSelectedSSOIds,
+    startTime: timeRef.current,
   } as LevelProps
 
   const levelToUse = forceLevel > 0 ? forceLevel : level

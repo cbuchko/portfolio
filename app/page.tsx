@@ -67,7 +67,7 @@ export default function Home() {
         </div>
       </section>
       <section className={sectionClass}>
-        <h3 className={headerClass}>Personal Projects</h3>
+        <h3 className={headerClass}>Projects</h3>
         <p className={paragraphClass}>
           {`My current focus has been developing web-based games. These are fun and interactive experiences built with React and TypeScript.`}
         </p>

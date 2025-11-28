@@ -5,14 +5,11 @@ GREAT IDEAS:
 maintenance becomes stanley parable?
 
 OTHER IDEAS:
-Logo Design and Portfolio 
-In credits thank Neal, and game homage creators
-Spice up end screen in general
 Cloudflare
 "Sauce" Pass. Looks for opportunities for SFX, Animations, general Sauce
 Sentry for monitoring
-Constant timer
 
 STRECH GOALS:
 Mobile
 Character randomizer
+Constant timer

@@ -11,6 +11,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { UPSTracker } from './components/UPSTracker'
 import { PortfolioHeader } from '../components/PortfolioHeader'
 import Image from 'next/image'
+import { VictoryScreen } from './VictoryScreen'
 
 export default function ThirtyFactorAuthentication() {
   const [playerId] = useState(PlayerIds.Biden)
@@ -49,12 +50,7 @@ export default function ThirtyFactorAuthentication() {
             )}
           </>
         )}
-        {isCompleted && (
-          <div className="absolute top-[25%] -translate-y-[50%] left-[50%] -translate-x-[50%]">
-            <h2 className="text-4xl mb-4">Congratulations, you successfully authenticated!</h2>
-            <h3>Thank you for playing, much more to come.</h3>
-          </div>
-        )}
+        {isCompleted && <VictoryScreen playerId={playerId} levelProps={baseProps} />}
         {isGameOver && (
           <div className="absolute top-[25%] -translate-y-[50%] left-[50%] -translate-x-[50%] max-w-[650px] bg-red-100 p-8 rounded-md shadow-lg">
             <h2 className="text-4xl mb-4">You have failed to authenticate.</h2>
