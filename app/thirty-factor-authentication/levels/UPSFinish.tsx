@@ -138,8 +138,7 @@ I promise there aren't any bonus incentives for doing this honestly.
 
 But do you really want to shortcut the struggle?
 Is the victory in advancing to the next level, or in completing an arduous task?
-Ultimately winning or losing is meaningless. But perservering is something to proud of.
-Just know that when we wake up in the morning, some of us are winners, and some of us are losers.
+Ultimately winning or losing is meaningless. But persevering is something to proud of.
 
 ${dynamicText}.
 `

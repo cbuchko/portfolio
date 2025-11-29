@@ -61,7 +61,7 @@ export const AuthContainer = ({
           id="auth-header"
           className="flex justify-between items-center min-w-[400px] py-1 px-4 rounded-t-md bg-blue-300 border"
         >
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center min-h-[20px]">
             <h6 className="w-full text-xs">{`Authenticating: ${PlayerInformation[playerId].name}`}</h6>
             <div className="flex itsems-center w-max">
               {Array.from({ length: errorCount }).map((_, idx) => (

@@ -18,7 +18,7 @@ export const EinsteinContent = ({ validateAdvance, cancelAdvance }: ContentProps
   }
 
   useEffect(() => {
-    if (JSON.stringify(AnswerKey) === JSON.stringify(selectedAnswers)) {
+    if (deepEqualAnswer(AnswerKey, selectedAnswers)) {
       validateAdvance()
     } else {
       cancelAdvance()
@@ -229,4 +229,23 @@ const AnswerKey: Answer = {
     cigarette: 'blue master',
     pet: 'dogs',
   },
+}
+
+function deepEqualAnswer(a: Answer, b: Answer): boolean {
+  const aKeys = Object.keys(a)
+  const bKeys = Object.keys(b)
+  if (aKeys.length !== bKeys.length) return false
+
+  for (const key of aKeys) {
+    if (!b.hasOwnProperty(key)) return false
+
+    const aInner = a[key as unknown as number]
+    const bInner = b[key as unknown as number]
+
+    for (const category of Object.keys(aInner) as CategoryIds[]) {
+      if (aInner[category] !== bInner[category]) return false
+    }
+  }
+
+  return true
 }

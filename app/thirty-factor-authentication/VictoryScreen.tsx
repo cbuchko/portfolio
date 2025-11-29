@@ -19,8 +19,7 @@ export const VictoryScreen = ({
           You authenticated as {characterName} in {formatElapsedTime(startTime)}.
         </p>
         <p className="text-lg">
-          Your reward is a sense of pride and accomplishment. And bragging rights if your time was
-          fast.
+          Your reward is a sense of pride and accomplishment. And bragging rights.
         </p>
         <button
           className="mt-2 auth-button"
@@ -45,6 +44,9 @@ export const VictoryScreen = ({
         <p className="text-md mt-2">
           Thank you Lucas Pope, Toby Fox, Eric Barone, Dean Herbert and Tonda Ros for creating some
           of my favourite games ever and directly inspiring levels of this game.
+        </p>
+        <p className="text-md mt-2">
+          The song used in the final level is "Death by Glamour" from the Undertale soundtrack.
         </p>
       </div>
     </div>

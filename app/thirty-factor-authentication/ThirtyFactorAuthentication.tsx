@@ -39,7 +39,10 @@ export default function ThirtyFactorAuthentication() {
 
   return (
     <>
-      <div className="relative w-screen h-screen flex flex-col overflow-y-auto">
+      <div
+        className="relative w-screen h-screen flex flex-col overflow-y-auto"
+        style={{ scrollbarGutter: 'stable' }}
+      >
         <div className="absolute left-[50%] -translate-x-[50%] top-8 flex items-center gap-2">
           <Image
             src="/thirty-factor-authentication/horizontal-logo.png"

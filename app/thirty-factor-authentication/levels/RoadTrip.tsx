@@ -116,7 +116,7 @@ const RoadTripMarkers: Marker[] = [
   {
     name: 'Columbus',
     coordinates: [39.9625, -83.0032],
-    message: `Gen Z might say "You're" cooked if you live in this state.`,
+    message: `Gen Z might say you're "cooked" if you live in this state.`,
   },
   {
     name: 'Null Island',

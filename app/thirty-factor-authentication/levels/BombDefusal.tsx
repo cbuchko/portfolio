@@ -83,6 +83,7 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
     setWires(Wires)
     setCode('')
     setIsGameOver(false)
+    setInstructionStepIndex(0)
     if (!audioRef.current) return
     audioRef.current.currentTime = 0
     audioRef.current.play()
@@ -295,10 +296,10 @@ const formatInstructions = (instructions: Instruction[]): string => {
   let instructionNumber = 1
   for (const instruction of instructions) {
     if (instruction.wireId) {
-      instructionsFormatted += `${instructionNumber}. Cut the ${instruction.wireId} wire.\n`
+      instructionsFormatted += `${instructionNumber}. Cut the ${instruction.wireId} wire\n`
     }
     if (instruction.number) {
-      instructionsFormatted += `${instructionNumber}. Enter the number ${instruction.number}.\n`
+      instructionsFormatted += `${instructionNumber}. Enter the number ${instruction.number}\n`
     }
     instructionNumber++
   }
