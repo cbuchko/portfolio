@@ -12,15 +12,30 @@ import { UPSTracker } from './components/UPSTracker'
 import { PortfolioHeader } from '../components/PortfolioHeader'
 import Image from 'next/image'
 import { VictoryScreen } from './VictoryScreen'
+import { useIsMobile } from '../utils/useIsMobile'
+import Link from 'next/link'
 
 export default function ThirtyFactorAuthentication() {
   const [playerId] = useState(PlayerIds.Biden)
   const [isGameOver, setIsGameOver] = useState(false)
+  const isMobile = useIsMobile()
 
   const { content, controls, baseProps } = useLevels()
   const { level, setLevel, upsTrackingCode, upsTrackingTime, resetLevel } = baseProps
 
   const isCompleted = level === maxLevel + 1
+
+  if (isMobile)
+    return (
+      <div className="flex flex-col items-center h-screen w-screen justify-center text-center">
+        <div className=" text-3xl">
+          {"Sorry! Thirty Factor Authentication isn't optimized for mobile devices (yet)."}
+        </div>
+        <Link className="hover:underline text-lg mt-4" href="/">
+          {'< Go Back'}
+        </Link>
+      </div>
+    )
 
   return (
     <>

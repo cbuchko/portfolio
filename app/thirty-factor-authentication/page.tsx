@@ -1,3 +1,5 @@
+import ThirtyFactorAuthentication from './ThirtyFactorAuthentication'
+
 export const generateMetadata = () => {
   return {
     title: 'Thirty Factor Authentication',
@@ -6,8 +8,6 @@ export const generateMetadata = () => {
     },
   }
 }
-
-import ThirtyFactorAuthentication from './ThirtyFactorAuthentication'
 
 export default function ThirtyFactorAuthenticationContainer() {
   return <ThirtyFactorAuthentication />

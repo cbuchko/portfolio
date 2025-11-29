@@ -9,6 +9,19 @@ const maxHealth = 100
 export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
   const characterName = PlayerInformation[playerId].name
   const [health, setHealth] = useState(maxHealth)
+  const damageTimestampRef = useRef<number>(0)
+
+  const handleHit = () => {
+    const now = new Date().getTime()
+    const elapsed = now - damageTimestampRef.current
+    if (elapsed > 2000) {
+      setHealth((health) => health - 5)
+      damageTimestampRef.current = now
+      const audio = new Audio('/thirty-factor-authentication/sounds/undertale-damage.mp3')
+      audio.volume = 0.5
+      audio.play()
+    }
+  }
 
   return (
     <>
@@ -16,7 +29,7 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps)
       <p className="text-lg">{`You came so close, but this level will be your last.`}</p>
       <p className="text-lg">{`GUARDS!`}</p>
       <p className="italic text-sm mt-4">
-        Knowing you are so close to finishing... it fills you with deterimination.
+        Knowing you are so close to finishing... it fills you with determination.
       </p>
       <div className="relative w-full flex items-center justify-center mt-8">
         <div>
@@ -25,9 +38,7 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps)
             height={200}
             health={health}
             setHealth={setHealth}
-            onPlayerHit={() => {
-              setHealth((health) => health - 5)
-            }}
+            onPlayerHit={handleHit}
             handleLevelAdvance={handleLevelAdvance}
           />
           <div className="flex items-center gap-2 mt-2">
@@ -198,7 +209,7 @@ function BulletHell({
     )
     const laserTimeout = setTimeout(
       () => setBulletTypes((types) => ({ ...types, laser: true })),
-      1000 * 60
+      1000 * 55
     )
     return () => {
       clearTimeout(bulletTimeout)
@@ -225,7 +236,7 @@ function BulletHell({
     if (bulletTypes.laser)
       laserInterval = setInterval(() => {
         spawnLaser()
-      }, 5000)
+      }, 10000)
 
     return () => {
       clearInterval(standardInterval)
