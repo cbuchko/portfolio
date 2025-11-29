@@ -46,7 +46,7 @@ export const VictoryScreen = ({
           of my favourite games ever and directly inspiring levels of this game.
         </p>
         <p className="text-md mt-2">
-          The song used in the final level is "Death by Glamour" from the Undertale soundtrack.
+          {'The song used in the final level is "Death by Glamour" from the Undertale soundtrack.'}
         </p>
       </div>
     </div>
