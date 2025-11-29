@@ -48,7 +48,7 @@ export const Spotify = ({
 
       let remaining = totalCount
 
-      for (let step of cadences) {
+      for (const step of cadences) {
         if (remaining <= step.count) {
           delay = step.delay
           //the cadence has changed
@@ -68,13 +68,13 @@ export const Spotify = ({
     return () => {
       cancelled = true
     }
-  }, [cadences, isStarted])
+  }, [isStarted])
 
   useEffect(() => {
     if (maxRythym == rythymCount && intervalRef.current) {
       clearInterval(intervalRef.current)
     }
-  }, [rythymCount])
+  }, [rythymCount, maxRythym])
 
   const color = colorHexArray[colorIndex % colorHexArray.length]
   return (
