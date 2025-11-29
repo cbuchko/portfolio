@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { clampPositionsToScreen } from '../utils'
 import classNames from 'classnames'
+import { useSound } from '@/app/utils/useSounds'
 
 const cadences = [
   { count: 5, delay: 750 },
@@ -151,6 +152,7 @@ const RythymPad = ({
 }) => {
   const [isCleared, setIsCleared] = useState(false)
   const [position, setPosition] = useState<Position | null>(null)
+  const playClickSound = useSound('thirty-factor-authentication/sounds/osu-click.mp3')
 
   useEffect(() => {
     //makes its position a random position
@@ -186,8 +188,7 @@ const RythymPad = ({
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
     setIsCleared(true)
     handleWin()
-    const audio = new Audio('thirty-factor-authentication/sounds/osu-click.mp3')
-    audio.play()
+    playClickSound()
   }
 
   if (!position) return null

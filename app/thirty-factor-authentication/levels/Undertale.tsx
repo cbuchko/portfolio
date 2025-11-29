@@ -4,12 +4,14 @@ import { useState } from 'react'
 import { ContentProps } from './types'
 import { PlayerInformation } from '../player-constants'
 import Image from 'next/image'
+import { useSound } from '@/app/utils/useSounds'
 
 const maxHealth = 100
 export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
   const characterName = PlayerInformation[playerId].name
   const [health, setHealth] = useState(maxHealth)
   const damageTimestampRef = useRef<number>(0)
+  const playDamageSound = useSound('/thirty-factor-authentication/sounds/undertale-damage.mp3', 0.5)
 
   const handleHit = () => {
     const now = new Date().getTime()
@@ -17,9 +19,7 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps)
     if (elapsed > 2000) {
       setHealth((health) => health - 5)
       damageTimestampRef.current = now
-      const audio = new Audio('/thirty-factor-authentication/sounds/undertale-damage.mp3')
-      audio.volume = 0.5
-      audio.play()
+      playDamageSound()
     }
   }
 

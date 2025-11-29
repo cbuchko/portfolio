@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { addMinutesToDate, getFormattedDate } from '../utils'
 import classNames from 'classnames'
+import { useSound } from '@/app/utils/useSounds'
 
 type UPSTrackerProps = { code: string; time: number }
 
@@ -17,6 +18,7 @@ export const UPSTracker = ({ code, time }: UPSTrackerProps) => {
   const [message, setMessage] = useState('Your package is On the Way.')
   const [isError, setIsError] = useState(false)
   const baseTimeRef = useRef<number>(time)
+  const playUPSError = useSound('/thirty-factor-authentication/sounds/notification.mp3')
 
   //change the tracker, surface the error, play the notification
   const handleDelay = (message: string, delayMinutes: number) => {
@@ -26,8 +28,7 @@ export const UPSTracker = ({ code, time }: UPSTrackerProps) => {
     baseTimeRef.current = newDate
     setIsError(true)
     setTimeout(() => setIsError(false), 5000)
-    const audio = new Audio('/thirty-factor-authentication/sounds/notification.mp3')
-    audio.play()
+    playUPSError()
   }
 
   useEffect(() => {

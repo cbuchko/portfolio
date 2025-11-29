@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { useMessageSpam } from '../useMessageSpam'
+import { useSound } from '@/app/utils/useSounds'
 
 const messages = [
   'hey what you up to?',
@@ -55,6 +56,7 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
 
   const timerRef = useRef<NodeJS.Timeout>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
+  const playExplosionSound = useSound('/thirty-factor-authentication/sounds/explosion.mp3')
 
   const [instructionStepIndex, setInstructionStepIndex] = useState(0)
   const [instructions, formattedInstructions] = useMemo(() => {
@@ -90,8 +92,7 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
   }, [])
 
   const handleExplosion = useCallback(() => {
-    const audio = new Audio('/thirty-factor-authentication/sounds/explosion.mp3')
-    audio.play()
+    playExplosionSound()
     audioRef.current?.pause()
     if (timerRef.current) clearTimeout(timerRef.current)
     setIsGameOver(true)

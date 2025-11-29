@@ -28,6 +28,7 @@ import { SSOContent, SSOIds } from './SSO'
 import { FishingContent, FishingControls } from './Fishing'
 import { RoadTripContent } from './RoadTrip'
 import { BrainScanContent, BrainScanControls } from './BrainScan'
+import { useSound } from '@/app/utils/useSounds'
 
 export type LevelProps = {
   level: number
@@ -50,6 +51,8 @@ export const useLevels = () => {
 
   const timeRef = useRef(new Date().getTime())
 
+  const playSuccessSound = useSound('/thirty-factor-authentication/sounds/success.mp3', 0.2)
+
   //details for tracking the overarching UPS mechanics
   const [upsTrackingCode, setUPSTrackingCode] = useState('')
   const [upsTrackingTime, setUPSTrackingTime] = useState(0)
@@ -57,9 +60,7 @@ export const useLevels = () => {
   const [selectedSSOIds, setSelectedSSOIds] = useState<Set<SSOIds>>(new Set())
 
   const handleLevelAdvance = useCallback(() => {
-    const audio = new Audio('/thirty-factor-authentication/sounds/success.mp3')
-    audio.volume = 0.2
-    audio.play()
+    playSuccessSound()
     setLevel((level) => level + 1)
   }, [])
 

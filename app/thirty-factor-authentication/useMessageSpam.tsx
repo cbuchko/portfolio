@@ -1,24 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
+import { useSound } from '../utils/useSounds'
 
 export const useMessageSpam = (spamMessages: string[], realMessage: string, delayInMs = 7000) => {
   const [message, setMessage] = useState<string | null>(null)
 
+  const playMessageSound = useSound('/thirty-factor-authentication/sounds/message.mp3', 0.2)
   const messageIndexRef = useRef(-1)
   const intervalRef = useRef<NodeJS.Timeout>(null)
 
   //every 5 seconds replace the message on screen with a new one
   useEffect(() => {
     if (messageIndexRef.current === -1) {
-      const audio = new Audio('/thirty-factor-authentication/sounds/message.mp3')
-      audio.volume = 0.2
-      audio.play()
+      playMessageSound()
       setMessage(realMessage)
       messageIndexRef.current = 0
     }
     intervalRef.current = setInterval(() => {
-      const audio = new Audio('/thirty-factor-authentication/sounds/message.mp3')
-      audio.volume = 0.2
-      audio.play()
+      playMessageSound()
       setMessage(spamMessages[messageIndexRef.current])
 
       //cycle to the next message

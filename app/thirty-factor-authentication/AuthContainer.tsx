@@ -5,6 +5,7 @@ import XIcon from '@/public/thirty-factor-authentication/icons/x.svg'
 import { devMode, maxLevel } from './constants'
 import classNames from 'classnames'
 import { LevelProps } from './levels/useLevel'
+import { useSound } from '../utils/useSounds'
 
 type AuthContainerProps = {
   playerId: PlayerIds
@@ -21,6 +22,7 @@ export const AuthContainer = ({
   Content,
   Controls,
 }: AuthContainerProps) => {
+  const playErrorSound = useSound('/thirty-factor-authentication/sounds/error.mp3')
   const [isLoading, setIsLoading] = useState(false)
   const [isAdvanceVerified, setIsAdvanceVerified] = useState(false)
   const [errorCount, setErrorCount] = useState(0)
@@ -28,8 +30,7 @@ export const AuthContainer = ({
 
   const onAdvance = (skipVerify?: boolean) => {
     if (!isAdvanceVerified && !devMode && !skipVerify) {
-      const audio = new Audio('/thirty-factor-authentication/sounds/error.mp3')
-      audio.play()
+      playErrorSound()
       setErrorCount((errorCount) => errorCount + 1)
       if (errorCount === 2) {
         setIsGameOver(true)
