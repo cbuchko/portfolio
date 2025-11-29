@@ -9,7 +9,7 @@ export function useSound(src: string, volume?: number) {
     audio.load()
     audio.volume = volume || 1
     audioRef.current = audio
-  }, [src])
+  }, [src, volume])
 
   return () => {
     const audio = audioRef.current
