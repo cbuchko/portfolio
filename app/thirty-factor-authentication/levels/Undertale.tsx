@@ -12,7 +12,6 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps)
   const [health, setHealth] = useState(maxHealth)
   const damageTimestampRef = useRef<number>(0)
   const playDamageSound = useSound('/thirty-factor-authentication/sounds/undertale-damage.mp3', 0.5)
-
   const handleHit = () => {
     const now = new Date().getTime()
     const elapsed = now - damageTimestampRef.current
@@ -105,6 +104,7 @@ function BulletHell({
 }: BulletHellProps) {
   const [gameStarted, setGameStarted] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
   // --- Game State (kept in refs for performance) ---
   const bulletsRef = useRef<Bullet[]>([])
@@ -209,7 +209,7 @@ function BulletHell({
     )
     const laserTimeout = setTimeout(
       () => setBulletTypes((types) => ({ ...types, laser: true })),
-      1000 * 55
+      1000 * 60
     )
     return () => {
       clearTimeout(bulletTimeout)
@@ -236,7 +236,7 @@ function BulletHell({
     if (bulletTypes.laser)
       laserInterval = setInterval(() => {
         spawnLaser()
-      }, 10000)
+      }, 5000)
 
     return () => {
       clearInterval(standardInterval)
@@ -298,7 +298,7 @@ function BulletHell({
         // --- 1. CHARGING PHASE ---
         if (elapsed < l.chargeTime) {
           // draw faint warning area
-          ctx.fillStyle = 'rgba(255, 0, 0, 0.25)'
+          ctx.fillStyle = 'rgba(254, 231, 71, 0.5)'
 
           if (l.orientation === 'vertical') {
             ctx.fillRect(l.position, 0, l.width, height)
@@ -314,7 +314,7 @@ function BulletHell({
           l.hasFired = true
 
           // draw strong laser beam
-          ctx.fillStyle = 'rgba(255, 0, 0, 0.9)'
+          ctx.fillStyle = 'rgba(254, 231, 71, 1)'
 
           if (l.orientation === 'vertical') {
             ctx.fillRect(l.position, 0, l.width, height)
@@ -382,6 +382,12 @@ function BulletHell({
     requestAnimationFrame(frame)
   }, [width, height, onPlayerHit, gameStarted])
 
+  useEffect(() => {
+    if (audioRef.current && gameStarted) {
+      audioRef.current.volume = 0.5
+    }
+  }, [gameStarted])
+
   return (
     <div className="relative">
       <canvas ref={canvasRef} width={width} height={height} style={{ border: '2px solid black' }} />
@@ -401,6 +407,7 @@ function BulletHell({
           src="/thirty-factor-authentication/sounds/death-by-glamor.flac"
           autoPlay
           onEnded={() => handleLevelAdvance(true)}
+          ref={audioRef}
         />
       )}
     </div>

@@ -175,7 +175,7 @@ const DriversLicense = ({
         <h5 className="text-2xl license-title uppercase">
           {PlayerInformation[playerId].license.location}
         </h5>
-        <h5 className="text-xs font-bold">{"DRIVER'S LICENCE"}</h5>
+        <h5 className="text-xs font-bold">{'IDENTIFICATION CARD'}</h5>
       </div>
       <div className="flex rounded-md bg w-max relative">
         <div className="flex bg-white/40 p-1 rounded-md bg w-max min-w-[290px]">
@@ -384,7 +384,7 @@ const EntryPermit = ({
         <p className="mt-4 text-[#284283]">{gameInfo.name}</p>
       </InspectableItem>
       <div className="border-b w-full" />
-      <p className="mt-4 w-full">bearing licence number</p>
+      <p className="mt-4 w-full">bearing identification number</p>
       <InspectableItem discrepancyId={DiscrepancyBase['number'].id} addDiscrepancy={addDiscrepancy}>
         <p className="mt-4 text-[#284283]">{gameInfo.permitNumber}</p>
       </InspectableItem>

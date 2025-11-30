@@ -22,7 +22,7 @@ export const TwoContent = ({
 
   return (
     <>
-      <p className="text-lg">Please confirm your full legal name</p>
+      <p className="text-lg">Please confirm your full legal name.</p>
       <input
         className="border w-full rounded-md mt-1 px-2 py-1"
         placeholder="Enter your name..."

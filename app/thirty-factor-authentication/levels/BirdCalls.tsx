@@ -5,7 +5,7 @@ import { shuffle } from '../utils'
 import Image from 'next/image'
 
 const selectTargetBird = () => {
-  return shuffle(birds)[0].id
+  return shuffle(targetBirds)[0].id
 }
 export const BirdCallContent = ({ validateAdvance, cancelAdvance, setIsLoading }: ContentProps) => {
   const [selectedBird, setSelectedBird] = useState<string>()
@@ -111,5 +111,14 @@ const birds: { id: string; url: string }[] = [
   { id: 'robin', url: '/thirty-factor-authentication/birds/robin.jpg' },
   { id: 'seagull', url: '/thirty-factor-authentication/birds/seagull.webp' },
   { id: 'sparrow', url: '/thirty-factor-authentication/birds/sparrow.jpg' },
+  { id: 'wren', url: '/thirty-factor-authentication/birds/wren.jpg' },
+]
+
+const targetBirds: { id: string; url: string }[] = [
+  { id: 'blackbird', url: '/thirty-factor-authentication/birds/blackbird.jpg' },
+  { id: 'bluejay', url: '/thirty-factor-authentication/birds/bluejay.webp' },
+  { id: 'cardinal', url: '/thirty-factor-authentication/birds/cardinal.jpg' },
+  { id: 'dove', url: '/thirty-factor-authentication/birds/dove.jpeg' },
+  { id: 'robin', url: '/thirty-factor-authentication/birds/robin.jpg' },
   { id: 'wren', url: '/thirty-factor-authentication/birds/wren.jpg' },
 ]

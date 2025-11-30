@@ -30,9 +30,12 @@ export const AquariumContent = ({
       <div className="w-full flex justify-end">
         <button
           className="underline text-sm cursor-pointer"
-          onClick={() => setMaxFish(generateMaxFish())}
+          onClick={() => {
+            setMaxFish(generateMaxFish())
+            setFishCount(0)
+          }}
         >
-          Restart
+          Reset
         </button>
       </div>
       <input
@@ -65,24 +68,22 @@ const FishTank = ({
 
   //resets the game
   useEffect(() => {
-    setFishCount(0)
-    if (intervalRef.current) clearInterval(intervalRef.current)
-  }, [maxFish])
+    if (fishCount === 0 && intervalRef.current) clearInterval(intervalRef.current)
+  }, [fishCount])
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
-      const increase = Math.random() < 0.3 ? 2 : 1
+      const increase = Math.random() < 0.2 ? 2 : 1
       setFishCount((count) => count + increase)
     }, 500)
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
-  }, [maxFish])
+  }, [fishCount])
 
   useEffect(() => {
     if (maxFish <= fishCount && intervalRef.current) {
-      console.log('game is done')
       clearInterval(intervalRef.current)
     }
   }, [fishCount, maxFish])
@@ -114,7 +115,7 @@ const Fish = () => {
 
       let newX
       let newY
-      const moveMagnitude = Math.random() * (600 - 100) + 600
+      const moveMagnitude = Math.random() * (600 - 200) + 200
       if (!isLeft) {
         newX = oldX - moveMagnitude
       } else newX = oldX + moveMagnitude

@@ -64,7 +64,7 @@ export const TaxReturnContent = ({
 
   return (
     <>
-      <p className="text-lg">Enter your net income from your 2025 tax return.</p>
+      <p className="text-lg">Enter your Net Income (Line 48) from your 2025 tax return.</p>
       <input
         className="border w-full rounded-md mt-1 px-2 py-1"
         placeholder="Enter income..."

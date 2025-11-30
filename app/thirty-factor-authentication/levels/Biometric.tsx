@@ -23,7 +23,7 @@ export const BiometricContent = ({ validateAdvance }: ContentProps) => {
   return (
     <>
       <p className="text-lg">
-        Keep your finger on the scanner to complete Biometric Authentication
+        Keep your finger on the scanner to complete Biometric Authentication.
       </p>
       {startPosition && (
         <Scanner

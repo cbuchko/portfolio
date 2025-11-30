@@ -121,7 +121,7 @@ function countVowels(str: string): number {
 }
 
 const rawText = (dynamicText: string) => `
-Time to use the physical authentication key you got from UPS.
+Time to use the physical authentication package UPS delivered to you.
 
 You don't have it? Really?
 I don't like to point fingers... but... did you do anything to upset them?

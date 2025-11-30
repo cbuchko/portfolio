@@ -90,25 +90,25 @@ export const useLevels = () => {
     { content: TwoContent, controls: TwoControls },
     { content: BasicAppCodeContent, controls: BasicAppCodeControls },
     { content: MessageSpamContent, controls: MessageSpamControls },
-    { content: ZodiacContent, controls: ZodiacControls }, //5
-    { content: FallbackOneContent, controls: FallbackOneControls },
+    { content: FallbackOneContent, controls: FallbackOneControls }, //5
     { content: MapContent, controls: MapControls },
     { content: BiometricContent, controls: BiometricControls },
-    { content: UPSContent, controls: UPSControls, requiresLoad: true },
-    { content: FallbackTwoContent, controls: FallbackTwoControls }, //10
-    { content: SSOContent },
-    { content: AppCodeContent, controls: AppCodeControls },
     { content: PostItContent, controls: PostItControls },
-    { content: QuotesContent, controls: QuotesControl },
-    { content: SSOContent }, //15
-    { content: MaintenanceContent, controls: MaintenanceControls },
-    { content: BrainScanContent, controls: BrainScanControls },
+    { content: ZodiacContent, controls: ZodiacControls },
+    { content: FallbackTwoContent, controls: FallbackTwoControls }, //10
+    { content: UPSContent, controls: UPSControls, requiresLoad: true },
+    { content: AppCodeContent, controls: AppCodeControls }, //APP CODE BEFORE SSO FOR CLARITY
+    { content: SSOContent },
     { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
+    { content: MaintenanceContent, controls: MaintenanceControls },
+    { content: SSOContent }, //15
+    { content: BrainScanContent, controls: BrainScanControls },
     { content: RoadTripContent, requiresLoad: true },
+    { content: QuotesContent, controls: QuotesControl },
     { content: SSOContent }, //20
+    { content: TaxReturnContent, controls: TaxReturnControls },
     { content: ParlorRoomContent, controls: undefined, requiresLoad: true },
     { content: AquariumContent, controls: AquariumControls },
-    { content: TaxReturnContent, controls: TaxReturnControls },
     { content: FishingContent, controls: FishingControls }, //25
     { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true },
     { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true },

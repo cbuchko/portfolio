@@ -105,8 +105,8 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
     >
       {!!code ? (
         <>
-          Recovery Keyword:
           <div className="underline font-bold">{`Don't Lose`}</div>
+          Recovery Keyword:
           <div className="mt-8 italic">{code}</div>
         </>
       ) : (
