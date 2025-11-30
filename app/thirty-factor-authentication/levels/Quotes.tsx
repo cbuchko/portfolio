@@ -28,7 +28,7 @@ export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) =>
       gameQuotes[i] = [trueShuffled[i], falseShuffled[i]]
     }
     setQuotes(gameQuotes)
-  }, [])
+  }, [playerId])
 
   const handleQuoteSelect = (isTrue: boolean) => {
     //if for some unforseen reason the game runs out of quotes, just advance them
@@ -125,7 +125,7 @@ const QuoteBox = ({
         { 'border-green-500': displaySuccess, 'border-red-500': displayFailure }
       )}
     >
-      "{quote}"
+      {`"${quote}"`}
     </div>
   )
 }
