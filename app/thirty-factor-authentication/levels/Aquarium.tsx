@@ -3,6 +3,7 @@ import { ContentProps, ControlProps } from './types'
 import { clampPositionsToScreen } from '../utils'
 import Image from 'next/image'
 import classNames from 'classnames'
+import { TextInput } from '../components/TextInput'
 
 const generateMaxFish = () => Math.floor(Math.random() * (55 - 40) + 40)
 export const AquariumContent = ({
@@ -38,14 +39,11 @@ export const AquariumContent = ({
           Reset
         </button>
       </div>
-      <input
-        className="border w-full rounded-md mt-1 px-2 py-1"
-        placeholder="Enter number of fish..."
+      <TextInput
         value={numberInput}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.code === 'Enter') handleLevelAdvance()
-        }}
+        placeholder="Enter number of fish..."
+        onChange={handleInputChange}
+        onSubmit={handleLevelAdvance}
       />
       {typeof window !== 'undefined' && (
         <FishTank maxFish={maxFish} fishCount={fishCount} setFishCount={setFishCount} />

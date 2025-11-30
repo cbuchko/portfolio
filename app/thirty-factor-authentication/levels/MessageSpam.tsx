@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { makeCode } from '../utils'
 import { useMessageSpam } from '../useMessageSpam'
+import { TextInput } from '../components/TextInput'
 
 const messages = [
   'hey what you up to?',
@@ -18,7 +19,7 @@ export const MessageSpamContent = ({
   cancelAdvance,
   handleLevelAdvance,
 }: ContentProps) => {
-  const [nameInput, setNameInput] = useState('')
+  const [codeInput, setCodeInput] = useState('')
   const codeRef = useRef(makeCode(12))
 
   const { message, handleResendCode } = useMessageSpam(
@@ -27,7 +28,7 @@ export const MessageSpamContent = ({
   )
 
   const handleInputChange = (input: string) => {
-    setNameInput(input)
+    setCodeInput(input)
     if (codeRef.current === input) {
       validateAdvance()
     } else {
@@ -44,14 +45,11 @@ export const MessageSpamContent = ({
           Resend Code
         </button>
       </div>
-      <input
-        className="border w-full rounded-md mt-1 px-2 py-1"
+      <TextInput
+        value={codeInput}
         placeholder="Enter the code..."
-        value={nameInput}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.code === 'Enter') handleLevelAdvance()
-        }}
+        onChange={handleInputChange}
+        onSubmit={handleLevelAdvance}
       />
       {message && (
         <div

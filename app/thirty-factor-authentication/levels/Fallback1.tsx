@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { fallbackPassKey } from '../constants'
+import { TextInput } from '../components/TextInput'
 
 const monthRe =
   /(January|February|March|April|May|June|July|August|September|October|November|December)/i
@@ -33,14 +34,11 @@ export const FallbackOneContent = ({
     <>
       <p className="text-lg">{`We've changed our password policies since your last login.`}</p>
       <p className="text-lg">Please create a new password.</p>
-      <input
-        className="border w-full rounded-md mt-4 px-2 py-1"
-        placeholder="Enter password..."
+      <TextInput
         value={passInput}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.code === 'Enter') handleLevelAdvance()
-        }}
+        placeholder="Enter password..."
+        onChange={handleInputChange}
+        onSubmit={handleLevelAdvance}
       />
       <div className="text-sm mt-4">
         <div>The password must include:</div>

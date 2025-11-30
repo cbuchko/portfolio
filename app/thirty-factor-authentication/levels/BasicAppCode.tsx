@@ -3,6 +3,7 @@ import { ContentProps, ControlProps } from './types'
 import { makeAuthCode } from '../utils'
 import { createPortal } from 'react-dom'
 import { AppCode } from './AppCode'
+import { TextInput } from '../components/TextInput'
 
 export const BasicAppCodeContent = ({
   validateAdvance,
@@ -30,14 +31,11 @@ export const BasicAppCodeContent = ({
   return (
     <>
       <p className="text-lg">Enter the code from your Authenticator App.</p>
-      <input
-        className="border w-full rounded-md mt-1 px-2 py-1"
-        placeholder="Enter code..."
+      <TextInput
         value={codeInput}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.code === 'Enter') handleLevelAdvance()
-        }}
+        placeholder="Enter code..."
+        onChange={handleInputChange}
+        onSubmit={handleLevelAdvance}
       />
       {portalElement &&
         createPortal(

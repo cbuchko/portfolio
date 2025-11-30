@@ -2,6 +2,7 @@ import { MouseEvent as ReactMouseEvent, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { clampPositionsToScreen } from '../utils'
+import { TextInput } from '../components/TextInput'
 
 const selectCode = () => {
   const index = Math.floor(Math.random() * codes.length)
@@ -14,10 +15,10 @@ export const PostItContent = ({
   handleLevelAdvance,
 }: ContentProps) => {
   const codeRef = useRef(selectCode())
-  const [nameInput, setNameInput] = useState('')
+  const [keywordInput, setKeywordInput] = useState('')
 
   const handleInputChange = (input: string) => {
-    setNameInput(input)
+    setKeywordInput(input)
     if (codeRef.current.toLocaleLowerCase() === input.toLocaleLowerCase()) {
       validateAdvance()
     } else {
@@ -31,14 +32,12 @@ export const PostItContent = ({
         When you created your account 15 years ago, you chose a secret recovery keyword.
       </p>
       <p className="text-lg">Please enter that now.</p>
-      <input
-        className="border w-full rounded-md mt-2 px-2 py-1"
+
+      <TextInput
+        value={keywordInput}
         placeholder="Enter the keyword..."
-        value={nameInput}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.code === 'Enter') handleLevelAdvance()
-        }}
+        onChange={handleInputChange}
+        onSubmit={handleLevelAdvance}
       />
       {notes.map((note, idx) => (
         <PostIt key={idx} message={note} />

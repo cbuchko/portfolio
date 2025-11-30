@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { PlayerInformation } from '../player-constants'
+import { TextInput } from '../components/TextInput'
 
 type TaxReturn = {
   income: number
@@ -43,7 +44,7 @@ export const TaxReturnContent = ({
   cancelAdvance,
   handleLevelAdvance,
 }: ContentProps) => {
-  const [nameInput, setNameInput] = useState('')
+  const [incomeInput, setIncomeInput] = useState('')
 
   const taxItems = useMemo(() => {
     return generateRandomTaxNumbers()
@@ -54,7 +55,7 @@ export const TaxReturnContent = ({
   const { firstName, lastName, dob } = PlayerInformation[playerId].taxReturn
 
   const handleInputChange = (input: string) => {
-    setNameInput(input)
+    setIncomeInput(input)
     if (inputTarget === parseInt(input)) {
       validateAdvance()
     } else {
@@ -65,14 +66,11 @@ export const TaxReturnContent = ({
   return (
     <>
       <p className="text-lg">Enter your Net Income (Line 48) from your 2025 tax return.</p>
-      <input
-        className="border w-full rounded-md mt-1 px-2 py-1"
-        placeholder="Enter income..."
-        value={nameInput}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.code === 'Enter') handleLevelAdvance()
-        }}
+      <TextInput
+        value={incomeInput}
+        placeholder="Enter net income..."
+        onChange={handleInputChange}
+        onSubmit={handleLevelAdvance}
       />
       <div className="absolute -bottom-12 border  h-[470px] -translate-x-[50%] translate-y-[100%] left-[50%] shadow-xl p-2 bg-gray-100">
         <div className="text-center mb-2">2025 Income Tax Return</div>

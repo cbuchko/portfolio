@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
+import { TextInput } from '../components/TextInput'
 
 export const UPSFinishContent = ({
   validateAdvance,
@@ -85,14 +86,11 @@ export const UPSFinishContent = ({
           }
         })}
       </div>
-      <input
-        className="border w-full rounded-md px-2 py-1 mt-4"
-        placeholder="Enter your answer..."
+      <TextInput
         value={vowelCount}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.code === 'Enter') handleLevelAdvance()
-        }}
+        placeholder="Enter your answer..."
+        onChange={handleInputChange}
+        onSubmit={handleLevelAdvance}
       />
     </>
   )

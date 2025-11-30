@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { PlayerInformation } from '../player-constants'
+import { TextInput } from '../components/TextInput'
 
 export const TwoContent = ({
   playerId,
@@ -23,14 +24,11 @@ export const TwoContent = ({
   return (
     <>
       <p className="text-lg">Please confirm your full legal name.</p>
-      <input
-        className="border w-full rounded-md mt-1 px-2 py-1"
-        placeholder="Enter your name..."
+      <TextInput
         value={nameInput}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.code === 'Enter') handleLevelAdvance()
-        }}
+        placeholder="Enter your name..."
+        onChange={handleInputChange}
+        onSubmit={handleLevelAdvance}
       />
     </>
   )

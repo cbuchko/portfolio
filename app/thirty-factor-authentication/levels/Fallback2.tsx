@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { fallbackPassKey } from '../constants'
+import { TextInput } from '../components/TextInput'
 
 export const FallbackTwoContent = ({
   validateAdvance,
@@ -25,15 +26,12 @@ export const FallbackTwoContent = ({
   return (
     <>
       <p className="text-lg">Please confirm your new password.</p>
-      <input
-        className="border w-full rounded-md mt-2 px-2 py-1"
-        placeholder="Enter password..."
+      <TextInput
         value={passInput}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.code === 'Enter') handleLevelAdvance()
-        }}
-      />
+        placeholder="Enter password..."
+        onChange={handleInputChange}
+        onSubmit={handleLevelAdvance}
+      />{' '}
     </>
   )
 }
