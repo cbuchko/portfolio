@@ -8,12 +8,15 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
   const [fishPosition, setFishPosition] = useState(0)
   const [rodPosition, setRodPosition] = useState(0)
   const [progress, setProgress] = useState(40)
-  const ticksSinceLastSpace = useRef(2)
+  const ticksSinceLastSpace = useRef(1)
+  const isHoldingSpace = useRef(false)
+  const rodIntervalRef = useRef<NodeJS.Timeout>(null)
 
   useEffect(() => {
     const interval = setInterval(() => {
       const oldY = fishPosition
 
+      /** fish movement */
       let newY
       const upOrDown = Math.random()
       const shouldSpikeMovement = Math.random()
@@ -26,14 +29,17 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
       if (newY < 0) newY = 0
       if (newY > playAreaHeight - 25) newY = playAreaHeight - 25
       setFishPosition(newY)
-      if (ticksSinceLastSpace.current === 0)
+
+      /** rod falling */
+      if (ticksSinceLastSpace.current === 0 && !isHoldingSpace.current) {
         setRodPosition((position) => {
           const newPosition = position - 15
           if (newPosition < 0) return 0
           return newPosition
         })
-      else ticksSinceLastSpace.current = ticksSinceLastSpace.current - 1
+      } else ticksSinceLastSpace.current = Math.max(ticksSinceLastSpace.current - 1, 0)
 
+      /** progress bar */
       if (fishPosition > rodPosition && fishPosition < rodPosition + rodHeight) {
         setProgress((progress) => progress + 0.5)
       } else if (progress > 0) {
@@ -57,25 +63,40 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
   }, [progress, handleLevelAdvance])
 
   const handleRodMove = useCallback((event: KeyboardEvent) => {
+    if (event.code.toLocaleLowerCase() !== 'space' || isHoldingSpace.current) return
+    ticksSinceLastSpace.current = 1
+    isHoldingSpace.current = true
+
+    const loopHold = () => {
+      if (!isHoldingSpace.current) return
+      setRodPosition((position) => {
+        const newPosition = position + 5
+        if (newPosition > playAreaHeight - rodHeight) return playAreaHeight - rodHeight
+        return newPosition
+      })
+    }
+    rodIntervalRef.current = setInterval(loopHold, 50)
+  }, [])
+
+  const handleRodRelease = useCallback((event: KeyboardEvent) => {
     if (event.code.toLocaleLowerCase() !== 'space') return
-    ticksSinceLastSpace.current = 2
-    setRodPosition((position) => {
-      const newPosition = position + 10
-      if (newPosition > playAreaHeight - rodHeight) return playAreaHeight - rodHeight
-      return newPosition
-    })
+    isHoldingSpace.current = false
+    if (rodIntervalRef.current) clearInterval(rodIntervalRef.current)
   }, [])
 
   useEffect(() => {
     window.addEventListener('keydown', handleRodMove)
+    window.addEventListener('keyup', handleRodRelease)
+
     return () => {
       window.removeEventListener('keydown', handleRodMove)
+      window.removeEventListener('keyup', handleRodRelease)
     }
   }, [handleRodMove])
 
   return (
     <>
-      <p className="text-lg">Take a load off and catch a Fish.</p>
+      <p className="text-lg">Take a load off and catch a fish.</p>
       <p className="text-lg">Hold SPACE to raise your lure.</p>
       <p className="text-lg">Keep the lure on the fish to catch it.</p>
       <div className="mt-8 flex gap-2 justify-center">
