@@ -83,6 +83,7 @@ export const Spotify = ({
       <p className="text-lg">
         To verify yourself as a Spotify user, please complete this Rhythm challenge.
       </p>
+      <p className="text-lg">Click the pads as they appear to win.</p>
       <p className="italic">
         *Playtesting Note:* Soundtrack for this level is still in development.
       </p>
@@ -196,13 +197,14 @@ const RythymPad = ({
     <>
       <div
         onClick={handleClick}
+        onPointerDown={handleClick}
         style={{ left: position.x, top: position.y, backgroundColor: color, outlineColor: color }}
         className={classNames(
-          'fixed  h-20 w-20 border-6 outline-2 border-black flex items-center justify-center rounded-full osu-outline cursor-pointer',
+          'fixed h-20 w-20 border-6 outline-2 border-black flex items-center justify-center rounded-full osu-outline cursor-pointer z-100',
           { 'opacity-0 transition-opacity duration-500 pointer-events-none': isCleared }
         )}
       >
-        <p className="mono text-3xl text-white select-none">{number}</p>
+        <p className="mono text-3xl text-white select-none pointer-events-none">{number}</p>
       </div>
     </>
   )

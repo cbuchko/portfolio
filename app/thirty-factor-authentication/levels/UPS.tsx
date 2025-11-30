@@ -19,11 +19,11 @@ export const UPSContent = ({
   }, [])
 
   useEffect(() => {
+    validateAdvance()
     if (!!code) return
     const newCode = makeCode(16)
     setCode(newCode)
     setIsLoading(false)
-    validateAdvance()
   }, [setCode, setIsLoading, validateAdvance, code])
 
   return (
