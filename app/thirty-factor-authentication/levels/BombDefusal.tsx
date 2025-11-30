@@ -100,7 +100,7 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
     setTimeout(() => {
       resetGame()
     }, 4000)
-  }, [handleLevelAdvance, resetGame])
+  }, [handleLevelAdvance, resetGame, playExplosionSound])
 
   useEffect(() => {
     if (timer === 0 && !isGameOver) {

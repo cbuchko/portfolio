@@ -62,7 +62,7 @@ export const useLevels = () => {
   const handleLevelAdvance = useCallback(() => {
     playSuccessSound()
     setLevel((level) => level + 1)
-  }, [])
+  }, [playSuccessSound])
 
   const resetLevel = () => {
     setLevel(1)

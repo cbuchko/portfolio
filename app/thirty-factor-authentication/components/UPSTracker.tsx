@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { addMinutesToDate, getFormattedDate } from '../utils'
 import classNames from 'classnames'
 import { useSound } from '@/app/utils/useSounds'
@@ -21,15 +21,18 @@ export const UPSTracker = ({ code, time }: UPSTrackerProps) => {
   const playUPSError = useSound('/thirty-factor-authentication/sounds/notification.mp3')
 
   //change the tracker, surface the error, play the notification
-  const handleDelay = (message: string, delayMinutes: number) => {
-    const newDate = addMinutesToDate(baseTimeRef.current, delayMinutes)
-    setTimeString(getFormattedDate(newDate))
-    setMessage(message)
-    baseTimeRef.current = newDate
-    setIsError(true)
-    setTimeout(() => setIsError(false), 5000)
-    playUPSError()
-  }
+  const handleDelay = useCallback(
+    (message: string, delayMinutes: number) => {
+      const newDate = addMinutesToDate(baseTimeRef.current, delayMinutes)
+      setTimeString(getFormattedDate(newDate))
+      setMessage(message)
+      baseTimeRef.current = newDate
+      setIsError(true)
+      setTimeout(() => setIsError(false), 5000)
+      playUPSError()
+    },
+    [playUPSError]
+  )
 
   useEffect(() => {
     //setup all the delays that will happen

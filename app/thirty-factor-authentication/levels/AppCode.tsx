@@ -100,7 +100,7 @@ export const AppCode = ({ title, isTarget, setTargetCode, duration, isDelayed }:
       if (intervalRef.current) clearInterval(intervalRef.current)
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
     }
-  }, [isDelayed, isTarget, duration])
+  }, [isDelayed, isTarget, duration, setTargetCode])
 
   const progress = 0.999999 - elapsed / duration // 1 → 0
 

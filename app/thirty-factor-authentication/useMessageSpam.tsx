@@ -28,7 +28,7 @@ export const useMessageSpam = (spamMessages: string[], realMessage: string, dela
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
-  }, [delayInMs, realMessage, spamMessages])
+  }, [delayInMs, realMessage, spamMessages, playMessageSound])
 
   const handleResendCode = () => {
     const audio = new Audio('/thirty-factor-authentication/sounds/message.mp3')

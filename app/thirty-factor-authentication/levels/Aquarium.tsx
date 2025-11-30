@@ -80,7 +80,7 @@ const FishTank = ({
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
-  }, [fishCount])
+  }, [fishCount, setFishCount])
 
   useEffect(() => {
     if (maxFish <= fishCount && intervalRef.current) {
