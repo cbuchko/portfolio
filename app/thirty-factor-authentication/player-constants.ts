@@ -15,7 +15,6 @@ export type Player = {
   }
   imdb: string[]
   quotes: { quote: string; isValid: boolean }[]
-  totalValidQuotes: number
   license: {
     location: string
     headshot: string
@@ -65,7 +64,6 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       dob: '1942/11/20',
     },
     imdb: ['parks', 'sesamestreet', 'jimmykimmel', 'lawandorder'],
-    totalValidQuotes: 5,
     quotes: [
       {
         quote:
@@ -78,6 +76,20 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
         isValid: true,
       },
       { quote: 'Setbacks are unavoidable, but giving up is unforgivable', isValid: true },
+      {
+        quote:
+          'We do not scare easily, we never bow, we never bend, we never break, we endure, we overcome, we are america, second to none, and we own the finish line.',
+        isValid: true,
+      },
+      {
+        quote: 'We should bomb Serbia to the ground.',
+        isValid: true,
+      },
+      {
+        quote:
+          'Don’t tell me what you value. Show me your budget, and I’ll tell you what you value!',
+        isValid: true,
+      },
       { quote: 'Will you shut up, man?', isValid: true },
       {
         quote:
@@ -99,6 +111,20 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       {
         quote:
           'Being President is like running a cemetery; you’ve got a lot of people under you and nobody’s listening.',
+        isValid: false,
+      },
+      {
+        quote: "People say I'm indecisive. Well, I don't know about that.",
+        isValid: false,
+      },
+      {
+        quote:
+          'I have a lot more material prepared, but I have to get the Secret Service home in time for their new curfew.',
+        isValid: false,
+      },
+      {
+        quote:
+          'My esteem in this country has gone up substantially. It is very nice now when people wave at me, they use all their fingers.',
         isValid: false,
       },
     ],

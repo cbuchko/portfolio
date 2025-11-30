@@ -15,7 +15,7 @@ import { IMDBContent, IMDBControls } from './IMDB'
 import { BirdCallContent, BirdCallControls } from './BirdCalls'
 import { ParlorRoomContent } from './ParlorRoom'
 import { MaintenanceContent, MaintenanceControls } from './Maintenance'
-import { QuotesContent, QuotesControl } from './Quotes'
+import { QuotesContent } from './Quotes'
 import { PapersPleaseContent } from './PapersPlease'
 import { AquariumContent, AquariumControls } from './Aquarium'
 import { UndertaleContent } from './Undertale'
@@ -99,12 +99,12 @@ export const useLevels = () => {
     { content: UPSContent, controls: UPSControls, requiresLoad: true },
     { content: AppCodeContent, controls: AppCodeControls }, //APP CODE BEFORE SSO FOR CLARITY
     { content: SSOContent },
-    { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
+    { content: QuotesContent, controls: undefined },
     { content: MaintenanceContent, controls: MaintenanceControls },
     { content: SSOContent }, //15
     { content: BrainScanContent, controls: BrainScanControls },
+    { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
     { content: RoadTripContent, requiresLoad: true },
-    { content: QuotesContent, controls: QuotesControl },
     { content: SSOContent }, //20
     { content: TaxReturnContent, controls: TaxReturnControls },
     { content: ParlorRoomContent, controls: undefined, requiresLoad: true },
