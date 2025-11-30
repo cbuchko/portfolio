@@ -69,6 +69,7 @@ export const useLevels = () => {
     timeRef.current = new Date().getTime()
     setUPSTrackingCode('')
     setUPSTrackingTime(0)
+    setSelectedSSOIds(new Set())
   }
 
   const baseProps = {

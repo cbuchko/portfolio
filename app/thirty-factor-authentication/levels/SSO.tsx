@@ -4,6 +4,7 @@ import { ContentProps } from './types'
 import Image from 'next/image'
 import { SelfCheckoutContent } from './SelfCheckout'
 import { Twitter } from './Twitter'
+import { devMode } from '../constants'
 
 export enum SSOIds {
   spotify = 'spotify',
@@ -48,7 +49,7 @@ export const SSOContent = (props: ContentProps) => {
                   onClick={() => handleSSOChoice(SSOIds.twitter)}
                 />
               )}
-              {!selectedSSOIds.has(SSOIds.spotify) && (
+              {(!selectedSSOIds.has(SSOIds.spotify) || devMode) && (
                 <SSOProvider
                   title="Spotify"
                   url="/thirty-factor-authentication/sso/spotify.png"

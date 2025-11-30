@@ -47,7 +47,7 @@ export const Twitter = ({ handleLevelAdvance }: ContentProps) => {
       setMessage("No hastags? Is it really a tweet if there's no hashtags?")
       return
     }
-    if (countChar(tweetText, '#') < 5) {
+    if (countChar(tweetText, '#') < 3) {
       setMessage('A few more hashtags should do the trick!')
       return
     }
@@ -77,7 +77,8 @@ export const Twitter = ({ handleLevelAdvance }: ContentProps) => {
 
     if (
       countPhrase(tweetText, 'Thirty Factor Authentication') < 1 &&
-      countPhrase(tweetText, 'thirtyfactorauthentication') < 1
+      countPhrase(tweetText, 'thirtyfactorauthentication') < 1 &&
+      countPhrase(tweetText, 'thirty-factor-authentication') < 1
     ) {
       setMessage('If you could mention the name of the game that would be awesome!')
       return
