@@ -92,7 +92,7 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
       window.removeEventListener('keydown', handleRodMove)
       window.removeEventListener('keyup', handleRodRelease)
     }
-  }, [handleRodMove])
+  }, [handleRodMove, handleRodRelease])
 
   return (
     <>
