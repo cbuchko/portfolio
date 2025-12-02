@@ -177,7 +177,7 @@ const notes = [
   'Check fridge before grocery trip',
   'Buy stamps',
   'Take out trash',
-  'Text Sarah back',
+  'Text Mom back',
   'Call Grandpa',
   'Bring charger to office',
   'Try new recipe',

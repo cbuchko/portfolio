@@ -24,16 +24,16 @@ const DiscrepancyBase: Record<string, Discrepancy> = {
   ['headshot']: { id: 'headshot', title: 'Headshot' },
   ['signature']: { id: 'signature', title: 'Signature' },
   ['name']: { id: 'name', title: 'Full Name' },
-  ['number']: { id: 'number', title: 'Licence Number' },
+  ['number']: { id: 'number', title: 'Identification Number' },
   ['issued']: { id: 'issued', title: 'Issuing Date' },
-  ['expires']: { id: 'expires', title: 'Expirey Date' },
+  ['expires']: { id: 'expires', title: 'Expiry Date' },
   ['dob']: { id: 'dob', title: 'Date of Birth' },
   ['height']: { id: 'height', title: 'Height' },
   ['weight']: { id: 'weight', title: 'Weight' },
   ['eyes']: { id: 'eyes', title: 'Eye Color' },
   ['hair']: { id: 'hair', title: 'Hair Color' },
   ['children']: { id: 'children', title: 'Number of Children' },
-  ['entry']: { id: 'entry', title: 'Entry Date' },
+  ['entry']: { id: 'entry', title: 'Authentication Date' },
   ['coat']: { id: 'coat', title: 'Coat of Arms' },
 }
 
@@ -61,6 +61,14 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
     handleLevelAdvance()
   }
 
+  const handleDiscrepancySelect = (id: string) => {
+    if (selectedDiscrepancyIds.has(id)) {
+      removeDiscrepancy(id)
+      return
+    }
+    addDiscrepancy(id)
+  }
+
   const addDiscrepancy = (id: string) =>
     setSelectedDiscrepancyIds((set) => {
       const setCopy = new Set(set)
@@ -81,20 +89,20 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
       </p>
       <div className="flex justify-between gap-8">
         <div>
-          <p className="mb-2 text-lg">Identify all discrepancies, if there are any.</p>
-          <p className="text-lg">If Approved:</p>
-          <ol className="list-decimal ml-4">
-            <li>Identify no discrepancies</li>
-            <li>Click APPROVED</li>
-          </ol>
-          <p className="mt-2 text-lg">If Denied:</p>
-          <ol className="list-decimal ml-4">
-            <li>Identify all discrepancies</li>
-            <li>Click DENIED</li>
+          <p className="text-lg max-w-[400px]">
+            Identify any indications of forgery or any wrong information in the two documents.
+          </p>
+          <p className="mb-2 text-sm italic">
+            eg. incorrect hair color, expired identification, forged signature
+          </p>
+          <p className="text-lg mt-4">After selecting everything you believe to be an error:</p>
+          <ol className="list-disc ml-4 text-lg">
+            <li>Click DENIED if you identified any errors</li>
+            <li>Click APPROVED if you identified no errors</li>
           </ol>
         </div>
         <div className="border w-[300px] min-h-[200px] text-sm p-2 rounded-sm italic mono">
-          <div>Discrepancies Identified:</div>
+          <div>Errors Identified:</div>
           <div className="flex flex-wrap gap-4 mt-2">
             {Array.from(selectedDiscrepancyIds).map((discrepancyId) => {
               const discrepancy = DiscrepancyBase[discrepancyId]
@@ -116,22 +124,27 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
         </div>
       </div>
       {typeof window !== 'undefined' && (
-        <DriversLicense playerId={playerId} gameInfo={gameInfo} addDiscrepancy={addDiscrepancy} />
+        <DriversLicense
+          playerId={playerId}
+          gameInfo={gameInfo}
+          addDiscrepancy={handleDiscrepancySelect}
+        />
       )}
       {typeof window !== 'undefined' && (
-        <EntryPermit gameInfo={gameInfo} addDiscrepancy={addDiscrepancy} />
+        <EntryPermit gameInfo={gameInfo} addDiscrepancy={handleDiscrepancySelect} />
       )}
-      <div className="flex justify-between mt-8">
+      <div className="flex justify-end mt-4 gap-8">
         <button
-          className="auth-button auth-button-primary !bg-red-400 font-semibold tracking-widest"
+          className="button-stamp bg-red-400 font-extrabold tracking-widest disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
           onClick={handleDecline}
+          disabled={selectedDiscrepancyIds.size === 0}
         >
           DENIED
         </button>
-        <div className="grow" />
         <button
-          className="auth-button auth-button-primary !bg-green-400 font-semibold tracking-widest"
+          className="button-stamp bg-green-400 font-extrabold tracking-widest disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
           onClick={handleApprove}
+          disabled={selectedDiscrepancyIds.size > 0}
         >
           APPROVED
         </button>
@@ -168,14 +181,14 @@ const DriversLicense = ({
         left: position.x,
         top: position.y,
       }}
-      className="border w-[400px] p-3 rounded-sm license-background depth-container select-none cursor-grab z-10"
+      className="border w-[400px] p-3 rounded-sm license-background depth-container select-none cursor-grab z-100"
       onMouseDown={handleDrag}
     >
       <div className="tracking-widest text-center mb-4 flex justify-between gap-2">
         <h5 className="text-2xl license-title uppercase">
           {PlayerInformation[playerId].license.location}
         </h5>
-        <h5 className="text-xs font-bold">{'IDENTIFICATION CARD'}</h5>
+        <h5 className="text-xs font-bold">{'THIRTY FACTOR ID'}</h5>
       </div>
       <div className="flex rounded-md bg w-max relative">
         <div className="flex bg-white/40 p-1 rounded-md bg w-max min-w-[290px]">
@@ -225,6 +238,7 @@ const DriversLicense = ({
               value={gameInfo.issued}
               discrepancyId={DiscrepancyBase['issued'].id}
               addDiscrepancy={addDiscrepancy}
+              isSelectable={false}
             />
             <IDDetail
               label="Expires"
@@ -308,12 +322,16 @@ const DriversLicense = ({
 const InspectableItem = ({
   discrepancyId,
   addDiscrepancy,
+  isSelectable = true,
   children,
 }: {
   discrepancyId: Discrepancy['id']
   addDiscrepancy: (id: string) => void
+  isSelectable?: boolean
 } & PropsWithChildren) => {
   const [isHovering, setIsHovering] = useState(false)
+
+  if (!isSelectable) return children
   return (
     <div
       className={classNames('outline-offset-2 rounded-md cursor-pointer', {
@@ -333,14 +351,20 @@ const IDDetail = ({
   value,
   discrepancyId,
   addDiscrepancy,
+  isSelectable = true,
 }: {
   label: string
   value: string
   discrepancyId: Discrepancy['id']
   addDiscrepancy: (id: string) => void
+  isSelectable?: boolean
 }) => {
   return (
-    <InspectableItem discrepancyId={discrepancyId} addDiscrepancy={addDiscrepancy}>
+    <InspectableItem
+      discrepancyId={discrepancyId}
+      addDiscrepancy={addDiscrepancy}
+      isSelectable={isSelectable}
+    >
       <div className="text-sm flex justify-between gap-1 mb-0.5 mr-3">
         <small className="text-blue-500 font-semibold">{`${label}: `}</small>
         <small className="font-medium">{value}</small>
@@ -372,11 +396,11 @@ const EntryPermit = ({
         left: position.x,
         top: position.y,
       }}
-      className="outline-2 -outline-offset-16 outline-amber-800   w-[350px] h-[470px] shadow-xl py-2 px-8 bg-yellow-50 cursor-grab select-none flex flex-col items-center"
+      className="outline-2 -outline-offset-16 outline-amber-800 w-[350px] h-[470px] shadow-xl py-2 px-8 bg-yellow-50 cursor-grab select-none flex flex-col items-center z-50"
       onMouseDown={handleDrag}
     >
       <h2 className="absolute top-0 text-2xl text-center !bg-yellow-50">THIRTY FACTOR</h2>
-      <h2 className="text-2xl text-center mt-6">Entry Permit</h2>
+      <h2 className="text-2xl text-center mt-6">Authentication Permit</h2>
       <p className="mt-4">
         Conditional entry into Thirty Factor Authentication is hereby granted to
       </p>
@@ -397,13 +421,13 @@ const EntryPermit = ({
           addDiscrepancy={addDiscrepancy}
         />
         <PermitDetail
-          label="Issuing Body"
+          label="ID Issued by"
           value={gameInfo.location}
           discrepancyId={DiscrepancyBase['location'].id}
           addDiscrepancy={addDiscrepancy}
         />
         <PermitDetail
-          label="Enter by"
+          label="Authenticate by"
           value={gameInfo.entry}
           discrepancyId={DiscrepancyBase['entry'].id}
           addDiscrepancy={addDiscrepancy}

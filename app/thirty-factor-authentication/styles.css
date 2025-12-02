@@ -23,6 +23,22 @@ small {
   background-color: rgb(142, 197, 255);
 }
 
+.button-stamp {
+  height: 50px;
+  width: 133px;
+  border: solid 1px black;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  font-family: 'Poppins';
+}
+
+.button-stamp:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  scale: 1.1;
+}
+
 @keyframes text-float-in {
   0% {
     opacity: 0;

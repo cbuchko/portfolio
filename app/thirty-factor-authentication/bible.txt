@@ -1,12 +1,24 @@
 Feedback actionables:
 Roadtrip reset and compass and markers
 Brain scan overhaul
+Papers Please Clarity Overhaul
+
+
+Roadtrip:
+    - Have markers always show their popups
+
+Papers Please:
+    - Have pink slip show up when you're wrong and say why you were wrong. Generate new information
+    - Make Approved Deny more Stamp like and more prominent
+    - Would be nice if dragging didnt select stuff
+    - Would be nice if reselecting an item deselected it
+
+Einstein: 
+    - Prevent tabbing out? lol
+
 
 Level Ideas:
-Color memory test
-
-GREAT IDEAS:
-maintenance becomes stanley parable?
+    -  mastermind
 
 OTHER IDEAS:
 Cloudflare
@@ -17,13 +29,8 @@ STRECH GOALS:
 Mobile
 Character randomizer
 Constant timer
+Stats in Game Over screen and Victory screen
+Achievements
+Leaderboards
 
-LEVEL MODIFICATION IDEAS:
-bomb defusal complications 
-    - dont press
-    - wait some time
-undertale 
-    - i-frames
-    - must be easier
-maintenance
-    - is noticeably the worst level
+
