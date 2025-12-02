@@ -519,7 +519,7 @@ const Citation = ({
       <div className="fixed w-[600px]  bg-pink-100 z-200 top-[50%] -translate-y-[50%] left-[50%] -translate-x-[50%] mono px-8 py-3 border-1 border-dotted">
         <div className="text-xl mb-4">CITATION</div>
         <div className="border-b-3 border-dotted" />
-        <div className="text-md mt-4">You didn't identify all errors.</div>
+        <div className="text-md mt-4">{`You didn't identify all errors.`}</div>
         <div className="text-md mt-1">Errors Expected:</div>
         {Array.from(discrepancyKeys).map((key, idx) => {
           return (
