@@ -98,8 +98,8 @@ export const useLevels = () => {
     { content: BiometricContent, controls: BiometricControls },
     { content: PostItContent, controls: PostItControls },
     { content: ZodiacContent, controls: ZodiacControls },
-    { content: FallbackTwoContent, controls: FallbackTwoControls }, //10
-    { content: UPSContent, controls: UPSControls, requiresLoad: true },
+    { content: UPSContent, controls: UPSControls, requiresLoad: true }, //10
+    { content: FallbackTwoContent, controls: FallbackTwoControls },
     { content: AppCodeContent, controls: AppCodeControls }, //APP CODE BEFORE SSO FOR CLARITY
     { content: SSOContent },
     { content: QuotesContent, controls: undefined },

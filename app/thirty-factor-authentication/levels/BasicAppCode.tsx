@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { makeAuthCode } from '../utils'
 import { createPortal } from 'react-dom'
@@ -28,6 +28,14 @@ export const BasicAppCodeContent = ({
     setPortalElement(portalElement)
   }, [])
 
+  const handleTargetSet = useCallback(
+    (code: string) => {
+      setTargetCode(code)
+      cancelAdvance()
+    },
+    [cancelAdvance]
+  )
+
   return (
     <>
       <p className="text-lg">Enter the code from your Authenticator App.</p>
@@ -43,7 +51,7 @@ export const BasicAppCodeContent = ({
             <AppCode
               title={'Thirty Factor Auth'}
               isTarget={true}
-              setTargetCode={setTargetCode}
+              setTargetCode={handleTargetSet}
               duration={3}
             />
           </div>,

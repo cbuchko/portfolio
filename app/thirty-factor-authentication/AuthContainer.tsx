@@ -1,4 +1,4 @@
-import { JSX, useEffect, useState } from 'react'
+import { JSX, useCallback, useEffect, useState } from 'react'
 import { PlayerIds, PlayerInformation } from './player-constants'
 import { ContentProps, ControlProps } from './levels/types'
 import XIcon from '@/public/thirty-factor-authentication/icons/x.svg'
@@ -47,9 +47,8 @@ export const AuthContainer = ({
     if (!requiresLoad) setIsLoading(false)
   }, [level, requiresLoad])
 
-  const validateAdvance = () => setIsAdvanceVerified(true)
-  const cancelAdvance = () => setIsAdvanceVerified(false)
-
+  const validateAdvance = useCallback(() => setIsAdvanceVerified(true), [])
+  const cancelAdvance = useCallback(() => setIsAdvanceVerified(false), [])
   return (
     <>
       <div

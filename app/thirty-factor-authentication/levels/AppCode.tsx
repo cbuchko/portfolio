@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { makeAuthCode, shuffle } from '../utils'
 import { createPortal } from 'react-dom'
@@ -20,6 +20,14 @@ export const AppCodeContent = ({
       cancelAdvance()
     }
   }
+
+  const handleTargetSet = useCallback(
+    (code: string) => {
+      setTargetCode(code)
+      cancelAdvance()
+    },
+    [cancelAdvance]
+  )
 
   useEffect(() => {
     const portalElement = document.getElementById('extras-portal')
@@ -52,7 +60,7 @@ export const AppCodeContent = ({
                   key={idx}
                   title={app}
                   isTarget={isTarget}
-                  setTargetCode={setTargetCode}
+                  setTargetCode={handleTargetSet}
                   duration={5}
                   isDelayed
                 />
