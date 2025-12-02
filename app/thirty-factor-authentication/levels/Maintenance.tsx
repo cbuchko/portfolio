@@ -73,9 +73,11 @@ export const MaintenanceContent = ({ handleLevelAdvance }: ContentProps) => {
       </div>
       {timeElapsed > 60 * 3 && (
         <p className="mt-8 max-w-[500px]">
-          I really didn't think I'd have to say this, but it's been three minutes. When I told you
-          to not do <span className="font-bold">ANYTHING</span>, I meant it. I'd recommend reading
-          the prompts in the future.
+          {`I really didn't think I'd have to say this, but it's been three minutes. When I told you
+          to not do`}{' '}
+          <span className="font-bold">ANYTHING</span>
+          {`, I meant it. I'd recommend reading the prompts
+          in the future.`}
         </p>
       )}
       <audio ref={audioRef} src="/idle_Game/audio/jazz.mp3" autoPlay loop />
