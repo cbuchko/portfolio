@@ -148,7 +148,11 @@ const FormLineItem = ({ label, amount, number }: LineItemProps) => {
     <div className=" text-xs pl-2 pt-1 pr-4 mx-2 border-b flex justify-between items-end">
       <div>{label}</div>
       <div className="flex">
-        <div className="bg-white px-2">{amount?.toLocaleString('en-us')}</div>
+        <input
+          className="bg-white px-2 field-sizing-content"
+          value={amount?.toLocaleString('en-us')}
+          onChange={() => {}}
+        />
         <div className="translate-x-3 font-bold">{number}</div>
       </div>
     </div>

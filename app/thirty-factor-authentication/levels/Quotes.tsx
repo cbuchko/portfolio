@@ -31,8 +31,9 @@ export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) =>
   }, [playerId])
 
   const handleQuoteSelect = (isTrue: boolean) => {
-    //if for some unforseen reason the game runs out of quotes, just advance them
+    if (displayFailure || displaySuccess) return
     if (matchupIndex >= quotes.length) {
+      //if for some unforseen reason the game runs out of quotes, just advance them
       handleLevelAdvance(true)
       return
     }
