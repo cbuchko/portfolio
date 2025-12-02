@@ -8,10 +8,7 @@ Roadtrip:
     - Have markers always show their popups
 
 Papers Please:
-    - Have pink slip show up when you're wrong and say why you were wrong. Generate new information
-    - Make Approved Deny more Stamp like and more prominent
-    - Would be nice if dragging didnt select stuff
-    - Would be nice if reselecting an item deselected it
+    - When other characters are added, make them show in every iteration, so you cant brute force
 
 Einstein: 
     - Prevent tabbing out? lol

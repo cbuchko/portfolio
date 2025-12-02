@@ -38,10 +38,17 @@ const DiscrepancyBase: Record<string, Discrepancy> = {
 }
 
 export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
-  const { gameInfo, discrepancyKeys } = useMemo(() => generateDiscrepancies(playerId), [playerId])
+  const [isShowingCitation, setIsShowingCitation] = useState(false)
+  const { gameInfo: baseGameInfo, discrepancyKeys: baseDiscrepancyKeys } = useMemo(
+    () => generateDiscrepancies(playerId),
+    [playerId]
+  )
+  const [gameInfo, setGameInfo] = useState(baseGameInfo)
+  const [discrepancyKeys, setDiscrepancyKeys] = useState(baseDiscrepancyKeys)
   const [selectedDiscrepancyIds, setSelectedDiscrepancyIds] = useState<Set<string>>(new Set())
 
   const handleApprove = () => {
+    setIsShowingCitation(true)
     if (discrepancyKeys.size === 0 && selectedDiscrepancyIds.size === 0) {
       handleLevelAdvance(true)
       return
@@ -58,6 +65,7 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
       handleLevelAdvance(true)
       return
     }
+    setIsShowingCitation(true)
     handleLevelAdvance()
   }
 
@@ -81,6 +89,14 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
       setCopy.delete(id)
       return setCopy
     })
+
+  const handleReset = () => {
+    const { gameInfo, discrepancyKeys } = generateDiscrepancies(playerId)
+    setGameInfo(gameInfo)
+    setDiscrepancyKeys(discrepancyKeys)
+    setIsShowingCitation(false)
+    setSelectedDiscrepancyIds(new Set())
+  }
 
   return (
     <>
@@ -133,6 +149,7 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
       {typeof window !== 'undefined' && (
         <EntryPermit gameInfo={gameInfo} addDiscrepancy={handleDiscrepancySelect} />
       )}
+      {isShowingCitation && <Citation discrepancyKeys={discrepancyKeys} onReset={handleReset} />}
       <div className="flex justify-end mt-4 gap-8">
         <button
           className="button-stamp bg-red-400 font-extrabold tracking-widest disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
@@ -487,6 +504,38 @@ const PermitDetail = ({
         </div>
       </div>
     </InspectableItem>
+  )
+}
+
+const Citation = ({
+  discrepancyKeys,
+  onReset,
+}: {
+  discrepancyKeys: Set<string>
+  onReset: () => void
+}) => {
+  return (
+    <>
+      <div className="fixed w-[600px]  bg-pink-100 z-200 top-[50%] -translate-y-[50%] left-[50%] -translate-x-[50%] mono px-8 py-3 border-1 border-dotted">
+        <div className="text-xl mb-4">CITATION</div>
+        <div className="border-b-3 border-dotted" />
+        <div className="text-md mt-4">You didn't identify all errors.</div>
+        <div className="text-md mt-1">Errors Expected:</div>
+        {Array.from(discrepancyKeys).map((key, idx) => {
+          return (
+            <span key={idx}>
+              {DiscrepancyBase[key].title}
+              {idx !== discrepancyKeys.size - 1 ? ', ' : ''}
+            </span>
+          )
+        })}
+        <div className="border-b-3 border-dotted mt-4" />
+        <button className="auth-button mt-4" onClick={onReset}>
+          Reset
+        </button>
+      </div>
+      <div className="fixed w-screen h-screen bg-black/20 top-0 left-0" />
+    </>
   )
 }
 
