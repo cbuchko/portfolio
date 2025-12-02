@@ -97,8 +97,8 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
         top: position.y,
       }}
       className={classNames(
-        'h-[225px] w-[200px] p-4 bg-yellow-200 rounded-lg shadow-md text-black select-none !cursor-grab',
-        { '-z-10': !!code }
+        'h-[225px] w-[200px] p-4 bg-yellow-200 rounded-lg shadow-md text-black select-none !cursor-grab z-2',
+        { '!z-1': !!code }
       )}
       onMouseDown={handleDrag}
     >
