@@ -103,7 +103,7 @@ export default function ThirtyFactorAuthentication() {
             </button>
           </div>
         )}
-        <PortfolioHeader />
+        {/* <PortfolioHeader /> */}
       </div>
     </>
   )

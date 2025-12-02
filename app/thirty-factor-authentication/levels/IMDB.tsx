@@ -34,8 +34,8 @@ export const IMDBContent = ({
 
   return (
     <>
-      <p className="text-lg">Confirm the media you have appeared in</p>
-      <div className="grid grid-cols-5 gap-4 mt-4">
+      <p className="text-lg">Confirm the media you have appeared in.</p>
+      <div className="grid grid-cols-3 gap-4 mt-4">
         {mediaShuffled &&
           mediaShuffled.map((media) => (
             <MovieThumbnail
@@ -110,15 +110,15 @@ const media: { id: string; url: string }[] = [
   { id: 'westwing', url: '/thirty-factor-authentication/imdb/westwing.jpg' },
   { id: 'houseofcards', url: '/thirty-factor-authentication/imdb/houseofcards.jpg' },
   { id: 'lawandorder', url: '/thirty-factor-authentication/imdb/lawandorder.jpg' },
-  { id: 'sesamestreet', url: '/thirty-factor-authentication/imdb/sesamestreet.jpg' },
+  // { id: 'sesamestreet', url: '/thirty-factor-authentication/imdb/sesamestreet.jpg' },
   { id: 'simpsons', url: '/thirty-factor-authentication/imdb/simpsons.jpg' },
-  { id: 'rickandmorty', url: '/thirty-factor-authentication/imdb/rickandmorty.jpg' },
+  // { id: 'rickandmorty', url: '/thirty-factor-authentication/imdb/rickandmorty.jpg' },
   { id: 'willandgrace', url: '/thirty-factor-authentication/imdb/willandgrace.jpg' },
-  { id: 'glee', url: '/thirty-factor-authentication/imdb/glee.jpg' },
+  // { id: 'glee', url: '/thirty-factor-authentication/imdb/glee.jpg' },
   { id: 'hotones', url: '/thirty-factor-authentication/imdb/hotones.jpg' },
-  { id: 'loveboat', url: '/thirty-factor-authentication/imdb/loveboat.webp' },
-  { id: 'maskedsinger', url: '/thirty-factor-authentication/imdb/maskedsinger.avif' },
+  // { id: 'loveboat', url: '/thirty-factor-authentication/imdb/loveboat.webp' },
+  // { id: 'maskedsinger', url: '/thirty-factor-authentication/imdb/maskedsinger.avif' },
   { id: 'xfiles', url: '/thirty-factor-authentication/imdb/xfiles.jpg' },
   { id: 'jimmykimmel', url: '/thirty-factor-authentication/imdb/jimmykimmel.webp' },
-  { id: 'billyonthestreet', url: '/thirty-factor-authentication/imdb/billyonthestreet.jpg' },
+  // { id: 'billyonthestreet', url: '/thirty-factor-authentication/imdb/billyonthestreet.jpg' },
 ]

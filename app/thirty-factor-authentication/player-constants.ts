@@ -63,7 +63,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       firstName: 'Joseph R',
       dob: '1942/11/20',
     },
-    imdb: ['parks', 'sesamestreet', 'jimmykimmel', 'lawandorder'],
+    imdb: ['parks', 'jimmykimmel', 'lawandorder'],
     quotes: [
       {
         quote:
