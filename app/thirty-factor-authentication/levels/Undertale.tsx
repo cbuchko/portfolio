@@ -15,7 +15,7 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps)
   const handleHit = () => {
     const now = new Date().getTime()
     const elapsed = now - damageTimestampRef.current
-    if (elapsed > 2000) {
+    if (elapsed > 1000) {
       setHealth((health) => health - 5)
       damageTimestampRef.current = now
       playDamageSound()
