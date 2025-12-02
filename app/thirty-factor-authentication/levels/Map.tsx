@@ -1,5 +1,6 @@
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 import L, { LatLngTuple } from 'leaflet'
+import { LeafletMarker } from '../components/Marker'
 
 export type MapProps = {
   handleCitySelect: (city?: string) => void
@@ -53,10 +54,11 @@ export default function Map({
         url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"
       />
       {markers.map((city, idx) => (
-        <Marker
+        <LeafletMarker
           key={idx}
           position={city.coordinates as [number, number]}
           icon={selectedCity === city.name ? redIcon : blueIcon}
+          message={city.message}
           eventHandlers={{
             click: () => {
               if (selectedCity === city.name) {
@@ -66,9 +68,7 @@ export default function Map({
               handleCitySelect(city.name)
             },
           }}
-        >
-          {city.message && <Popup>{city.message}</Popup>}
-        </Marker>
+        />
       ))}
     </MapContainer>
   )
