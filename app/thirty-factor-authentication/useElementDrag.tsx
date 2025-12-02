@@ -5,6 +5,7 @@ export const useElementDrag = (
   ref: RefObject<HTMLDivElement | null>,
   initialPosition: { x: number; y: number }
 ) => {
+  const [isDragging, setIsDragging] = useState(false)
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null)
 
   useEffect(() => {
@@ -15,6 +16,7 @@ export const useElementDrag = (
     const element = ref.current
     if (!element || !position) return
 
+    setTimeout(() => setIsDragging(true), 200)
     const startPosition = { x: event.clientX, y: event.clientY }
 
     const handleMove = (moveEvent: MouseEvent) => {
@@ -31,6 +33,7 @@ export const useElementDrag = (
     }
 
     const handleMouseUp = () => {
+      setTimeout(() => setIsDragging(false), 200)
       window.removeEventListener('mousemove', handleMove)
       window.removeEventListener('mouseup', handleMouseUp)
     }
@@ -38,5 +41,5 @@ export const useElementDrag = (
     window.addEventListener('mousemove', handleMove)
     window.addEventListener('mouseup', handleMouseUp)
   }
-  return { position, handleDrag }
+  return { position, handleDrag, isDragging }
 }

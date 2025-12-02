@@ -102,7 +102,7 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
           </ol>
         </div>
         <div className="border w-[300px] min-h-[200px] text-sm p-2 rounded-sm italic mono">
-          <div>Errors Identified:</div>
+          <div className="font-bold">Errors Identified:</div>
           <div className="flex flex-wrap gap-4 mt-2">
             {Array.from(selectedDiscrepancyIds).map((discrepancyId) => {
               const discrepancy = DiscrepancyBase[discrepancyId]
@@ -167,10 +167,15 @@ const DriversLicense = ({
 }) => {
   const licenseRef = useRef<HTMLDivElement>(null)
 
-  const { position, handleDrag } = useElementDrag(licenseRef, {
+  const { position, handleDrag, isDragging } = useElementDrag(licenseRef, {
     x: window.innerWidth / 2 - width / 2,
     y: window.innerHeight / 2 - height / 2,
   })
+
+  const handleDiscrepancySelect = (id: string) => {
+    if (isDragging) return
+    addDiscrepancy(id)
+  }
 
   if (!position) return null
   return (
@@ -195,7 +200,7 @@ const DriversLicense = ({
           <div className="">
             <InspectableItem
               discrepancyId={DiscrepancyBase['headshot'].id}
-              addDiscrepancy={addDiscrepancy}
+              addDiscrepancy={handleDiscrepancySelect}
             >
               <Image
                 src={`/thirty-factor-authentication/portraits/${PlayerInformation[playerId].license.headshot}`}
@@ -208,7 +213,7 @@ const DriversLicense = ({
             </InspectableItem>
             <InspectableItem
               discrepancyId={DiscrepancyBase['signature'].id}
-              addDiscrepancy={addDiscrepancy}
+              addDiscrepancy={handleDiscrepancySelect}
             >
               <Image
                 src={`/thirty-factor-authentication/signatures/${gameInfo.signature}`}
@@ -223,7 +228,7 @@ const DriversLicense = ({
           <div className="ml-2 flex flex-col">
             <InspectableItem
               discrepancyId={DiscrepancyBase['name'].id}
-              addDiscrepancy={addDiscrepancy}
+              addDiscrepancy={handleDiscrepancySelect}
             >
               <h5 className="text-xs mb-1 font-medium">{gameInfo.name}</h5>
             </InspectableItem>
@@ -231,57 +236,57 @@ const DriversLicense = ({
               label="No"
               value={gameInfo.licenseNumber}
               discrepancyId={DiscrepancyBase['number'].id}
-              addDiscrepancy={addDiscrepancy}
+              addDiscrepancy={handleDiscrepancySelect}
             />
             <IDDetail
               label="Issued"
               value={gameInfo.issued}
               discrepancyId={DiscrepancyBase['issued'].id}
-              addDiscrepancy={addDiscrepancy}
+              addDiscrepancy={handleDiscrepancySelect}
               isSelectable={false}
             />
             <IDDetail
               label="Expires"
               value={gameInfo.expires}
               discrepancyId={DiscrepancyBase['expires'].id}
-              addDiscrepancy={addDiscrepancy}
+              addDiscrepancy={handleDiscrepancySelect}
             />
             <IDDetail
               label="DOB"
               value={gameInfo.dob}
               discrepancyId={DiscrepancyBase['dob'].id}
-              addDiscrepancy={addDiscrepancy}
+              addDiscrepancy={handleDiscrepancySelect}
             />
             <div className="grid grid-cols-2">
               <IDDetail
                 label="Ht"
                 value={gameInfo.height}
                 discrepancyId={DiscrepancyBase['height'].id}
-                addDiscrepancy={addDiscrepancy}
+                addDiscrepancy={handleDiscrepancySelect}
               />
               <IDDetail
                 label="Wt"
                 value={gameInfo.weight}
                 discrepancyId={DiscrepancyBase['weight'].id}
-                addDiscrepancy={addDiscrepancy}
+                addDiscrepancy={handleDiscrepancySelect}
               />
               <IDDetail
                 label="Eyes"
                 value={gameInfo.eyes}
                 discrepancyId={DiscrepancyBase['eyes'].id}
-                addDiscrepancy={addDiscrepancy}
+                addDiscrepancy={handleDiscrepancySelect}
               />
               <IDDetail
                 label="Hair"
                 value={gameInfo.hair}
                 discrepancyId={DiscrepancyBase['hair'].id}
-                addDiscrepancy={addDiscrepancy}
+                addDiscrepancy={handleDiscrepancySelect}
               />
               <IDDetail
                 label="Children"
                 value={gameInfo.children}
                 discrepancyId={DiscrepancyBase['children'].id}
-                addDiscrepancy={addDiscrepancy}
+                addDiscrepancy={handleDiscrepancySelect}
               />
             </div>
           </div>
@@ -289,7 +294,7 @@ const DriversLicense = ({
         <div className="flex flex-col items-center justify-evenly w-[100px]">
           <InspectableItem
             discrepancyId={DiscrepancyBase['coat'].id}
-            addDiscrepancy={addDiscrepancy}
+            addDiscrepancy={handleDiscrepancySelect}
           >
             <Image
               src={`/thirty-factor-authentication/state-arms/${gameInfo.coat}`}
@@ -302,7 +307,7 @@ const DriversLicense = ({
           </InspectableItem>
           <InspectableItem
             discrepancyId={DiscrepancyBase['headshot'].id}
-            addDiscrepancy={addDiscrepancy}
+            addDiscrepancy={handleDiscrepancySelect}
           >
             <Image
               src={`/thirty-factor-authentication/portraits/${gameInfo.headshot}`}
@@ -382,10 +387,15 @@ const EntryPermit = ({
 }) => {
   const permitRef = useRef<HTMLDivElement>(null)
 
-  const { position, handleDrag } = useElementDrag(permitRef, {
+  const { position, handleDrag, isDragging } = useElementDrag(permitRef, {
     x: window.innerWidth / 2 - 350 / 2,
     y: window.innerHeight / 2 - 200 / 2,
   })
+
+  const handleDiscrepancySelect = (id: string) => {
+    if (isDragging) return
+    addDiscrepancy(id)
+  }
 
   if (!position) return null
   return (
@@ -404,12 +414,18 @@ const EntryPermit = ({
       <p className="mt-4">
         Conditional entry into Thirty Factor Authentication is hereby granted to
       </p>
-      <InspectableItem discrepancyId={DiscrepancyBase['name'].id} addDiscrepancy={addDiscrepancy}>
+      <InspectableItem
+        discrepancyId={DiscrepancyBase['name'].id}
+        addDiscrepancy={handleDiscrepancySelect}
+      >
         <p className="mt-4 text-[#284283]">{gameInfo.name}</p>
       </InspectableItem>
       <div className="border-b w-full" />
       <p className="mt-4 w-full">bearing identification number</p>
-      <InspectableItem discrepancyId={DiscrepancyBase['number'].id} addDiscrepancy={addDiscrepancy}>
+      <InspectableItem
+        discrepancyId={DiscrepancyBase['number'].id}
+        addDiscrepancy={handleDiscrepancySelect}
+      >
         <p className="mt-4 text-[#284283]">{gameInfo.permitNumber}</p>
       </InspectableItem>
       <div className="border-b w-full" />
@@ -418,22 +434,25 @@ const EntryPermit = ({
           label="Date of Birth"
           value={gameInfo.dob}
           discrepancyId={DiscrepancyBase['dob'].id}
-          addDiscrepancy={addDiscrepancy}
+          addDiscrepancy={handleDiscrepancySelect}
         />
         <PermitDetail
           label="ID Issued by"
           value={gameInfo.location}
           discrepancyId={DiscrepancyBase['location'].id}
-          addDiscrepancy={addDiscrepancy}
+          addDiscrepancy={handleDiscrepancySelect}
         />
         <PermitDetail
           label="Authenticate by"
           value={gameInfo.entry}
           discrepancyId={DiscrepancyBase['entry'].id}
-          addDiscrepancy={addDiscrepancy}
+          addDiscrepancy={handleDiscrepancySelect}
         />
       </div>
-      <InspectableItem discrepancyId={DiscrepancyBase['coat'].id} addDiscrepancy={addDiscrepancy}>
+      <InspectableItem
+        discrepancyId={DiscrepancyBase['coat'].id}
+        addDiscrepancy={handleDiscrepancySelect}
+      >
         <Image
           src={`/thirty-factor-authentication/state-arms/${gameInfo.coat}`}
           alt="coat-of-arms"
