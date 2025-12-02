@@ -106,11 +106,9 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
       <div className="flex justify-between gap-8">
         <div>
           <p className="text-lg max-w-[400px]">
-            Identify any indications of forgery or any wrong information in the two documents.
+            Identify all information on each document that is incorrect or otherwise invalid.
           </p>
-          <p className="mb-2 text-sm italic">
-            eg. incorrect hair color, expired identification, forged signature
-          </p>
+          <p className="mb-2 text-sm italic">eg. incorrect hair color or expired identification</p>
           <p className="text-lg mt-4">After selecting everything you believe to be an error:</p>
           <ol className="list-disc ml-4 text-lg">
             <li>Click DENIED if you identified any errors</li>
