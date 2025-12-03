@@ -59,6 +59,7 @@ export const AppCodeContent = ({
                 <AppCode
                   key={idx}
                   title={app}
+                  codeDefault={targetCode}
                   isTarget={isTarget}
                   setTargetCode={handleTargetSet}
                   duration={5}
@@ -75,15 +76,23 @@ export const AppCodeContent = ({
 
 type AppCodeProps = {
   title: string
+  codeDefault?: string
   isTarget?: boolean
   setTargetCode?: (code: string) => void
   duration: number
   isDelayed?: boolean
 }
 
-export const AppCode = ({ title, isTarget, setTargetCode, duration, isDelayed }: AppCodeProps) => {
+export const AppCode = ({
+  title,
+  codeDefault,
+  isTarget,
+  setTargetCode,
+  duration,
+  isDelayed,
+}: AppCodeProps) => {
   const [elapsed, setElapsed] = useState(0)
-  const [code, setCode] = useState(makeAuthCode(6))
+  const [code, setCode] = useState(codeDefault || makeAuthCode(6))
   const intervalRef = useRef<NodeJS.Timeout>(null)
   const timeoutRef = useRef<NodeJS.Timeout>(null)
 

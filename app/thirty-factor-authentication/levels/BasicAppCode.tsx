@@ -50,6 +50,7 @@ export const BasicAppCodeContent = ({
           <div className="flex flex-wrap justify-center mt-6">
             <AppCode
               title={'Thirty Factor Auth'}
+              codeDefault={targetCode}
               isTarget={true}
               setTargetCode={handleTargetSet}
               duration={3}
