@@ -1,11 +1,6 @@
 Feedback actionables:
-Roadtrip reset and compass and markers
-Brain scan overhaul
-Papers Please Clarity Overhaul
-
-
-Roadtrip:
-    - Have markers always show their popups
+Roadtrip reset
+Brain scan overhaul (Replace with mastermind?)
 
 Papers Please:
     - When other characters are added, make them show in every iteration, so you cant brute force
@@ -19,8 +14,8 @@ Level Ideas:
 
 OTHER IDEAS:
 Cloudflare
-"Sauce" Pass. Looks for opportunities for SFX, Animations, general Sauce
 Sentry for monitoring
+Re-add Name logo
 
 STRECH GOALS:
 Mobile

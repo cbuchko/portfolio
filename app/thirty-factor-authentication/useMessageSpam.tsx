@@ -8,13 +8,15 @@ export const useMessageSpam = (spamMessages: string[], realMessage: string, dela
   const messageIndexRef = useRef(-1)
   const intervalRef = useRef<NodeJS.Timeout>(null)
 
-  //every 5 seconds replace the message on screen with a new one
   useEffect(() => {
     if (messageIndexRef.current === -1) {
       playMessageSound()
       setMessage(realMessage)
       messageIndexRef.current = 0
     }
+  }, [realMessage, playMessageSound])
+
+  useEffect(() => {
     intervalRef.current = setInterval(() => {
       playMessageSound()
       setMessage(spamMessages[messageIndexRef.current])
@@ -28,7 +30,7 @@ export const useMessageSpam = (spamMessages: string[], realMessage: string, dela
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
-  }, [delayInMs, realMessage, spamMessages, playMessageSound])
+  }, [delayInMs, spamMessages, playMessageSound])
 
   const handleResendCode = () => {
     const audio = new Audio('/thirty-factor-authentication/sounds/message.mp3')
