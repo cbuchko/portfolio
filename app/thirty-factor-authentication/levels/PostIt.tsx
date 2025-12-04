@@ -1,4 +1,4 @@
-import { MouseEvent as ReactMouseEvent, useMemo, useRef, useState } from 'react'
+import { MouseEvent as ReactMouseEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { clampPositionsToScreen } from '../utils'
@@ -57,8 +57,12 @@ const getRandomPosition = () => {
 }
 
 const PostIt = ({ message, code }: { message?: string; code?: string }) => {
-  const [position, setPosition] = useState(getRandomPosition())
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(null)
   const noteRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setPosition(getRandomPosition())
+  }, [])
 
   const handleDrag = (event: ReactMouseEvent<HTMLDivElement>) => {
     const note = noteRef.current
@@ -67,6 +71,7 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
     const startPosition = { x: event.clientX, y: event.clientY }
 
     const handleMove = (moveEvent: MouseEvent) => {
+      if (!position) return
       const dx = moveEvent.clientX - startPosition.x
       const dy = moveEvent.clientY - startPosition.y
       const newX = position.x + dx
@@ -91,6 +96,8 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
   const randomizedTextPosition = useMemo(() => Math.floor(Math.random() * (100 - 50) + 50), [])
   const randomizedFontSize = useMemo(() => Math.floor(Math.random() * (36 - 24) + 24), [])
   const randomizedTextAlign = useMemo(() => (Math.random() > 0.2 ? 'left' : 'right'), [])
+
+  if (!position) return null
 
   return (
     <div
