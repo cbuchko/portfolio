@@ -2,6 +2,7 @@
 
 import { AuthContainer } from './AuthContainer'
 import './styles.css'
+import './waves.css'
 import { useLevels } from './levels/useLevel'
 import { useState } from 'react'
 import { PlayerIds } from './player-constants'
@@ -42,7 +43,7 @@ export default function ThirtyFactorAuthentication() {
         className="relative w-screen h-screen flex flex-col overflow-y-auto"
         style={{ scrollbarGutter: 'stable' }}
       >
-        <div className="absolute left-[50%] -translate-x-[50%] top-8 flex items-center gap-2">
+        <div className="absolute left-[50%] -translate-x-[50%] top-8 flex items-center gap-2 bg-white rounded-md p-2">
           <Image
             src="/thirty-factor-authentication/horizontal-logo.png"
             alt="logo"

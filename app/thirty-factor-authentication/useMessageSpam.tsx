@@ -4,7 +4,10 @@ import { useSound } from '../utils/useSounds'
 export const useMessageSpam = (spamMessages: string[], realMessage: string, delayInMs = 7000) => {
   const [message, setMessage] = useState<string | null>(null)
 
-  const playMessageSound = useSound('/thirty-factor-authentication/sounds/message.mp3', 0.2)
+  const { playSound: playMessageSound } = useSound(
+    '/thirty-factor-authentication/sounds/message.mp3',
+    0.2
+  )
   const messageIndexRef = useRef(-1)
   const intervalRef = useRef<NodeJS.Timeout>(null)
 

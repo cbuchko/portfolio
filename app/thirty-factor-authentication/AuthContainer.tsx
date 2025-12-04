@@ -22,7 +22,7 @@ export const AuthContainer = ({
   Content,
   Controls,
 }: AuthContainerProps) => {
-  const playErrorSound = useSound('/thirty-factor-authentication/sounds/error.mp3')
+  const { playSound: playErrorSound } = useSound('/thirty-factor-authentication/sounds/error.mp3')
   const [isLoading, setIsLoading] = useState(false)
   const [isAdvanceVerified, setIsAdvanceVerified] = useState(false)
   const [errorCount, setErrorCount] = useState(0)
@@ -74,7 +74,7 @@ export const AuthContainer = ({
           <h6 className="text-xs">{`Level ${level}/${maxLevel}`}</h6>
         </div>
         <div id="auth-body" className="border rounded-sm border-t-0 rounded-t-none">
-          <div id="auth-content" className="px-4 py-8">
+          <div id="auth-content" className="px-4 py-8 bg-white">
             <Content
               playerId={playerId}
               validateAdvance={validateAdvance}

@@ -56,7 +56,10 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
 
   const timerRef = useRef<NodeJS.Timeout>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
-  const playExplosionSound = useSound('/thirty-factor-authentication/sounds/explosion.mp3', 0.3)
+  const { playSound: playExplosionSound } = useSound(
+    '/thirty-factor-authentication/sounds/explosion.mp3',
+    0.3
+  )
 
   const [instructionStepIndex, setInstructionStepIndex] = useState(0)
   const [instructions, formattedInstructions] = useMemo(() => {

@@ -51,7 +51,10 @@ export const useLevels = () => {
 
   const timeRef = useRef(new Date().getTime())
 
-  const playSuccessSound = useSound('/thirty-factor-authentication/sounds/success.mp3', 0.2)
+  const { playSound: playSuccessSound } = useSound(
+    '/thirty-factor-authentication/sounds/success.mp3',
+    0.2
+  )
 
   //details for tracking the overarching UPS mechanics
   const [upsTrackingCode, setUPSTrackingCode] = useState('')

@@ -153,7 +153,9 @@ const RythymPad = ({
 }) => {
   const [isCleared, setIsCleared] = useState(false)
   const [position, setPosition] = useState<Position | null>(null)
-  const playClickSound = useSound('thirty-factor-authentication/sounds/osu-click.mp3')
+  const { playSound: playClickSound } = useSound(
+    'thirty-factor-authentication/sounds/osu-click.mp3'
+  )
 
   useEffect(() => {
     //makes its position a random position

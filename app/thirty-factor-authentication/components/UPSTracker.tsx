@@ -18,7 +18,9 @@ export const UPSTracker = ({ code, time }: UPSTrackerProps) => {
   const [message, setMessage] = useState('Your package is On the Way.')
   const [isError, setIsError] = useState(false)
   const baseTimeRef = useRef<number>(time)
-  const playUPSError = useSound('/thirty-factor-authentication/sounds/notification.mp3')
+  const { playSound: playUPSError } = useSound(
+    '/thirty-factor-authentication/sounds/notification.mp3'
+  )
 
   //change the tracker, surface the error, play the notification
   const handleDelay = useCallback(

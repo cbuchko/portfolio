@@ -11,7 +11,10 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps)
   const characterName = PlayerInformation[playerId].name
   const [health, setHealth] = useState(maxHealth)
   const damageTimestampRef = useRef<number>(0)
-  const playDamageSound = useSound('/thirty-factor-authentication/sounds/undertale-damage.mp3', 0.5)
+  const { playSound: playDamageSound } = useSound(
+    '/thirty-factor-authentication/sounds/undertale-damage.mp3',
+    0.5
+  )
   const handleHit = () => {
     const now = new Date().getTime()
     const elapsed = now - damageTimestampRef.current

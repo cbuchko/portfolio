@@ -1,0 +1,58 @@
+/** Credit to Nicholas Gratton from this codepen: https://codepen.io/ngratton/pen/MZKJvr*/
+
+.LightWaves {
+  animation: lightwaves 8s infinite;
+  position: relative;
+}
+
+@keyframes lightwaves {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(5px, 5px);
+    transform: scale(1.05);
+  }
+  50% {
+    transform: translate(25px, 5px);
+  }
+  75% {
+    transform: translate(12px, 10px);
+    transform: scale(1.05);
+  }
+}
+
+.DarkWaves {
+  animation: darkwaves 12s infinite;
+}
+
+@keyframes darkwaves {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(25px, 5px);
+    transform: scale(1.05);
+  }
+  50% {
+    transform: translate(12px, 10px);
+  }
+  75% {
+    transform: translate(5px, 5px);
+  }
+}
+
+.WhiteWaves {
+  animation: whitewaves 4s alternate ease infinite;
+}
+
+@keyframes whitewaves {
+  0% {
+    transform: translate(0, 25px);
+  }
+  100% {
+    transform: translate(25px, 35px);
+  }
+}

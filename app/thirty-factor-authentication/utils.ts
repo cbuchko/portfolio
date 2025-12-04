@@ -14,7 +14,7 @@ export const clampPositionsToScreen = (
 
 export function makeCode(length: number) {
   let result = ''
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const characters = 'ABCDEFGHJKMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789'
   const charactersLength = characters.length
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength))
@@ -107,4 +107,55 @@ export function formatElapsedTime(timestamp: number): string {
     parts.push(`${remainingSeconds} second${remainingSeconds === 1 ? '' : 's'}`)
 
   return parts.join(' ')
+}
+
+type RGB = { r: number; g: number; b: number }
+
+const hexToRgb = (hex: string): RGB => {
+  const sanitized = hex.replace('#', '')
+  const bigint = parseInt(sanitized, 16)
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255,
+  }
+}
+
+const rgbToHex = (r: number, g: number, b: number): string =>
+  '#' + [r, g, b].map((x) => x.toString(16).padStart(2, '0')).join('')
+
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t
+
+/**
+ * Interpolate between start → middle → end based on percentage (0–1)
+ */
+export const interpolateThreeColors = (
+  startHex: string,
+  midHex: string,
+  endHex: string,
+  percentage: number
+): string => {
+  const p = Math.min(1, Math.max(0, percentage))
+
+  const start = hexToRgb(startHex)
+  const mid = hexToRgb(midHex)
+  const end = hexToRgb(endHex)
+
+  // First half: 0 → 0.5
+  if (p < 0.5) {
+    const t = p / 0.5 // Normalize 0–0.5 to 0–1
+    return rgbToHex(
+      Math.round(lerp(start.r, mid.r, t)),
+      Math.round(lerp(start.g, mid.g, t)),
+      Math.round(lerp(start.b, mid.b, t))
+    )
+  }
+
+  // Second half: 0.5 → 1
+  const t = (p - 0.5) / 0.5 // Normalize 0.5–1 to 0–1
+  return rgbToHex(
+    Math.round(lerp(mid.r, end.r, t)),
+    Math.round(lerp(mid.g, end.g, t)),
+    Math.round(lerp(mid.b, end.b, t))
+  )
 }
