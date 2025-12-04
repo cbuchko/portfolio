@@ -1,4 +1,4 @@
-import { MouseEvent as ReactMouseEvent, useRef, useState } from 'react'
+import { MouseEvent as ReactMouseEvent, useMemo, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { clampPositionsToScreen } from '../utils'
@@ -88,6 +88,10 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
     window.addEventListener('mouseup', handleMouseUp)
   }
 
+  const randomizedTextPosition = useMemo(() => Math.floor(Math.random() * (100 - 50) + 50), [])
+  const randomizedFontSize = useMemo(() => Math.floor(Math.random() * (36 - 24) + 24), [])
+  const randomizedTextAlign = useMemo(() => (Math.random() > 0.2 ? 'left' : 'right'), [])
+
   return (
     <div
       ref={noteRef}
@@ -97,19 +101,27 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
         top: position.y,
       }}
       className={classNames(
-        'h-[225px] w-[200px] p-4 bg-yellow-200 rounded-lg shadow-md text-black select-none !cursor-grab z-2',
+        'h-[225px] w-[200px] flex p-4 bg-yellow-200 rounded-lg shadow-md text-black select-none !cursor-grab z-2 post-it liebe-heide overflow-hidden',
         { '!z-1': !!code }
       )}
       onMouseDown={handleDrag}
     >
       {!!code ? (
-        <>
-          <div className="underline font-bold">{`Don't Lose`}</div>
-          Recovery Keyword:
-          <div className="mt-8 italic">{code}</div>
-        </>
+        <div>
+          <p className="text-2xl liebe-heide">**Recovery Keyword:**</p>
+          <div className="mt-8 !select-all text-5xl">smorgasbord</div>
+        </div>
       ) : (
-        <div>{message}</div>
+        <div
+          className="leading-8"
+          style={{
+            marginTop: randomizedTextPosition,
+            fontSize: randomizedFontSize,
+            textAlign: randomizedTextAlign,
+          }}
+        >
+          {message}
+        </div>
       )}
     </div>
   )
@@ -135,7 +147,6 @@ const codes = [
   'covfefe',
   'smorgasbord',
   'snickerdoodle',
-  'bibbitybobbityboo',
 ]
 
 const notes = [
@@ -146,7 +157,7 @@ const notes = [
   'Buy milk',
   'Groceries: eggs, spinach, coffee',
   'Laundry tonight',
-  'Don’t forget umbrella ☂️',
+  'Don’t forget umbrella',
   'Meeting 10AM sharp',
   'Cancel gym membership',
   'Water the plants',
@@ -183,7 +194,7 @@ const notes = [
   'Try new recipe',
   'Research new phone plan',
   'Check oil level',
-  'Don’t forget keys 🔑',
+  'Don’t forget keys',
   'Stretch every hour',
   'Backup files',
   'Charge headphones',
@@ -207,7 +218,6 @@ const notes = [
   'Walk 10k steps',
   'Call insurance company',
   'Vacuum living room',
-  'Don’t forget presentation notes',
   'Feed fish',
   'Refill water jug',
   'Buy batteries',
@@ -222,7 +232,6 @@ const notes = [
   'Bring reusable bag',
   'Send invoice',
   'Backup photos',
-  'Don’t forget sunglasses',
   'Confirm dinner reservation',
   'Buy detergent',
   'Check weather forecast',
@@ -234,41 +243,8 @@ const notes = [
   'Buy toothpaste',
   'Message HR',
   'Turn off oven!',
-  'Don’t forget ID',
   'Check fridge expiry dates',
   'Order groceries online',
   'Take vitamins after breakfast',
   'Update app passwords',
-  'Return Amazon package',
-  'Call plumber',
-  'Bring lunchbox home',
-  'Plan meals for week',
-  'Pick up gift',
-  'Charge power bank',
-  'Call car service',
-  'Send thank you note',
-  'Print meeting agenda',
-  'Buy wrapping paper',
-  'Stretch + breathe',
-  'New batteries for remote',
-  'Update spreadsheet',
-  'Declutter desk drawer',
-  'Book massage',
-  'Check credit score',
-  'Drop keys off',
-  'Change bedsheets',
-  'Bring snacks',
-  'Clean kitchen sink',
-  'Don’t overthink it',
-  'Relax — you got this!',
-  'Breathe deeply',
-  'Remember to smile 🙂',
-  'Make today count',
-  'Be kind to yourself',
-  'Focus on one thing at a time',
-  'You’re doing great',
-  'Call it a day early if needed',
-  'It’s okay to rest',
-  'Tomorrow is another chance',
-  'You’ve got this 💪',
 ]

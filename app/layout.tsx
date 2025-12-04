@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Source_Sans_3, IBM_Plex_Mono, Poppins } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 import Script from 'next/script'
 
@@ -19,6 +20,12 @@ const poppins = Poppins({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   display: 'swap',
+})
+
+const liebeHeide = localFont({
+  src: '../public/fonts/liebe-heide/liebeheide-color.otf',
+  variable: '--liebe-heide',
+  weight: '400',
 })
 
 export const metadata: Metadata = {
@@ -46,7 +53,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossOrigin=""
       />
-      <body className={`${sourceSansPro.className}  antialiased`}>{children}</body>
+      <body className={`${sourceSansPro.className} ${liebeHeide.variable} antialiased`}>
+        {children}
+      </body>
     </html>
   )
 }
