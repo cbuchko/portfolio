@@ -7,7 +7,7 @@ import { interpolateThreeColors } from '../utils'
 const playAreaHeight = 300
 const rodHeight = 75
 export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
-  const [fishPosition, setFishPosition] = useState(0)
+  const [fishPosition, setFishPosition] = useState(100)
   const [rodPosition, setRodPosition] = useState(0)
   const [progress, setProgress] = useState(40)
   const ticksSinceLastSpace = useRef(1)
