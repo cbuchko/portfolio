@@ -64,7 +64,7 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
     return () => {
       clearInterval(interval)
     }
-  }, [fishPosition, progress, rodPosition, playReel])
+  }, [fishPosition, progress, rodPosition, playReel, isAudioPlayingRef, stopSound])
 
   useEffect(() => {
     if (progress >= 100) handleLevelAdvance(true)
@@ -76,25 +76,28 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
     }
   }, [progress, handleLevelAdvance])
 
-  const handleRodMove = useCallback((event: KeyboardEvent) => {
-    if (!isSoundtrackPlayingRef.current) {
-      playSoundtrack()
-      isSoundtrackPlayingRef.current = true
-    }
-    if (event.code.toLocaleLowerCase() !== 'space' || isHoldingSpace.current) return
-    ticksSinceLastSpace.current = 1
-    isHoldingSpace.current = true
+  const handleRodMove = useCallback(
+    (event: KeyboardEvent) => {
+      if (!isSoundtrackPlayingRef.current) {
+        playSoundtrack()
+        isSoundtrackPlayingRef.current = true
+      }
+      if (event.code.toLocaleLowerCase() !== 'space' || isHoldingSpace.current) return
+      ticksSinceLastSpace.current = 1
+      isHoldingSpace.current = true
 
-    const loopHold = () => {
-      if (!isHoldingSpace.current) return
-      setRodPosition((position) => {
-        const newPosition = position + 5
-        if (newPosition > playAreaHeight - rodHeight) return playAreaHeight - rodHeight
-        return newPosition
-      })
-    }
-    rodIntervalRef.current = setInterval(loopHold, 50)
-  }, [])
+      const loopHold = () => {
+        if (!isHoldingSpace.current) return
+        setRodPosition((position) => {
+          const newPosition = position + 5
+          if (newPosition > playAreaHeight - rodHeight) return playAreaHeight - rodHeight
+          return newPosition
+        })
+      }
+      rodIntervalRef.current = setInterval(loopHold, 50)
+    },
+    [isSoundtrackPlayingRef, playSoundtrack]
+  )
 
   const handleRodRelease = useCallback((event: KeyboardEvent) => {
     if (event.code.toLocaleLowerCase() !== 'space') return
@@ -145,17 +148,26 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
           />
         </div>
       </div>
-      <img
+      <Image
         className="leaf leaf-1"
         src="https://cdn3.iconfinder.com/data/icons/spring-23/32/leaf-spring-plant-ecology-green-512.png"
+        alt="leaf"
+        width={32}
+        height={32}
       />
-      <img
+      <Image
         className="leaf leaf-2"
         src="https://cdn3.iconfinder.com/data/icons/spring-23/32/leaf-spring-plant-ecology-green-512.png"
+        alt="leaf"
+        width={32}
+        height={32}
       />
-      <img
+      <Image
         className="leaf leaf-3"
         src="https://cdn3.iconfinder.com/data/icons/spring-23/32/leaf-spring-plant-ecology-green-512.png"
+        alt="leaf"
+        width={32}
+        height={32}
       />
       <div className="fixed left-0 top-0 w-screen h-screen sunset-gradient -z-10" />
       <SeaSvg className="fixed left-0 -bottom-10 -z-1" />
