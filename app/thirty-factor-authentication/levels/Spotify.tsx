@@ -3,13 +3,33 @@ import { clampPositionsToScreen } from '../utils'
 import classNames from 'classnames'
 import { useSound } from '@/app/utils/useSounds'
 
+type RythymPadType = {
+  number: number
+  delayInMs: number
+  color: string
+}
+
+const colorHexArray = ['#fb923c', '#facc15', '#4ade80', '#60a5fa', '#a78bfa', '#9ca3af']
+const fullTimeQuarter = 389.61
+const halfTimeQuarter = 779.221
 const cadences = [
-  { count: 5, delay: 750 },
-  { count: 5, delay: 500 },
-  { count: 10, delay: 750 },
-  { count: 10, delay: 500 },
-  { count: 5, delay: 600 },
-  { count: 5, delay: 500 },
+  { count: 5, delay: halfTimeQuarter, color: colorHexArray[0] },
+  { count: 5, delay: halfTimeQuarter, color: colorHexArray[1] },
+  { count: 5, delay: halfTimeQuarter, color: colorHexArray[2] },
+  { count: 5, delay: halfTimeQuarter, color: colorHexArray[3] },
+  { count: 5, delay: halfTimeQuarter, color: colorHexArray[4] },
+  { count: 5, delay: halfTimeQuarter, color: colorHexArray[5] },
+  { count: 5, delay: halfTimeQuarter, color: colorHexArray[0] },
+  { count: 5, delay: halfTimeQuarter, color: colorHexArray[1] },
+  { count: 7, delay: halfTimeQuarter, color: colorHexArray[2] },
+  { count: 15, delay: fullTimeQuarter, color: colorHexArray[3] },
+  { count: 17, delay: fullTimeQuarter, color: colorHexArray[4] },
+  { count: 5, delay: fullTimeQuarter, color: colorHexArray[5] },
+  { count: 5, delay: fullTimeQuarter, color: colorHexArray[0] },
+  { count: 5, delay: fullTimeQuarter, color: colorHexArray[1] },
+  { count: 5, delay: fullTimeQuarter, color: colorHexArray[2] },
+  { count: 5, delay: fullTimeQuarter, color: colorHexArray[3] },
+  { count: 5, delay: fullTimeQuarter, color: colorHexArray[4] },
 ]
 
 type Position = { x: number; y: number }
@@ -19,14 +39,19 @@ export const Spotify = ({
   handleLevelAdvance: (skipVerify?: boolean) => void
 }) => {
   const maxRythym = useMemo(() => cadences.reduce((acc, curr) => acc + curr.count, 0), [])
-  const [rythymCount, setRhythymCount] = useState(0)
+  const [rhythmPads, setRhythmPads] = useState<RythymPadType[]>([])
+  const cadenceIndexRef = useRef(0)
   const [isStarted, setIsStarted] = useState(false)
   const intervalRef = useRef<NodeJS.Timeout>(null)
   const [previousPosition, setPreviousPosition] = useState<Position | null>(null)
-  const [colorIndex, setColorIndex] = useState(0)
+  const { playSound: playSoundtrack } = useSound(
+    '/thirty-factor-authentication/sounds/open-the-sky.mp3',
+    0.15,
+    true
+  )
 
   const resetGame = useCallback(() => {
-    setRhythymCount(0)
+    setRhythmPads([])
     setIsStarted(false)
     handleLevelAdvance()
     if (intervalRef.current) clearInterval(intervalRef.current)
@@ -36,32 +61,29 @@ export const Spotify = ({
   useEffect(() => {
     if (!isStarted) return
     let cancelled = false
-    let totalCount = 0
 
-    let workingDelay: number | null = null
+    let innerCadenceCount = 0
     const run = () => {
       if (cancelled) return
+      const { delay, color, count } = cadences[cadenceIndexRef.current]
 
-      setRhythymCount((c) => c + 1)
-      totalCount++
-
-      let delay = cadences[cadences.length - 1].delay
-
-      let remaining = totalCount
-
-      for (const step of cadences) {
-        if (remaining <= step.count) {
-          delay = step.delay
-          //the cadence has changed
-          if (delay !== workingDelay) {
-            setPreviousPosition(null)
-            setColorIndex((idx) => idx + 1)
-          }
-          workingDelay = delay
-          break
-        }
-        remaining -= step.count
+      if (innerCadenceCount === 0) {
+        setPreviousPosition(null)
       }
+      if (innerCadenceCount < count) {
+        innerCadenceCount++
+      }
+
+      setRhythmPads((pads) => [
+        ...pads,
+        { delayInMs: delay, number: innerCadenceCount === 0 ? count : innerCadenceCount, color },
+      ])
+
+      if (innerCadenceCount === count) {
+        cadenceIndexRef.current = cadenceIndexRef.current + 1
+        innerCadenceCount = 0
+      }
+
       setTimeout(run, delay)
     }
     run()
@@ -71,40 +93,34 @@ export const Spotify = ({
     }
   }, [isStarted])
 
-  useEffect(() => {
-    if (maxRythym == rythymCount && intervalRef.current) {
-      clearInterval(intervalRef.current)
-    }
-  }, [rythymCount, maxRythym])
-
-  const color = colorHexArray[colorIndex % colorHexArray.length]
   return (
     <>
       <p className="text-lg">
         To verify yourself as a Spotify user, please complete this Rhythm challenge.
       </p>
       <p className="text-lg">Click the pads as they appear to win.</p>
-      <p className="italic">
-        *Playtesting Note:* Soundtrack for this level is still in development.
-      </p>
       <div className="w-full flex justify-center mt-4">
         <button
           className={classNames('border-2 py-1 px-3 rounded-md cursor-pointer auth-button', {
             'opacity-0': isStarted,
           })}
-          onClick={() => setIsStarted(true)}
+          onClick={() => {
+            setIsStarted(true)
+            playSoundtrack()
+          }}
         >
           Start
         </button>
       </div>
-      {Array.from({ length: rythymCount }).map((_, idx) => (
+      {rhythmPads.map((pad, idx) => (
         <RythymPad
           key={idx}
-          number={idx + 1}
+          number={pad.number}
+          delayInMs={pad.delayInMs}
           resetGame={resetGame}
           previousPosition={previousPosition}
           setPreviousPosition={setPreviousPosition}
-          color={color}
+          color={pad.color}
           handleWin={() => {
             if (idx + 1 === maxRythym) {
               handleLevelAdvance(true)
@@ -136,15 +152,17 @@ const getRelativePosition = (position: Position) => {
   return { x: newX, y: newY }
 }
 
+const padSize = 100
 const RythymPad = ({
   number,
+  delayInMs,
   previousPosition,
   color,
   setPreviousPosition,
   resetGame,
-  handleWin,
 }: {
   number: number
+  delayInMs: number
   previousPosition: Position | null
   color: string
   setPreviousPosition: (pos: Position | null) => void
@@ -154,7 +172,8 @@ const RythymPad = ({
   const [isCleared, setIsCleared] = useState(false)
   const [position, setPosition] = useState<Position | null>(null)
   const { playSound: playClickSound } = useSound(
-    'thirty-factor-authentication/sounds/osu-click.mp3'
+    'thirty-factor-authentication/sounds/osu-click.mp3',
+    0.25
   )
 
   useEffect(() => {
@@ -176,8 +195,10 @@ const RythymPad = ({
   useEffect(() => {
     if (timeoutRef.current) return
     const id = setTimeout(() => {
-      resetGame()
-    }, 1000)
+      //MISS
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      setIsCleared(true)
+    }, delayInMs + 200)
 
     timeoutRef.current = id
 
@@ -190,7 +211,7 @@ const RythymPad = ({
   const handleClick = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
     setIsCleared(true)
-    handleWin()
+    // handleWin()
     playClickSound()
   }
 
@@ -200,16 +221,22 @@ const RythymPad = ({
       <div
         onClick={handleClick}
         onPointerDown={handleClick}
-        style={{ left: position.x, top: position.y, backgroundColor: color, outlineColor: color }}
+        style={{
+          left: position.x,
+          top: position.y,
+          backgroundColor: color,
+          outlineColor: color + '33',
+          width: padSize,
+          height: padSize,
+          animation: `osu-outline ${delayInMs}ms linear`,
+        }}
         className={classNames(
-          'fixed h-20 w-20 border-6 outline-2 border-black flex items-center justify-center rounded-full osu-outline cursor-pointer z-100',
+          'fixed border-6 outline-8 border-black flex items-center justify-center rounded-full osu-outline cursor-pointer z-100',
           { 'opacity-0 transition-opacity duration-500 pointer-events-none': isCleared }
         )}
       >
-        <p className="mono text-3xl text-white select-none pointer-events-none">{number}</p>
+        <p className="mono text-4xl text-white select-none pointer-events-none">{number}</p>
       </div>
     </>
   )
 }
-
-const colorHexArray = ['#fb923c', '#facc15', '#4ade80', '#60a5fa', '#a78bfa', '#9ca3af']
