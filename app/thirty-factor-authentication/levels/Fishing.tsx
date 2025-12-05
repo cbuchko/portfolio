@@ -10,6 +10,10 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
   const [fishPosition, setFishPosition] = useState(100)
   const [rodPosition, setRodPosition] = useState(0)
   const [progress, setProgress] = useState(40)
+  const fishRef = useRef(fishPosition)
+  const rodRef = useRef(rodPosition)
+  const progressRef = useRef(progress)
+
   const ticksSinceLastSpace = useRef(1)
   const isHoldingSpace = useRef(false)
   const rodIntervalRef = useRef<NodeJS.Timeout>(null)
@@ -24,47 +28,64 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
     isAudioPlayingRef,
   } = useSound('/thirty-factor-authentication/sounds/reel.mp3', 0.05)
 
+  //keep track of state values in refs so they dont affect the gameplay loop
+  useEffect(() => {
+    fishRef.current = fishPosition
+  }, [fishPosition])
+
+  useEffect(() => {
+    rodRef.current = rodPosition
+  }, [rodPosition])
+
+  useEffect(() => {
+    progressRef.current = progress
+  }, [progress])
+
+  const gameUpdateLoop = useCallback(() => {
+    const oldY = fishRef.current
+
+    /** fish movement */
+    let newY
+    const upOrDown = Math.random()
+    const shouldSpikeMovement = Math.random()
+    const moveMagnitude = shouldSpikeMovement < 0.05 ? 10 * Math.random() * (25 - 15) + 15 : 10
+
+    if ((upOrDown < 0.5 || oldY > playAreaHeight - 50) && oldY > 50) {
+      newY = oldY - moveMagnitude //move up
+    } else newY = oldY + moveMagnitude //move down
+
+    if (newY < 0) newY = 0
+    if (newY > playAreaHeight - 25) newY = playAreaHeight - 25
+    setFishPosition(newY)
+
+    /** rod falling */
+    if (ticksSinceLastSpace.current === 0 && !isHoldingSpace.current) {
+      setRodPosition((position) => {
+        const newPosition = position - 15
+        if (newPosition < 0) return 0
+        return newPosition
+      })
+    } else ticksSinceLastSpace.current = Math.max(ticksSinceLastSpace.current - 1, 0)
+
+    /** progress bar */
+    if (fishRef.current > rodRef.current && fishRef.current < rodRef.current + rodHeight) {
+      if (!isAudioPlayingRef.current) playReel()
+      setProgress((progress) => progress + 0.5)
+    } else if (progressRef.current > 0) {
+      stopSound()
+      setProgress((progress) => progress - 0.5)
+    }
+  }, [])
+
   useEffect(() => {
     const interval = setInterval(() => {
-      const oldY = fishPosition
-
-      /** fish movement */
-      let newY
-      const upOrDown = Math.random()
-      const shouldSpikeMovement = Math.random()
-      const moveMagnitude = shouldSpikeMovement < 0.05 ? 10 * Math.random() * (25 - 15) + 15 : 10
-
-      if ((upOrDown < 0.5 || oldY > playAreaHeight - 50) && oldY > 50) {
-        newY = oldY - moveMagnitude //move up
-      } else newY = oldY + moveMagnitude //move down
-
-      if (newY < 0) newY = 0
-      if (newY > playAreaHeight - 25) newY = playAreaHeight - 25
-      setFishPosition(newY)
-
-      /** rod falling */
-      if (ticksSinceLastSpace.current === 0 && !isHoldingSpace.current) {
-        setRodPosition((position) => {
-          const newPosition = position - 15
-          if (newPosition < 0) return 0
-          return newPosition
-        })
-      } else ticksSinceLastSpace.current = Math.max(ticksSinceLastSpace.current - 1, 0)
-
-      /** progress bar */
-      if (fishPosition > rodPosition && fishPosition < rodPosition + rodHeight) {
-        if (!isAudioPlayingRef.current) playReel()
-        setProgress((progress) => progress + 0.5)
-      } else if (progress > 0) {
-        stopSound()
-        setProgress((progress) => progress - 0.5)
-      }
+      gameUpdateLoop()
     }, 100)
 
     return () => {
       clearInterval(interval)
     }
-  }, [fishPosition, progress, rodPosition, playReel, isAudioPlayingRef, stopSound])
+  }, [playReel, isAudioPlayingRef, stopSound, gameUpdateLoop])
 
   useEffect(() => {
     if (progress >= 100) handleLevelAdvance(true)
