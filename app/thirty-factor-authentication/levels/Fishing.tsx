@@ -75,7 +75,7 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
       stopSound()
       setProgress((progress) => progress - 0.5)
     }
-  }, [])
+  }, [isAudioPlayingRef, playReel, stopSound])
 
   useEffect(() => {
     const interval = setInterval(() => {

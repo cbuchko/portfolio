@@ -45,9 +45,12 @@ export const VictoryScreen = ({
           Thank you Lucas Pope, Toby Fox, Eric Barone, Dean Herbert and Tonda Ros for creating some
           of my favourite games ever and directly inspiring levels of this game.
         </p>
-        <p className="text-md mt-2">
-          {'The song used in the final level is "Death by Glamour" from the Undertale soundtrack.'}
-        </p>
+        <p className="mt-4">Soundtrack:</p>
+        <ul className="list-disc ml-4">
+          <li>{`Spotify: "Open the Skies" by Kxdama`}</li>
+          <li>{`Fishing: "Fishing Song" by Kai Mikkelsen`}</li>
+          <li>{`Finale Level: "Death by Glamour" by Toby Fox from Undertale`}</li>
+        </ul>
       </div>
     </div>
   )
