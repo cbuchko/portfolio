@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { clampPositionsToScreen } from '../utils'
 import classNames from 'classnames'
 import { useSound } from '@/app/utils/useSounds'
+import { ContentProps, ControlProps } from './types'
 
 type RythymPadType = {
   number: number
@@ -12,6 +13,11 @@ type RythymPadType = {
 const colorHexArray = ['#fb923c', '#facc15', '#4ade80', '#60a5fa', '#a78bfa', '#9ca3af']
 const fullTimeQuarter = 389.61
 const halfTimeQuarter = 779.221
+
+const greatScore = 200
+const goodScore = 100
+const okScore = 50
+
 const cadences = [
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[0] },
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[1] },
@@ -33,29 +39,37 @@ const cadences = [
 ]
 
 type Position = { x: number; y: number }
-export const Spotify = ({
-  handleLevelAdvance,
-}: {
-  handleLevelAdvance: (skipVerify?: boolean) => void
-}) => {
+export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentProps) => {
   const maxRythym = useMemo(() => cadences.reduce((acc, curr) => acc + curr.count, 0), [])
   const [rhythmPads, setRhythmPads] = useState<RythymPadType[]>([])
   const cadenceIndexRef = useRef(0)
   const [isStarted, setIsStarted] = useState(false)
   const intervalRef = useRef<NodeJS.Timeout>(null)
   const [previousPosition, setPreviousPosition] = useState<Position | null>(null)
-  const { playSound: playSoundtrack } = useSound(
+  const { playSound: playSoundtrack, stopSound: stopSoundtrack } = useSound(
     '/thirty-factor-authentication/sounds/open-the-sky.mp3',
     0.15,
     true
   )
+  const [score, setScore] = useState(0)
+  const padAmount = rhythmPads.length
+
+  //must get the equivalent of 75% greats and 25% goods
+  const scoreThreshold = useMemo(() => {
+    return Math.floor(maxRythym * 0.75 * greatScore + maxRythym * 0.25 * goodScore)
+  }, [maxRythym])
 
   const resetGame = useCallback(() => {
     setRhythmPads([])
     setIsStarted(false)
-    handleLevelAdvance()
+    stopSoundtrack()
+    setPreviousPosition(null)
+    cadenceIndexRef.current = 0
     if (intervalRef.current) clearInterval(intervalRef.current)
-  }, [handleLevelAdvance])
+    const hasWon = score >= scoreThreshold
+    if (!hasWon) handleLevelAdvance()
+    else validateAdvance()
+  }, [handleLevelAdvance, stopSoundtrack, score])
 
   //takes the list of Cadences and smartly spawns them based on their delays
   useEffect(() => {
@@ -93,12 +107,20 @@ export const Spotify = ({
     }
   }, [isStarted])
 
+  useEffect(() => {
+    if (padAmount >= maxRythym) {
+      resetGame()
+    }
+  }, [padAmount, resetGame])
+
   return (
     <>
+      <p className="text-lg">Please complete this Rhythm challenge.</p>
       <p className="text-lg">
-        To verify yourself as a Spotify user, please complete this Rhythm challenge.
+        Click on the pads to score points. Score at least {scoreThreshold} points to win!
       </p>
-      <p className="text-lg">Click the pads as they appear to win.</p>
+      <p className="text-lg"></p>
+      <p className="text-2xl mono mt-4">Score: {score}</p>
       <div className="w-full flex justify-center mt-4">
         <button
           className={classNames('border-2 py-1 px-3 rounded-md cursor-pointer auth-button', {
@@ -107,9 +129,10 @@ export const Spotify = ({
           onClick={() => {
             setIsStarted(true)
             playSoundtrack()
+            setScore(0)
           }}
         >
-          Start
+          {score > 0 ? 'Restart' : 'Start'}
         </button>
       </div>
       {rhythmPads.map((pad, idx) => (
@@ -120,6 +143,7 @@ export const Spotify = ({
           resetGame={resetGame}
           previousPosition={previousPosition}
           setPreviousPosition={setPreviousPosition}
+          setScore={setScore}
           color={pad.color}
           handleWin={() => {
             if (idx + 1 === maxRythym) {
@@ -152,6 +176,13 @@ const getRelativePosition = (position: Position) => {
   return { x: newX, y: newY }
 }
 
+enum Score {
+  miss = 'miss',
+  ok = 'ok',
+  good = 'good',
+  great = 'great',
+}
+
 const padSize = 100
 const RythymPad = ({
   number,
@@ -159,6 +190,7 @@ const RythymPad = ({
   previousPosition,
   color,
   setPreviousPosition,
+  setScore,
   resetGame,
 }: {
   number: number
@@ -166,6 +198,7 @@ const RythymPad = ({
   previousPosition: Position | null
   color: string
   setPreviousPosition: (pos: Position | null) => void
+  setScore: React.Dispatch<React.SetStateAction<number>>
   resetGame: () => void
   handleWin: () => void
 }) => {
@@ -175,6 +208,18 @@ const RythymPad = ({
     'thirty-factor-authentication/sounds/osu-click.mp3',
     0.25
   )
+  const [scoreDisplay, setScoreDisplay] = useState<Score | null>(null)
+  const padLifeTimeRef = useRef(new Date().getTime())
+
+  //setScore and clear the pad
+  const handlePadCleanup = (scoreType: Score) => {
+    setScoreDisplay(scoreType)
+    setIsCleared(true)
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    if (scoreType === Score.great) setScore((score) => score + greatScore)
+    if (scoreType === Score.good) setScore((score) => score + goodScore)
+    if (scoreType === Score.ok) setScore((score) => score + okScore)
+  }
 
   useEffect(() => {
     //makes its position a random position
@@ -195,10 +240,8 @@ const RythymPad = ({
   useEffect(() => {
     if (timeoutRef.current) return
     const id = setTimeout(() => {
-      //MISS
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
-      setIsCleared(true)
-    }, delayInMs + 200)
+      handlePadCleanup(Score.miss)
+    }, delayInMs + 50)
 
     timeoutRef.current = id
 
@@ -206,13 +249,20 @@ const RythymPad = ({
       clearTimeout(id)
       timeoutRef.current = null
     }
-  }, [resetGame])
+  }, [resetGame, delayInMs])
 
   const handleClick = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    setIsCleared(true)
-    // handleWin()
     playClickSound()
+    const padSpawnTime = padLifeTimeRef.current
+    const currentTime = new Date().getTime()
+    const elapsedTime = currentTime - padSpawnTime
+    if (elapsedTime >= delayInMs - 20) {
+      handlePadCleanup(Score.great)
+    } else if (elapsedTime >= delayInMs / 1.5) {
+      handlePadCleanup(Score.good)
+    } else {
+      handlePadCleanup(Score.ok)
+    }
   }
 
   if (!position) return null
@@ -235,8 +285,26 @@ const RythymPad = ({
           { 'opacity-0 transition-opacity duration-500 pointer-events-none': isCleared }
         )}
       >
-        <p className="mono text-4xl text-white select-none pointer-events-none">{number}</p>
+        <p
+          className={classNames(
+            'mono text-4xl text-white select-none pointer-events-none uppercase',
+            { '!text-2xl font-bold': !!scoreDisplay, '!text-red-500': scoreDisplay === Score.miss }
+          )}
+        >
+          {scoreDisplay || number}
+        </p>
       </div>
+    </>
+  )
+}
+
+export const SpotifyControls = ({ handleLevelAdvance }: ControlProps) => {
+  return (
+    <>
+      <div className="grow" />
+      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
+        Submit
+      </button>
     </>
   )
 }

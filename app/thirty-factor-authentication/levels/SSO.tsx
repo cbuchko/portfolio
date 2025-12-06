@@ -1,13 +1,10 @@
 import { useState } from 'react'
-import { Spotify } from './Spotify'
 import { ContentProps } from './types'
 import Image from 'next/image'
 import { SelfCheckoutContent } from './SelfCheckout'
 import { Twitter } from './Twitter'
-import { devMode } from '../constants'
 
 export enum SSOIds {
-  spotify = 'spotify',
   walmart = 'walmart',
   twitter = 'twitter',
 }
@@ -49,13 +46,6 @@ export const SSOContent = (props: ContentProps) => {
                   onClick={() => handleSSOChoice(SSOIds.twitter)}
                 />
               )}
-              {(!selectedSSOIds.has(SSOIds.spotify) || devMode) && (
-                <SSOProvider
-                  title="Spotify"
-                  url="/thirty-factor-authentication/sso/spotify.png"
-                  onClick={() => handleSSOChoice(SSOIds.spotify)}
-                />
-              )}
               {!selectedSSOIds.has(SSOIds.walmart) && (
                 <SSOProvider
                   title="Walmart"
@@ -67,7 +57,6 @@ export const SSOContent = (props: ContentProps) => {
           </div>
         </>
       )}
-      {SSOChoice === SSOIds.spotify && <Spotify handleLevelAdvance={props.handleLevelAdvance} />}
       {SSOChoice === SSOIds.walmart && <SelfCheckoutContent {...props} />}
       {SSOChoice === SSOIds.twitter && <Twitter {...props} />}
     </>

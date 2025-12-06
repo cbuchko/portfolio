@@ -29,6 +29,7 @@ import { FishingContent, FishingControls } from './Fishing'
 import { RoadTripContent } from './RoadTrip'
 import { BrainScanContent, BrainScanControls } from './BrainScan'
 import { useSound } from '@/app/utils/useSounds'
+import { SpotifyContent, SpotifyControls } from './Spotify'
 
 export type LevelProps = {
   level: number
@@ -111,13 +112,13 @@ export const useLevels = () => {
     { content: BrainScanContent, controls: BrainScanControls },
     { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
     { content: RoadTripContent, requiresLoad: true },
-    { content: SSOContent }, //20
     { content: TaxReturnContent, controls: TaxReturnControls },
     { content: ParlorRoomContent, controls: undefined, requiresLoad: true },
     { content: AquariumContent, controls: AquariumControls },
     { content: FishingContent, controls: FishingControls }, //25
     { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true },
     { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true },
+    { content: SpotifyContent, controls: SpotifyControls },
     { content: BombDefusalContent, controls: BombDefusalControls },
     { content: EinsteinContent, controls: EinsteinControls },
     { content: PapersPleaseContent, controls: undefined },
