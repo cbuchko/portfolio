@@ -13,17 +13,14 @@ const nextConfig: NextConfig = {
     ],
   },
   webpack(config) {
-    // Look for the existing svg rule
     const fileLoaderRule = config.module.rules.find(
       (rule: any) => rule.test instanceof RegExp && rule.test.test('.svg')
     )
 
     if (fileLoaderRule) {
-      // Exclude .svg from the default file-loader
       fileLoaderRule.exclude = /\.svg$/i
     }
 
-    // Add SVGR handling for .svg imports
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
@@ -32,6 +29,7 @@ const nextConfig: NextConfig = {
 
     return config
   },
+  turbopack: {},
 }
 
 export default nextConfig
