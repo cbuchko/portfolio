@@ -69,7 +69,7 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
     const hasWon = score >= scoreThreshold
     if (!hasWon) handleLevelAdvance()
     else validateAdvance()
-  }, [handleLevelAdvance, stopSoundtrack, score])
+  }, [handleLevelAdvance, stopSoundtrack, score, scoreThreshold, validateAdvance])
 
   //takes the list of Cadences and smartly spawns them based on their delays
   useEffect(() => {
@@ -111,7 +111,7 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
     if (padAmount >= maxRythym) {
       resetGame()
     }
-  }, [padAmount, resetGame])
+  }, [padAmount, maxRythym, resetGame])
 
   return (
     <>
@@ -120,7 +120,7 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
         Click on the pads to score points. Score at least {scoreThreshold} points to win!
       </p>
       <p className="text-lg"></p>
-      <p className="text-2xl mono mt-4">Score: {score}</p>
+      <p className="text-2xl mono mt-4">Points: {score}</p>
       <div className="w-full flex justify-center mt-4">
         <button
           className={classNames('border-2 py-1 px-3 rounded-md cursor-pointer auth-button', {
@@ -212,14 +212,17 @@ const RythymPad = ({
   const padLifeTimeRef = useRef(new Date().getTime())
 
   //setScore and clear the pad
-  const handlePadCleanup = (scoreType: Score) => {
-    setScoreDisplay(scoreType)
-    setIsCleared(true)
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    if (scoreType === Score.great) setScore((score) => score + greatScore)
-    if (scoreType === Score.good) setScore((score) => score + goodScore)
-    if (scoreType === Score.ok) setScore((score) => score + okScore)
-  }
+  const handlePadCleanup = useCallback(
+    (scoreType: Score) => {
+      setScoreDisplay(scoreType)
+      setIsCleared(true)
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      if (scoreType === Score.great) setScore((score) => score + greatScore)
+      if (scoreType === Score.good) setScore((score) => score + goodScore)
+      if (scoreType === Score.ok) setScore((score) => score + okScore)
+    },
+    [setScore]
+  )
 
   useEffect(() => {
     //makes its position a random position
@@ -249,7 +252,7 @@ const RythymPad = ({
       clearTimeout(id)
       timeoutRef.current = null
     }
-  }, [resetGame, delayInMs])
+  }, [resetGame, delayInMs, handlePadCleanup])
 
   const handleClick = () => {
     playClickSound()
