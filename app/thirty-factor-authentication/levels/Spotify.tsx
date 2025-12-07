@@ -44,7 +44,7 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
   const intervalRef = useRef<NodeJS.Timeout>(null)
   const [previousPosition, setPreviousPosition] = useState<Position | null>(null)
   const { playSound: playSoundtrack, stopSound: stopSoundtrack } = useSound(
-    '/thirty-factor-authentication/sounds/open-the-sky.mp3',
+    '/thirty-factor-authentication/sounds/open-the-sky.wav',
     0.15,
     true
   )
