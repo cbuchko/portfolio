@@ -1,11 +1,11 @@
 import { JSX, useCallback, useEffect, useState } from 'react'
 import { PlayerIds, PlayerInformation } from './player-constants'
 import { ContentProps, ControlProps } from './levels/types'
-import XIcon from '@/public/thirty-factor-authentication/icons/x.svg'
 import { devMode, maxLevel } from './constants'
 import classNames from 'classnames'
 import { LevelProps } from './levels/useLevel'
 import { useSound } from '../utils/useSounds'
+import Image from 'next/image'
 
 type AuthContainerProps = {
   playerId: PlayerIds
@@ -66,7 +66,12 @@ export const AuthContainer = ({
             <div className="flex itsems-center w-max">
               {Array.from({ length: errorCount }).map((_, idx) => (
                 <small key={idx} className="text-red-500 h-5 w-5">
-                  <XIcon />
+                  <Image
+                    src="/thirty-factor-authentication/icons/red-x.svg"
+                    alt="X"
+                    width={20}
+                    height={20}
+                  />
                 </small>
               ))}
             </div>

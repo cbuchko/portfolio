@@ -1,6 +1,6 @@
-import ChevronDown from '@/public/thirty-factor-authentication/icons/chevron-down.svg'
 import { useEffect, useState } from 'react'
 import classNames from 'classnames'
+import Image from 'next/image'
 
 type DropdownSelectorProps = {
   id: string
@@ -59,7 +59,12 @@ export const DropdownSelector = ({
       >
         <div className="min-h-6 capitalize">{selectedOption}</div>
         <div className={classNames('w-3 h-3 transition-transform', { 'rotate-180': isOpen })}>
-          <ChevronDown />
+          <Image
+            src="/thirty-factor-authentication/icons/chevron-down.svg"
+            alt="down"
+            width={12}
+            height={12}
+          />
         </div>
       </button>
       {isOpen && (

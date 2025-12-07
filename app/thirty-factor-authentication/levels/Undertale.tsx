@@ -10,20 +10,6 @@ const maxHealth = 100
 export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
   const characterName = PlayerInformation[playerId].name
   const [health, setHealth] = useState(maxHealth)
-  const damageTimestampRef = useRef<number>(0)
-  const { playSound: playDamageSound } = useSound(
-    '/thirty-factor-authentication/sounds/undertale-damage.mp3',
-    0.5
-  )
-  const handleHit = () => {
-    const now = new Date().getTime()
-    const elapsed = now - damageTimestampRef.current
-    if (elapsed > 1000) {
-      setHealth((health) => health - 5)
-      damageTimestampRef.current = now
-      playDamageSound()
-    }
-  }
 
   return (
     <>
@@ -38,9 +24,7 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps)
           <BulletHell
             width={200}
             height={200}
-            health={health}
             setHealth={setHealth}
-            onPlayerHit={handleHit}
             handleLevelAdvance={handleLevelAdvance}
           />
           <div className="flex items-center gap-2 mt-2">
@@ -89,31 +73,29 @@ type Laser = {
 interface BulletHellProps {
   width: number
   height: number
-  health: number
-  setHealth: (health: number) => void
-  onPlayerHit?: () => void
+  setHealth: React.Dispatch<React.SetStateAction<number>>
   handleLevelAdvance: (skipVerify?: boolean) => void
 }
 
 //game duration is timed based on death by glamors song duration (2:14)
 //const gameDuration = 1000 * 60 * 2 + 1000 * 14
-function BulletHell({
-  width,
-  height,
-  health,
-  setHealth,
-  onPlayerHit,
-  handleLevelAdvance,
-}: BulletHellProps) {
+function BulletHell({ width, height, setHealth, handleLevelAdvance }: BulletHellProps) {
   const [gameStarted, setGameStarted] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const healthRef = useRef(maxHealth)
 
   // --- Game State (kept in refs for performance) ---
   const bulletsRef = useRef<Bullet[]>([])
   const soulRef = useRef<Vec2>({ x: width / 2, y: height / 2 })
   const keys = useRef<Record<string, boolean>>({})
   const lastTime = useRef<number>(0)
+  const damageTimestampRef = useRef<number>(0)
+  const { playSound: playDamageSound } = useSound(
+    '/thirty-factor-authentication/sounds/undertale-damage.mp3',
+    0.5
+  )
+
   const [bulletTypes, setBulletTypes] = useState<Record<BulletType, boolean>>({
     standard: false,
     spear: false,
@@ -126,6 +108,7 @@ function BulletHell({
     keys.current = {}
     lastTime.current = 0
     soulRef.current = { x: width + 5, y: height + 5 }
+    healthRef.current = maxHealth
 
     setHealth(maxHealth)
     setGameStarted(false)
@@ -133,9 +116,20 @@ function BulletHell({
     handleLevelAdvance()
   }, [handleLevelAdvance, height, setHealth, width])
 
-  useEffect(() => {
-    if (health <= 0) resetGame()
-  }, [health, resetGame])
+  const handleHit = useCallback(() => {
+    const now = new Date().getTime()
+    const elapsed = now - damageTimestampRef.current
+    if (elapsed > 1000) {
+      setHealth((health) => {
+        const newHealth = health - 5
+        return newHealth
+      })
+      damageTimestampRef.current = now
+      playDamageSound()
+      healthRef.current = healthRef.current - 5
+      if (healthRef.current <= 0) resetGame()
+    }
+  }, [resetGame, setHealth, playDamageSound])
 
   const spawnBullet = useCallback(
     (type: BulletType) => {
@@ -334,7 +328,7 @@ function BulletHell({
               : soul.y + half > l.position && soul.y - half < l.position + l.width
 
           if (inside) {
-            onPlayerHit?.()
+            handleHit()
           }
 
           return true
@@ -374,7 +368,7 @@ function BulletHell({
 
         const hit = dist < b.radius + 6
         if (hit) {
-          onPlayerHit?.()
+          handleHit()
         }
         return !hit
       })
@@ -383,7 +377,7 @@ function BulletHell({
     }
 
     requestAnimationFrame(frame)
-  }, [width, height, onPlayerHit, gameStarted])
+  }, [width, height, handleHit, gameStarted])
 
   useEffect(() => {
     if (audioRef.current && gameStarted) {

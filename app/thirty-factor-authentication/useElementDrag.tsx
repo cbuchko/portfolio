@@ -1,4 +1,4 @@
-import { MouseEvent as ReactMouseEvent, RefObject, useEffect, useState } from 'react'
+import { MouseEvent as ReactMouseEvent, RefObject, useState } from 'react'
 import { clampPositionsToScreen } from './utils'
 
 export const useElementDrag = (
@@ -6,11 +6,7 @@ export const useElementDrag = (
   initialPosition: { x: number; y: number }
 ) => {
   const [isDragging, setIsDragging] = useState(false)
-  const [position, setPosition] = useState<{ x: number; y: number } | null>(null)
-
-  useEffect(() => {
-    setPosition(initialPosition)
-  }, [])
+  const [position, setPosition] = useState<{ x: number; y: number }>(initialPosition)
 
   const handleDrag = (event: ReactMouseEvent<HTMLDivElement>) => {
     const element = ref.current

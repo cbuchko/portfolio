@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { RefObject, useCallback, useRef, useState } from 'react'
 import { OneContent, OneControls } from './1'
 import { TwoContent, TwoControls } from './2'
 import { MessageSpamContent, MessageSpamControls } from './MessageSpam'
@@ -43,14 +43,14 @@ export type LevelProps = {
   setUPSTrackingTime: (time: number) => void
   selectedSSOIds: Set<SSOIds>
   setSelectedSSOIds: React.Dispatch<React.SetStateAction<Set<SSOIds>>>
-  startTime: number
+  startTimeRef: RefObject<number>
 }
 
 //AAAA@@may00
 export const useLevels = () => {
   const [level, setLevel] = useState(1)
 
-  const timeRef = useRef(new Date().getTime())
+  const startTimeRef = useRef(new Date().getTime())
 
   const { playSound: playSuccessSound } = useSound(
     '/thirty-factor-authentication/sounds/success.mp3',
@@ -70,7 +70,7 @@ export const useLevels = () => {
 
   const resetLevel = () => {
     setLevel(1)
-    timeRef.current = new Date().getTime()
+    startTimeRef.current = new Date().getTime()
     setUPSTrackingCode('')
     setUPSTrackingTime(0)
     setSelectedSSOIds(new Set())
@@ -88,7 +88,7 @@ export const useLevels = () => {
     setUPSTrackingTime,
     selectedSSOIds,
     setSelectedSSOIds,
-    startTime: timeRef.current,
+    startTimeRef,
   } as LevelProps
 
   const levelToUse = forceLevel > 0 ? forceLevel : level

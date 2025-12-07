@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useSound } from '../utils/useSounds'
 
 export const useMessageSpam = (spamMessages: string[], realMessage: string, delayInMs = 7000) => {
-  const [message, setMessage] = useState<string | null>(null)
+  const [message, setMessage] = useState<string>(realMessage)
 
   const { playSound: playMessageSound } = useSound(
     '/thirty-factor-authentication/sounds/message.mp3',
@@ -14,7 +14,6 @@ export const useMessageSpam = (spamMessages: string[], realMessage: string, dela
   useEffect(() => {
     if (messageIndexRef.current === -1) {
       playMessageSound()
-      setMessage(realMessage)
       messageIndexRef.current = 0
     }
   }, [realMessage, playMessageSound])

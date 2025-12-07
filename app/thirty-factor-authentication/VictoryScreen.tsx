@@ -9,14 +9,14 @@ export const VictoryScreen = ({
   playerId: PlayerIds
   levelProps: LevelProps
 }) => {
-  const { startTime, resetLevel } = levelProps
+  const { startTimeRef, resetLevel } = levelProps
   const characterName = PlayerInformation[playerId].name
   return (
     <div className="absolute top-[50%] -translate-y-[50%] left-[50%] -translate-x-[50%] h-[50%]">
       <div className="bg-green-100 p-8 rounded-md shadow-lg">
         <h2 className="text-4xl mb-4">Congratulations, you successfully authenticated!</h2>
         <p className="text-lg">
-          You authenticated as {characterName} in {formatElapsedTime(startTime)}.
+          You authenticated as {characterName} in {formatElapsedTime(startTimeRef.current)}.
         </p>
         <p className="text-lg">
           Your reward is a sense of pride and accomplishment. And bragging rights.
