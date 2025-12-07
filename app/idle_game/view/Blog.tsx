@@ -3,9 +3,8 @@ import { ShopItemIds } from '../side-panel/shop/constants'
 import { BlogPost as BlogPostType, BlogPosts } from './constants'
 import { useEffect, useRef, useState } from 'react'
 import { BlogViewProps } from './useBlogViews'
-import AuthorIcon from '@/public/idle_game/icons/author.svg'
-import ViewIcon from '@/public/idle_game/icons/eye.svg'
 import classNames from 'classnames'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 type BlogProps = {
   purchasedIds: Array<ShopItemIds>
@@ -84,7 +83,7 @@ const BlogPost = ({
   }
 
   //fetch the image
-  useEffect(() => {
+  useEffectInitializer(() => {
     fetchImage()
   }, [])
 
@@ -195,7 +194,8 @@ const BlogLayoutV2 = ({
           {purchasedIds.includes(ShopItemIds.blogAuthor) && (
             <div className="flex items-center gap-1 text-white mt-1">
               <div className="rounded-full pt-px pb-0.5 pl-px pr-px border w-max">
-                <AuthorIcon alt="author" height={10} width={10} />
+                {/** TODO: IMAGE BROKE FROM NEXTJS UPDATE */}
+                <Image src={'/idle_game/icons/author.svg'} width={10} height={10} alt="author" />
               </div>
               <h5 className="text-xs">{userName}</h5>
             </div>
@@ -206,7 +206,8 @@ const BlogLayoutV2 = ({
           <div className="flex justify-between items-center text-[10px]">
             <div className=" capitalize">{`${post.type} * ${post.duration} read`}</div>
             <div className="flex gap-1 items-center">
-              <ViewIcon alt="eye" height={12} width={12} />
+              {/** TODO: IMAGE BROKE FROM NEXTJS UPDATE */}
+              <Image src={'/idle_game/icons/eye.svg'} width={12} height={12} alt="view" />
               <small className="text-xs">{viewCount}</small>
             </div>
           </div>

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { shuffle } from '../utils'
 import Image from 'next/image'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const selectTargetBird = () => {
   return shuffle(targetBirds)[0].id
@@ -19,7 +20,7 @@ export const BirdCallContent = ({ validateAdvance, cancelAdvance, setIsLoading }
     }
   }
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     setBirdsShuffled(shuffle(birds))
     setTargetBird(selectTargetBird())
     setIsLoading(false)

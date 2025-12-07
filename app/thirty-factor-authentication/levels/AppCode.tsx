@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { makeAuthCode, shuffle } from '../utils'
 import { createPortal } from 'react-dom'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 export const AppCodeContent = ({
   validateAdvance,
@@ -29,7 +30,7 @@ export const AppCodeContent = ({
     [cancelAdvance]
   )
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     const portalElement = document.getElementById('extras-portal')
     setPortalElement(portalElement)
   }, [])
@@ -92,7 +93,7 @@ export const AppCode = ({
   isDelayed,
 }: AppCodeProps) => {
   const [elapsed, setElapsed] = useState(0)
-  const [code, setCode] = useState(codeDefault || makeAuthCode(6))
+  const [code, setCode] = useState(isTarget ? codeDefault : makeAuthCode(6))
   const intervalRef = useRef<NodeJS.Timeout>(null)
   const timeoutRef = useRef<NodeJS.Timeout>(null)
 

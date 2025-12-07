@@ -72,7 +72,7 @@ export const VideoPlayer = ({
 
       video.addEventListener('ended', handleEnded, { once: true })
     },
-    [videoRef]
+    [videoRef, viewRef]
   )
 
   useEffect(() => {

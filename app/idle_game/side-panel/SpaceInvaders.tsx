@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ScoreProps } from './useScore'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 type InvaderType = {
   id: string
@@ -11,7 +12,7 @@ const invaderTimeToLive = 10000
 export const SpaceInvaders = ({ scoreProps }: { scoreProps: ScoreProps }) => {
   const [invaders, setInvaders] = useState<InvaderType[]>([])
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     const id = crypto.randomUUID()
     setInvaders((prevInvaders) => [...prevInvaders, { id, xPos: Math.random() * 80 }])
     setInterval(() => {

@@ -1,15 +1,16 @@
 /**
  * The game at many points needs to initialize state based on randomness
  * These calls to Math.random() can not be ran during render, due to React componenets being idempotent
- * They also can't be ran during render due to SSR
+ * They also can't be ran during render due to SSR and hydration issues
  * This means that we need to run them in an Effect
  * However, this breaks another react rule where we shouldn't be setting state in an Effect
  * For our purposes, this pattern is extremely important and common, so this custom hook allows us to use it without the warnings
+ * This custom hook is expressly only for generating random values on the initial render
  */
 
 import { DependencyList, EffectCallback, useEffect } from 'react'
 
-export const useEffectUnsafe = (
+export const useEffectInitializer = (
   effectCallback: EffectCallback,
   effectDependencies: DependencyList
 ) => {

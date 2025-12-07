@@ -1,8 +1,9 @@
-import { MouseEvent as ReactMouseEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { CSSProperties, MouseEvent as ReactMouseEvent, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { clampPositionsToScreen } from '../utils'
 import { TextInput } from '../components/TextInput'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const selectCode = () => {
   const index = Math.floor(Math.random() * codes.length)
@@ -14,12 +15,16 @@ export const PostItContent = ({
   cancelAdvance,
   handleLevelAdvance,
 }: ContentProps) => {
-  const codeRef = useRef(selectCode())
+  const [code, setCode] = useState<string>('')
   const [keywordInput, setKeywordInput] = useState('')
+
+  useEffectInitializer(() => {
+    setCode(selectCode())
+  }, [])
 
   const handleInputChange = (input: string) => {
     setKeywordInput(input)
-    if (codeRef.current.toLocaleLowerCase() === input.toLocaleLowerCase()) {
+    if (code.toLocaleLowerCase() === input.toLocaleLowerCase()) {
       validateAdvance()
     } else {
       cancelAdvance()
@@ -42,7 +47,7 @@ export const PostItContent = ({
       {notes.map((note, idx) => (
         <PostIt key={idx} message={note} />
       ))}
-      <PostIt code={codeRef.current} />
+      <PostIt code={code} />
     </>
   )
 }
@@ -58,10 +63,19 @@ const getRandomPosition = () => {
 
 const PostIt = ({ message, code }: { message?: string; code?: string }) => {
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null)
+  const [postStyles, setPostStyles] = useState<CSSProperties>()
   const noteRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     setPosition(getRandomPosition())
+    const randomizedTextPosition = Math.floor(Math.random() * (100 - 50) + 50)
+    const randomizedFontSize = Math.floor(Math.random() * (36 - 24) + 24)
+    const randomizedTextAlign = Math.random() > 0.2 ? 'left' : 'right'
+    setPostStyles({
+      marginTop: randomizedTextPosition,
+      fontSize: randomizedFontSize,
+      textAlign: randomizedTextAlign,
+    })
   }, [])
 
   const handleDrag = (event: ReactMouseEvent<HTMLDivElement>) => {
@@ -93,10 +107,6 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
     window.addEventListener('mouseup', handleMouseUp)
   }
 
-  const randomizedTextPosition = useMemo(() => Math.floor(Math.random() * (100 - 50) + 50), [])
-  const randomizedFontSize = useMemo(() => Math.floor(Math.random() * (36 - 24) + 24), [])
-  const randomizedTextAlign = useMemo(() => (Math.random() > 0.2 ? 'left' : 'right'), [])
-
   if (!position) return null
 
   return (
@@ -116,17 +126,10 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
       {!!code ? (
         <div>
           <p className="text-2xl liebe-heide">**Recovery Keyword:**</p>
-          <div className="mt-8 !select-all text-5xl">smorgasbord</div>
+          <p className="mt-8 text-md">{code}</p>
         </div>
       ) : (
-        <div
-          className="leading-8"
-          style={{
-            marginTop: randomizedTextPosition,
-            fontSize: randomizedFontSize,
-            textAlign: randomizedTextAlign,
-          }}
-        >
+        <div className="leading-8" style={postStyles}>
           {message}
         </div>
       )}

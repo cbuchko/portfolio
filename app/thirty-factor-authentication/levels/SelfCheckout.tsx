@@ -3,7 +3,7 @@ import { ContentProps } from './types'
 import { useDrag, useDrop } from 'react-dnd'
 import classNames from 'classnames'
 import Image from 'next/image'
-import { useEffectUnsafe } from '@/app/utils/useEffectUnsafe'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 type ShoppingItem = {
   id: string
@@ -291,7 +291,7 @@ const Scanner = ({
     }
   }, [drop])
 
-  useEffectUnsafe(() => {
+  useEffectInitializer(() => {
     scanningRef.current = isOver
     if (!isOver && isScanning) {
       updateScanning(false)

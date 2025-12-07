@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ContentProps } from './types'
 import classNames from 'classnames'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const selectInitialPuzzleIndex = () => {
   return Math.floor(Math.random() * Statements.length)
@@ -8,10 +9,10 @@ const selectInitialPuzzleIndex = () => {
 export const ParlorRoomContent = ({ handleLevelAdvance, setIsLoading }: ContentProps) => {
   const [puzzleIndex, setPuzzleIndex] = useState<number | null>(null)
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     setPuzzleIndex(selectInitialPuzzleIndex())
     setIsLoading(false)
-  }, [setIsLoading])
+  }, [])
 
   const puzzle = Statements[puzzleIndex || 0]
   const onCorrectSelect = (type: 'blue' | 'black' | 'red') => {

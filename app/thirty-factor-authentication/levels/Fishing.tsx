@@ -3,6 +3,7 @@ import { ContentProps, ControlProps } from './types'
 import Image from 'next/image'
 import { useSound } from '@/app/utils/useSounds'
 import { interpolateThreeColors } from '../utils'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const playAreaHeight = 300
 const rodHeight = 75
@@ -87,7 +88,7 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
     }
   }, [playReel, isAudioPlayingRef, stopSound, gameUpdateLoop])
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     if (progress >= 100) handleLevelAdvance(true)
     if (progress <= 0) {
       setFishPosition(0)

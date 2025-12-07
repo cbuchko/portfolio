@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { brands } from '../constants'
 import { ShopItemIds } from '../../side-panel/shop/constants'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 export const Sponsorships = ({ purchasedIds }: { purchasedIds: Array<ShopItemIds> }) => {
   const extraSponsorAmount = purchasedIds.filter(
@@ -9,8 +10,7 @@ export const Sponsorships = ({ purchasedIds }: { purchasedIds: Array<ShopItemIds
   const sponsors = 5 + extraSponsorAmount * 10
 
   // shuffle brands once
-  const shuffledBrands = useMemo(() => [...brands].sort(() => Math.random() - 0.5), [])
-  const chosenSponsors = shuffledBrands.slice(0, sponsors)
+  const chosenSponsors = brands.slice(0, sponsors)
 
   return (
     <div className="absolute top-16 z-0">
@@ -27,7 +27,7 @@ export const Sponsorships = ({ purchasedIds }: { purchasedIds: Array<ShopItemIds
 export const Sponsor = ({ sponsor }: { sponsor: string }) => {
   const [url, setUrl] = useState<string | undefined>()
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     if (!!url) return
     const logoUrl = `https://img.logo.dev/${sponsor}?token=pk_c7WqEA3OQN-C8z6J2BB-QQ&format=png`
     setUrl(logoUrl)

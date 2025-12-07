@@ -3,6 +3,7 @@ import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { useMessageSpam } from '../useMessageSpam'
 import { useSound } from '@/app/utils/useSounds'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const messages = [
   'hey what you up to?',
@@ -105,11 +106,11 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
     }, 4000)
   }, [handleLevelAdvance, resetGame, playExplosionSound])
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     if (timer === 0 && !isGameOver) {
       handleExplosion()
     }
-  }, [timer, resetGame, handleExplosion, isGameOver])
+  }, [timer, handleExplosion, isGameOver])
 
   const handleDefusalStep = (wireId?: WireIds, number?: number) => {
     const expectedInstruction = instructions[instructionStepIndex]

@@ -2,10 +2,10 @@ import classNames from 'classnames'
 import { BlackMarketPacks } from '../side-panel/shop/constants'
 import { ScoreProps } from '../side-panel/useScore'
 import { MemeProps } from '../useMemes'
-import { Rarity, RarityColors } from '../view/constants'
+import { Rarity } from '../view/constants'
 import { ModalContainer } from './ModalContainer'
 import { ModalNames } from './modalRegistry'
-import StarIcon from '@/public/idle_game/icons/star.svg'
+import Image from 'next/image'
 
 export const BlackMarketModal = ({
   memeProps,
@@ -71,7 +71,14 @@ const BlackMarketItem = ({
 }) => {
   return (
     <div className="flex my-4 border-b border-gray-300 pb-4 gap-4 items-center w-full">
-      <StarIcon style={{ color: RarityColors[rarity] }} className="w-10 h-10" />
+      {/** TODO: IMAGE BROKE FROM NEXTJS UPDATE */}
+      <Image
+        src={'/idle_game/icons/star.svg'}
+        className="h-10 w-10"
+        width={40}
+        height={40}
+        alt="star"
+      />
       <div className="w-full">
         <h5 className="font-medium">{title}</h5>
         <h5 className="text-sm w-full">{description}</h5>

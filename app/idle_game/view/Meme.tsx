@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ShopItemIds } from '../side-panel/shop/constants'
 import Image from 'next/image'
 import { Meme as MemeType, Rarity, RarityColors } from './constants'
-import StarIcon from '@/public/idle_game/icons/star.svg'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 type MemeProps = {
   meme: MemeType
@@ -81,11 +81,11 @@ export const Meme = ({ meme, setActiveMeme, size, purchasedIds, isActive }: Meme
 
       setActiveMeme()
     },
-    [purchasedIds]
+    [purchasedIds, setActiveMeme]
   )
 
   //listen for when the meme becomes active/inactive, and transition it back to its original spot
-  useEffect(() => {
+  useEffectInitializer(() => {
     if (!isActive) {
       const container = containerRef.current
       if (!container) return
@@ -181,7 +181,8 @@ const MemeContext = ({
       </div>
       {purchasedIds.includes(ShopItemIds.memeRarity) && (
         <div className="flex gap-2 items-center" style={{ color: RarityColors[meme.rarity] }}>
-          <StarIcon className="w-6 h-6" />
+          {/** TODO: IMAGE BROKE FROM NEXTJS UPDATE */}
+          <Image src={'/idle_game/icons/star.svg'} width={24} height={24} alt="star" />
           <h5 className="text-xl tracking-widest uppercase font-semibold">{meme.rarity}</h5>
         </div>
       )}

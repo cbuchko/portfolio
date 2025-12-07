@@ -4,27 +4,22 @@ import classNames from 'classnames'
 import { clampPositionsToScreen } from '../utils'
 import Image from 'next/image'
 
+const maxHealth = 100
 export const BrainScanContent = ({ handleLevelAdvance, validateAdvance }: ContentProps) => {
   const startRef = useRef<HTMLImageElement>(null)
   const [startPosition, setStartPosition] = useState<{ x: number; y: number }>()
-  const [health, setHealth] = useState(100)
+  const [health, setHealth] = useState(maxHealth)
   const [isStarted, setIsStarted] = useState(false)
   const [isCompleted, setIsCompleted] = useState(false)
 
   const isDead = health <= 0
   useEffect(() => {
-    if (isDead) {
-      handleLevelAdvance()
-      setIsStarted(false)
-      setIsCompleted(false)
-      setHealth(100)
-    }
     if (isCompleted) validateAdvance()
-  }, [isDead, isCompleted, handleLevelAdvance, validateAdvance])
+  }, [isCompleted, validateAdvance])
 
   //start and time the game
   useEffect(() => {
-    if (health !== 100) return
+    if (health !== maxHealth) return
     const timeout = setTimeout(() => {
       setIsStarted(true)
       setInterval(() => {
@@ -44,6 +39,18 @@ export const BrainScanContent = ({ handleLevelAdvance, validateAdvance }: Conten
     }
   }, [startPosition])
 
+  const handleHealthUpdate = () => {
+    const isDead = health <= 0.5
+    console.log(health)
+    setHealth((prevHealth) => prevHealth - 0.4)
+    if (isDead) {
+      handleLevelAdvance()
+      setIsStarted(false)
+      setIsCompleted(false)
+      setHealth(maxHealth)
+    }
+  }
+
   return (
     <>
       <p className="text-lg">
@@ -52,7 +59,7 @@ export const BrainScanContent = ({ handleLevelAdvance, validateAdvance }: Conten
       <p className="text-lg">{`This shouldn't hurt as long as you stay in the zone.`}</p>
       {startPosition && isStarted && !isCompleted && (
         <Scanner
-          setHealth={setHealth}
+          setHealth={handleHealthUpdate}
           isProgressing={health > 0}
           startPosition={startPosition}
           isComplete={isDead}
@@ -92,7 +99,7 @@ const Scanner = ({
   isProgressing?: boolean
   isComplete?: boolean
   isDead?: boolean
-  setHealth: React.Dispatch<React.SetStateAction<number>>
+  setHealth: () => void
 }) => {
   const scannerRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState(startPosition)
@@ -161,7 +168,7 @@ const Scanner = ({
     }
 
     const interval = setInterval(() => {
-      setHealth((prevHealth) => prevHealth - 0.4)
+      setHealth()
     }, 100)
 
     return () => {

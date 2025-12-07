@@ -1,10 +1,10 @@
 import { ContentProps } from './types'
 import { PlayerInformation } from '../player-constants'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import classNames from 'classnames'
 import Image from 'next/image'
 import { shuffle } from '../utils'
-import XIcon from '@/public/thirty-factor-authentication/icons/x.svg'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 type Quote = { quote: string; isValid: boolean }
 type QuoteMatchup = [Quote, Quote]
@@ -17,7 +17,7 @@ export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) =>
   const [displayFailure, setDisplayFailure] = useState(false)
 
   //setup quotes
-  useEffect(() => {
+  useEffectInitializer(() => {
     const characterQuotes = PlayerInformation[playerId].quotes
     const trueQuotes = characterQuotes.filter((q) => q.isValid)
     const falseQuotes = characterQuotes.filter((q) => !q.isValid)
@@ -85,7 +85,12 @@ export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) =>
           )}
           {displayFailure && (
             <div className="text-red-500 h-[36px] w-[36px]">
-              <XIcon />
+              <Image
+                src={'/thirty-factor-authentication/icons/red-x.svg'}
+                width={36}
+                height={36}
+                alt="X"
+              />
             </div>
           )}
         </div>

@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { PlayerInformation } from '../player-constants'
 import classNames from 'classnames'
 import { shuffle } from '../utils'
 import Image from 'next/image'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 export const IMDBContent = ({
   playerId,
@@ -27,10 +28,10 @@ export const IMDBContent = ({
     }
   }
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     setMediaShuffled(shuffle(media))
     setIsLoading(false)
-  }, [setIsLoading])
+  }, [])
 
   return (
     <>

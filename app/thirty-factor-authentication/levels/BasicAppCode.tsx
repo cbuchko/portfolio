@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { makeAuthCode } from '../utils'
 import { createPortal } from 'react-dom'
 import { AppCode } from './AppCode'
 import { TextInput } from '../components/TextInput'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 export const BasicAppCodeContent = ({
   validateAdvance,
@@ -23,7 +24,7 @@ export const BasicAppCodeContent = ({
     }
   }
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     const portalElement = document.getElementById('extras-portal')
     setPortalElement(portalElement)
   }, [])

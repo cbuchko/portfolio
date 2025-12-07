@@ -1,6 +1,7 @@
 'use client'
 
 import classNames from 'classnames'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -20,9 +21,11 @@ export const BlogButton = () => {
       >
         <div className={classNames('flex items-center gap-2')}>
           <div className="tracking-wide mt-0.5 whitespace-nowrap">ENTER BLOG</div>
-          <img
+          <Image
             src={isHovering ? '/black-arrow.svg' : '/white-arrow.svg'}
             className="h-5 w-5"
+            width={20}
+            height={20}
             alt="arrow"
           />
         </div>

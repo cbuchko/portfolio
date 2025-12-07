@@ -4,6 +4,7 @@ import { clampPositionsToScreen } from '../utils'
 import Image from 'next/image'
 import classNames from 'classnames'
 import { TextInput } from '../components/TextInput'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const generateMaxFish = () => Math.floor(Math.random() * (55 - 40) + 40)
 export const AquariumContent = ({
@@ -101,7 +102,11 @@ const FishOptions = [
 const Fish = () => {
   const { initialPosition, isLeft } = useMemo(() => getInitialPosition(), [])
   const [position, setPosition] = useState<{ x: number; y: number }>(initialPosition)
-  const fishIndex = useMemo(() => Math.floor(Math.random() * FishOptions.length), [])
+  const [fishType, setFishType] = useState<string>()
+
+  useEffectInitializer(() => {
+    setFishType(FishOptions[Math.floor(Math.random() * FishOptions.length)])
+  }, [])
 
   useEffect(() => {
     if (isLeft === undefined) return
@@ -132,8 +137,8 @@ const Fish = () => {
 
   return (
     <Image
-      src={`/thirty-factor-authentication/fish/${FishOptions[fishIndex]}.png`}
-      alt={FishOptions[fishIndex]}
+      src={`/thirty-factor-authentication/fish/${fishType}.png`}
+      alt={fishType || 'fish'}
       height={48}
       width={48}
       className={classNames('fixed transition-all duration-1000', { 'rotate-y-180': !isLeft })}

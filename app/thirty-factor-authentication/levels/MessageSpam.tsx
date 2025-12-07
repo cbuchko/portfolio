@@ -1,8 +1,9 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { makeCode } from '../utils'
 import { useMessageSpam } from '../useMessageSpam'
 import { TextInput } from '../components/TextInput'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const messages = [
   'hey what you up to?',
@@ -20,16 +21,20 @@ export const MessageSpamContent = ({
   handleLevelAdvance,
 }: ContentProps) => {
   const [codeInput, setCodeInput] = useState('')
-  const codeRef = useRef(makeCode(12))
+  const [code, setCode] = useState('')
+
+  useEffectInitializer(() => {
+    setCode(makeCode(12))
+  }, [])
 
   const { message, handleResendCode } = useMessageSpam(
     messages,
-    `Your authentication code is: ${codeRef.current}`
+    code ? `Your authentication code is: ${code}` : undefined
   )
 
   const handleInputChange = (input: string) => {
     setCodeInput(input)
-    if (codeRef.current === input) {
+    if (code === input) {
       validateAdvance()
     } else {
       cancelAdvance()

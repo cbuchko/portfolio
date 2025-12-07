@@ -1,4 +1,4 @@
-import { JSX, useCallback, useEffect, useState } from 'react'
+import { JSX, useCallback, useState } from 'react'
 import { PlayerIds, PlayerInformation } from './player-constants'
 import { ContentProps, ControlProps } from './levels/types'
 import { devMode, maxLevel } from './constants'
@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import { LevelProps } from './levels/useLevel'
 import { useSound } from '../utils/useSounds'
 import Image from 'next/image'
+import { useEffectInitializer } from '../utils/useEffectUnsafe'
 
 type AuthContainerProps = {
   playerId: PlayerIds
@@ -43,7 +44,7 @@ export const AuthContainer = ({
     setIsLoading(true)
   }
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     if (!requiresLoad) setIsLoading(false)
   }, [level, requiresLoad])
 
