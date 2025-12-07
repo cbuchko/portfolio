@@ -1,3 +1,4 @@
+import { SetStateAction } from 'react'
 import { PlayerIds } from '../player-constants'
 import { SSOIds } from './SSO'
 
@@ -13,7 +14,7 @@ export type ContentProps = {
   validateAdvance: () => void
   cancelAdvance: () => void
   handleLevelAdvance: (skipVerify?: boolean) => void
-  setIsLoading: (loading: boolean) => void
+  setIsLoading: React.Dispatch<SetStateAction<boolean>>
   upsTrackingCode: string
   upsTrackingTime: number
   setUPSTrackingCode: (code: string) => void

@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { TextInput } from '../components/TextInput'
+import { useEffectUnsafe } from '@/app/utils/useEffectUnsafe'
 
 export const UPSFinishContent = ({
   validateAdvance,
@@ -11,7 +12,7 @@ export const UPSFinishContent = ({
   const [dynamicText, setDynamicText] = useState<string>('')
   const [vowelCount, setVowelCount] = useState('')
 
-  useEffect(() => {
+  useEffectUnsafe(() => {
     const text = dynamicTextOptions[Math.floor(Math.random() * dynamicTextOptions.length)]
     setDynamicText(text)
     setIsLoading(false)

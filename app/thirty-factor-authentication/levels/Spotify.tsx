@@ -246,6 +246,7 @@ const RythymPad = ({
       handlePadCleanup(Score.miss)
     }, delayInMs + 50)
 
+    // eslint-disable-next-line react-hooks/immutability
     timeoutRef.current = id
 
     return () => {

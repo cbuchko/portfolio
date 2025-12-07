@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { RefObject, useEffect, useMemo, useRef, useState } from 'react'
 import { ContentProps } from './types'
 import { useDrag, useDrop } from 'react-dnd'
 import classNames from 'classnames'
 import Image from 'next/image'
+import { useEffectUnsafe } from '@/app/utils/useEffectUnsafe'
 
 type ShoppingItem = {
   id: string
@@ -123,9 +124,7 @@ export const SelfCheckoutContent = ({ handleLevelAdvance, cancelAdvance }: Conte
   }, [items])
 
   const isUnexpectedItemError = baggedItems.some((item) => !item.isScanned)
-  const isUnbaggedItemError = !Array.from(scannedIdsRef.current).every((id) =>
-    baggedItems.find((item) => item.id === id)
-  )
+  const isUnbaggedItemError = scannedItems.some((item) => cartItems.find((i) => item.id === i.id))
   const isAgeVerificationError = baggedItems.some(
     (item) => item.id === 'wine' && item.isScanned && !isAgeVerified
   )
@@ -142,7 +141,7 @@ export const SelfCheckoutContent = ({ handleLevelAdvance, cancelAdvance }: Conte
           items={cartItems}
         />
         <div>
-          <Scanner handleScan={handleScan} scannedIds={scannedIdsRef.current} />
+          <Scanner handleScan={handleScan} scannedIds={scannedIdsRef} />
           <div className="mt-4">
             <h5 className="text-center">Summary</h5>
             <div className="border p-2 h-[160px]">
@@ -187,7 +186,11 @@ const CheckoutItem = ({ item }: { item: ShoppingItem }) => {
     }),
     []
   )
-  drag(dragRef)
+  useEffect(() => {
+    if (dragRef.current) {
+      drag(dragRef)
+    }
+  }, [drag])
 
   return (
     <div className="flex items-center justify-center cursor-pointer">
@@ -219,7 +222,11 @@ const DropArea = ({
     () => ({ accept: 'checkout-item', drop: handleDrop }),
     [handleDrop, items]
   )
-  drop(dropRef)
+  useEffect(() => {
+    if (dropRef.current) {
+      drop(dropRef)
+    }
+  }, [drop])
   return (
     <div ref={dropRef}>
       <h5 className="text-center">{title}</h5>
@@ -236,7 +243,7 @@ const Scanner = ({
   scannedIds,
   handleScan,
 }: {
-  scannedIds: Set<string>
+  scannedIds: RefObject<Set<string>>
   handleScan: (item: ShoppingItem) => void
 }) => {
   const dropRef = useRef<HTMLDivElement>(null)
@@ -254,7 +261,7 @@ const Scanner = ({
   }
 
   const attemptScan = (item: ShoppingItem) => {
-    if (scanningRef.current || scannedIds.has(item.id)) return
+    if (scanningRef.current || scannedIds.current.has(item.id)) return
     updateScanning(true)
 
     const max = 6000
@@ -277,16 +284,23 @@ const Scanner = ({
     }),
     [isScanning, scannedIds]
   )
-  drop(dropRef)
-  scanningRef.current = isOver
 
-  if (!isOver && isScanning) {
-    updateScanning(false)
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-  }
-  if (!isOver && isSuccess) {
-    setIsSuccess(false)
-  }
+  useEffect(() => {
+    if (dropRef.current) {
+      drop(dropRef)
+    }
+  }, [drop])
+
+  useEffectUnsafe(() => {
+    scanningRef.current = isOver
+    if (!isOver && isScanning) {
+      updateScanning(false)
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    }
+    if (!isOver && isSuccess) {
+      setIsSuccess(false)
+    }
+  }, [isOver, isScanning, isSuccess])
 
   return (
     <div
