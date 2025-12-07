@@ -11,8 +11,8 @@ type RythymPadType = {
 }
 
 const colorHexArray = ['#fb923c', '#facc15', '#4ade80', '#60a5fa', '#a78bfa', '#9ca3af']
-const fullTimeQuarter = 389.61
-const halfTimeQuarter = 779.221
+const fullTimeQuarter = 375
+const halfTimeQuarter = 750
 
 const greatScore = 200
 const goodScore = 100
@@ -25,7 +25,8 @@ const cadences = [
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[3] },
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[4] },
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[5] },
-  { count: 8, delay: halfTimeQuarter, color: colorHexArray[0] },
+  { count: 5, delay: halfTimeQuarter, color: colorHexArray[0] },
+  { count: 4, delay: halfTimeQuarter, color: colorHexArray[4] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[1] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[2] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[3] },
