@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { useMessageSpam } from '../useMessageSpam'
@@ -62,12 +62,15 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
     0.3
   )
 
+  const [instructions, setInstructions] = useState<Instruction[]>()
+  const [formattedInstructions, setFormattedInstructiosn] = useState<string>()
   const [instructionStepIndex, setInstructionStepIndex] = useState(0)
-  const [instructions, formattedInstructions] = useMemo(() => {
+
+  useEffectInitializer(() => {
     const instructions = generateInstructions()
     const formattedInstructions = formatInstructions(instructions)
-    if (isGameOver) return [instructions, formattedInstructions]
-    return [instructions, formattedInstructions]
+    setInstructions(instructions)
+    setFormattedInstructiosn(formattedInstructions)
   }, [isGameOver])
 
   const { message, handleResendCode } = useMessageSpam(messages, formattedInstructions, 4000)
@@ -113,6 +116,7 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
   }, [timer, handleExplosion, isGameOver])
 
   const handleDefusalStep = (wireId?: WireIds, number?: number) => {
+    if (!instructions) return
     const expectedInstruction = instructions[instructionStepIndex]
     if (expectedInstruction.wireId !== wireId) {
       handleExplosion()
