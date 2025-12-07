@@ -14,11 +14,13 @@ import Image from 'next/image'
 import { VictoryScreen } from './VictoryScreen'
 import { useIsMobile } from '../utils/useIsMobile'
 import Link from 'next/link'
+import { useSound } from '../utils/useSounds'
 
 export default function ThirtyFactorAuthentication() {
   const [playerId] = useState(PlayerIds.Biden)
   const [isGameOver, setIsGameOver] = useState(false)
   const isMobile = useIsMobile()
+  const { playSound: playErrorSound } = useSound('/thirty-factor-authentication/sounds/error.mp3')
 
   const { content, controls, baseProps } = useLevels()
   const { level, setLevel, upsTrackingCode, upsTrackingTime, resetLevel } = baseProps
@@ -60,6 +62,7 @@ export default function ThirtyFactorAuthentication() {
                 Content={content}
                 Controls={controls}
                 baseProps={baseProps}
+                playErrorSound={playErrorSound}
               />
             </DndProvider>
             <div id="extras-portal" />

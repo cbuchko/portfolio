@@ -4,7 +4,6 @@ import { ContentProps, ControlProps } from './levels/types'
 import { devMode, maxLevel } from './constants'
 import classNames from 'classnames'
 import { LevelProps } from './levels/useLevel'
-import { useSound } from '../utils/useSounds'
 import Image from 'next/image'
 import { useEffectInitializer } from '../utils/useEffectUnsafe'
 
@@ -14,6 +13,7 @@ type AuthContainerProps = {
   setIsGameOver: (value: boolean) => void
   Content: (props: ContentProps) => JSX.Element | null
   Controls?: (props: ControlProps) => JSX.Element
+  playErrorSound: () => void
 }
 
 export const AuthContainer = ({
@@ -22,8 +22,8 @@ export const AuthContainer = ({
   setIsGameOver,
   Content,
   Controls,
+  playErrorSound,
 }: AuthContainerProps) => {
-  const { playSound: playErrorSound } = useSound('/thirty-factor-authentication/sounds/error.mp3')
   const [isLoading, setIsLoading] = useState(false)
   const [isAdvanceVerified, setIsAdvanceVerified] = useState(false)
   const [errorCount, setErrorCount] = useState(0)
