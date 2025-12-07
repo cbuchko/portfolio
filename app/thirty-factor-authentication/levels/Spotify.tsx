@@ -25,17 +25,14 @@ const cadences = [
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[3] },
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[4] },
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[5] },
-  { count: 5, delay: halfTimeQuarter, color: colorHexArray[0] },
-  { count: 5, delay: halfTimeQuarter, color: colorHexArray[1] },
-  { count: 7, delay: halfTimeQuarter, color: colorHexArray[2] },
+  { count: 8, delay: halfTimeQuarter, color: colorHexArray[0] },
+  { count: 15, delay: fullTimeQuarter, color: colorHexArray[1] },
+  { count: 15, delay: fullTimeQuarter, color: colorHexArray[2] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[3] },
-  { count: 17, delay: fullTimeQuarter, color: colorHexArray[4] },
-  { count: 5, delay: fullTimeQuarter, color: colorHexArray[5] },
-  { count: 5, delay: fullTimeQuarter, color: colorHexArray[0] },
-  { count: 5, delay: fullTimeQuarter, color: colorHexArray[1] },
-  { count: 5, delay: fullTimeQuarter, color: colorHexArray[2] },
-  { count: 5, delay: fullTimeQuarter, color: colorHexArray[3] },
-  { count: 5, delay: fullTimeQuarter, color: colorHexArray[4] },
+  { count: 15, delay: fullTimeQuarter, color: colorHexArray[4] },
+  { count: 5, delay: halfTimeQuarter, color: colorHexArray[5] },
+  { count: 5, delay: halfTimeQuarter, color: colorHexArray[0] },
+  { count: 8, delay: halfTimeQuarter, color: colorHexArray[1] },
 ]
 
 type Position = { x: number; y: number }
@@ -54,9 +51,9 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
   const [score, setScore] = useState(0)
   const padAmount = rhythmPads.length
 
-  //must get the equivalent of 75% greats and 25% goods
+  //must get the equivalent of 50% greats and 50% goods
   const scoreThreshold = useMemo(() => {
-    return Math.floor(maxRythym * 0.75 * greatScore + maxRythym * 0.25 * goodScore)
+    return Math.floor(maxRythym * 0.5 * greatScore + maxRythym * 0.5 * goodScore)
   }, [maxRythym])
 
   const resetGame = useCallback(() => {
@@ -244,7 +241,7 @@ const RythymPad = ({
     if (timeoutRef.current) return
     const id = setTimeout(() => {
       handlePadCleanup(Score.miss)
-    }, delayInMs + 50)
+    }, delayInMs + 100)
 
     // eslint-disable-next-line react-hooks/immutability
     timeoutRef.current = id
