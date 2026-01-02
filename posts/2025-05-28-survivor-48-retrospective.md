@@ -1,6 +1,6 @@
 ---
 layout: blog-post
-title: "Survivor 48: A Disappointing Misstep"
+title: 'Survivor 48: A Disappointing Misstep'
 featuredImage: /assets/images/Survivor_47.png
 publishDate: 2025-05-28
 category: survivor
@@ -22,14 +22,3 @@ Who wants a counterexample? Everyone loves a good counterexample. Season 45 was 
 Survivor 48 has a lot of high points. The Kyle and Kamilla duo is so fun. I'm a sucker for a dynamic duo and Kyle and Kamilla deliver that hard. David was also an extremely bright spot in the cast and was consistently hilarious. Kyle is a fantastic winner, probably the best winner in the new era, and it'll be interesting to see him play in Survivor 50.
 
 Overall, Survivor 48 is on the bottom half of new era seasons. Not really because anything bad happens, but because basically _nothing_ happens for like 4 episodes in a row post merge. I rarely find Survivor episodes boring and I was feeling that bit with this.
-
-Here's my new era season rankings up to this point, cause why not, I've never done this before:
-
-1. 46
-2. 47
-3. 45
-4. 42
-5. 43
-6. 48
-7. 44
-8. 41
