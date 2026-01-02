@@ -135,6 +135,7 @@ const Fish = () => {
     }
   }, [isLeft, position])
 
+  if (!fishType) return
   return (
     <Image
       src={`/thirty-factor-authentication/fish/${fishType}.png`}

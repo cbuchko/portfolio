@@ -264,7 +264,7 @@ const Scanner = ({
     if (scanningRef.current || scannedIds.current.has(item.id)) return
     updateScanning(true)
 
-    const max = 6000
+    const max = 2000
     const min = 2000
     const timeoutDuration = Math.random() * (max - min) + min
     timeoutRef.current = setTimeout(() => {
