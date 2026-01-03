@@ -30,6 +30,7 @@ import { RoadTripContent } from './RoadTrip'
 import { BrainScanContent, BrainScanControls } from './BrainScan'
 import { useSound } from '@/app/utils/useSounds'
 import { SpotifyContent, SpotifyControls } from './Spotify'
+import { MastermindContent } from './Mastermind'
 
 export type LevelProps = {
   level: number
@@ -105,11 +106,11 @@ export const useLevels = () => {
     { content: UPSContent, controls: UPSControls, requiresLoad: true }, //10
     { content: FallbackTwoContent, controls: FallbackTwoControls },
     { content: AppCodeContent, controls: AppCodeControls }, //APP CODE BEFORE SSO FOR CLARITY
-    { content: SSOContent },
     { content: QuotesContent, controls: undefined },
     { content: MaintenanceContent, controls: MaintenanceControls },
     { content: SSOContent }, //15
     { content: BrainScanContent, controls: BrainScanControls },
+    { content: MastermindContent },
     { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
     { content: RoadTripContent, requiresLoad: true },
     { content: TaxReturnContent, controls: TaxReturnControls },

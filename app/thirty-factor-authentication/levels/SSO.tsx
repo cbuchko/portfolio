@@ -2,11 +2,9 @@ import { useState } from 'react'
 import { ContentProps } from './types'
 import Image from 'next/image'
 import { SelfCheckoutContent } from './SelfCheckout'
-import { Twitter } from './Twitter'
 
 export enum SSOIds {
   walmart = 'walmart',
-  twitter = 'twitter',
 }
 
 export const SSOContent = (props: ContentProps) => {
@@ -39,13 +37,6 @@ export const SSOContent = (props: ContentProps) => {
           <p className="mb-4 text-lg">{message}</p>
           <div className="w-full flex justify-center">
             <div className="flex flex-row justify-around gap-4 text-center">
-              {!selectedSSOIds.has(SSOIds.twitter) && (
-                <SSOProvider
-                  title="Twitter"
-                  url="/thirty-factor-authentication/sso/twitter.webp"
-                  onClick={() => handleSSOChoice(SSOIds.twitter)}
-                />
-              )}
               {!selectedSSOIds.has(SSOIds.walmart) && (
                 <SSOProvider
                   title="Walmart"
@@ -58,7 +49,6 @@ export const SSOContent = (props: ContentProps) => {
         </>
       )}
       {SSOChoice === SSOIds.walmart && <SelfCheckoutContent {...props} />}
-      {SSOChoice === SSOIds.twitter && <Twitter {...props} />}
     </>
   )
 }

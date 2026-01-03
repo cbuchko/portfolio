@@ -14,6 +14,9 @@ Papers Please:
 Einstein: 
     - Prevent tabbing out? lol
 
+Quotes:
+    - Show who said the wrong quotes
+
 
 Level Ideas:
     -  mastermind
