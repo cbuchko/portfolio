@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { ContentProps } from './types'
 import classNames from 'classnames'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
@@ -18,20 +18,20 @@ const generateAnswer = () => {
   return answer
 }
 
-const maxAttempts = 8
+const maxAttempts = 7
 export const MastermindContent = ({ handleLevelAdvance }: ContentProps) => {
-  const answerRef = useRef<Colors[]>([])
+  const [answer, setAnswer] = useState<Colors[]>([])
   const [attemptCount, setAttemptCount] = useState(1)
   const [selectedBall, setSelectedBall] = useState<Colors>()
   const [isGameOver, setIsGameOver] = useState(false)
   const [isShowingHelp, setIsShowingHelp] = useState(false)
 
   useEffectInitializer(() => {
-    answerRef.current = generateAnswer()
+    setAnswer(generateAnswer())
   }, [])
 
   const resetGame = () => {
-    answerRef.current = generateAnswer()
+    setAnswer(generateAnswer())
     setAttemptCount(1)
     setSelectedBall(undefined)
     setIsGameOver(false)
@@ -49,14 +49,14 @@ export const MastermindContent = ({ handleLevelAdvance }: ContentProps) => {
           Help
         </span>
       </p>
-      <div key={answerRef.current.join('')}>
+      <div key={answer.join('')}>
         {Array.from({ length: attemptCount }).map((_, idx) => (
           <MasterMindRow
             key={idx}
             selectedBall={selectedBall}
             isCurrent={idx + 1 === attemptCount && !isGameOver}
             setAttemptCount={setAttemptCount}
-            answer={answerRef.current}
+            answer={answer}
             attemptCount={attemptCount}
             handleLevelAdvance={handleLevelAdvance}
             setIsGameOver={setIsGameOver}
@@ -64,7 +64,7 @@ export const MastermindContent = ({ handleLevelAdvance }: ContentProps) => {
         ))}
       </div>
       <MasterMindBalls selectedBall={selectedBall} setSelectedBall={setSelectedBall} />
-      {isGameOver && <Answer answer={answerRef.current} resetGame={resetGame} />}
+      {isGameOver && <Answer answer={answer} resetGame={resetGame} />}
       {isShowingHelp && <HelpModal setIsShowingHelp={setIsShowingHelp} />}
     </>
   )
