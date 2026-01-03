@@ -5,6 +5,7 @@ import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 import { arraysEqual } from '../utils'
 import Image from 'next/image'
 import { useSound } from '@/app/utils/useSounds'
+import { ModalContainer } from '@/app/idle_game/menus/ModalContainer'
 
 const answerLength = 4
 const generateAnswer = () => {
@@ -23,6 +24,7 @@ export const MastermindContent = ({ handleLevelAdvance }: ContentProps) => {
   const [attemptCount, setAttemptCount] = useState(1)
   const [selectedBall, setSelectedBall] = useState<Colors>()
   const [isGameOver, setIsGameOver] = useState(false)
+  const [isShowingHelp, setIsShowingHelp] = useState(false)
 
   useEffectInitializer(() => {
     answerRef.current = generateAnswer()
@@ -38,7 +40,15 @@ export const MastermindContent = ({ handleLevelAdvance }: ContentProps) => {
 
   return (
     <>
-      <p className="text-lg mb-4">Crack the code in {maxAttempts} attempts or less.</p>
+      <p className="text-lg mb-4">
+        Crack the code in {maxAttempts} attempts or less.
+        <span
+          className="underline cursor-pointer ml-3 text-sm"
+          onClick={() => setIsShowingHelp(true)}
+        >
+          Help
+        </span>
+      </p>
       <div key={answerRef.current.join('')}>
         {Array.from({ length: attemptCount }).map((_, idx) => (
           <MasterMindRow
@@ -55,6 +65,7 @@ export const MastermindContent = ({ handleLevelAdvance }: ContentProps) => {
       </div>
       <MasterMindBalls selectedBall={selectedBall} setSelectedBall={setSelectedBall} />
       {isGameOver && <Answer answer={answerRef.current} resetGame={resetGame} />}
+      {isShowingHelp && <HelpModal setIsShowingHelp={setIsShowingHelp} />}
     </>
   )
 }
@@ -82,11 +93,16 @@ const MasterMindRow = ({
   handleLevelAdvance: (skipVerify?: boolean) => void
   setIsGameOver: (val: boolean) => void
 }) => {
-  const [currentGuess, setCurrentGuess] = useState<Colors[]>([])
+  const [currentGuess, setCurrentGuess] = useState<(Colors | undefined)[]>(
+    Array.from({ length: 4 })
+  )
   const [hints, setHints] = useState<Hints>()
 
+  const isGuessReady =
+    currentGuess.length === answerLength && currentGuess.every((guess) => !!guess)
+
   const submitGuess = () => {
-    if (currentGuess.length !== answerLength) return
+    if (!isGuessReady) return
     if (arraysEqual(answer, currentGuess)) {
       handleLevelAdvance(true)
       return
@@ -138,7 +154,7 @@ const MasterMindRow = ({
   return (
     <div className={classNames('flex items-center gap-4')}>
       <div
-        className={classNames('outline flex items-center w-max py-2', {
+        className={classNames('outline flex items-center  w-max py-2', {
           'pointer-events-none opacity-75': !isCurrent,
         })}
       >
@@ -152,15 +168,17 @@ const MasterMindRow = ({
       </div>
       {hints && <MasterMindClue hints={hints} />}
       {isCurrent && (
-        <button
-          onClick={submitGuess}
-          className={classNames('auth-button', {
-            '!border-2 !border-amber-500': currentGuess.length === answerLength,
-          })}
-          disabled={currentGuess.length !== answerLength}
-        >
-          Guess
-        </button>
+        <div className="w-full flex justify-center">
+          <button
+            onClick={submitGuess}
+            className={classNames('auth-button', {
+              '!border-2 !border-amber-500': isGuessReady,
+            })}
+            disabled={!isGuessReady}
+          >
+            Guess
+          </button>
+        </div>
       )}
     </div>
   )
@@ -204,7 +222,7 @@ const MasterMindHole = ({
 
 const MasterMindClue = ({ hints }: { hints: Hints }) => {
   return (
-    <div className="flex flex-col gap-0.5">
+    <div className="flex flex-col gap-0.5 ml-4">
       <div className="flex items-center">
         <Image
           src="/thirty-factor-authentication/icons/green-checkmark.svg"
@@ -215,7 +233,7 @@ const MasterMindClue = ({ hints }: { hints: Hints }) => {
         <h5 className="text-xs ml-2 mono">{hints.correct}</h5>
       </div>
       <div className="flex items-center">
-        <div className="text-amber-500 w-3 h-3 flex items-center justify-center">?</div>
+        <div className="text-amber-500 w-3 h-3 flex items-center justify-center font-bold">?</div>
         <h5 className="text-xs ml-2 mono">{hints.close}</h5>
       </div>
       <div className="flex items-center">
@@ -278,6 +296,51 @@ const Answer = ({ answer, resetGame }: { answer: Colors[]; resetGame: () => void
         </button>
       </div>
     </>
+  )
+}
+
+const HelpModal = ({
+  setIsShowingHelp,
+}: {
+  setIsShowingHelp: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
+  return (
+    <ModalContainer setActiveModal={() => setIsShowingHelp((val) => !val)}>
+      <div className="text-2xl mt-2">How to Play</div>
+      <ul className="list-disc ml-4 mt-2">
+        <li>The computer has chosen a secret code of 4 colors</li>
+        <li>You have 6 different colors to choose from</li>
+        <li>Colors can repeat in the code</li>
+        <li>Select a color from the palette, then click a position to place it</li>
+        <li>After placing 4 colors, click Guess to see how close you are to the real code</li>
+      </ul>
+      <div className="mt-3">Guessing will give you feedback:</div>
+      <div className="flex flex-col gap-2 mt-2">
+        <div className="flex items-center">
+          <Image
+            src="/thirty-factor-authentication/icons/green-checkmark.svg"
+            alt="checkmark"
+            height={16}
+            width={16}
+          />
+          <h5 className="text-sm ml-2">Number of colors in the correct position</h5>
+        </div>
+        <div className="flex items-center">
+          <div className="text-amber-500 w-4 h-4 flex items-center justify-center font-bold">?</div>
+          <h5 className="text-sm ml-2">Number of correct colors in the wrong position</h5>
+        </div>
+        <div className="flex items-center">
+          <Image
+            src="/thirty-factor-authentication/icons/red-x.svg"
+            alt="checkmark"
+            height={16}
+            width={16}
+          />
+          <h5 className="text-sm ml-2">Number of colors that are not in the code</h5>
+        </div>
+        <div className="mt-3">Use the feedback to deduce the code</div>
+      </div>
+    </ModalContainer>
   )
 }
 
