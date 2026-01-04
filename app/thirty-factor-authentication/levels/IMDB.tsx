@@ -67,31 +67,31 @@ export const IMDBContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
         <HintCard
           title="release year"
           hint={question.date}
-          revealTimeoutInMs={10000}
+          revealTimeoutInMs={5000}
           className="bg-orange-100"
         />
         <HintCard
           title="genre"
           hint={question.genre}
-          revealTimeoutInMs={20000}
+          revealTimeoutInMs={15000}
           className="bg-green-100"
         />
         <HintCard
           title="creator"
           hint={question.creator}
-          revealTimeoutInMs={30000}
+          revealTimeoutInMs={25000}
           className="bg-red-100"
         />
         <HintCard
           title="starring"
           hint={question.starring}
-          revealTimeoutInMs={45000}
+          revealTimeoutInMs={40000}
           className="bg-yellow-100"
         />
         <HintCard
           title="synopsis"
           hint={question.synopsis}
-          revealTimeoutInMs={55000}
+          revealTimeoutInMs={50000}
           className="bg-purple-100"
         />
       </div>
