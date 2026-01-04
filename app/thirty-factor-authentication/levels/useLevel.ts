@@ -11,7 +11,7 @@ import { PostItContent, PostItControls } from './PostIt'
 import { BiometricContent, BiometricControls } from './Biometric'
 import { TaxReturnContent, TaxReturnControls } from './TaxReturn'
 import { AppCodeContent, AppCodeControls } from './AppCode'
-import { IMDBContent, IMDBControls } from './IMDB'
+import { IMDBContent } from './IMDB'
 import { BirdCallContent, BirdCallControls } from './BirdCalls'
 import { ParlorRoomContent } from './ParlorRoom'
 import { MaintenanceContent, MaintenanceControls } from './Maintenance'
@@ -111,7 +111,7 @@ export const useLevels = () => {
     { content: SSOContent }, //15
     { content: BrainScanContent, controls: BrainScanControls },
     { content: MastermindContent },
-    { content: IMDBContent, controls: IMDBControls, requiresLoad: true },
+    { content: IMDBContent },
     { content: RoadTripContent, requiresLoad: true },
     { content: TaxReturnContent, controls: TaxReturnControls },
     { content: ParlorRoomContent, controls: undefined, requiresLoad: true },

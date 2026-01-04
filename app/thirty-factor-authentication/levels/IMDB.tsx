@@ -1,108 +1,69 @@
-import { useMemo, useState } from 'react'
-import { ContentProps, ControlProps } from './types'
-import { PlayerInformation } from '../player-constants'
-import classNames from 'classnames'
-import { shuffle } from '../utils'
-import Image from 'next/image'
-import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { useEffect, useState } from 'react'
+import { ContentProps } from './types'
 
-export const IMDBContent = ({
-  playerId,
-  validateAdvance,
-  cancelAdvance,
-  setIsLoading,
-}: ContentProps) => {
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [mediaShuffled, setMediaShuffled] = useState<{ id: string; url: string }[] | null>(null)
-
-  const targetMediaIds = useMemo(() => PlayerInformation[playerId].imdb.sort(), [playerId])
-
-  const validateSelect = (input: string[]) => {
-    if (
-      input.length === targetMediaIds.length &&
-      input.sort().every((val, i) => val === targetMediaIds[i])
-    ) {
-      validateAdvance()
-    } else {
-      cancelAdvance()
-    }
-  }
-
-  useEffectInitializer(() => {
-    setMediaShuffled(shuffle(media))
-    setIsLoading(false)
-  }, [])
-
+export const IMDBContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
   return (
     <>
-      <p className="text-lg">Confirm the media you have appeared in.</p>
-      <div className="grid grid-cols-3 gap-4 mt-4">
-        {mediaShuffled &&
-          mediaShuffled.map((media) => (
-            <MovieThumbnail
-              key={media.id}
-              media={media}
-              selectedIds={selectedIds}
-              setSelectedIds={setSelectedIds}
-              validateSelect={validateSelect}
-            />
-          ))}
+      <p className="text-lg mb-1">Confirm the media you have appeared in.</p>
+      <div className="flex gap-2">
+        <MovieSearch />
+        <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
+          Submit
+        </button>
       </div>
     </>
   )
 }
 
-const MovieThumbnail = ({
-  media,
-  selectedIds,
-  setSelectedIds,
-  validateSelect,
-}: {
-  media: { id: string; url: string }
-  selectedIds: string[]
-  setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
-  validateSelect: (ids: string[]) => void
-}) => {
-  const isSelected = selectedIds.includes(media.id)
+const MovieSearch = () => {
+  const [searchInput, setSearchInput] = useState('')
+  const [movieResults, setMovieResults] = useState<Array<string>>([])
+  const [debouncedInput, setDebouncedInput] = useState(searchInput)
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false)
 
-  const handleSelect = () => {
-    let newIds
-    if (isSelected) {
-      newIds = selectedIds.filter((id) => id !== media.id)
-      setSelectedIds(newIds)
-    } else {
-      newIds = [...selectedIds, media.id]
-      setSelectedIds(newIds)
-    }
-    validateSelect(newIds)
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setDebouncedInput(searchInput)
+    }, 300)
+
+    return () => clearTimeout(id)
+  }, [searchInput])
+
+  const fetchTMDB = async (query: string) => {
+    const tmdbResult = await fetch(`/api/movies?query=${query}`)
+    const body = await tmdbResult.json()
+    setMovieResults(body)
   }
 
-  return (
-    <Image
-      key={media.id}
-      src={media.url}
-      alt={media.id}
-      height={'200'}
-      width={'150'}
-      className={classNames(
-        'h-[200px] w-[150px] cursor-pointer transition-transform duration-500',
-        {
-          'outline-6 outline-yellow-300 rounded-md scale-75 shadow-lg': isSelected,
-        }
-      )}
-      onClick={handleSelect}
-    />
-  )
-}
+  useEffect(() => {
+    fetchTMDB(debouncedInput)
+  }, [debouncedInput])
 
-export const IMDBControls = ({ handleLevelAdvance }: ControlProps) => {
   return (
-    <>
-      <div className="grow" />
-      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
-        Submit
-      </button>
-    </>
+    <div className="relative w-full">
+      <input
+        className="border rounded-md p-1 px-2 w-full"
+        onChange={(e) => setSearchInput(e.target.value)}
+        value={searchInput}
+        onClick={() => setIsDropdownVisible(true)}
+      />
+      {movieResults.length > 0 && isDropdownVisible && (
+        <ul className="absolute bg-white h-max border w-full rounded-md mt-1">
+          {movieResults.map((title, idx) => (
+            <li
+              key={idx}
+              className="p-2 py-1 hover:bg-gray-100 cursor-pointer"
+              onClick={() => {
+                setSearchInput(title)
+                setIsDropdownVisible(false)
+              }}
+            >
+              {title}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   )
 }
 

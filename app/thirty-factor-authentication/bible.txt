@@ -17,15 +17,10 @@ Einstein:
 Quotes:
     - Show who said the wrong quotes
 
-
-Level Ideas:
-    -  mastermind
-
 "Feel" Ideas:
     - Bespoke Zodiac Selector
     - Make IMDB more like IMDB
     - Aquarium add sfx and ocean elements
-    - Fishing add sfx 
 
 OTHER IDEAS:
 Cloudflare
