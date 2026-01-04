@@ -13,7 +13,7 @@ export const TextInput = ({
   className?: string
   onChange: (value: string) => void
   onSubmit: () => void
-  onClick: () => void
+  onClick?: () => void
 }) => {
   return (
     <input

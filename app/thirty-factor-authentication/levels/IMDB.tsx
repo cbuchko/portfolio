@@ -55,7 +55,7 @@ export const IMDBContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
 
   return (
     <>
-      <p className="text-lg">Confirm the title of this piece of media you've appeared in.</p>
+      <p className="text-lg">{`Confirm the title of this piece of media you've appeared in.`}</p>
       <p className="text-lg">You have unlimited attempts until the time runs out.</p>
       <div className="bg-black text-red-500 mono text-4xl my-4 p-1 text-center">
         {timer < 0
@@ -145,7 +145,7 @@ const MovieSearch = ({
     setMovieResults(body)
   }
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     fetchTMDB(debouncedInput)
   }, [debouncedInput])
 
@@ -200,7 +200,7 @@ const HintCard = ({
     return () => {
       clearTimeout(id)
     }
-  }, [])
+  }, [revealTimeoutInMs])
 
   return (
     <div
