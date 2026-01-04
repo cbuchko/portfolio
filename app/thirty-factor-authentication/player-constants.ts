@@ -13,7 +13,7 @@ export type Player = {
     firstName: string
     dob: string
   }
-  imdb: string[]
+  imdb: IMDB[]
   quotes: { quote: string; isValid: boolean }[]
   license: {
     location: string
@@ -44,6 +44,16 @@ export type Player = {
   portrait: string
 }
 
+export type IMDB = {
+  type: string
+  date: string
+  genre: string
+  creator: string
+  starring: string
+  synopsis: string
+  answer: string
+}
+
 export const PlayerInformation: Record<PlayerIds, Player> = {
   [PlayerIds.Biden]: {
     name: 'Joe Biden',
@@ -63,7 +73,38 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       firstName: 'Joseph R',
       dob: '1942/11/20',
     },
-    imdb: ['parks', 'jimmykimmel', 'lawandorder'],
+    imdb: [
+      {
+        type: 'TV Show',
+        date: '2009',
+        creator: 'Michael Schur, Greg Daniels',
+        genre: 'Sitcom',
+        starring: 'Amy Poehler, Chris Pratt',
+        synopsis:
+          'Leslie Knope, a midlevel bureaucrat in an Indiana Parks and Recreation Department, hopes to beautify her town.',
+        answer: 'Parks and Recreation',
+      },
+      {
+        type: 'TV Show',
+        date: '1969',
+        creator: 'Joan Ganz Cooney, Lloyd Morrisett',
+        genre: 'Educational',
+        starring: 'Jim Henson, Frank Oz',
+        synopsis:
+          'An educational series uses puppets to teach children basic academic and social skills.',
+        answer: 'Sesame Street',
+      },
+      {
+        type: 'TV Show',
+        date: '1999',
+        creator: 'Dick Wolf',
+        genre: 'Crime Drama',
+        starring: 'Mariska Hargitay, Ice-T',
+        synopsis:
+          'Detectives in New York City investigate crimes while navigating the emotional toll of their work.',
+        answer: 'Law & Order: Special Victims Unit',
+      },
+    ],
     quotes: [
       {
         quote:
