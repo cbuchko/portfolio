@@ -3,7 +3,6 @@ Roadtrip reset
 Brain scan overhaul (Replace with mastermind?)
 
 Levels that NEED to be better:
-IMDB - commonly complained about
 Self Checkout - missing sauce
 Brain Scan - missing sauce, thematics, etc.
 Spotify - More aesthetic score counter

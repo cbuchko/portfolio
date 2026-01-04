@@ -106,10 +106,13 @@ export const IMDBContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
         </button>
       </div>
       <p
-        className={classNames('mt-2 text-red-500 transition-opacity duration-500', {
-          'opacity-0': !isShowingError,
-          'opacity-100': isShowingError,
-        })}
+        className={classNames(
+          'mt-2 text-red-500 transition-opacity duration-500 pointer-events-none',
+          {
+            'opacity-0': !isShowingError,
+            'opacity-100': isShowingError,
+          }
+        )}
       >
         Wrong answer, please try again.
       </p>
