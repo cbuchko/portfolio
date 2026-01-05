@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { clampPositionsToScreen } from '../utils'
 import Image from 'next/image'
 import { useSound } from '@/app/utils/useSounds'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const maxHealth = 100
 const gameTime = 60
@@ -53,7 +54,7 @@ export const BrainScanContent = ({ handleLevelAdvance, validateAdvance }: Conten
     return () => {
       clearTimeout(timeout)
     }
-  }, [health])
+  }, [health, stopSound])
 
   useEffect(() => {
     if (startRef.current && !startPosition) {
@@ -249,42 +250,7 @@ export const BrainScanControls = ({ handleLevelAdvance }: ControlProps) => {
 
 //this entire section is by jvastos from this codepen: https://codepen.io/jvastos/details/bGrvgbq
 const BloodSplatter = ({ playSound }: { playSound: () => void }) => {
-  let splashesUsed: number[] = []
-
-  useEffect(() => {
-    const id = setInterval(() => getBlood(), 8000)
-
-    return () => {
-      clearInterval(id)
-    }
-  }, [])
-
-  //FUNCTION TO CHOSE A RANDOM BLOOD SPLASH THAT HAVEN'T BEEN DISPLAYED BEFORE
-  function getBlood() {
-    playSound()
-    if (splashesUsed.length == 3) {
-      splashesUsed.shift()
-      splashesUsed.shift()
-    }
-
-    let randomNumber = Math.floor(Math.random() * 3)
-
-    while (splashesUsed.includes(randomNumber)) {
-      randomNumber = Math.floor(Math.random() * 3)
-    }
-
-    let chosenNumber = randomNumber
-
-    if (chosenNumber === 0) {
-      Blood1()
-    } else if (chosenNumber === 1) {
-      Blood2()
-    } else if (chosenNumber === 2) {
-      Blood3()
-    }
-
-    splashesUsed.push(chosenNumber)
-  }
+  const splashIndexRef = useRef(0)
 
   //GETTING THE SPLASH OF BLOOD 1
   function Blood1() {
@@ -304,6 +270,32 @@ const BloodSplatter = ({ playSound }: { playSound: () => void }) => {
     ;(document.getElementById('splash-3-fade') as unknown as SVGAnimationElement).beginElement()
     ;(document.getElementById('splash-3-drip') as unknown as SVGAnimationElement).beginElement()
   }
+
+  //FUNCTION TO CHOSE A RANDOM BLOOD SPLASH THAT HAVEN'T BEEN DISPLAYED BEFORE
+  function getBlood() {
+    playSound()
+
+    const chosenNumber = splashIndexRef.current
+
+    if (chosenNumber === 0) {
+      Blood1()
+    } else if (chosenNumber === 1) {
+      Blood2()
+    } else if (chosenNumber === 2) {
+      Blood3()
+    }
+
+    splashIndexRef.current = ((splashIndexRef.current || 0) + 1) % 3
+  }
+
+  useEffectInitializer(() => {
+    const id = setInterval(() => getBlood(), 8000)
+
+    return () => {
+      clearInterval(id)
+    }
+  }, [])
+
   return (
     <>
       <svg
