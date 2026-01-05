@@ -24,13 +24,14 @@ import { BasicAppCodeContent, BasicAppCodeControls } from './BasicAppCode'
 import { EinsteinContent, EinsteinControls } from './Einstein'
 import { UPSContent, UPSControls } from './UPS'
 import { UPSFinishContent, UPSFinishControls } from './UPSFinish'
-import { SSOContent, SSOIds } from './SSO'
+import { SSOIds } from './SSO'
 import { FishingContent, FishingControls } from './Fishing'
 import { RoadTripContent } from './RoadTrip'
 import { BrainScanContent, BrainScanControls } from './BrainScan'
 import { useSound } from '@/app/utils/useSounds'
 import { SpotifyContent, SpotifyControls } from './Spotify'
 import { MastermindContent } from './Mastermind'
+import { SelfCheckoutContent } from './SelfCheckout'
 
 export type LevelProps = {
   level: number
@@ -107,18 +108,18 @@ export const useLevels = () => {
     { content: FallbackTwoContent, controls: FallbackTwoControls },
     { content: AppCodeContent, controls: AppCodeControls }, //APP CODE BEFORE SSO FOR CLARITY
     { content: QuotesContent, controls: undefined },
-    { content: MaintenanceContent, controls: MaintenanceControls },
-    { content: SSOContent }, //15
     { content: BrainScanContent, controls: BrainScanControls },
+    { content: MaintenanceContent, controls: MaintenanceControls }, //15
     { content: MastermindContent },
+    { content: SelfCheckoutContent },
     { content: IMDBContent },
     { content: RoadTripContent, requiresLoad: true },
-    { content: TaxReturnContent, controls: TaxReturnControls },
-    { content: ParlorRoomContent, controls: undefined, requiresLoad: true },
+    { content: ParlorRoomContent, controls: undefined, requiresLoad: true }, //20
     { content: AquariumContent, controls: AquariumControls },
-    { content: FishingContent, controls: FishingControls }, //25
+    { content: FishingContent, controls: FishingControls },
+    { content: TaxReturnContent, controls: TaxReturnControls },
     { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true },
-    { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true },
+    { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true }, //25
     { content: SpotifyContent, controls: SpotifyControls },
     { content: BombDefusalContent, controls: BombDefusalControls },
     { content: EinsteinContent, controls: EinsteinControls },

@@ -3,7 +3,13 @@ Roadtrip reset
 
 Levels that NEED to be better:
 Self Checkout - missing sauce
-Spotify - More aesthetic score counter
+Spotify 
+    - More aesthetic score
+    - Pad spawns are too random and not smart enough. Pads should never spawn ontop of eachother
+    - Music probably could be lined up better
+    - Move to Grid system for spawning?
+
+Vowel Counter - This one just stands out as under baked
 
 Papers Please:
     - When other characters are added, make them show in every iteration, so you cant brute force
@@ -14,6 +20,8 @@ Quotes:
 "Feel" Ideas:
     - Bespoke Zodiac Selector
     - Aquarium add sfx and ocean elements
+
+Clean up SSO stuff when I know I'm done with it
 
 OTHER IDEAS:
 Cloudflare

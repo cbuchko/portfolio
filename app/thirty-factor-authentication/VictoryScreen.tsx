@@ -47,9 +47,9 @@ export const VictoryScreen = ({
         </p>
         <p className="mt-4">Soundtrack:</p>
         <ul className="list-disc ml-4">
-          <li>{`Spotify: "Open the Skies" by Kxdama`}</li>
+          <li>{`Rythm Challenge: "Open the Skies" by Kxdama`}</li>
           <li>{`Fishing: "Fishing Song" by Kai Mikkelsen`}</li>
-          <li>{`Finale Level: "Death by Glamour" by Toby Fox from Undertale`}</li>
+          <li>{`Final Level: "Death by Glamour" by Toby Fox from Undertale`}</li>
         </ul>
       </div>
     </div>

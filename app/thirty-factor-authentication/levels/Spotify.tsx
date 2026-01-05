@@ -25,15 +25,22 @@ const cadences = [
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[3] },
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[4] },
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[5] },
-  { count: 5, delay: halfTimeQuarter, color: colorHexArray[0] },
-  { count: 4, delay: halfTimeQuarter, color: colorHexArray[4] },
+  { count: 4, delay: halfTimeQuarter, color: colorHexArray[0] },
+  { count: 1, delay: halfTimeQuarter, color: colorHexArray[4] },
+  { count: 1, delay: halfTimeQuarter, color: colorHexArray[5] },
+  { count: 1, delay: halfTimeQuarter, color: colorHexArray[0] },
+  { count: 1, delay: halfTimeQuarter, color: colorHexArray[1] },
+  { count: 1, delay: fullTimeQuarter, color: colorHexArray[2] },
+  { count: 1, delay: fullTimeQuarter, color: colorHexArray[3] },
+  { count: 1, delay: fullTimeQuarter, color: colorHexArray[4] },
+  { count: 1, delay: fullTimeQuarter, color: colorHexArray[5] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[1] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[2] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[3] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[4] },
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[5] },
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[0] },
-  { count: 8, delay: halfTimeQuarter, color: colorHexArray[1] },
+  { count: 11, delay: halfTimeQuarter, color: colorHexArray[1] },
 ]
 
 type Position = { x: number; y: number }
@@ -44,17 +51,20 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
   const [isStarted, setIsStarted] = useState(false)
   const intervalRef = useRef<NodeJS.Timeout>(null)
   const [previousPosition, setPreviousPosition] = useState<Position | null>(null)
-  const { playSound: playSoundtrack, stopSound: stopSoundtrack } = useSound(
-    '/thirty-factor-authentication/sounds/open-the-sky.wav',
-    0.15,
-    true
-  )
+  const [secondaryPreviousPosition, setSecondaryPreviousPosition] = useState<Position | null>(null)
+  const {
+    playSound: playSoundtrack,
+    isAudioPlayingRef,
+    stopSound: stopSoundtrack,
+  } = useSound('/thirty-factor-authentication/sounds/open-the-sky.wav', 0.3, true)
   const [score, setScore] = useState(0)
+  const [isInsideCadence, setIsInsideCadence] = useState(false)
+
   const padAmount = rhythmPads.length
 
-  //must get the equivalent of 50% greats and 50% goods
+  //must get the equivalent of 60% greats and 40% goods
   const scoreThreshold = useMemo(() => {
-    return Math.floor(maxRythym * 0.5 * greatScore + maxRythym * 0.5 * goodScore)
+    return Math.floor(maxRythym * 0.6 * greatScore + maxRythym * 0.4 * goodScore)
   }, [maxRythym])
 
   const resetGame = useCallback(() => {
@@ -62,6 +72,8 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
     setIsStarted(false)
     stopSoundtrack()
     setPreviousPosition(null)
+    setSecondaryPreviousPosition(null)
+    setIsInsideCadence(false)
     cadenceIndexRef.current = 0
     if (intervalRef.current) clearInterval(intervalRef.current)
     const hasWon = score >= scoreThreshold
@@ -80,7 +92,9 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
       const { delay, color, count } = cadences[cadenceIndexRef.current]
 
       if (innerCadenceCount === 0) {
-        setPreviousPosition(null)
+        setIsInsideCadence(false)
+      } else {
+        setIsInsideCadence(true)
       }
       if (innerCadenceCount < count) {
         innerCadenceCount++
@@ -111,6 +125,12 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
     }
   }, [padAmount, maxRythym, resetGame])
 
+  const playSoundtrackHandler = () => {
+    if (!isAudioPlayingRef.current) {
+      playSoundtrack()
+    }
+  }
+
   return (
     <>
       <p className="text-lg">Please complete this Rhythm challenge.</p>
@@ -126,7 +146,6 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
           })}
           onClick={() => {
             setIsStarted(true)
-            playSoundtrack()
             setScore(0)
           }}
         >
@@ -140,7 +159,9 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
           delayInMs={pad.delayInMs}
           resetGame={resetGame}
           previousPosition={previousPosition}
+          secondaryPreviousPosition={secondaryPreviousPosition}
           setPreviousPosition={setPreviousPosition}
+          setSecondaryPreviousPosition={setSecondaryPreviousPosition}
           setScore={setScore}
           color={pad.color}
           handleWin={() => {
@@ -149,29 +170,55 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
               if (intervalRef.current) clearInterval(intervalRef.current)
             }
           }}
+          playSoundtrackHandler={playSoundtrackHandler}
+          isInsideCadence={isInsideCadence}
         />
       ))}
     </>
   )
 }
 
-const getRandomPosition = () => {
+const clamp = 200
+const getRandomPosition = (previousPosition: Position | null, callstackCount = 0) => {
   const halfwayDown = window.innerHeight / 2
   const height = window.innerHeight
-  const y = Math.random() * (height - halfwayDown - 200) + halfwayDown - 200
-  const maxX = window.innerWidth / 2 + 200
-  const minxX = window.innerWidth / 2 - 200
+  const y = Math.random() * (height - halfwayDown - clamp) + halfwayDown - clamp
+  const maxX = window.innerWidth / 2 + clamp
+  const minxX = window.innerWidth / 2 - clamp
   const x = Math.random() * (maxX - minxX) + minxX
-  const { newX, newY } = clampPositionsToScreen(x, y, 200, 200)
-  return { x: newX, y: newY }
+  let newPosition = clampPositionsToScreen(x, y, clamp, clamp)
+
+  //dont let it recursively go crazy, at a certain point just return anything
+  if (callstackCount > 5) return { x: newPosition.newX, y: newPosition.newY }
+
+  //ensures it doesnt double back on itself
+  if (
+    previousPosition &&
+    newPosition.newX >= previousPosition.x - padSize * 2 &&
+    newPosition.newX <= previousPosition.x + padSize * 2 &&
+    newPosition.newY >= previousPosition.y - padSize * 2 &&
+    newPosition.newY <= previousPosition.y + padSize * 2
+  ) {
+    return getRandomPosition(previousPosition, callstackCount + 1)
+  }
+  return { x: newPosition.newX, y: newPosition.newY }
 }
 
-const getRelativePosition = (position: Position) => {
+const getRelativePosition = (position: Position, secondaryPrevious: Position | null) => {
   const magnitude = 75
   const y = Math.random() > 0.5 ? position.y + magnitude : position.y - magnitude
   const x = Math.random() > 0.5 ? position.x + magnitude : position.x - magnitude
-  const { newX, newY } = clampPositionsToScreen(x, y, 200, 200)
-  return { x: newX, y: newY }
+  let newPosition = clampPositionsToScreen(x, y, clamp, clamp)
+
+  //ensures it doesnt double back on itself
+  if (
+    secondaryPrevious &&
+    newPosition.newX === secondaryPrevious.x &&
+    newPosition.newY === secondaryPrevious.y
+  ) {
+    return getRelativePosition(position, secondaryPrevious)
+  }
+  return { x: newPosition.newX, y: newPosition.newY }
 }
 
 enum Score {
@@ -186,19 +233,27 @@ const RythymPad = ({
   number,
   delayInMs,
   previousPosition,
+  secondaryPreviousPosition,
   color,
   setPreviousPosition,
+  setSecondaryPreviousPosition,
   setScore,
   resetGame,
+  playSoundtrackHandler,
+  isInsideCadence,
 }: {
   number: number
   delayInMs: number
   previousPosition: Position | null
+  secondaryPreviousPosition: Position | null
   color: string
   setPreviousPosition: (pos: Position | null) => void
+  setSecondaryPreviousPosition: (pos: Position | null) => void
   setScore: React.Dispatch<React.SetStateAction<number>>
   resetGame: () => void
   handleWin: () => void
+  playSoundtrackHandler: () => void
+  isInsideCadence: boolean
 }) => {
   const [isCleared, setIsCleared] = useState(false)
   const [position, setPosition] = useState<Position | null>(null)
@@ -224,13 +279,15 @@ const RythymPad = ({
 
   useEffect(() => {
     //makes its position a random position
-    if (!previousPosition) {
-      const position = getRandomPosition()
+    if (!isInsideCadence || !previousPosition) {
+      const position = getRandomPosition(previousPosition)
+      setSecondaryPreviousPosition(previousPosition)
       setPreviousPosition(position)
       setPosition(position)
     } else {
       //makes its position relative to the previous position
-      const relativePosition = getRelativePosition(previousPosition)
+      const relativePosition = getRelativePosition(previousPosition, secondaryPreviousPosition)
+      setSecondaryPreviousPosition(previousPosition)
       setPreviousPosition(relativePosition)
       setPosition(relativePosition)
     }
@@ -255,6 +312,7 @@ const RythymPad = ({
 
   const handleClick = () => {
     playClickSound()
+    playSoundtrackHandler()
     const padSpawnTime = padLifeTimeRef.current
     const currentTime = new Date().getTime()
     const elapsedTime = currentTime - padSpawnTime
