@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { shuffle } from '../utils'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
-type Quote = { quote: string; isValid: boolean }
+type Quote = { quote: string; isValid: boolean; origin: string }
 type QuoteMatchup = [Quote, Quote]
 
 export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
@@ -15,6 +15,7 @@ export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) =>
   const [successCount, setSuccessCount] = useState(0)
   const [displaySuccess, setDisplaySuccess] = useState(false)
   const [displayFailure, setDisplayFailure] = useState(false)
+  const [isShowingOrigins, setIsShowingOrigins] = useState(false)
 
   //setup quotes
   useEffectInitializer(() => {
@@ -46,15 +47,18 @@ export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) =>
       setTimeout(() => {
         setDisplaySuccess(false)
         setMatchupIndex((index) => index + 1)
-      }, 2000)
+      }, 3000)
     } else {
       handleLevelAdvance(false)
       setDisplayFailure(true)
       setTimeout(() => {
         setDisplayFailure(false)
         setMatchupIndex((index) => index + 1)
-      }, 2000)
+      }, 3000)
     }
+
+    setIsShowingOrigins(true)
+    setTimeout(() => setIsShowingOrigins(false), 2900)
   }
 
   const matchup = useMemo(() => {
@@ -69,9 +73,11 @@ export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) =>
       <div className="flex gap-5 m-4 mt-8 items-center">
         <QuoteBox
           quote={matchup[0].quote}
+          origin={matchup[0].origin}
           onClick={() => handleQuoteSelect(matchup[0].isValid)}
           displayFailure={displayFailure && !matchup[0].isValid}
           displaySuccess={displaySuccess && matchup[0].isValid}
+          isShowingOrigins={isShowingOrigins}
         />
         <div className="w-[80px] h-[80px] flex items-center justify-center text-4xl border-2 p-4 rounded-full">
           {!displaySuccess && !displayFailure && <div>OR</div>}
@@ -96,9 +102,11 @@ export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) =>
         </div>
         <QuoteBox
           quote={matchup[1].quote}
+          origin={matchup[1].origin}
           onClick={() => handleQuoteSelect(matchup[1].isValid)}
           displayFailure={displayFailure && !matchup[1].isValid}
           displaySuccess={displaySuccess && matchup[1].isValid}
+          isShowingOrigins={isShowingOrigins}
         />
       </div>
       <div className="flex gap-4 justify-center mt-8">
@@ -114,24 +122,41 @@ export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) =>
 
 const QuoteBox = ({
   quote,
+  origin,
   displayFailure,
   displaySuccess,
   onClick,
+  isShowingOrigins,
 }: {
   quote: string
+  origin: string
   displaySuccess: boolean
   displayFailure: boolean
   onClick: () => void
+  isShowingOrigins: boolean
 }) => {
   return (
     <div
       onClick={onClick}
       className={classNames(
-        'w-[400px] h-[400px] flex items-center justify-center text-center text-2xl border-2 p-4 py-16 cursor-pointer hover:scale-105 transition-transform',
+        'w-[400px] h-[400px] flex flex-col items-center justify-center text-center text-2xl border-2 p-4 py-16 cursor-pointer hover:scale-105 transition-transform',
         { 'border-green-500': displaySuccess, 'border-red-500': displayFailure }
       )}
     >
-      {`"${quote}"`}
+      <div className="relative">
+        {`"${quote}"`}
+        <div
+          className={classNames(
+            'absolute -bottom-10 text-center w-full transition-opacity pointer-events-none',
+            {
+              'opacity-0': !isShowingOrigins,
+              'opacity-100': isShowingOrigins,
+            }
+          )}
+        >
+          - {origin}
+        </div>
+      </div>
     </div>
   )
 }

@@ -1,24 +1,18 @@
 Feedback actionables:
 Roadtrip reset
-Brain scan overhaul (Replace with mastermind?)
 
 Levels that NEED to be better:
 Self Checkout - missing sauce
-Brain Scan - missing sauce, thematics, etc.
 Spotify - More aesthetic score counter
 
 Papers Please:
     - When other characters are added, make them show in every iteration, so you cant brute force
-
-Einstein: 
-    - Prevent tabbing out? lol
 
 Quotes:
     - Show who said the wrong quotes
 
 "Feel" Ideas:
     - Bespoke Zodiac Selector
-    - Make IMDB more like IMDB
     - Aquarium add sfx and ocean elements
 
 OTHER IDEAS:
