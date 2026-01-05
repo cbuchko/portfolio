@@ -27,21 +27,20 @@ const cadences = [
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[4] },
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[5] },
   { count: 4, delay: halfTimeQuarter, color: colorHexArray[0] },
-  { count: 1, delay: halfTimeQuarter, color: colorHexArray[4] },
-  { count: 1, delay: halfTimeQuarter, color: colorHexArray[5] },
-  { count: 1, delay: halfTimeQuarter, color: colorHexArray[0] },
-  { count: 1, delay: halfTimeQuarter, color: colorHexArray[1] },
-  { count: 1, delay: fullTimeQuarter, color: colorHexArray[2] },
-  { count: 1, delay: fullTimeQuarter, color: colorHexArray[3] },
-  { count: 1, delay: fullTimeQuarter, color: colorHexArray[4] },
+  { count: 5, delay: fullTimeQuarter, color: colorHexArray[4] },
   { count: 1, delay: fullTimeQuarter, color: colorHexArray[5] },
+  { count: 1, delay: fullTimeQuarter, color: colorHexArray[0] },
+  { count: 1, delay: fullTimeQuarter, color: colorHexArray[1] },
+  { count: 1, delay: fullTimeQuarter, color: colorHexArray[2] },
+  { count: 1, delay: fullTimeQuarter, color: colorHexArray[0] },
+  { count: 1, delay: fullTimeQuarter, color: colorHexArray[1] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[1] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[2] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[3] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[4] },
-  { count: 5, delay: halfTimeQuarter, color: colorHexArray[5] },
+  { count: 15, delay: fullTimeQuarter, color: colorHexArray[4] },
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[0] },
-  { count: 11, delay: halfTimeQuarter, color: colorHexArray[1] },
+  { count: 7, delay: halfTimeQuarter, color: colorHexArray[1] },
 ]
 
 type Position = { x: number; y: number }
@@ -148,6 +147,7 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
           onClick={() => {
             setIsStarted(true)
             setScore(0)
+            playSoundtrack()
           }}
         >
           {score > 0 ? 'Restart' : 'Start'}
@@ -313,7 +313,7 @@ const RythymPad = ({
 
   const handleClick = () => {
     playClickSound()
-    playSoundtrackHandler()
+    // playSoundtrackHandler()
     const padSpawnTime = padLifeTimeRef.current
     const currentTime = new Date().getTime()
     const elapsedTime = currentTime - padSpawnTime
