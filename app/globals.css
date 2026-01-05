@@ -110,3 +110,24 @@ h6 {
 .homelink:hover {
   color: #cdecff;
 }
+
+/** credit to jvastos from this codepen: https://codepen.io/jvastos/details/bGrvgbq **/
+.blood-svg {
+  width: 40vmax;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.blood-svg {
+  opacity: 0;
+}
+
+.blood-splash-2 {
+  width: 70vmax;
+}
+
+.blood-splash-3 {
+  width: 60vmax;
+}
