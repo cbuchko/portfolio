@@ -3,6 +3,7 @@ import { clampPositionsToScreen } from '../utils'
 import classNames from 'classnames'
 import { useSound } from '@/app/utils/useSounds'
 import { ContentProps, ControlProps } from './types'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 type RythymPadType = {
   number: number
@@ -186,7 +187,7 @@ const getRandomPosition = (previousPosition: Position | null, callstackCount = 0
   const maxX = window.innerWidth / 2 + clamp
   const minxX = window.innerWidth / 2 - clamp
   const x = Math.random() * (maxX - minxX) + minxX
-  let newPosition = clampPositionsToScreen(x, y, clamp, clamp)
+  const newPosition = clampPositionsToScreen(x, y, clamp, clamp)
 
   //dont let it recursively go crazy, at a certain point just return anything
   if (callstackCount > 5) return { x: newPosition.newX, y: newPosition.newY }
@@ -208,7 +209,7 @@ const getRelativePosition = (position: Position, secondaryPrevious: Position | n
   const magnitude = 75
   const y = Math.random() > 0.5 ? position.y + magnitude : position.y - magnitude
   const x = Math.random() > 0.5 ? position.x + magnitude : position.x - magnitude
-  let newPosition = clampPositionsToScreen(x, y, clamp, clamp)
+  const newPosition = clampPositionsToScreen(x, y, clamp, clamp)
 
   //ensures it doesnt double back on itself
   if (
@@ -277,7 +278,7 @@ const RythymPad = ({
     [setScore]
   )
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     //makes its position a random position
     if (!isInsideCadence || !previousPosition) {
       const position = getRandomPosition(previousPosition)
