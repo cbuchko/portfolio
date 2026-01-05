@@ -27,20 +27,20 @@ const cadences = [
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[4] },
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[5] },
   { count: 4, delay: halfTimeQuarter, color: colorHexArray[0] },
-  { count: 5, delay: fullTimeQuarter, color: colorHexArray[4] },
+  { count: 5, delay: fullTimeQuarter, color: colorHexArray[1] },
+  { count: 1, delay: fullTimeQuarter, color: colorHexArray[2] },
+  { count: 1, delay: fullTimeQuarter, color: colorHexArray[3] },
+  { count: 1, delay: fullTimeQuarter, color: colorHexArray[4] },
   { count: 1, delay: fullTimeQuarter, color: colorHexArray[5] },
   { count: 1, delay: fullTimeQuarter, color: colorHexArray[0] },
   { count: 1, delay: fullTimeQuarter, color: colorHexArray[1] },
-  { count: 1, delay: fullTimeQuarter, color: colorHexArray[2] },
-  { count: 1, delay: fullTimeQuarter, color: colorHexArray[0] },
-  { count: 1, delay: fullTimeQuarter, color: colorHexArray[1] },
-  { count: 15, delay: fullTimeQuarter, color: colorHexArray[1] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[2] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[3] },
   { count: 15, delay: fullTimeQuarter, color: colorHexArray[4] },
-  { count: 15, delay: fullTimeQuarter, color: colorHexArray[4] },
-  { count: 5, delay: halfTimeQuarter, color: colorHexArray[0] },
-  { count: 7, delay: halfTimeQuarter, color: colorHexArray[1] },
+  { count: 15, delay: fullTimeQuarter, color: colorHexArray[5] },
+  { count: 15, delay: fullTimeQuarter, color: colorHexArray[0] },
+  { count: 5, delay: halfTimeQuarter, color: colorHexArray[1] },
+  { count: 7, delay: halfTimeQuarter, color: colorHexArray[2] },
 ]
 
 type Position = { x: number; y: number }
@@ -171,7 +171,6 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
               if (intervalRef.current) clearInterval(intervalRef.current)
             }
           }}
-          playSoundtrackHandler={playSoundtrackHandler}
           isInsideCadence={isInsideCadence}
         />
       ))}
@@ -240,7 +239,6 @@ const RythymPad = ({
   setSecondaryPreviousPosition,
   setScore,
   resetGame,
-  playSoundtrackHandler,
   isInsideCadence,
 }: {
   number: number
@@ -253,7 +251,6 @@ const RythymPad = ({
   setScore: React.Dispatch<React.SetStateAction<number>>
   resetGame: () => void
   handleWin: () => void
-  playSoundtrackHandler: () => void
   isInsideCadence: boolean
 }) => {
   const [isCleared, setIsCleared] = useState(false)
