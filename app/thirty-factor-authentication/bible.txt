@@ -25,6 +25,7 @@ OTHER IDEAS:
 Cloudflare
 Sentry for monitoring
 Re-add Name logo
+Devlog in my blog
 
 STRECH GOALS:
 Mobile
