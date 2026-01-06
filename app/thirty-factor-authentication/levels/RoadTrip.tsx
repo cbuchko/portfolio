@@ -4,6 +4,7 @@ import { PlayerInformation } from '../player-constants'
 import dynamic from 'next/dynamic'
 import { MapProps, Marker } from './Map'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import classNames from 'classnames'
 
 //have to lazy load map because leaflet does not support SSR
 const Map = dynamic<MapProps>(() => import('./Map').then((mod) => mod.default), {
@@ -34,13 +35,12 @@ export const RoadTripContent = ({ playerId, handleLevelAdvance, setIsLoading }: 
     })
     setStartingPoint(start.coordinates)
     setMarkers(markers)
-    setIsLoading(false)
   }, [])
 
   if (!startingPoint || startingPoint.length !== 2) return null
 
   return (
-    <div className="fixed top-0 left-0 h-screen w-screen">
+    <div className={classNames('fixed top-0 left-0 h-screen w-screen bg-gray-100')}>
       <Map
         handleCitySelect={handleCitySelect}
         selectedCity={selectedCity}
@@ -48,6 +48,7 @@ export const RoadTripContent = ({ playerId, handleLevelAdvance, setIsLoading }: 
         markers={markers}
         initialCoordinate={startingPoint as [number, number]}
         className="map-full"
+        onLoad={() => setIsLoading(false)}
       />
     </div>
   )

@@ -14,6 +14,7 @@ type AuthContainerProps = {
   Content: (props: ContentProps) => JSX.Element | null
   Controls?: (props: ControlProps) => JSX.Element
   playErrorSound: () => void
+  requiresLoad?: boolean
 }
 
 export const AuthContainer = ({
@@ -23,11 +24,12 @@ export const AuthContainer = ({
   Content,
   Controls,
   playErrorSound,
+  requiresLoad,
 }: AuthContainerProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isAdvanceVerified, setIsAdvanceVerified] = useState(false)
   const [errorCount, setErrorCount] = useState(0)
-  const { handleLevelAdvance, requiresLoad, level } = baseProps
+  const { handleLevelAdvance, level } = baseProps
 
   const onAdvance = (skipVerify?: boolean) => {
     if (!isAdvanceVerified && !devMode && !skipVerify) {
@@ -50,6 +52,7 @@ export const AuthContainer = ({
 
   const validateAdvance = useCallback(() => setIsAdvanceVerified(true), [])
   const cancelAdvance = useCallback(() => setIsAdvanceVerified(false), [])
+
   return (
     <>
       <div

@@ -15,9 +15,6 @@ Vowel Counter - This one just stands out as under baked
 Papers Please:
     - When other characters are added, make them show in every iteration, so you cant brute force
 
-Quotes:
-    - Show who said the wrong quotes
-
 "Feel" Ideas:
     - Bespoke Zodiac Selector
     - Aquarium add sfx and ocean elements
@@ -45,3 +42,18 @@ John Travolta
 John Lennon
 Martha Stewart
 Snoop Dogg
+Jack Black
+Jackie Chan
+Michael Jackson
+Mike Tyson
+Jeff Bezos
+Mr Beast
+Taylor Swift
+Jerry Seinfeld
+Tom Brady
+Conan O'Brien
+Drew Barrymore
+Shia Labeouf
+Jojo Siwa
+Greta Thunberg
+Shaq

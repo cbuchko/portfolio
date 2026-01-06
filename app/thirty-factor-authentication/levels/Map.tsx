@@ -1,6 +1,7 @@
 import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 import L, { LatLngTuple } from 'leaflet'
 import { LeafletMarker } from '../components/Marker'
+import { useEffect } from 'react'
 
 export type MapProps = {
   handleCitySelect: (city?: string) => void
@@ -9,6 +10,7 @@ export type MapProps = {
   markers?: Marker[]
   initialCoordinate?: LatLngTuple
   className: string
+  onLoad?: () => void
 }
 
 export type Marker = { name: string; coordinates: number[]; message?: string }
@@ -38,7 +40,12 @@ export default function Map({
   markers = [],
   initialCoordinate = [0, 0],
   className,
+  onLoad,
 }: MapProps) {
+  useEffect(() => {
+    onLoad?.()
+  }, [])
+
   return (
     <MapContainer
       className={className}

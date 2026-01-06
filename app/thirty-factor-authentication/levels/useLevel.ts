@@ -104,17 +104,17 @@ export const useLevels = () => {
     { content: BiometricContent, controls: BiometricControls },
     { content: PostItContent, controls: PostItControls },
     { content: ZodiacContent, controls: ZodiacControls },
-    { content: UPSContent, controls: UPSControls, requiresLoad: true }, //10
+    { content: UPSContent, controls: UPSControls }, //10
     { content: FallbackTwoContent, controls: FallbackTwoControls },
     { content: AppCodeContent, controls: AppCodeControls }, //APP CODE BEFORE SSO FOR CLARITY
-    { content: QuotesContent, controls: undefined },
+    { content: QuotesContent },
     { content: BrainScanContent, controls: BrainScanControls },
     { content: MaintenanceContent, controls: MaintenanceControls }, //15
     { content: MastermindContent },
     { content: SelfCheckoutContent },
     { content: IMDBContent },
     { content: RoadTripContent, requiresLoad: true },
-    { content: ParlorRoomContent, controls: undefined, requiresLoad: true }, //20
+    { content: ParlorRoomContent, requiresLoad: true }, //20
     { content: AquariumContent, controls: AquariumControls },
     { content: FishingContent, controls: FishingControls },
     { content: TaxReturnContent, controls: TaxReturnControls },
@@ -123,8 +123,8 @@ export const useLevels = () => {
     { content: SpotifyContent, controls: SpotifyControls },
     { content: BombDefusalContent, controls: BombDefusalControls },
     { content: EinsteinContent, controls: EinsteinControls },
-    { content: PapersPleaseContent, controls: undefined },
-    { content: UndertaleContent, controls: undefined }, //30
+    { content: PapersPleaseContent },
+    { content: UndertaleContent }, //30
   ]
 
   const levelDef = LEVELS[levelToUse - 1]

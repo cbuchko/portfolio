@@ -6,7 +6,6 @@ import Image from 'next/image'
 
 export const UPSContent = ({
   validateAdvance,
-  setIsLoading,
   upsTrackingCode: code,
   setUPSTrackingCode: setCode,
 }: ContentProps) => {
@@ -23,8 +22,7 @@ export const UPSContent = ({
     if (!!code) return
     const newCode = makeCode(16)
     setCode(newCode)
-    setIsLoading(false)
-  }, [setCode, setIsLoading, validateAdvance, code])
+  }, [setCode, validateAdvance, code])
 
   return (
     <>

@@ -22,7 +22,7 @@ export default function ThirtyFactorAuthentication() {
   const isMobile = useIsMobile()
   const { playSound: playErrorSound } = useSound('/thirty-factor-authentication/sounds/error.mp3')
 
-  const { content, controls, baseProps } = useLevels()
+  const { content, controls, requiresLoad, baseProps } = useLevels()
   const { level, setLevel, upsTrackingCode, upsTrackingTime, resetLevel } = baseProps
 
   const isCompleted = level === maxLevel + 1
@@ -63,6 +63,7 @@ export default function ThirtyFactorAuthentication() {
                 Controls={controls}
                 baseProps={baseProps}
                 playErrorSound={playErrorSound}
+                requiresLoad={requiresLoad}
               />
             </DndProvider>
             <div id="extras-portal" />
