@@ -4,7 +4,7 @@ import { AuthContainer } from './AuthContainer'
 import './styles.css'
 import './waves.css'
 import { useLevels } from './levels/useLevel'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { PlayerIds } from './player-constants'
 import { devMode, maxLevel } from './constants'
 import { DndProvider } from 'react-dnd'
@@ -15,11 +15,12 @@ import { VictoryScreen } from './VictoryScreen'
 import { useIsMobile } from '../utils/useIsMobile'
 import Link from 'next/link'
 import { useSound } from '../utils/useSounds'
+import { useEffectInitializer } from '../utils/useEffectUnsafe'
 
 export default function ThirtyFactorAuthentication() {
   const [playerId, setPlayerId] = useState<PlayerIds>()
 
-  useEffect(() => {
+  useEffectInitializer(() => {
     const storedPlayerId = localStorage.getItem('playerId') as PlayerIds | null
     if (storedPlayerId) {
       setPlayerId(storedPlayerId)
