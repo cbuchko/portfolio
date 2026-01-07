@@ -66,7 +66,8 @@ const cities = [
   { name: 'Aberdeen', coordinates: [45.4647, -98.4865] },
   { name: 'Huntington', coordinates: [38.4192, -82.4452] },
   { name: 'Macon', coordinates: [32.8407, -83.6324] },
-  { name: 'scranton', coordinates: [41.4103, -75.6611] },
+  { name: 'scranton', coordinates: [41.4103, -75.6611] }, //biden
+  { name: 'hayward', coordinates: [37.6688, -122.081] }, //the rock
 
   // Canada
   { name: 'Toronto', coordinates: [43.6511, -79.347] },

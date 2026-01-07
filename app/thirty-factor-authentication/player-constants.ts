@@ -1,5 +1,12 @@
 export enum PlayerIds {
   Biden,
+  TheRock,
+  // Devito,
+  // Snoop,
+  // Labeouf,
+  // Coolidge,
+  // Hilton,
+  // Swift,
 }
 
 export type Player = {
@@ -22,7 +29,6 @@ export type Player = {
     name: string
     dob: string
     height: string
-    weight: string
     eyes: string
     hair: string
     children: string
@@ -35,13 +41,11 @@ export type Player = {
     name: string
     dob: string
     height: string
-    weight: string
     eyes: string
     hair: string
     children: string
     coat: string
   }
-  portrait: string
 }
 
 export type IMDB = {
@@ -200,7 +204,6 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       name: 'Joseph Robinette Biden Jr.',
       dob: '1942-Nov-20',
       height: '1.83 m',
-      weight: '81 kg',
       eyes: 'BLU',
       hair: 'GRA',
       children: '4',
@@ -213,12 +216,165 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       name: 'Joseph Robin Biden Jr.',
       dob: '1952-Nov-20',
       height: '1.73 m',
-      weight: '71 kg',
       eyes: 'BRO',
       hair: 'BLO',
       children: '2',
       coat: 'maryland.svg',
     },
-    portrait: 'joe.avif',
+  },
+  [PlayerIds.TheRock]: {
+    name: 'The Rock',
+    fullName: 'Dwayne Douglas Johnson',
+    fullNameAliases: ['Dwayne Douglas Johnson'],
+    birthCity: 'hayward',
+    zodiac: 'taurus-capricorn-libra',
+    taxReturn: {
+      lastName: 'Johnson',
+      firstName: 'Dwayne D',
+      dob: '1972/05/02',
+    },
+    imdb: [
+      {
+        type: 'Movie',
+        date: '2010',
+        creator: 'Adam McKay',
+        genre: 'Comedy/Action',
+        starring: 'Will Ferrell, Mark Wahlberg',
+        synopsis: 'Desk-bound NYPD detectives Gamble and Hoitz work their day to day.',
+        answer: 'The Other Guys',
+      },
+      {
+        type: 'Movie',
+        date: '2017',
+        creator: 'Seth Gordon',
+        genre: 'Comedy/Action',
+        starring: 'Zach Efron, Kelly Rohrbach',
+        synopsis:
+          'When a dangerous crime wave hits the beach, Mitch Buchannon leads his squad of lifeguards.',
+        answer: 'Baywatch',
+      },
+      {
+        type: 'Movie',
+        date: '2001',
+        creator: 'Stephen Sommers',
+        genre: 'Adventure/Action',
+        starring: 'Brendan Fraser, Rachel Weisz',
+        synopsis:
+          'The evil mummy Imhotep returns to wreak havoc as he resumes his search for immortality.',
+        answer: 'The Mummy Returns',
+      },
+    ],
+    quotes: [
+      {
+        quote: 'Be humble, be hungry, and always be the hardest worker in the room.',
+        isValid: true,
+        origin: 'The Rock',
+      },
+      {
+        quote:
+          'WHAT ARE YOU LAUGHING AT? I WILL SLAP THE LIPS OFF YOUR FACE AND MAKE YOU KISS YOUR OWN ASS.',
+        isValid: true,
+        origin: 'The Rock',
+      },
+      {
+        quote:
+          'Losers whine about how they tried their "Best". Winners go home and fuck the prom queen.',
+        isValid: true,
+        origin: 'The Rock',
+      },
+      {
+        quote: "I'm the biggest thing to hit Canada because the Maple Leafs suck!",
+        isValid: true,
+        origin: 'The Rock',
+      },
+      {
+        quote: 'The Undertaker with his Mickey Mouse tattoos and his 33 pound head.',
+        isValid: true,
+        origin: 'The Rock',
+      },
+      {
+        quote: 'You run around here looking like a big fat bowl of fruity pebbles!',
+        isValid: true,
+        origin: 'The Rock',
+      },
+      {
+        quote: 'Hold the mic up, jabroni, before I slap the taste out of your mouth!',
+        isValid: true,
+        origin: 'The Rock',
+      },
+      {
+        quote: 'Stone Cold has lack of testicle-itis!',
+        isValid: true,
+        origin: 'The Rock',
+      },
+      {
+        quote: "Hard work pays off, dreams come true. Bad times don't last but bad guys do",
+        isValid: false,
+        origin: 'Scott Hall',
+      },
+      {
+        quote: 'Your arms are just too short to box with God.',
+        isValid: false,
+        origin: 'CM Punk',
+      },
+      {
+        quote:
+          'Be more than motivated, be more than driven, become literally obsessed to the point where people think you’re fucking nuts.',
+        isValid: false,
+        origin: 'David Goggins',
+      },
+      {
+        quote:
+          'It ain’t about how hard ya hit. It’s about how hard you can get hit and keep moving forward.',
+        isValid: false,
+        origin: 'Rocky Balboa',
+      },
+      {
+        quote: 'It’s hard to be humble when you’re as great as I am.',
+        isValid: false,
+        origin: 'Muhammad Ali',
+      },
+      {
+        quote:
+          'I love it when people say ‘I don’t like muscles.’ That’s like saying ‘I don’t like money.’',
+        isValid: false,
+        origin: 'Arnold Schwarzenegger',
+      },
+      {
+        quote: "You're a boy in a man's world, and I'm a man who loves to play with boys.",
+        isValid: false,
+        origin: 'Kurt Angle',
+      },
+      {
+        quote:
+          'So you go ahead! You keep on kissing babies and hugging fat girls! I’m gonna be at a gym somewhere training and thinking about beating the hell out of you at WrestleMania!',
+        isValid: false,
+        origin: 'Dave Batista',
+      },
+    ],
+    license: {
+      location: 'California',
+      headshot: 'therock.jpg',
+      signature: 'rocksig.png',
+      name: 'Dwayne Douglas Johnson',
+      dob: '1972-May-02',
+      height: '1.96 m',
+      eyes: 'BRO',
+      hair: 'BALD',
+      children: '1',
+      coat: 'california.png',
+    },
+    fakeLicense: {
+      location: 'Nevada',
+      headshot: 'kevin.jpg',
+      signature: 'bush.svg',
+      name: 'Dwayne Doug Johnson',
+      dob: '1972-May-04',
+      height: '1.85 m',
+      eyes: 'BLU',
+      hair: 'BLO',
+      children: '3',
+      coat: 'nevada.svg',
+    },
   },
 }

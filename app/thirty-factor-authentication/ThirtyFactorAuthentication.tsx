@@ -17,7 +17,7 @@ import Link from 'next/link'
 import { useSound } from '../utils/useSounds'
 
 export default function ThirtyFactorAuthentication() {
-  const [playerId] = useState(PlayerIds.Biden)
+  const [playerId] = useState(PlayerIds.TheRock)
   const [isGameOver, setIsGameOver] = useState(false)
   const isMobile = useIsMobile()
   const { playSound: playErrorSound } = useSound('/thirty-factor-authentication/sounds/error.mp3')

@@ -29,7 +29,6 @@ const DiscrepancyBase: Record<string, Discrepancy> = {
   ['expires']: { id: 'expires', title: 'Expiry Date' },
   ['dob']: { id: 'dob', title: 'Date of Birth' },
   ['height']: { id: 'height', title: 'Height' },
-  ['weight']: { id: 'weight', title: 'Weight' },
   ['eyes']: { id: 'eyes', title: 'Eye Color' },
   ['hair']: { id: 'hair', title: 'Hair Color' },
   ['children']: { id: 'children', title: 'Number of Children' },
@@ -277,12 +276,6 @@ const DriversLicense = ({
                 label="Ht"
                 value={gameInfo.height}
                 discrepancyId={DiscrepancyBase['height'].id}
-                addDiscrepancy={handleDiscrepancySelect}
-              />
-              <IDDetail
-                label="Wt"
-                value={gameInfo.weight}
-                discrepancyId={DiscrepancyBase['weight'].id}
                 addDiscrepancy={handleDiscrepancySelect}
               />
               <IDDetail

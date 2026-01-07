@@ -6,12 +6,7 @@ Self Checkout - missing sauce
 Spotify 
     - More aesthetic score (ticks up)
     - Mouse trail
-    - Show score instead of "good" "great"
     - Pads disappear instantly and the score lingers for a bit
-Vowel Counter - Find a way to make it insanely clear where to count the E's
-
-
-Vowel Counter - This one just stands out as under baked
 
 Papers Please:
     - When other characters are added, make them show in every iteration, so you cant brute force
@@ -38,24 +33,16 @@ Achievements
 Leaderboards
 
 Character Suggestions:
-Gordon Ramsey
 Jennifer Coolidge
-John Travolta
-John Lennon
-Martha Stewart
 Snoop Dogg
 Jack Black
-Jackie Chan
-Michael Jackson
-Mike Tyson
-Jeff Bezos
-Mr Beast
 Taylor Swift
-Jerry Seinfeld
-Tom Brady
 Conan O'Brien
-Drew Barrymore
 Shia Labeouf
-Jojo Siwa
-Greta Thunberg
-Shaq
+Mark Zuckerberg
+Danny DeVito
+Guy Fieri
+Paris Hilton
+Lady Gaga
+Mike Tyson
+The Rock
