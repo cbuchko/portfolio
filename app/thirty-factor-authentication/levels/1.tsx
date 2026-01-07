@@ -4,7 +4,6 @@ import { ContentProps, ControlProps } from './types'
 import { DropdownSelector } from '../components/dropdown-selector'
 
 export const OneContent = ({ playerId, setPlayerId, validateAdvance }: ContentProps) => {
-  const name = PlayerInformation[playerId].name
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   useEffect(() => {
@@ -25,6 +24,7 @@ export const OneContent = ({ playerId, setPlayerId, validateAdvance }: ContentPr
   const handleCharacterSelect = (option: string) => {
     const id = nameKeys[option]
     setPlayerId(id)
+    localStorage.setItem('playerId', id.toString())
   }
 
   return (
@@ -42,7 +42,7 @@ export const OneContent = ({ playerId, setPlayerId, validateAdvance }: ContentPr
             setActiveId={() =>
               isDropdownOpen ? setIsDropdownOpen(false) : setIsDropdownOpen(true)
             }
-            defaultOption="Joe Biden"
+            defaultOption={PlayerInformation[playerId].name}
             activeId={isDropdownOpen ? 'character-select' : undefined}
             width={150}
             includeBlankOption={false}

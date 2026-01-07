@@ -4,7 +4,7 @@ import { AuthContainer } from './AuthContainer'
 import './styles.css'
 import './waves.css'
 import { useLevels } from './levels/useLevel'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PlayerIds } from './player-constants'
 import { devMode, maxLevel } from './constants'
 import { DndProvider } from 'react-dnd'
@@ -17,7 +17,15 @@ import Link from 'next/link'
 import { useSound } from '../utils/useSounds'
 
 export default function ThirtyFactorAuthentication() {
-  const [playerId, setPlayerId] = useState(PlayerIds.Biden)
+  const [playerId, setPlayerId] = useState<PlayerIds>()
+
+  useEffect(() => {
+    const storedPlayerId = localStorage.getItem('playerId') as PlayerIds | null
+    if (storedPlayerId) {
+      setPlayerId(storedPlayerId)
+    }
+  }, [])
+
   const [isGameOver, setIsGameOver] = useState(false)
   const isMobile = useIsMobile()
   const { playSound: playErrorSound } = useSound('/thirty-factor-authentication/sounds/error.mp3')
@@ -39,6 +47,7 @@ export default function ThirtyFactorAuthentication() {
       </div>
     )
 
+  if (!playerId) return
   return (
     <>
       <div
