@@ -24,6 +24,8 @@ export default function ThirtyFactorAuthentication() {
     const storedPlayerId = localStorage.getItem('playerId') as PlayerIds | null
     if (storedPlayerId) {
       setPlayerId(storedPlayerId)
+    } else {
+      setPlayerId(PlayerIds.Biden)
     }
   }, [])
 
@@ -48,7 +50,7 @@ export default function ThirtyFactorAuthentication() {
       </div>
     )
 
-  if (!playerId) return
+  if (playerId === undefined) return
   return (
     <>
       <div
