@@ -11,6 +11,7 @@ export type ControlProps = {
 
 export type ContentProps = {
   playerId: PlayerIds
+  setPlayerId: (id: PlayerIds) => void
   validateAdvance: () => void
   cancelAdvance: () => void
   handleLevelAdvance: (skipVerify?: boolean) => void

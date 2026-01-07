@@ -17,7 +17,7 @@ import Link from 'next/link'
 import { useSound } from '../utils/useSounds'
 
 export default function ThirtyFactorAuthentication() {
-  const [playerId] = useState(PlayerIds.TheRock)
+  const [playerId, setPlayerId] = useState(PlayerIds.Biden)
   const [isGameOver, setIsGameOver] = useState(false)
   const isMobile = useIsMobile()
   const { playSound: playErrorSound } = useSound('/thirty-factor-authentication/sounds/error.mp3')
@@ -58,6 +58,7 @@ export default function ThirtyFactorAuthentication() {
             <DndProvider backend={HTML5Backend}>
               <AuthContainer
                 playerId={playerId}
+                setPlayerId={setPlayerId}
                 setIsGameOver={setIsGameOver}
                 Content={content}
                 Controls={controls}

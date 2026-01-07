@@ -9,6 +9,7 @@ import { useEffectInitializer } from '../utils/useEffectUnsafe'
 
 type AuthContainerProps = {
   playerId: PlayerIds
+  setPlayerId: (id: PlayerIds) => void
   baseProps: LevelProps
   setIsGameOver: (value: boolean) => void
   Content: (props: ContentProps) => JSX.Element | null
@@ -19,6 +20,7 @@ type AuthContainerProps = {
 
 export const AuthContainer = ({
   playerId,
+  setPlayerId,
   baseProps,
   setIsGameOver,
   Content,
@@ -86,6 +88,7 @@ export const AuthContainer = ({
           <div id="auth-content" className="px-4 py-8 bg-white rounded-b-lg">
             <Content
               playerId={playerId}
+              setPlayerId={setPlayerId}
               validateAdvance={validateAdvance}
               cancelAdvance={cancelAdvance}
               handleLevelAdvance={onAdvance}

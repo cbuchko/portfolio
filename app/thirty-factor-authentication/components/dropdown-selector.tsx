@@ -11,6 +11,7 @@ type DropdownSelectorProps = {
   onOptionSelect: (option: string) => void
   width: number
   label?: string
+  includeBlankOption?: boolean
 }
 
 export const DropdownSelector = ({
@@ -22,6 +23,7 @@ export const DropdownSelector = ({
   width,
   label,
   onOptionSelect,
+  includeBlankOption = true,
 }: DropdownSelectorProps) => {
   const [selectedOption, setSelectedOption] = useState(defaultOption)
   const isOpen = id === activeId
@@ -69,7 +71,7 @@ export const DropdownSelector = ({
       </button>
       {isOpen && (
         <div className="absolute mt-0.5 bg-white w-full border rounded-md z-100">
-          {[' ', ...options].map((sign, idx) => (
+          {(includeBlankOption ? ['', ...options] : [...options]).map((sign, idx) => (
             <div
               key={idx}
               onClick={() => handleOptionSelect(sign)}
