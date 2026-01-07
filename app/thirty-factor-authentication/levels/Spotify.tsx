@@ -78,7 +78,7 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
     if (intervalRef.current) clearInterval(intervalRef.current)
     const hasWon = score >= scoreThreshold
     if (!hasWon) handleLevelAdvance()
-    else validateAdvance()
+    else handleLevelAdvance(true)
   }, [handleLevelAdvance, stopSoundtrack, score, scoreThreshold, validateAdvance])
 
   //takes the list of Cadences and smartly spawns them based on their delays
@@ -310,11 +310,10 @@ const RythymPad = ({
 
   const handleClick = () => {
     playClickSound()
-    // playSoundtrackHandler()
     const padSpawnTime = padLifeTimeRef.current
     const currentTime = new Date().getTime()
     const elapsedTime = currentTime - padSpawnTime
-    if (elapsedTime >= delayInMs - 20) {
+    if (elapsedTime >= delayInMs - 40) {
       handlePadCleanup(Score.great)
     } else if (elapsedTime >= delayInMs / 1.5) {
       handlePadCleanup(Score.good)

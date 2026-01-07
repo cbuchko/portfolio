@@ -34,7 +34,7 @@ export const UPSFinishContent = ({
     .split(/\n\s*\n/)
   return (
     <>
-      <div>
+      <div className="border p-2 rounded-md">
         {paragraphGroups.map((group, i) => {
           const lines = group.split('\n').map((line) => line.trim())
           // Doing it this way so the text is easily editable and usable by the vowel counter function
@@ -130,7 +130,7 @@ There's got to be something you could do instead.
 Maybe you could just tell me how many E's are in this body of text?
 To prove you're not a robot or something like that I don't know.
 
-You're saying counting E's is the exact thing a robot would be good at?
+You're saying counting the letter E is the exact thing a robot would be good at?
 Copy and paste this whole thing into ChatGPT then. See if I care.
 Or use the countless other websites that will tell you the answer.
 I promise there aren't any bonus incentives for doing this honestly.

@@ -29,7 +29,7 @@ import { FishingContent, FishingControls } from './Fishing'
 import { RoadTripContent } from './RoadTrip'
 import { BrainScanContent, BrainScanControls } from './BrainScan'
 import { useSound } from '@/app/utils/useSounds'
-import { SpotifyContent, SpotifyControls } from './Spotify'
+import { SpotifyContent } from './Spotify'
 import { MastermindContent } from './Mastermind'
 import { SelfCheckoutContent } from './SelfCheckout'
 
@@ -110,7 +110,6 @@ export const useLevels = () => {
     { content: QuotesContent },
     { content: BrainScanContent, controls: BrainScanControls },
     { content: MaintenanceContent, controls: MaintenanceControls }, //15
-    { content: MastermindContent },
     { content: SelfCheckoutContent },
     { content: IMDBContent },
     { content: RoadTripContent, requiresLoad: true },
@@ -119,11 +118,12 @@ export const useLevels = () => {
     { content: FishingContent, controls: FishingControls },
     { content: TaxReturnContent, controls: TaxReturnControls },
     { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true },
+    { content: MastermindContent },
     { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true }, //25
-    { content: SpotifyContent, controls: SpotifyControls },
+    { content: SpotifyContent },
     { content: BombDefusalContent, controls: BombDefusalControls },
-    { content: EinsteinContent, controls: EinsteinControls },
     { content: PapersPleaseContent },
+    { content: EinsteinContent, controls: EinsteinControls },
     { content: UndertaleContent }, //30
   ]
 

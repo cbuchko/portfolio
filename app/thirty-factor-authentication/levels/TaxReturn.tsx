@@ -51,12 +51,12 @@ export const TaxReturnContent = ({
   }, [])
 
   const inputTarget = taxItems.total
-
   const { firstName, lastName, dob } = PlayerInformation[playerId].taxReturn
 
   const handleInputChange = (input: string) => {
     setIncomeInput(input)
-    if (inputTarget === parseInt(input)) {
+    const removedComma = input.split(',').join('')
+    if (inputTarget === parseInt(removedComma)) {
       validateAdvance()
     } else {
       cancelAdvance()
@@ -115,7 +115,10 @@ export const TaxReturnContent = ({
             <FormLineItem label="Add line 37 and line 38" number={43} />
             <FormLineItem label="Multiply line 39 and 41" number={44} />
             <FormLineItem label="Multiply line 40 by line 43" number={45} />
-            <FormLineItem label="Divide line 44 by line 42 (round down)" number={46} />
+            <FormLineItem
+              label="Divide line 44 by line 42 (round down to a whole number)"
+              number={46}
+            />
             <FormLineItem label="Add line 45 and line 46" number={47} />
             <FormLineItem label="NET INCOME: Add line 36 and line 47" number={48} />
           </div>

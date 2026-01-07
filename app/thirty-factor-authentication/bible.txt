@@ -8,6 +8,7 @@ Spotify
     - Mouse trail
     - Show score instead of "good" "great"
     - Pads disappear instantly and the score lingers for a bit
+Vowel Counter - Find a way to make it insanely clear where to count the E's
 
 
 Vowel Counter - This one just stands out as under baked
@@ -26,6 +27,7 @@ Cloudflare
 Sentry for monitoring
 Re-add Name logo
 Devlog in my blog
+Dark Mode support
 
 STRECH GOALS:
 Mobile
