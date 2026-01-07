@@ -44,7 +44,7 @@ const cadences = [
 ]
 
 type Position = { x: number; y: number }
-export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentProps) => {
+export const SpotifyContent = ({ handleLevelAdvance }: ContentProps) => {
   const maxRythym = useMemo(() => cadences.reduce((acc, curr) => acc + curr.count, 0), [])
   const [rhythmPads, setRhythmPads] = useState<RythymPadType[]>([])
   const cadenceIndexRef = useRef(0)
@@ -52,11 +52,11 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
   const intervalRef = useRef<NodeJS.Timeout>(null)
   const [previousPosition, setPreviousPosition] = useState<Position | null>(null)
   const [secondaryPreviousPosition, setSecondaryPreviousPosition] = useState<Position | null>(null)
-  const {
-    playSound: playSoundtrack,
-    isAudioPlayingRef,
-    stopSound: stopSoundtrack,
-  } = useSound('/thirty-factor-authentication/sounds/open-the-sky.wav', 0.3, true)
+  const { playSound: playSoundtrack, stopSound: stopSoundtrack } = useSound(
+    '/thirty-factor-authentication/sounds/open-the-sky.wav',
+    0.3,
+    true
+  )
   const [score, setScore] = useState(0)
   const [isInsideCadence, setIsInsideCadence] = useState(false)
 
@@ -79,7 +79,7 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
     const hasWon = score >= scoreThreshold
     if (!hasWon) handleLevelAdvance()
     else handleLevelAdvance(true)
-  }, [handleLevelAdvance, stopSoundtrack, score, scoreThreshold, validateAdvance])
+  }, [handleLevelAdvance, stopSoundtrack, score, scoreThreshold])
 
   //takes the list of Cadences and smartly spawns them based on their delays
   useEffect(() => {
@@ -124,12 +124,6 @@ export const SpotifyContent = ({ handleLevelAdvance, validateAdvance }: ContentP
       resetGame()
     }
   }, [padAmount, maxRythym, resetGame])
-
-  const playSoundtrackHandler = () => {
-    if (!isAudioPlayingRef.current) {
-      playSoundtrack()
-    }
-  }
 
   return (
     <>

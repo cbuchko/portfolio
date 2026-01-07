@@ -83,7 +83,6 @@ export const useLevels = () => {
     setLevel,
     handleLevelAdvance,
     resetLevel,
-    requiresLoad: false,
     upsTrackingCode,
     upsTrackingTime,
     setUPSTrackingCode,
@@ -134,7 +133,8 @@ export const useLevels = () => {
       baseProps,
       content: OneContent,
       controls: OneControls,
+      requiresLoad: false,
     }
   }
-  return { baseProps, ...levelDef }
+  return { baseProps, ...levelDef, requiresLoad: levelDef.requiresLoad || false }
 }

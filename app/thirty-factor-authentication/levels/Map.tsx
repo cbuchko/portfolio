@@ -44,7 +44,7 @@ export default function Map({
 }: MapProps) {
   useEffect(() => {
     onLoad?.()
-  }, [])
+  }, [onLoad])
 
   return (
     <MapContainer
