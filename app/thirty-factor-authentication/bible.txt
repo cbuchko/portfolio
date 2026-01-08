@@ -23,6 +23,7 @@ Sentry for monitoring
 Re-add Name logo
 Devlog in my blog
 Dark Mode support
+Count mistakes for endgame screen
 
 STRECH GOALS:
 Mobile
@@ -46,3 +47,14 @@ Paris Hilton
 Lady Gaga
 Mike Tyson
 The Rock
+
+devlog ideas:
+sections:
+    - ideation/inspirations
+    - level creation
+        - how did i come up with levels
+        - methodology
+    - playtesting
+    - revisions
+    - what worked/what didn't
+    - using ai

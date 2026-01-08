@@ -1,7 +1,7 @@
 export enum PlayerIds {
   Biden,
   TheRock,
-  // Devito,
+  Devito,
   // Snoop,
   // Labeouf,
   // Coolidge,
@@ -375,6 +375,169 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       hair: 'BLO',
       children: '3',
       coat: 'nevada.svg',
+    },
+  },
+  [PlayerIds.Devito]: {
+    name: 'Danny DeVito',
+    fullName: 'Daniel Michael DeVito Jr. ',
+    fullNameAliases: [
+      'Daniel Michael DeVito Jr.',
+      'Daniel Michael DeVito Jr',
+      'Daniel Michael DeVito Junior',
+      'Daniel Michael DeVito, Jr.',
+      'Daniel Michael DeVito, Jr',
+      'Daniel Michael DeVito, Junior',
+    ],
+    birthCity: 'neptune',
+    zodiac: 'scorpio-sagittarius-sagittarius',
+    taxReturn: {
+      lastName: 'DeVito',
+      firstName: 'Danny M',
+      dob: '1944/11/17',
+    },
+    imdb: [
+      {
+        type: 'Movie',
+        date: '1992',
+        creator: 'Tim Burton',
+        genre: 'Action/Sci-fi',
+        starring: 'Michael Keaton, Michelle Pfeiffer',
+        synopsis:
+          'The monstrous Penguin, who lives in the sewers beneath Gotham, tries to topple the Batman.',
+        answer: 'Batman Returns',
+      },
+      {
+        type: 'Movie',
+        date: '1996',
+        creator: 'Danny DeVito',
+        genre: 'Family/Comedy',
+        starring: 'Mara Wilson, Rhea Perlman',
+        synopsis: 'A gifted girl is forced to put up with a crude father and mother',
+        answer: 'Matilda',
+      },
+      {
+        type: 'Movie',
+        date: '1997',
+        creator: 'Ron Clements, John Musker',
+        genre: 'Family/Musical',
+        starring: 'James Woods, Tate Donovan',
+        synopsis:
+          'The son of a god was snatched as a baby and forced to live among mortals as a half-man, half-god.',
+        answer: 'Hercules',
+      },
+    ],
+    quotes: [
+      {
+        quote:
+          "I don't know how how many years on this Earth I got left. I'm gonna get real weird with it.",
+        isValid: true,
+        origin: 'Danny Devito as Frank Reynolds',
+      },
+      {
+        quote:
+          "I've been to the Leaning Tower of Pisa. It's a tower, and it's leaning. You look at it, but nothing happens, so then you look for someplace to get a sandwich.",
+        isValid: true,
+        origin: 'Danny DeVito',
+      },
+      {
+        quote: 'Can I offer you a nice egg in this trying time?',
+        isValid: true,
+        origin: 'Danny Devito as Frank Reynolds',
+      },
+      {
+        quote:
+          "We're just air conditioners, walking around this planet, screwing eachothers brains out.",
+        isValid: true,
+        origin: 'Danny DeVito as Frank Reynolds',
+      },
+      {
+        quote: 'You gotta pay the troll toll if you wanna get into this boy’s hole.',
+        isValid: true,
+        origin: 'Danny DeVito as Frank Reynolds',
+      },
+      {
+        quote: "When I'm dead, just throw me in the trash.",
+        isValid: true,
+        origin: 'Danny DeVito as Frank Reynolds',
+      },
+      {
+        quote: 'I am self‑centred. I just adore myself.',
+        isValid: true,
+        origin: 'Danny DeVito',
+      },
+      {
+        quote:
+          "It's fun to be on the edge. I think you do your best work when you take chances, when you're not safe, when you're not in the middle of the road, at least for me, anyway.",
+        isValid: true,
+        origin: 'Danny DeVito',
+      },
+      {
+        quote: 'Oh, look at me! The millionaire who goes to see doctors!',
+        isValid: false,
+        origin: 'Charlie Kelly',
+      },
+      {
+        quote: 'First of all, through God, all things are possible. So jot that down.',
+        isValid: false,
+        origin: 'Mac',
+      },
+      {
+        quote: 'I’m playing both sides so I always come out on top.',
+        isValid: false,
+        origin: 'Mac',
+      },
+      {
+        quote:
+          'If you don’t like me, that’s fine. I don’t need you to like me. But don’t tell me I’m wrong for being who I am. I’m not hurting anybody. I’m just being me.',
+        isValid: false,
+        origin: 'Larry David',
+      },
+      {
+        quote:
+          'It’s not a lie if you believe it. Because if you believe it, then it’s true to you, and if it’s true to you, then how can anyone say it’s a lie?',
+        isValid: false,
+        origin: 'George Costanza',
+      },
+      {
+        quote: "Well, I don't want to blame it all on 9/11, but it certainly didn't help.",
+        isValid: false,
+        origin: 'Tobias Funke',
+      },
+      {
+        quote:
+          'I’m afraid that I prematurely shot my wad on what was supposed to be a dry run, if you will. Now I’m afraid that I have a mess on my hands.',
+        isValid: false,
+        origin: 'Tobias Funke',
+      },
+      {
+        quote: 'Cat in the wall, eh! Ok, now you’re talking my language. I know this game.',
+        isValid: false,
+        origin: 'Charlie Kelly',
+      },
+    ],
+    license: {
+      location: 'New Jeresey',
+      headshot: 'danny.webp',
+      signature: 'danny.svg',
+      name: 'Daniel Michael DeVito Jr.',
+      dob: '1944-Nov-17',
+      height: '1.52 m',
+      eyes: 'BRO',
+      hair: 'BRO',
+      children: '3',
+      coat: 'new_jersey.png',
+    },
+    fakeLicense: {
+      location: 'New York',
+      headshot: 'oldguy.jpg',
+      signature: 'bush.svg',
+      name: 'Daniel Mitchell DeVito Jr.',
+      dob: '1944-Nov-04',
+      height: '1.60 m',
+      eyes: 'BLU',
+      hair: 'GRA',
+      children: '1',
+      coat: 'new_york.svg',
     },
   },
 }

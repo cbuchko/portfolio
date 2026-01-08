@@ -68,6 +68,7 @@ const cities = [
   { name: 'Macon', coordinates: [32.8407, -83.6324] },
   { name: 'scranton', coordinates: [41.4103, -75.6611] }, //biden
   { name: 'hayward', coordinates: [37.6688, -122.081] }, //the rock
+  { name: 'neptune', coordinates: [40.2095, -74.027] }, //danny devito
 
   // Canada
   { name: 'Toronto', coordinates: [43.6511, -79.347] },
