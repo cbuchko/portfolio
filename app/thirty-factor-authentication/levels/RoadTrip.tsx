@@ -180,10 +180,9 @@ const RoadTripMarkers: Marker[] = [
     coordinates: [49.2827, -123.1207],
     message: 'Oh Canada.',
   },
-  {
-    name: 'scranton',
-    coordinates: [41.4103, -75.6611],
-  },
+  { name: 'scranton', coordinates: [41.4103, -75.6611] }, //biden
+  { name: 'hayward', coordinates: [37.6688, -122.081] }, //the rock
+  { name: 'neptune', coordinates: [40.2095, -74.027] }, //danny devito
   {
     name: 'London',
     coordinates: [51.5072, -0.1276],
