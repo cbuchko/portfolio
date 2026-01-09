@@ -6,7 +6,7 @@ import './waves.css'
 import { useLevels } from './levels/useLevel'
 import { useMemo, useState } from 'react'
 import { PlayerIds } from './player-constants'
-import { devMode, maxLevel } from './constants'
+import { devMode, maxLevel, mobileWidthBreakpoint } from './constants'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { TouchBackend } from 'react-dnd-touch-backend'
@@ -15,8 +15,11 @@ import Image from 'next/image'
 import { VictoryScreen } from './VictoryScreen'
 import { useSound } from '../utils/useSounds'
 import { useEffectInitializer } from '../utils/useEffectUnsafe'
+import { useIsMobile } from '../utils/useIsMobile'
+import classNames from 'classnames'
 
 export default function ThirtyFactorAuthentication() {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const [playerId, setPlayerId] = useState<PlayerIds>()
 
   useEffectInitializer(() => {
@@ -53,7 +56,12 @@ export default function ThirtyFactorAuthentication() {
         className="relative w-screen h-screen flex flex-col overflow-y-auto"
         style={{ scrollbarGutter: 'stable' }}
       >
-        <div className="absolute left-[50%] -translate-x-[50%] top-8 flex items-center gap-2 bg-white rounded-md p-2">
+        <div
+          className={classNames('absolute flex items-center gap-2 bg-white rounded-md p-2', {
+            'left-[50%] -translate-x-[50%] top-8 ': !isMobile,
+            'top-16': isMobile,
+          })}
+        >
           <Image
             src="/thirty-factor-authentication/horizontal-logo.png"
             alt="logo"
@@ -86,7 +94,12 @@ export default function ThirtyFactorAuthentication() {
         )}
         {isCompleted && <VictoryScreen playerId={playerId} levelProps={baseProps} />}
         {isGameOver && (
-          <div className="absolute top-[25%] -translate-y-[50%] left-[50%] -translate-x-[50%] max-w-[650px] bg-red-100 p-8 rounded-md shadow-lg">
+          <div
+            className={classNames(
+              'absolute top-[25%] -translate-y-[50%] left-[50%] -translate-x-[50%] bg-red-100 p-8 rounded-md shadow-lg',
+              { '!top-[50%] w-full': isMobile, 'max-w-[650px]': !isMobile }
+            )}
+          >
             <h2 className="text-4xl mb-4">You have failed to authenticate.</h2>
             <h3>
               To protect your account, it has been temporarily locked and all data has been deleted.

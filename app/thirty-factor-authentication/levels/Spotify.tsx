@@ -136,7 +136,7 @@ export const SpotifyContent = ({ handleLevelAdvance }: ContentProps) => {
       <div className="w-full flex justify-center mt-4">
         <button
           className={classNames('border-2 py-1 px-3 rounded-md cursor-pointer auth-button', {
-            'opacity-0': isStarted,
+            'opacity-0 pointer-events-none': isStarted,
           })}
           onClick={() => {
             setIsStarted(true)

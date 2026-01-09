@@ -345,6 +345,7 @@ const ErrorContainer = ({
   isAgeVerificationError?: boolean
   setIsAgeVerified: (isVerified: boolean) => void
 }) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const audioRef = useRef<HTMLAudioElement>(null)
 
   useEffect(() => {
@@ -356,7 +357,12 @@ const ErrorContainer = ({
   return (
     <>
       <div className="fixed w-screen h-screen top-0 left-0 bg-red-500 error-container pointer-events-none" />
-      <div className="fixed flex flex-col items-center text-[100px] top-[75%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center text-black z-100 pointer-events-none">
+      <div
+        className={classNames(
+          'fixed flex flex-col items-center text-[100px] top-[75%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center text-black z-100 pointer-events-none',
+          { '!text-[50px] !top-[50%]': isMobile }
+        )}
+      >
         {text}
         {isAgeVerificationError && (
           <button

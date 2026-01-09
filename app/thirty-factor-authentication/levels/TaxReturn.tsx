@@ -2,6 +2,9 @@ import { useMemo, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { PlayerInformation } from '../player-constants'
 import { TextInput } from '../components/TextInput'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import { mobileWidthBreakpoint } from '../constants'
+import classNames from 'classnames'
 
 type TaxReturn = {
   income: number
@@ -44,6 +47,8 @@ export const TaxReturnContent = ({
   cancelAdvance,
   handleLevelAdvance,
 }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const [incomeInput, setIncomeInput] = useState('')
 
   const taxItems = useMemo(() => {
@@ -72,7 +77,12 @@ export const TaxReturnContent = ({
         onChange={handleInputChange}
         onSubmit={handleLevelAdvance}
       />
-      <div className="absolute -bottom-12 border  h-[470px] -translate-x-[50%] translate-y-[100%] left-[50%] shadow-xl p-2 bg-gray-100">
+      <div
+        className={classNames(
+          'absolute -bottom-12 border  -translate-x-[50%] translate-y-[100%] left-[50%] shadow-xl p-2 bg-gray-100',
+          { 'scale-75 !bottom-0': isMobile }
+        )}
+      >
         <div className="text-center mb-2">2025 Income Tax Return</div>
         <div className="border w-max h-max">
           <div className="flex">
@@ -147,12 +157,13 @@ type LineItemProps = {
   number: number
 }
 const FormLineItem = ({ label, amount, number }: LineItemProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
   return (
-    <div className=" text-xs pl-2 pt-1 pr-4 mx-2 border-b flex justify-between items-end">
+    <div className="text-xs pl-2 pt-1 pr-4 mx-2 border-b flex justify-between items-end">
       <div>{label}</div>
       <div className="flex">
         <input
-          className="bg-white px-2 field-sizing-content"
+          className={classNames('bg-white px-2 field-sizing-content', { 'w-[60px]': isMobile })}
           value={amount?.toLocaleString('en-us')}
           onChange={() => {}}
         />

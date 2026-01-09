@@ -195,7 +195,6 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
           </div>
         </div>
       </div>
-      <ul></ul>
       {message && (
         <div
           key={message}

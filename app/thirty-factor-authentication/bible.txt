@@ -71,9 +71,8 @@ sections:
 Responsiveness Notes:
 General: In general the app doesn't support a small enough width
     Biometric: Finger scanner seems to activate on click not on hold, beginning scan is misplaced
-    Post-it: Can't drag postits
     Brain Scan: Similar to biometric, seems to only works on click
-    Shopping Cart: Can't drag, needs vertical stack
+    Shopping Cart: No ghost drag item
     Fishing: Needs a spacebar replacement
-    Papers Please: Documents aren't draggable, not enough room to drag them to open areas
     Undertale: Needs a WASD replacement
+    Put a message on Game Over encouraging people to try it on browser?
