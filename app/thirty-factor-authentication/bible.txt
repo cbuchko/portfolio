@@ -8,6 +8,13 @@ Spotify
     - Mouse trail
     - Pads disappear instantly and the score lingers for a bit
 
+
+Brain Scan:
+    - People aren't understanding what they need to do right away
+    - Health bar is too similar to fingerprint
+    - Not enough positive feedback for staying in the zone
+    - It's unclear that you need to wait it out
+
 Papers Please:
     - When other characters are added, make them show in every iteration, so you cant brute force
 
@@ -58,3 +65,15 @@ sections:
     - revisions
     - what worked/what didn't
     - using ai
+
+
+
+Responsiveness Notes:
+General: In general the app doesn't support a small enough width
+    Biometric: Finger scanner seems to activate on click not on hold, beginning scan is misplaced
+    Post-it: Can't drag postits
+    Brain Scan: Similar to biometric, seems to only works on click
+    Shopping Cart: Can't drag, needs vertical stack
+    Fishing: Needs a spacebar replacement
+    Papers Please: Documents aren't draggable, not enough room to drag them to open areas
+    Undertale: Needs a WASD replacement

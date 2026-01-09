@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { DropdownSelector } from '../components/dropdown-selector'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import { mobileWidthBreakpoint } from '../constants'
+import classNames from 'classnames'
 
 type CategoryIds = 'color' | 'nationality' | 'drink' | 'cigarette' | 'pet'
 type Answer = Record<number, Record<CategoryIds, string>>
 
 export const EinsteinContent = ({ validateAdvance, cancelAdvance }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const [activeDropdownId, setActiveDropdownId] = useState<string>()
 
   const [selectedAnswers, setSelectedAnswers] = useState<Answer>({})
@@ -39,8 +44,13 @@ export const EinsteinContent = ({ validateAdvance, cancelAdvance }: ContentProps
       <p className="text-lg mt-3">
         Submit only after <span className="font-bold">all</span> dropdowns are correctly filled.
       </p>
-      <div className="grid grid-cols-6 gap-4 items-center justify-center -translate-x-4 mt-8 select-none">
-        <div />
+      <div
+        className={classNames(
+          'grid grid-cols-6 gap-4 items-center justify-center  mt-8 select-none',
+          { '!grid-cols-5': isMobile, '-translate-x-4': !isMobile }
+        )}
+      >
+        {!isMobile && <div />}
         <h5 className="text-center font-medium translate-y-2">House #1</h5>
         <h5 className="text-center font-medium translate-y-2">House #2</h5>
         <h5 className="text-center font-medium translate-y-2">House #3</h5>
@@ -111,16 +121,19 @@ const SelectionContainer = ({
   setActiveDropdownId,
   handleSelect,
 }: SelectionContainerProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
+  const dropdownWidth = !isMobile ? 150 : 65
   return (
     <>
-      <h5 className="capitalize text-center translate-x-2">{id}</h5>
+      {!isMobile && <h5 className="capitalize text-center translate-x-2">{id}</h5>}
       <DropdownSelector
         id={`${id}-1`}
         activeId={activeDropdownId}
         setActiveId={setActiveDropdownId}
         options={options}
         onOptionSelect={(option) => handleSelect(option, 1, id)}
-        width={150}
+        width={dropdownWidth}
       />
       <DropdownSelector
         id={`${id}-2`}
@@ -128,7 +141,7 @@ const SelectionContainer = ({
         setActiveId={setActiveDropdownId}
         options={options}
         onOptionSelect={(option) => handleSelect(option, 2, id)}
-        width={150}
+        width={dropdownWidth}
       />
       <DropdownSelector
         id={`${id}-3`}
@@ -136,7 +149,7 @@ const SelectionContainer = ({
         setActiveId={setActiveDropdownId}
         options={options}
         onOptionSelect={(option) => handleSelect(option, 3, id)}
-        width={150}
+        width={dropdownWidth}
       />
       <DropdownSelector
         id={`${id}-4`}
@@ -144,7 +157,7 @@ const SelectionContainer = ({
         setActiveId={setActiveDropdownId}
         options={options}
         onOptionSelect={(option) => handleSelect(option, 4, id)}
-        width={150}
+        width={dropdownWidth}
       />
       <DropdownSelector
         id={`${id}-5`}
@@ -152,7 +165,7 @@ const SelectionContainer = ({
         setActiveId={setActiveDropdownId}
         options={options}
         onOptionSelect={(option) => handleSelect(option, 5, id)}
-        width={150}
+        width={dropdownWidth}
       />
     </>
   )

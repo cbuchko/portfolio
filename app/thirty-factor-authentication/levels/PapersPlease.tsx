@@ -5,6 +5,8 @@ import Image from 'next/image'
 import classNames from 'classnames'
 import { makeAuthCode, shuffle } from '../utils'
 import { useElementDrag } from '../useElementDrag'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import { mobileWidthBreakpoint } from '../constants'
 
 type Discrepancy = {
   id: string
@@ -37,6 +39,8 @@ const DiscrepancyBase: Record<string, Discrepancy> = {
 }
 
 export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const [isShowingCitation, setIsShowingCitation] = useState(false)
   const { gameInfo: baseGameInfo, discrepancyKeys: baseDiscrepancyKeys } = useMemo(
     () => generateDiscrepancies(playerId),
@@ -102,7 +106,7 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
       <p className="mb-4 text-lg">
         Our authenticators are at their limit. Please manually authenticate this user for us.
       </p>
-      <div className="flex justify-between gap-8">
+      <div className={classNames('flex justify-between gap-8', { 'flex-col': isMobile })}>
         <div>
           <p className="text-lg max-w-[400px]">
             Identify all information on each document that is incorrect or otherwise invalid.
@@ -114,7 +118,12 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
             <li>Click APPROVED if you identified no errors</li>
           </ol>
         </div>
-        <div className="border w-[300px] min-h-[200px] text-sm p-2 rounded-sm italic mono">
+        <div
+          className={classNames(
+            'border w-[300px] min-h-[200px] text-sm p-2 rounded-sm italic mono',
+            { 'w-full': isMobile }
+          )}
+        >
           <div className="font-bold">Errors Identified:</div>
           <div className="flex flex-wrap gap-4 mt-2">
             {Array.from(selectedDiscrepancyIds).map((discrepancyId) => {
@@ -147,7 +156,7 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
         <EntryPermit gameInfo={gameInfo} addDiscrepancy={handleDiscrepancySelect} />
       )}
       {isShowingCitation && <Citation discrepancyKeys={discrepancyKeys} onReset={handleReset} />}
-      <div className="flex justify-end mt-4 gap-8">
+      <div className={classNames('flex justify-end mt-4 gap-8', { '!justify-center': isMobile })}>
         <button
           className="button-stamp bg-red-400 font-extrabold tracking-widest disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
           onClick={handleDecline}
@@ -179,6 +188,8 @@ const DriversLicense = ({
   gameInfo: GameInfo
   addDiscrepancy: (id: string) => void
 }) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const licenseRef = useRef<HTMLDivElement>(null)
 
   const { position, handleDrag, isDragging } = useElementDrag(licenseRef, {
@@ -200,7 +211,10 @@ const DriversLicense = ({
         left: position.x,
         top: position.y,
       }}
-      className="border w-[400px] p-3 rounded-sm license-background depth-container select-none cursor-grab z-100"
+      className={classNames(
+        'border w-[400px] p-3 rounded-sm license-background depth-container select-none cursor-grab z-100',
+        { 'scale-60': isMobile }
+      )}
       onMouseDown={handleDrag}
     >
       <div className="tracking-widest text-center mb-4 flex justify-between gap-2">
@@ -393,6 +407,7 @@ const EntryPermit = ({
   gameInfo: GameInfo
   addDiscrepancy: (id: string) => void
 }) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const permitRef = useRef<HTMLDivElement>(null)
 
   const { position, handleDrag, isDragging } = useElementDrag(permitRef, {
@@ -414,7 +429,10 @@ const EntryPermit = ({
         left: position.x,
         top: position.y,
       }}
-      className="outline-2 -outline-offset-16 outline-amber-800 w-[350px] h-[470px] shadow-xl py-2 px-8 bg-yellow-50 cursor-grab select-none flex flex-col items-center z-50"
+      className={classNames(
+        'outline-2 -outline-offset-16 outline-amber-800 w-[350px] h-[470px] shadow-xl py-2 px-8 bg-yellow-50 cursor-grab select-none flex flex-col items-center z-50',
+        { 'scale-60': isMobile }
+      )}
       onMouseDown={handleDrag}
     >
       <h2 className="absolute top-0 text-2xl text-center !bg-yellow-50">THIRTY FACTOR</h2>

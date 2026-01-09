@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import Image from 'next/image'
+import { mobileWidthBreakpoint } from '../constants'
+import { useIsMobile } from '@/app/utils/useIsMobile'
 
 const levelDuration = 1000 * 30
 export const MaintenanceContent = ({ handleLevelAdvance }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const timeoutRef = useRef<NodeJS.Timeout>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
   const [timeElapsed, setTimeElapsed] = useState(0)
@@ -45,6 +49,7 @@ export const MaintenanceContent = ({ handleLevelAdvance }: ContentProps) => {
     }
   }, [handleLevelAdvance])
 
+  const imageSizes = !isMobile ? 150 : 100
   return (
     <>
       <p className="text-lg">{`Sorry, the Authentication service is currently under maintenance.`}</p>
@@ -55,20 +60,20 @@ export const MaintenanceContent = ({ handleLevelAdvance }: ContentProps) => {
         <Image
           src="/thirty-factor-authentication/maintenance.webp"
           alt="maintenance"
-          height={150}
-          width={150}
+          height={imageSizes}
+          width={imageSizes}
         />
         <Image
           src="/thirty-factor-authentication/sorry.jpg"
           alt="maintenance"
-          height={150}
-          width={150}
+          height={imageSizes}
+          width={imageSizes}
         />
         <Image
           src="/thirty-factor-authentication/work.jpg"
           alt="maintenance"
-          height={150}
-          width={150}
+          height={imageSizes}
+          width={imageSizes}
         />
       </div>
       {timeElapsed > 60 * 3 && (

@@ -1,11 +1,12 @@
 import { JSX, useCallback, useState } from 'react'
 import { PlayerIds, PlayerInformation } from './player-constants'
 import { ContentProps, ControlProps } from './levels/types'
-import { devMode, maxLevel } from './constants'
+import { devMode, maxLevel, mobileWidthBreakpoint } from './constants'
 import classNames from 'classnames'
 import { LevelProps } from './levels/useLevel'
 import Image from 'next/image'
 import { useEffectInitializer } from '../utils/useEffectUnsafe'
+import { useIsMobile } from '../utils/useIsMobile'
 
 type AuthContainerProps = {
   playerId: PlayerIds
@@ -28,6 +29,8 @@ export const AuthContainer = ({
   playErrorSound,
   requiresLoad,
 }: AuthContainerProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const [isLoading, setIsLoading] = useState(false)
   const [isAdvanceVerified, setIsAdvanceVerified] = useState(false)
   const [errorCount, setErrorCount] = useState(0)
@@ -59,13 +62,16 @@ export const AuthContainer = ({
     <>
       <div
         id="auth-container"
-        className={classNames('relative min-w-[400px] mx-auto mt-28 shadow-md', {
+        className={classNames('relative  mx-auto mt-28 shadow-md', {
           'opacity-0 pointer-events-none': isLoading && requiresLoad,
         })}
       >
         <div
           id="auth-header"
-          className="flex justify-between items-center min-w-[400px] py-1 px-4 rounded-t-md bg-blue-300 border"
+          className={classNames(
+            'flex justify-between items-center py-1 px-4 rounded-t-md bg-blue-300 border',
+            { 'min-w-[400px]': !isMobile }
+          )}
         >
           <div className="flex gap-2 items-center min-h-[20px]">
             <h6 className="w-full text-xs">{`Authenticating: ${PlayerInformation[playerId].name}`}</h6>

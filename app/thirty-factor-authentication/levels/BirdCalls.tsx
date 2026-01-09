@@ -4,11 +4,15 @@ import classNames from 'classnames'
 import { shuffle } from '../utils'
 import Image from 'next/image'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import { mobileWidthBreakpoint } from '../constants'
 
 const selectTargetBird = () => {
   return shuffle(targetBirds)[0].id
 }
 export const BirdCallContent = ({ validateAdvance, cancelAdvance, setIsLoading }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const [selectedBird, setSelectedBird] = useState<string>()
   const [birdsShuffled, setBirdsShuffled] = useState<{ id: string; url: string }[] | null>(null)
   const [targetBird, setTargetBird] = useState<string>()
@@ -28,15 +32,19 @@ export const BirdCallContent = ({ validateAdvance, cancelAdvance, setIsLoading }
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <p className="text-lg">Identify the Bird Call</p>
+      <div className={classNames('flex items-center justify-between', { 'flex-col': isMobile })}>
+        <p className="text-lg w-max mr-2">Identify the Bird Call</p>
         <audio
           controls
           controlsList="nodownload"
           src={`/thirty-factor-authentication/birds/${targetBird}.mp3`}
         />
       </div>
-      <div className="grid grid-cols-3 gap-4 mt-4">
+      <div
+        className={classNames('grid grid-cols-3 gap-4 mt-4', {
+          '!grid-cols-2 place-items-center': isMobile,
+        })}
+      >
         {birdsShuffled &&
           birdsShuffled.map((bird) => (
             <BirdThumbnail
@@ -63,6 +71,8 @@ const BirdThumbnail = ({
   setSelectedBird: React.Dispatch<React.SetStateAction<string | undefined>>
   validateSelect: (id?: string) => void
 }) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const isSelected = selectedBird === bird.id
 
   const handleSelect = () => {
@@ -74,19 +84,18 @@ const BirdThumbnail = ({
     validateSelect(bird.id)
   }
 
+  const birdSize = isMobile ? 150 : 200
   return (
     <Image
       key={bird.id}
       src={bird.url}
       alt={bird.id}
-      height={'200'}
-      width={'200'}
-      className={classNames(
-        'h-[200px] w-[200px] cursor-pointer transition-transform duration-500',
-        {
-          'outline-6 outline-yellow-300 rounded-md scale-75 shadow-lg': isSelected,
-        }
-      )}
+      height={birdSize}
+      width={birdSize}
+      className={classNames(' cursor-pointer transition-transform duration-500', {
+        'outline-6 outline-yellow-300 rounded-md scale-75 shadow-lg': isSelected,
+      })}
+      style={{ height: birdSize, width: birdSize }}
       onClick={handleSelect}
     />
   )

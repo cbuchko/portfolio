@@ -4,6 +4,8 @@ import { TextInput } from '../components/TextInput'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 import classNames from 'classnames'
 import { PlayerInformation } from '../player-constants'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import { mobileWidthBreakpoint } from '../constants'
 
 const selectInitialPuzzleIndex = () => {
   //currently assuming every player will have three options
@@ -12,6 +14,8 @@ const selectInitialPuzzleIndex = () => {
 
 const maxTimeInSeconds = 59
 export const IMDBContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const [timer, setTimer] = useState(maxTimeInSeconds)
   const [searchInput, setSearchInput] = useState('')
   const [questionIndex, setQuestionIndex] = useState<number | null>(null)
@@ -62,7 +66,12 @@ export const IMDBContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
           ? '0:00'
           : '0:' + (timer.toString().length === 1 ? '0' + timer : timer.toString())}
       </div>
-      <div className=" grid grid-cols-3 gap-5 my-8" key={question.answer}>
+      <div
+        className={classNames('grid grid-cols-3 gap-5 my-8', {
+          '!grid-cols-2 place-items-center': isMobile,
+        })}
+        key={question.answer}
+      >
         <HintCard title="type" hint={question.type} revealTimeoutInMs={0} className="bg-blue-100" />
         <HintCard
           title="release year"

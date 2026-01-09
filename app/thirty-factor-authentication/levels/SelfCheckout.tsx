@@ -4,6 +4,8 @@ import { useDrag, useDrop } from 'react-dnd'
 import classNames from 'classnames'
 import Image from 'next/image'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { mobileWidthBreakpoint } from '../constants'
+import { useIsMobile } from '@/app/utils/useIsMobile'
 
 type ShoppingItem = {
   id: string
@@ -78,6 +80,8 @@ const ShoppingItems: ShoppingItem[] = [
 ]
 
 export const SelfCheckoutContent = ({ handleLevelAdvance, cancelAdvance }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const [items, setItems] = useState(ShoppingItems)
   const scannedIdsRef = useRef<Set<string>>(new Set())
   const [isAgeVerified, setIsAgeVerified] = useState(false)
@@ -135,7 +139,7 @@ export const SelfCheckoutContent = ({ handleLevelAdvance, cancelAdvance }: Conte
         To verify yourself as a member of our Walmart Rewards Program, please demonstrate how to use
         a Self-Checkout.
       </p>
-      <div className="flex gap-10 mt-8">
+      <div className={classNames('flex gap-10 mt-8', { 'flex-col items-center': isMobile })}>
         <DropArea
           title="Shopping Cart"
           handleDrop={(item) => handleDrop(item, false)}
@@ -143,9 +147,31 @@ export const SelfCheckoutContent = ({ handleLevelAdvance, cancelAdvance }: Conte
         />
         <div>
           <Scanner handleScan={handleScan} scannedIds={scannedIdsRef} />
+          {!isMobile && (
+            <div className="mt-4">
+              <h5 className="text-center">Summary</h5>
+              <div className="border p-2 h-[160px]">
+                {scannedItems.map((item) => {
+                  return (
+                    <div key={item.id} className="text-xs flex justify-between">
+                      <p>{item.title}</p>
+                      <p>{`$${item.cost.toFixed(2)}`}</p>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+        <DropArea
+          title="Bagging Area"
+          handleDrop={(item) => handleDrop(item, true)}
+          items={baggedItems}
+        />
+        {isMobile && (
           <div className="mt-4">
             <h5 className="text-center">Summary</h5>
-            <div className="border p-2 h-[160px]">
+            <div className="border p-2 h-[160px] w-[200px]">
               {scannedItems.map((item) => {
                 return (
                   <div key={item.id} className="text-xs flex justify-between">
@@ -156,12 +182,7 @@ export const SelfCheckoutContent = ({ handleLevelAdvance, cancelAdvance }: Conte
               })}
             </div>
           </div>
-        </div>
-        <DropArea
-          title="Bagging Area"
-          handleDrop={(item) => handleDrop(item, true)}
-          items={baggedItems}
-        />
+        )}
       </div>
       {isAnyError && (
         <ErrorContainer

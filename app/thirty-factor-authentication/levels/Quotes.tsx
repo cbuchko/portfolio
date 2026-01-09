@@ -5,11 +5,15 @@ import classNames from 'classnames'
 import Image from 'next/image'
 import { shuffle } from '../utils'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import { mobileWidthBreakpoint } from '../constants'
 
 type Quote = { quote: string; isValid: boolean; origin: string }
 type QuoteMatchup = [Quote, Quote]
 
 export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const [quotes, setQuotes] = useState<QuoteMatchup[]>([])
   const [matchupIndex, setMatchupIndex] = useState(0)
   const [successCount, setSuccessCount] = useState(0)
@@ -70,7 +74,7 @@ export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) =>
   return (
     <>
       <p className="text-lg">Which of these quotes have you said?</p>
-      <div className="flex gap-5 m-4 mt-8 items-center">
+      <div className={classNames('flex gap-5 m-4 mt-8 items-center', { 'flex-col': isMobile })}>
         <QuoteBox
           quote={matchup[0].quote}
           origin={matchup[0].origin}
@@ -135,12 +139,15 @@ const QuoteBox = ({
   onClick: () => void
   isShowingOrigins: boolean
 }) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   return (
     <div
       onClick={onClick}
       className={classNames(
         'w-[400px] h-[400px] flex flex-col items-center justify-center text-center text-2xl border-2 p-4 py-16 cursor-pointer hover:scale-105 transition-transform',
-        { 'border-green-500': displaySuccess, 'border-red-500': displayFailure }
+        { 'border-green-500': displaySuccess, 'border-red-500': displayFailure },
+        { 'w-auto h-auto': isMobile }
       )}
     >
       <div className="relative">

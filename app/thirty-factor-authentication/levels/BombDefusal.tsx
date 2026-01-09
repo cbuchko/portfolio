@@ -4,6 +4,8 @@ import classNames from 'classnames'
 import { useMessageSpam } from '../useMessageSpam'
 import { useSound } from '@/app/utils/useSounds'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import { mobileWidthBreakpoint } from '../constants'
 
 const messages = [
   'hey what you up to?',
@@ -49,6 +51,8 @@ const instructionCount = 9
 
 const maxTimeInSeconds = 30
 export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const [wires, setWires] = useState(Wires)
   const [code, setCode] = useState('')
 
@@ -149,6 +153,8 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
   }
 
   const codeDisplay = code.padStart(4, '0')
+
+  const bombWidth = isMobile ? 'auto' : 500
   return (
     <>
       <p className="text-lg">{`We've sent instructions to defuse this bomb to your mobile device.`}</p>
@@ -159,8 +165,11 @@ export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: Cont
         </button>
       </div>
       <div className="flex justify-center w-full mt-4">
-        <div className="flex justify-between border rounded-md bg-gray-500 w-[500px] h-[300px] shadow-[inset_0px_0px_80px_rgba(0,0,0,1),_inset_-5px_-5px_5px_rgba(255,255,255,0.7)]">
-          <div className="h-full ml-16 flex gap-6">
+        <div
+          className="flex justify-between border rounded-md bg-gray-500 h-[300px] shadow-[inset_0px_0px_80px_rgba(0,0,0,1),_inset_-5px_-5px_5px_rgba(255,255,255,0.7)]"
+          style={{ width: bombWidth }}
+        >
+          <div className={classNames('h-full ml-16 flex gap-6', { '!ml-1 mr-1': isMobile })}>
             {Object.entries(wires).map(([id, wire]) => (
               <Wire key={id} id={id as WireIds} wire={wire} cutWire={cutWire} />
             ))}

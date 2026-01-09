@@ -3,12 +3,16 @@ import { ContentProps, ControlProps } from './types'
 import { addMinutesToDate, getFormattedDate, makeCode } from '../utils'
 import classNames from 'classnames'
 import Image from 'next/image'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import { mobileWidthBreakpoint } from '../constants'
 
 export const UPSContent = ({
   validateAdvance,
   upsTrackingCode: code,
   setUPSTrackingCode: setCode,
 }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const [deliveryStart, deliveryEnd] = useMemo(() => {
     const dateNow = new Date()
     const formattedNow = getFormattedDate(dateNow)
@@ -33,7 +37,11 @@ export const UPSContent = ({
       <p className="text-lg">
         You may proceed with the next levels while you wait. We appreciate your patience.
       </p>
-      <div className="flex gap-12 mt-8 p-8 bg-gray-100 w-max mx-auto">
+      <div
+        className={classNames('flex gap-12 mt-8 p-8 bg-gray-100 w-max mx-auto', {
+          'flex-col': isMobile,
+        })}
+      >
         <div>
           <small>Your shipment</small>
           <h5 className="font-bold mb-4 uppercase">{code}</h5>

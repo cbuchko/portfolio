@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { PlayerInformation } from '../player-constants'
 import { DropdownSelector } from '../components/dropdown-selector'
+import { mobileWidthBreakpoint } from '../constants'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import classNames from 'classnames'
 
 const signs = [
   'Aries',
@@ -20,6 +23,7 @@ const signs = [
 
 const defaultSign = 'Aries'
 export const ZodiacContent = ({ playerId, validateAdvance, cancelAdvance }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const [activeDropdownId, setActiveDropdownId] = useState<string>()
 
   const [selectedSun, setSelectedSun] = useState(defaultSign)
@@ -54,7 +58,9 @@ export const ZodiacContent = ({ playerId, validateAdvance, cancelAdvance }: Cont
   return (
     <>
       <p className="mb-4 text-lg">Please confirm your zodiac alignment.</p>
-      <div className="flex justify-between gap-4">
+      <div
+        className={classNames('flex justify-between gap-4', { 'flex-col items-center': isMobile })}
+      >
         <DropdownSelector
           id={'zodiac-sun'}
           activeId={activeDropdownId}

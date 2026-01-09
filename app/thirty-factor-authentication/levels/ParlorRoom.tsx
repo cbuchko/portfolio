@@ -2,11 +2,14 @@ import { useState } from 'react'
 import { ContentProps } from './types'
 import classNames from 'classnames'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import { mobileWidthBreakpoint } from '../constants'
 
 const selectInitialPuzzleIndex = () => {
   return Math.floor(Math.random() * Statements.length)
 }
 export const ParlorRoomContent = ({ handleLevelAdvance, setIsLoading }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const [puzzleIndex, setPuzzleIndex] = useState<number | null>(null)
 
   useEffectInitializer(() => {
@@ -26,16 +29,20 @@ export const ParlorRoomContent = ({ handleLevelAdvance, setIsLoading }: ContentP
         In front of you sits three boxes. Select the box that contains the prize.
       </p>
       <div className="text-lg my-8">
-        <p className="mono font-bold mb-2">RULES:</p>
+        <p className="mono font-bold mb-4">RULES:</p>
         <p className="font-bold">
-          THERE WILL ALWAYS BE AT LEAST ONE BOX WHICH DISPLAYS ONLY TRUE STATEMENTS.
+          1. THERE WILL ALWAYS BE AT LEAST ONE BOX WHICH DISPLAYS ONLY TRUE STATEMENTS.
         </p>
-        <p className=" font-bold my-2">
-          THERE WILL ALWAYS BE AT LEAST ONE BOX WHICH DISPLAYS ONLY FALSE STATEMENTS.
+        <p className="font-bold my-4">
+          2. THERE WILL ALWAYS BE AT LEAST ONE BOX WHICH DISPLAYS ONLY FALSE STATEMENTS.
         </p>
-        <p className=" font-bold">ONLY ONE BOX HAS A PRIZE WITHIN. THE OTHER 2 ARE ALWAYS EMPTY.</p>
+        <p className="font-bold">
+          3. ONLY ONE BOX HAS A PRIZE WITHIN. THE OTHER 2 ARE ALWAYS EMPTY.
+        </p>
       </div>
-      <div className="flex justify-between px-4">
+      <div
+        className={classNames('flex justify-between px-4', { 'flex-col items-center': isMobile })}
+      >
         <ParlorBox
           color="bg-blue-300"
           statements={puzzle.blueStatements}

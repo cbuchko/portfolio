@@ -6,16 +6,19 @@ import './waves.css'
 import { useLevels } from './levels/useLevel'
 import { useState } from 'react'
 import { PlayerIds } from './player-constants'
-import { devMode, maxLevel } from './constants'
+import { devMode, maxLevel, mobileWidthBreakpoint } from './constants'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { TouchBackend } from 'react-dnd-touch-backend'
 import { UPSTracker } from './components/UPSTracker'
 import Image from 'next/image'
 import { VictoryScreen } from './VictoryScreen'
 import { useIsMobile } from '../utils/useIsMobile'
-import Link from 'next/link'
 import { useSound } from '../utils/useSounds'
 import { useEffectInitializer } from '../utils/useEffectUnsafe'
+
+const isTouchDevice =
+  typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)
 
 export default function ThirtyFactorAuthentication() {
   const [playerId, setPlayerId] = useState<PlayerIds>()
@@ -30,25 +33,13 @@ export default function ThirtyFactorAuthentication() {
   }, [])
 
   const [isGameOver, setIsGameOver] = useState(false)
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const { playSound: playErrorSound } = useSound('/thirty-factor-authentication/sounds/error.mp3')
 
   const { content, controls, requiresLoad, baseProps } = useLevels()
   const { level, setLevel, upsTrackingCode, upsTrackingTime, resetLevel } = baseProps
 
   const isCompleted = level === maxLevel + 1
-
-  if (isMobile)
-    return (
-      <div className="flex flex-col items-center h-screen w-screen justify-center text-center">
-        <div className=" text-3xl">
-          {"Sorry! Thirty Factor Authentication isn't optimized for mobile devices (yet)."}
-        </div>
-        <Link className="hover:underline text-lg mt-4" href="/">
-          {'< Go Back'}
-        </Link>
-      </div>
-    )
 
   if (playerId === undefined) return
   return (
@@ -67,7 +58,7 @@ export default function ThirtyFactorAuthentication() {
         </div>
         {!isGameOver && !isCompleted && (
           <>
-            <DndProvider backend={HTML5Backend}>
+            <DndProvider backend={isTouchDevice ? TouchBackend : HTML5Backend}>
               <AuthContainer
                 playerId={playerId}
                 setPlayerId={setPlayerId}

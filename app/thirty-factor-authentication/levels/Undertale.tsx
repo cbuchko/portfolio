@@ -6,9 +6,13 @@ import { PlayerInformation } from '../player-constants'
 import Image from 'next/image'
 import { useSound } from '@/app/utils/useSounds'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import { mobileWidthBreakpoint } from '../constants'
 
 const maxHealth = 100
 export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const characterName = PlayerInformation[playerId].name
   const [health, setHealth] = useState(maxHealth)
   const damageTimestampRef = useRef<number>(0)
@@ -52,14 +56,16 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps)
             <h5 className="mono min-w-[50px]">{`${Math.max(0, health)}/${maxHealth}`}</h5>
           </div>
         </div>
-        <div className="absolute right-[2%] top-[50%] -translate-y-[50%]">
-          <Image
-            src="/thirty-factor-authentication/wasd.png"
-            width={150}
-            height={150}
-            alt="wasd-controls"
-          />
-        </div>
+        {!isMobile && (
+          <div className="absolute right-[2%] top-[50%] -translate-y-[50%]">
+            <Image
+              src="/thirty-factor-authentication/wasd.png"
+              width={150}
+              height={150}
+              alt="wasd-controls"
+            />
+          </div>
+        )}
       </div>
     </>
   )

@@ -54,7 +54,7 @@ export const DropdownSelector = ({
       <h5>{label}</h5>
       <button
         className={classNames(
-          'border rounded-sm py-1 px-2 flex justify-between items-center cursor-pointer w-full',
+          'border rounded-sm py-1 px-2 flex justify-between items-center cursor-pointer w-full overflow-hidden whitespace-nowrap',
           { outline: isOpen }
         )}
         onClick={() => (isOpen ? setActiveId() : setActiveId(id))}
@@ -75,7 +75,7 @@ export const DropdownSelector = ({
             <div
               key={idx}
               onClick={() => handleOptionSelect(sign)}
-              className="py-2 px-2 cursor-pointer hover:bg-gray-100 capitalize min-h-[40px]"
+              className="py-2 px-2 cursor-pointer hover:bg-gray-100 capitalize min-h-[40px] overflow-hidden whitespace-nowrap"
             >
               {sign}
             </div>
