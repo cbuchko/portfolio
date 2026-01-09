@@ -9,27 +9,19 @@ export type ProjectProps = {
   body: string
   link: string
   isItch?: boolean
+  allowMobileNavigation?: boolean
 }
 
-export default function Project({ img, body, link, isItch }: ProjectProps) {
+export default function Project({ img, body, link, isItch, allowMobileNavigation }: ProjectProps) {
   const mobile = useIsMobile()
 
-  if (mobile)
+  if (mobile && !allowMobileNavigation)
     return (
       <div className="br2 project-container">
         <Image className="project-image z-4" src={img} alt="project" width={400} height={400} />
         <div className="project-info p-4 h-full ">
           <div className="project-spacing h-full flex flex-col justify-center items-center">
             <div className="f5 lh-title">{body}</div>
-            {!mobile && isItch && (
-              <Image
-                className="project-link my-3"
-                src={'/itch.png'}
-                alt="github link"
-                width={400}
-                height={400}
-              />
-            )}
           </div>
         </div>
         <Image className="gif text-center" src={img} alt="project gif" width={400} height={400} />

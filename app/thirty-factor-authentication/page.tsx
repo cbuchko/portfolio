@@ -6,6 +6,7 @@ export const generateMetadata = () => {
     icons: {
       icon: '/thirty-factor-authentication/lock-logo.png',
     },
+    description: 'Verify yourself by completing thirty different authentication challenges.',
   }
 }
 

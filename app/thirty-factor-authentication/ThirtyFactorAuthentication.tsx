@@ -6,14 +6,13 @@ import './waves.css'
 import { useLevels } from './levels/useLevel'
 import { useState } from 'react'
 import { PlayerIds } from './player-constants'
-import { devMode, maxLevel, mobileWidthBreakpoint } from './constants'
+import { devMode, maxLevel } from './constants'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { TouchBackend } from 'react-dnd-touch-backend'
 import { UPSTracker } from './components/UPSTracker'
 import Image from 'next/image'
 import { VictoryScreen } from './VictoryScreen'
-import { useIsMobile } from '../utils/useIsMobile'
 import { useSound } from '../utils/useSounds'
 import { useEffectInitializer } from '../utils/useEffectUnsafe'
 
@@ -33,7 +32,6 @@ export default function ThirtyFactorAuthentication() {
   }, [])
 
   const [isGameOver, setIsGameOver] = useState(false)
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const { playSound: playErrorSound } = useSound('/thirty-factor-authentication/sounds/error.mp3')
 
   const { content, controls, requiresLoad, baseProps } = useLevels()
