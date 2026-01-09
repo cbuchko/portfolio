@@ -1,9 +1,12 @@
-import { CSSProperties, MouseEvent as ReactMouseEvent, useRef, useState } from 'react'
+import { CSSProperties, useMemo, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { clampPositionsToScreen } from '../utils'
 import { TextInput } from '../components/TextInput'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import { mobileWidthBreakpoint } from '../constants'
+import { useElementDrag } from '../useElementDrag'
 
 const selectCode = () => {
   const index = Math.floor(Math.random() * codes.length)
@@ -15,6 +18,7 @@ export const PostItContent = ({
   cancelAdvance,
   handleLevelAdvance,
 }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const [code, setCode] = useState<string>('')
   const [keywordInput, setKeywordInput] = useState('')
 
@@ -31,6 +35,12 @@ export const PostItContent = ({
     }
   }
 
+  //use way less post its on mobile because its so much harder there
+  const postItNotes = useMemo(() => {
+    if (!isMobile) return notes
+    return notes.slice(0, 50)
+  }, [isMobile])
+
   return (
     <>
       <p className="text-lg">
@@ -44,7 +54,7 @@ export const PostItContent = ({
         onChange={handleInputChange}
         onSubmit={handleLevelAdvance}
       />
-      {notes.map((note, idx) => (
+      {postItNotes.map((note, idx) => (
         <PostIt key={idx} message={note} />
       ))}
       <PostIt code={code} />
@@ -52,22 +62,28 @@ export const PostItContent = ({
   )
 }
 
-const getRandomPosition = () => {
+const getRandomPosition = (height: number, width: number, isMobile?: boolean) => {
   const halfwayDown = window.innerHeight / 2
-  const height = window.innerHeight
-  const y = Math.random() * (height - halfwayDown) + halfwayDown - 200
-  const x = Math.random() * window.innerWidth - 200
-  const { newX, newY } = clampPositionsToScreen(x, y, 200, 225)
+  const viewportHeight = window.innerHeight
+
+  const y = Math.random() * (viewportHeight - halfwayDown) + halfwayDown - height
+  const x = Math.random() * window.innerWidth - width
+  const { newX, newY } = clampPositionsToScreen(x, y, width, height, 1, isMobile)
   return { x: newX, y: newY }
 }
 
 const PostIt = ({ message, code }: { message?: string; code?: string }) => {
-  const [position, setPosition] = useState<{ x: number; y: number } | null>(null)
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   const [postStyles, setPostStyles] = useState<CSSProperties>()
   const noteRef = useRef<HTMLDivElement>(null)
 
+  const { position, handlePointerDown, setPosition } = useElementDrag(noteRef, undefined, 0.6)
+
   useEffectInitializer(() => {
-    setPosition(getRandomPosition())
+    const height = isMobile ? 225 * 0.6 : 225
+    const width = isMobile ? 200 * 0.6 : 200
+    setPosition(getRandomPosition(height, width, isMobile))
     const randomizedTextPosition = Math.floor(Math.random() * (100 - 50) + 50)
     const randomizedFontSize = Math.floor(Math.random() * (36 - 24) + 24)
     const randomizedTextAlign = Math.random() > 0.2 ? 'left' : 'right'
@@ -76,36 +92,7 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
       fontSize: randomizedFontSize,
       textAlign: randomizedTextAlign,
     })
-  }, [])
-
-  const handleDrag = (event: ReactMouseEvent<HTMLDivElement>) => {
-    const note = noteRef.current
-    if (!note) return
-
-    const startPosition = { x: event.clientX, y: event.clientY }
-
-    const handleMove = (moveEvent: MouseEvent) => {
-      if (!position) return
-      const dx = moveEvent.clientX - startPosition.x
-      const dy = moveEvent.clientY - startPosition.y
-      const newX = position.x + dx
-      const newY = position.y + dy
-      const clamped = clampPositionsToScreen(newX, newY, note.clientWidth, note.clientHeight)
-      const newPos = {
-        x: clamped.newX,
-        y: clamped.newY,
-      }
-      setPosition(newPos)
-    }
-
-    const handleMouseUp = () => {
-      window.removeEventListener('mousemove', handleMove)
-      window.removeEventListener('mouseup', handleMouseUp)
-    }
-
-    window.addEventListener('mousemove', handleMove)
-    window.addEventListener('mouseup', handleMouseUp)
-  }
+  }, [isMobile])
 
   if (!position) return null
 
@@ -116,12 +103,13 @@ const PostIt = ({ message, code }: { message?: string; code?: string }) => {
         position: 'fixed',
         left: position.x,
         top: position.y,
+        touchAction: 'none',
       }}
       className={classNames(
         'h-[225px] w-[200px] flex p-4 bg-yellow-200 rounded-lg shadow-md text-black select-none !cursor-grab z-2 post-it liebe-heide overflow-hidden',
-        { '!z-1': !!code }
+        { '!z-1': !!code, 'scale-60': isMobile }
       )}
-      onMouseDown={handleDrag}
+      onPointerDown={handlePointerDown}
     >
       {!!code ? (
         <div>
