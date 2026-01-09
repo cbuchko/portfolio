@@ -64,6 +64,7 @@ export const AuthContainer = ({
         id="auth-container"
         className={classNames('relative  mx-auto mt-28 shadow-md', {
           'opacity-0 pointer-events-none': isLoading && requiresLoad,
+          'mb-4': isMobile,
         })}
       >
         <div

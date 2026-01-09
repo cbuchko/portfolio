@@ -4,7 +4,7 @@ import { AuthContainer } from './AuthContainer'
 import './styles.css'
 import './waves.css'
 import { useLevels } from './levels/useLevel'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { PlayerIds } from './player-constants'
 import { devMode, maxLevel } from './constants'
 import { DndProvider } from 'react-dnd'
@@ -15,9 +15,6 @@ import Image from 'next/image'
 import { VictoryScreen } from './VictoryScreen'
 import { useSound } from '../utils/useSounds'
 import { useEffectInitializer } from '../utils/useEffectUnsafe'
-
-const isTouchDevice =
-  typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)
 
 export default function ThirtyFactorAuthentication() {
   const [playerId, setPlayerId] = useState<PlayerIds>()
@@ -39,6 +36,16 @@ export default function ThirtyFactorAuthentication() {
 
   const isCompleted = level === maxLevel + 1
 
+  const dragBackend = useMemo(() => {
+    if (typeof window === 'undefined') {
+      return HTML5Backend
+    }
+
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+
+    return isTouch ? TouchBackend : HTML5Backend
+  }, [])
+
   if (playerId === undefined) return
   return (
     <>
@@ -56,7 +63,10 @@ export default function ThirtyFactorAuthentication() {
         </div>
         {!isGameOver && !isCompleted && (
           <>
-            <DndProvider backend={isTouchDevice ? TouchBackend : HTML5Backend}>
+            <DndProvider
+              backend={dragBackend}
+              options={{ delayTouchStart: 0, enableMouseEvents: true }}
+            >
               <AuthContainer
                 playerId={playerId}
                 setPlayerId={setPlayerId}

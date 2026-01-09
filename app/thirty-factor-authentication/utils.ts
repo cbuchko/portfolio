@@ -2,12 +2,29 @@ export const clampPositionsToScreen = (
   newX: number,
   newY: number,
   width: number,
-  height: number
+  height: number,
+  scale?: number,
+  isMobile?: boolean
 ) => {
-  if (newX < 0) newX = 0
-  if (newX > window.innerWidth - width) newX = window.innerWidth - width
-  if (newY < 0) newY = 0
-  if (newY > window.innerHeight - height) newY = window.innerHeight - height
+  const vw = window.visualViewport?.width ?? window.innerWidth
+  const vh = window.visualViewport?.height ?? window.innerHeight
+
+  const elementWidth = scale ? width * scale : width
+  const elementHeight = scale ? height * scale : height
+
+  //this lets elements got off screen a liiiittle bit, but prevents them from getting lost
+  // (useful in mobile if you want to save screen space)
+  if (isMobile) {
+    if (newX < -1 * (elementWidth / 2)) newX = -1 * (elementWidth / 2)
+    if (newX > vw - elementWidth) newX = vw - elementWidth
+    if (newY < -1 * (elementHeight / 2)) newY = -1 * (elementHeight / 2)
+    if (newY > vh - elementHeight) newY = vh - elementHeight
+  } else {
+    if (newX < 0) newX = 0
+    if (newX > window.innerWidth - width) newX = window.innerWidth - width
+    if (newY < 0) newY = 0
+    if (newY > window.innerHeight - height) newY = window.innerHeight - height
+  }
 
   return { newX, newY }
 }

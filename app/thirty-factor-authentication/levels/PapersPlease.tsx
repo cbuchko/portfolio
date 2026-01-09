@@ -134,7 +134,9 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
                   <Image
                     src="/thirty-factor-authentication/icons/close.svg"
                     alt="x"
-                    className="group-hover:opacity-100 opacity-0 cursor-pointer"
+                    className={classNames('group-hover:opacity-100 opacity-0 cursor-pointer', {
+                      '!opacity-100': isMobile,
+                    })}
                     width={16}
                     height={16}
                     onClick={() => removeDiscrepancy(discrepancyId)}
@@ -192,10 +194,14 @@ const DriversLicense = ({
 
   const licenseRef = useRef<HTMLDivElement>(null)
 
-  const { position, handleDrag, isDragging } = useElementDrag(licenseRef, {
-    x: window.innerWidth / 2 - width / 2,
-    y: window.innerHeight / 2 - height / 2,
-  })
+  const { position, handlePointerDown, isDragging } = useElementDrag(
+    licenseRef,
+    {
+      x: window.innerWidth / 2 - width / 2,
+      y: window.innerHeight / 2 - height / 2,
+    },
+    0.6
+  )
 
   const handleDiscrepancySelect = (id: string) => {
     if (isDragging) return
@@ -210,12 +216,13 @@ const DriversLicense = ({
         position: 'fixed',
         left: position.x,
         top: position.y,
+        touchAction: 'none',
       }}
       className={classNames(
         'border w-[400px] p-3 rounded-sm license-background depth-container select-none cursor-grab z-100',
         { 'scale-60': isMobile }
       )}
-      onMouseDown={handleDrag}
+      onPointerDown={handlePointerDown}
     >
       <div className="tracking-widest text-center mb-4 flex justify-between gap-2">
         <h5 className="text-2xl license-title uppercase">
@@ -366,7 +373,10 @@ const InspectableItem = ({
       })}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      onClick={() => addDiscrepancy(discrepancyId)}
+      onClick={(e) => {
+        e.stopPropagation()
+        addDiscrepancy(discrepancyId)
+      }}
     >
       {children}
     </div>
@@ -410,10 +420,14 @@ const EntryPermit = ({
   const isMobile = useIsMobile(mobileWidthBreakpoint)
   const permitRef = useRef<HTMLDivElement>(null)
 
-  const { position, handleDrag, isDragging } = useElementDrag(permitRef, {
-    x: window.innerWidth / 2 - 350 / 2,
-    y: window.innerHeight / 2 - 200 / 2,
-  })
+  const { position, handlePointerDown, isDragging } = useElementDrag(
+    permitRef,
+    {
+      x: window.innerWidth / 2 - 350 / 2,
+      y: window.innerHeight / 2 - 200 / 2,
+    },
+    0.6
+  )
 
   const handleDiscrepancySelect = (id: string) => {
     if (isDragging) return
@@ -428,12 +442,13 @@ const EntryPermit = ({
         position: 'fixed',
         left: position.x,
         top: position.y,
+        touchAction: 'none',
       }}
       className={classNames(
         'outline-2 -outline-offset-16 outline-amber-800 w-[350px] h-[470px] shadow-xl py-2 px-8 bg-yellow-50 cursor-grab select-none flex flex-col items-center z-50',
         { 'scale-60': isMobile }
       )}
-      onMouseDown={handleDrag}
+      onPointerDown={handlePointerDown}
     >
       <h2 className="absolute top-0 text-2xl text-center !bg-yellow-50">THIRTY FACTOR</h2>
       <h2 className="text-2xl text-center mt-6">Authentication Permit</h2>
@@ -523,9 +538,16 @@ const Citation = ({
   discrepancyKeys: Set<string>
   onReset: () => void
 }) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
+
   return (
     <>
-      <div className="fixed w-[600px]  bg-pink-100 z-200 top-[50%] -translate-y-[50%] left-[50%] -translate-x-[50%] mono px-8 py-3 border-1 border-dotted">
+      <div
+        className={classNames(
+          'fixed w-[600px]  bg-pink-100 z-200 top-[50%] -translate-y-[50%] left-[50%] -translate-x-[50%] mono px-8 py-3 border-1 border-dotted',
+          { 'scale-60': isMobile }
+        )}
+      >
         <div className="text-xl mb-4">CITATION</div>
         <div className="border-b-3 border-dotted" />
         <div className="text-md mt-4">{`You didn't identify all errors.`}</div>
