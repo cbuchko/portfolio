@@ -125,7 +125,7 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
       if (event.code.toLocaleLowerCase() !== 'space' || isHoldingSpace.current) return
       handleReel()
     },
-    [isSoundtrackPlayingRef, playSoundtrack]
+    [handleReel]
   )
 
   const handleRodRelease = useCallback((event: KeyboardEvent) => {
