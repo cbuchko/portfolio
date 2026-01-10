@@ -4,10 +4,13 @@ import Image from 'next/image'
 import { useSound } from '@/app/utils/useSounds'
 import { interpolateThreeColors } from '../utils'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import { mobileWidthBreakpoint } from '../constants'
 
 const playAreaHeight = 300
 const rodHeight = 75
 export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const [fishPosition, setFishPosition] = useState(100)
   const [rodPosition, setRodPosition] = useState(0)
   const [progress, setProgress] = useState(40)
@@ -41,6 +44,25 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
   useEffect(() => {
     progressRef.current = progress
   }, [progress])
+
+  const handleReel = useCallback(() => {
+    if (!isSoundtrackPlayingRef.current) {
+      playSoundtrack()
+      isSoundtrackPlayingRef.current = true
+    }
+    ticksSinceLastSpace.current = 1
+    isHoldingSpace.current = true
+
+    const loopHold = () => {
+      if (!isHoldingSpace.current) return
+      setRodPosition((position) => {
+        const newPosition = position + 5
+        if (newPosition > playAreaHeight - rodHeight) return playAreaHeight - rodHeight
+        return newPosition
+      })
+    }
+    rodIntervalRef.current = setInterval(loopHold, 50)
+  }, [isSoundtrackPlayingRef, playSoundtrack])
 
   const gameUpdateLoop = useCallback(() => {
     const oldY = fishRef.current
@@ -100,23 +122,8 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
 
   const handleRodMove = useCallback(
     (event: KeyboardEvent) => {
-      if (!isSoundtrackPlayingRef.current) {
-        playSoundtrack()
-        isSoundtrackPlayingRef.current = true
-      }
       if (event.code.toLocaleLowerCase() !== 'space' || isHoldingSpace.current) return
-      ticksSinceLastSpace.current = 1
-      isHoldingSpace.current = true
-
-      const loopHold = () => {
-        if (!isHoldingSpace.current) return
-        setRodPosition((position) => {
-          const newPosition = position + 5
-          if (newPosition > playAreaHeight - rodHeight) return playAreaHeight - rodHeight
-          return newPosition
-        })
-      }
-      rodIntervalRef.current = setInterval(loopHold, 50)
+      handleReel()
     },
     [isSoundtrackPlayingRef, playSoundtrack]
   )
@@ -140,10 +147,20 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
   const progressColor = useMemo(() => {
     return interpolateThreeColors('#FF0000', '#FFFF00', '#00FF00', progress / 100)
   }, [progress])
+
+  const handleMobileRodReel = () => {
+    handleReel()
+  }
+
+  const handleMobileRodRelease = () => {
+    isHoldingSpace.current = false
+    if (rodIntervalRef.current) clearInterval(rodIntervalRef.current)
+  }
+
   return (
     <>
       <p className="text-lg">Take a load off and catch a fish.</p>
-      <p className="text-lg">Hold SPACE to raise your lure.</p>
+      {!isMobile && <p className="text-lg">Hold SPACE to raise your lure.</p>}
       <p className="text-lg">Keep the lure on the fish to catch it.</p>
       <div className="mt-8 flex gap-2 justify-center">
         <div
@@ -151,7 +168,7 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
           style={{ height: playAreaHeight }}
         >
           <div
-            className="absolute bg-green-500 w-full rounded-lg transition-all bottom-0"
+            className="absolute bg-green-500 w-full rounded-md transition-all bottom-0"
             style={{ transform: `translateY(-${rodPosition}px)`, height: rodHeight }}
           />
           <Image
@@ -170,29 +187,42 @@ export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
           />
         </div>
       </div>
-      <Image
-        className="leaf leaf-1"
-        src="https://cdn3.iconfinder.com/data/icons/spring-23/32/leaf-spring-plant-ecology-green-512.png"
-        alt="leaf"
-        width={32}
-        height={32}
-      />
-      <Image
-        className="leaf leaf-2"
-        src="https://cdn3.iconfinder.com/data/icons/spring-23/32/leaf-spring-plant-ecology-green-512.png"
-        alt="leaf"
-        width={32}
-        height={32}
-      />
-      <Image
-        className="leaf leaf-3"
-        src="https://cdn3.iconfinder.com/data/icons/spring-23/32/leaf-spring-plant-ecology-green-512.png"
-        alt="leaf"
-        width={32}
-        height={32}
-      />
-      <div className="fixed left-0 top-0 w-screen h-screen sunset-gradient -z-10" />
-      <SeaSvg className="fixed left-0 -bottom-10 -z-1" />
+      {isMobile && (
+        <button
+          className="w-full mx-auto mt-8 shadow-lg select-none border rounded-lg py-4 pointer-cursor hold-button active:bg-gray-200"
+          onPointerDown={handleMobileRodReel}
+          onPointerUp={handleMobileRodRelease}
+        >
+          REEL
+        </button>
+      )}
+      {!isMobile && (
+        <>
+          <Image
+            className="leaf leaf-1 select-none"
+            src="https://cdn3.iconfinder.com/data/icons/spring-23/32/leaf-spring-plant-ecology-green-512.png"
+            alt="leaf"
+            width={32}
+            height={32}
+          />
+          <Image
+            className="leaf leaf-2 select-none"
+            src="https://cdn3.iconfinder.com/data/icons/spring-23/32/leaf-spring-plant-ecology-green-512.png"
+            alt="leaf"
+            width={32}
+            height={32}
+          />
+          <Image
+            className="leaf leaf-3 select-none"
+            src="https://cdn3.iconfinder.com/data/icons/spring-23/32/leaf-spring-plant-ecology-green-512.png"
+            alt="leaf"
+            width={32}
+            height={32}
+          />
+          <div className="fixed left-0 top-0 w-screen h-screen sunset-gradient -z-10" />
+          <SeaSvg className="fixed left-0 -bottom-10 -z-1" />
+        </>
+      )}
     </>
   )
 }

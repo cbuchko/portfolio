@@ -109,10 +109,10 @@ export const useLevels = () => {
     { content: QuotesContent },
     { content: BrainScanContent, controls: BrainScanControls },
     { content: MaintenanceContent, controls: MaintenanceControls }, //15
-    { content: SelfCheckoutContent },
     { content: IMDBContent },
     { content: RoadTripContent, requiresLoad: true },
-    { content: ParlorRoomContent, requiresLoad: true }, //20
+    { content: ParlorRoomContent, requiresLoad: true },
+    { content: SelfCheckoutContent }, //20
     { content: AquariumContent, controls: AquariumControls },
     { content: FishingContent, controls: FishingControls },
     { content: TaxReturnContent, controls: TaxReturnControls },

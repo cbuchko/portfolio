@@ -94,7 +94,10 @@ export const AuthContainer = ({
           <h6 className="text-xs">{`Level ${level}/${maxLevel}`}</h6>
         </div>
         <div id="auth-body" className="border rounded-sm border-t-0 rounded-t-none">
-          <div id="auth-content" className="px-4 py-8 bg-white rounded-b-lg">
+          <div
+            id="auth-content"
+            className={classNames('px-4 py-8 bg-white', { 'rounded-b-lg': !Controls })}
+          >
             <Content
               playerId={playerId}
               setPlayerId={setPlayerId}

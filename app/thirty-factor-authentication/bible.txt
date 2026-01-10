@@ -4,6 +4,7 @@ Trim soudns like success so there isnt dead air beginning and end
 
 Levels that NEED to be better:
 Self Checkout - missing sauce
+              - make it more skillbased? have to order things by weight?
 Spotify 
     - More aesthetic score (ticks up)
     - Mouse trail
@@ -70,9 +71,8 @@ sections:
 
 
 Responsiveness Notes:
-    Biometric: Finger scanner seems to activate on click not on hold, beginning scan is misplaced
-    Brain Scan: Similar to biometric, seems to only works on click
     Shopping Cart: No ghost drag item
-    Fishing: Needs a spacebar replacement
+    Fishing: clear performance issues, selection issues with holding button highlighting the screen
+    Spotify: clear performance issues
     Undertale: Needs a WASD replacement
     Put a message on Game Over encouraging people to try it on browser?
