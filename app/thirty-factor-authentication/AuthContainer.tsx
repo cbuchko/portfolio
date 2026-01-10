@@ -62,16 +62,18 @@ export const AuthContainer = ({
     <>
       <div
         id="auth-container"
-        className={classNames('relative  mx-auto mt-28 shadow-md', {
+        className={classNames('relative mt-28', {
           'opacity-0 pointer-events-none': isLoading && requiresLoad,
-          'mb-4': isMobile,
+          'mb-4 !mt-0 top-[20%]': isMobile,
+          'mx-auto': !isMobile,
         })}
       >
         <div
           id="auth-header"
           className={classNames(
-            'flex justify-between items-center py-1 px-4 rounded-t-md bg-blue-300 border',
-            { 'min-w-[400px]': !isMobile }
+            'flex justify-between items-center py-1 px-4 rounded-t-md bg-blue-300 border shadow-md',
+            { 'min-w-[400px]': !isMobile },
+            { 'w-full': isMobile }
           )}
         >
           <div className="flex gap-2 items-center min-h-[20px]">

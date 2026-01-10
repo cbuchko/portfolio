@@ -86,7 +86,7 @@ export default function ThirtyFactorAuthentication() {
                 requiresLoad={requiresLoad}
               />
             </DndProvider>
-            <div id="extras-portal" />
+            <div id="extras-portal" className={classNames({ '!mt-42': isMobile })} />
             {!!upsTrackingCode && !!upsTrackingTime && (
               <UPSTracker code={upsTrackingCode} time={upsTrackingTime} />
             )}

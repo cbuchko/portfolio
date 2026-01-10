@@ -1,5 +1,6 @@
 Feedback actionables:
 Roadtrip reset
+Trim soudns like success so there isnt dead air beginning and end
 
 Levels that NEED to be better:
 Self Checkout - missing sauce
@@ -69,7 +70,6 @@ sections:
 
 
 Responsiveness Notes:
-General: In general the app doesn't support a small enough width
     Biometric: Finger scanner seems to activate on click not on hold, beginning scan is misplaced
     Brain Scan: Similar to biometric, seems to only works on click
     Shopping Cart: No ghost drag item

@@ -3,12 +3,15 @@ import { ContentProps, ControlProps } from './types'
 import { makeAuthCode, shuffle } from '../utils'
 import { createPortal } from 'react-dom'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { useIsMobile } from '@/app/utils/useIsMobile'
+import { mobileWidthBreakpoint } from '../constants'
 
 export const AppCodeContent = ({
   validateAdvance,
   cancelAdvance,
   handleLevelAdvance,
 }: ContentProps) => {
+  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const [targetCode, setTargetCode] = useState(makeAuthCode(6))
   const [codeInput, setCodeInput] = useState('')
   const [portalElement, setPortalElement] = useState<HTMLElement | null>(null)
@@ -39,6 +42,8 @@ export const AppCodeContent = ({
     return shuffle([...appNames, 'Thirty Factor Auth'])
   }, [])
 
+  //give them more time on mobile because it's way too hard otherwise
+  const duration = isMobile ? 10 : 5
   return (
     <>
       <p className="text-lg">Enter the code from your Authenticator App.</p>
@@ -63,7 +68,7 @@ export const AppCodeContent = ({
                   codeDefault={targetCode}
                   isTarget={isTarget}
                   setTargetCode={handleTargetSet}
-                  duration={5}
+                  duration={duration}
                   isDelayed
                 />
               )
