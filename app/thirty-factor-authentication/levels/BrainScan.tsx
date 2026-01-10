@@ -103,14 +103,14 @@ export const BrainScanContent = ({ handleLevelAdvance, validateAdvance }: Conten
         />
         <div className="w-full h-8 border  justify-self-end rounded-md">
           <div
-            className={classNames('bg-red-400 h-full rounded-md')}
+            className={classNames('bg-red-400 h-full rounded-sm')}
             style={{ width: `${Math.min(health, 100)}%` }}
           />
         </div>
       </div>
       {isStarted && !isCompleted && (
         <div
-          className={classNames('fixed inset-0  top-0 left-0 h-screen w-screen bg-red-500')}
+          className={classNames('fixed inset-0 top-0 left-0 h-screen w-screen bg-red-500')}
           style={{ opacity: Math.max((100 - health) / 100, 0.3) }}
         />
       )}
@@ -146,20 +146,15 @@ const Scanner = ({
   const scannerRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState(startPosition)
   const [isOver, setIsOver] = useState(false)
-
-  if (isComplete && position !== startPosition) {
-    setPosition(startPosition)
-  }
+  const activePointerId = useRef<number | null>(null)
 
   useEffect(() => {
     if (isComplete || isDead) return
 
     const interval = setInterval(() => {
       const { innerWidth, innerHeight } = window
-      const oldX = position.x
-      const oldY = position.y
+      const { x: oldX, y: oldY } = position
 
-      // determine current quadrant
       const midX = innerWidth / 2
       const midY = innerHeight / 2
 
@@ -168,12 +163,11 @@ const Scanner = ({
       else if (oldX < midX && oldY >= midY) currentQuadrant = 3
       else if (oldX >= midX && oldY >= midY) currentQuadrant = 4
 
-      // choose a DIFFERENT quadrant
       const otherQuadrants = [1, 2, 3, 4].filter((q) => q !== currentQuadrant)
       const chosenQuadrant = otherQuadrants[Math.floor(Math.random() * otherQuadrants.length)]
 
-      // pick a random point in that quadrant
-      let newX, newY
+      let newX: number
+      let newY: number
       switch (chosenQuadrant) {
         case 1:
           newX = Math.random() * midX
@@ -194,7 +188,6 @@ const Scanner = ({
           break
       }
 
-      // apply padding (50x50 hitbox)
       const { newX: clampedX, newY: clampedY } = clampPositionsToScreen(newX, newY, 50, 50)
 
       setPosition({ x: clampedX, y: clampedY })
@@ -203,36 +196,63 @@ const Scanner = ({
     return () => clearInterval(interval)
   }, [isComplete, isDead, position])
 
-  //interval for health damage
   useEffect(() => {
-    if (isOver || isComplete) {
-      return
-    }
+    if (isOver || isComplete) return
 
     const interval = setInterval(() => {
       setHealth()
     }, 100)
 
-    return () => {
-      clearInterval(interval)
-    }
+    return () => clearInterval(interval)
   }, [isOver, isComplete, position, setHealth])
+
+  //dedicated mobile handlers
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType !== 'touch') return
+
+    activePointerId.current = e.pointerId
+    scannerRef.current?.setPointerCapture(e.pointerId)
+    setIsOver(true)
+  }
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (activePointerId.current !== e.pointerId) return
+    if (!scannerRef.current) return
+
+    const elUnderFinger = document.elementFromPoint(e.clientX, e.clientY)
+
+    setIsOver(scannerRef.current.contains(elUnderFinger))
+  }
+
+  const endPointer = (e: React.PointerEvent) => {
+    if (activePointerId.current !== e.pointerId) return
+
+    activePointerId.current = null
+    scannerRef.current?.releasePointerCapture(e.pointerId)
+    setIsOver(false)
+  }
 
   return (
     <div
       ref={scannerRef}
       className={classNames(
-        'fixed inset-0 h-[50px] w-[50px] border-4 border-red-400 bg-white z-[100] mix-blend-destination-out',
-        {
-          '': !isOver,
-        }
+        'fixed inset-0 h-[50px] w-[50px] border-4 border-red-400 bg-white z-[100] mix-blend-destination-out select-none'
       )}
       style={{
         left: position.x === 0 && !isProgressing ? 'auto' : position.x,
         top: position.y === 0 && !isProgressing ? 'auto' : position.y,
+        touchAction: 'none',
       }}
-      onMouseEnter={() => setIsOver(true)}
-      onMouseLeave={() => setIsOver(false)}
+      onPointerEnter={(e) => {
+        if (e.pointerType === 'mouse') setIsOver(true)
+      }}
+      onPointerLeave={(e) => {
+        if (e.pointerType === 'mouse') setIsOver(false)
+      }}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={endPointer}
+      onPointerCancel={endPointer}
     />
   )
 }
