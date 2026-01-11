@@ -23,6 +23,7 @@ export const TextInput = ({
       onChange={(e) => onChange(e.target.value)}
       onClick={onClick}
       onKeyDown={(e) => {
+        if (!value) return
         if (e.key === 'Enter' || e.key === 'enter') onSubmit()
       }}
     />
