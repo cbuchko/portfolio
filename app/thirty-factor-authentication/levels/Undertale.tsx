@@ -27,7 +27,7 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance, isMobile }: Con
   }
 
   return (
-    <>
+    <div className="select-none">
       <p className="text-lg">{`Hold on... you aren't ${characterName}. You lied. You've been lying this whole time.`}</p>
       <p className="text-lg">{`You came so close, but this level will be your last.`}</p>
       <p className="text-lg">{`GUARDS!`}</p>
@@ -43,11 +43,15 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance, isMobile }: Con
             setHealth={setHealth}
             onPlayerHit={handleHit}
             handleLevelAdvance={handleLevelAdvance}
+            isMobile={isMobile}
           />
           <div className="flex items-center gap-2 mt-2">
             <h5>HP</h5>
             <div className="h-5 w-full border">
-              <div className="h-5 bg-red-500" style={{ width: `${(health / maxHealth) * 100}%` }} />
+              <div
+                className="h-full bg-red-500"
+                style={{ width: `${(health / maxHealth) * 100}%` }}
+              />
             </div>
             <h5 className="mono min-w-[50px]">{`${Math.max(0, health)}/${maxHealth}`}</h5>
           </div>
@@ -63,7 +67,7 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance, isMobile }: Con
           </div>
         )}
       </div>
-    </>
+    </div>
   )
 }
 
@@ -96,6 +100,7 @@ interface BulletHellProps {
   setHealth: (health: number) => void
   onPlayerHit?: () => void
   handleLevelAdvance: (skipVerify?: boolean) => void
+  isMobile?: boolean
 }
 
 //game duration is timed based on death by glamors song duration (2:14)
@@ -107,6 +112,7 @@ function BulletHell({
   setHealth,
   onPlayerHit,
   handleLevelAdvance,
+  isMobile,
 }: BulletHellProps) {
   const [gameStarted, setGameStarted] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -394,28 +400,111 @@ function BulletHell({
     }
   }, [gameStarted])
 
+  //mobile movement handlers
+  const handleDirectionClick = (direction: 'left' | 'right' | 'up' | 'down') => {
+    handleDirectionRelease()
+    if (direction === 'left') keys.current['a'] = true
+    if (direction === 'right') keys.current['d'] = true
+    if (direction === 'up') keys.current['w'] = true
+    if (direction === 'down') keys.current['s'] = true
+  }
+
+  const handleDirectionRelease = () => {
+    keys.current['a'] = false
+    keys.current['d'] = false
+    keys.current['w'] = false
+    keys.current['s'] = false
+  }
+
   return (
-    <div className="relative">
-      <canvas ref={canvasRef} width={width} height={height} style={{ border: '2px solid black' }} />
-      {!gameStarted && (
-        <button
-          className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] border-2 py-1 px-3 rounded-md cursor-pointer"
-          onClick={() => {
-            setGameStarted(true)
-            soulRef.current = { x: width / 2, y: height / 2 }
-          }}
-        >
-          Start
-        </button>
-      )}
-      {gameStarted && (
-        <audio
-          src="/thirty-factor-authentication/sounds/death-by-glamor.flac"
-          autoPlay
-          onEnded={() => handleLevelAdvance(true)}
-          ref={audioRef}
+    <>
+      <div className="relative">
+        <canvas
+          ref={canvasRef}
+          width={width}
+          height={height}
+          style={{ border: '2px solid black' }}
         />
+        {!gameStarted && (
+          <button
+            className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] border-2 py-1 px-3 rounded-md cursor-pointer"
+            onClick={() => {
+              setGameStarted(true)
+              soulRef.current = { x: width / 2, y: height / 2 }
+            }}
+          >
+            Start
+          </button>
+        )}
+        {gameStarted && (
+          <audio
+            src="/thirty-factor-authentication/sounds/death-by-glamor.flac"
+            autoPlay
+            onEnded={() => handleLevelAdvance(true)}
+            ref={audioRef}
+          />
+        )}
+      </div>
+      {/** Mobile Movement Buttons */}
+      {isMobile && (
+        <div className="flex flex-col justify-center items-center gap-1 my-4">
+          <button
+            className="undertale-movement-button w-max"
+            onPointerDown={() => handleDirectionClick('up')}
+            onPointerUp={() => handleDirectionRelease()}
+          >
+            <Image
+              className="rotate-270 pointer-events-none "
+              src="/thirty-factor-authentication/icons/directional-arrow.svg"
+              alt="up"
+              height={32}
+              width={32}
+            />
+          </button>
+          <div className="flex gap-1">
+            <button
+              className="undertale-movement-button"
+              onPointerDown={() => handleDirectionClick('left')}
+              onPointerUp={() => handleDirectionRelease()}
+            >
+              <Image
+                className="rotate-180 pointer-events-none"
+                src="/thirty-factor-authentication/icons/directional-arrow.svg"
+                alt="left"
+                height={32}
+                width={32}
+              />
+            </button>
+            <button
+              className="undertale-movement-button"
+              onPointerDown={() => handleDirectionClick('down')}
+              onPointerUp={() => handleDirectionRelease()}
+            >
+              <Image
+                className="rotate-90 pointer-events-none"
+                src="/thirty-factor-authentication/icons/directional-arrow.svg"
+                alt="down"
+                height={32}
+                width={32}
+              />
+            </button>
+
+            <button
+              className="undertale-movement-button"
+              onPointerDown={() => handleDirectionClick('right')}
+              onPointerUp={() => handleDirectionRelease()}
+            >
+              <Image
+                className="pointer-events-none"
+                src="/thirty-factor-authentication/icons/directional-arrow.svg"
+                alt="right"
+                height={32}
+                width={32}
+              />
+            </button>
+          </div>
+        </div>
       )}
-    </div>
+    </>
   )
 }
