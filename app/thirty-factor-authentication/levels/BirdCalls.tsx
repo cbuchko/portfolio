@@ -4,15 +4,16 @@ import classNames from 'classnames'
 import { shuffle } from '../utils'
 import Image from 'next/image'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 
 const selectTargetBird = () => {
   return shuffle(targetBirds)[0].id
 }
-export const BirdCallContent = ({ validateAdvance, cancelAdvance, setIsLoading }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
+export const BirdCallContent = ({
+  validateAdvance,
+  cancelAdvance,
+  setIsLoading,
+  isMobile,
+}: ContentProps) => {
   const [selectedBird, setSelectedBird] = useState<string>()
   const [birdsShuffled, setBirdsShuffled] = useState<{ id: string; url: string }[] | null>(null)
   const [targetBird, setTargetBird] = useState<string>()
@@ -53,6 +54,7 @@ export const BirdCallContent = ({ validateAdvance, cancelAdvance, setIsLoading }
               selectedBird={selectedBird}
               setSelectedBird={setSelectedBird}
               validateSelect={validateSelect}
+              isMobile={isMobile}
             />
           ))}
       </div>
@@ -65,14 +67,14 @@ const BirdThumbnail = ({
   selectedBird,
   setSelectedBird,
   validateSelect,
+  isMobile,
 }: {
   bird: { id: string; url: string }
   selectedBird?: string
   setSelectedBird: React.Dispatch<React.SetStateAction<string | undefined>>
   validateSelect: (id?: string) => void
+  isMobile?: boolean
 }) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
   const isSelected = selectedBird === bird.id
 
   const handleSelect = () => {

@@ -6,13 +6,9 @@ import { PlayerInformation } from '../player-constants'
 import Image from 'next/image'
 import { useSound } from '@/app/utils/useSounds'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 
 const maxHealth = 100
-export const UndertaleContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
+export const UndertaleContent = ({ playerId, handleLevelAdvance, isMobile }: ContentProps) => {
   const characterName = PlayerInformation[playerId].name
   const [health, setHealth] = useState(maxHealth)
   const damageTimestampRef = useRef<number>(0)

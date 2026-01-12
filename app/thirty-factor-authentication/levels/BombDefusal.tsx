@@ -4,8 +4,6 @@ import classNames from 'classnames'
 import { useMessageSpam } from '../useMessageSpam'
 import { useSound } from '@/app/utils/useSounds'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 
 const messages = [
   'hey what you up to?',
@@ -50,9 +48,11 @@ const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 const instructionCount = 9
 
 const maxTimeInSeconds = 30
-export const BombDefusalContent = ({ validateAdvance, handleLevelAdvance }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
+export const BombDefusalContent = ({
+  validateAdvance,
+  handleLevelAdvance,
+  isMobile,
+}: ContentProps) => {
   const [wires, setWires] = useState(Wires)
   const [code, setCode] = useState('')
 

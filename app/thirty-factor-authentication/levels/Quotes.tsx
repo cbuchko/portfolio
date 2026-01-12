@@ -5,15 +5,11 @@ import classNames from 'classnames'
 import Image from 'next/image'
 import { shuffle } from '../utils'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 
 type Quote = { quote: string; isValid: boolean; origin: string }
 type QuoteMatchup = [Quote, Quote]
 
-export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
+export const QuotesContent = ({ playerId, handleLevelAdvance, isMobile }: ContentProps) => {
   const [quotes, setQuotes] = useState<QuoteMatchup[]>([])
   const [matchupIndex, setMatchupIndex] = useState(0)
   const [successCount, setSuccessCount] = useState(0)
@@ -82,6 +78,7 @@ export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) =>
           displayFailure={displayFailure && !matchup[0].isValid}
           displaySuccess={displaySuccess && matchup[0].isValid}
           isShowingOrigins={isShowingOrigins}
+          isMobile={isMobile}
         />
         <div className="w-[80px] h-[80px] flex items-center justify-center text-4xl border-2 p-4 rounded-full">
           {!displaySuccess && !displayFailure && <div>OR</div>}
@@ -111,6 +108,7 @@ export const QuotesContent = ({ playerId, handleLevelAdvance }: ContentProps) =>
           displayFailure={displayFailure && !matchup[1].isValid}
           displaySuccess={displaySuccess && matchup[1].isValid}
           isShowingOrigins={isShowingOrigins}
+          isMobile={isMobile}
         />
       </div>
       <div className="flex gap-4 justify-center mt-8">
@@ -131,6 +129,7 @@ const QuoteBox = ({
   displaySuccess,
   onClick,
   isShowingOrigins,
+  isMobile,
 }: {
   quote: string
   origin: string
@@ -138,9 +137,8 @@ const QuoteBox = ({
   displayFailure: boolean
   onClick: () => void
   isShowingOrigins: boolean
+  isMobile?: boolean
 }) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
   return (
     <div
       onClick={onClick}

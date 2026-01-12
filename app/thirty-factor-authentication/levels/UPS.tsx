@@ -3,16 +3,13 @@ import { ContentProps, ControlProps } from './types'
 import { addMinutesToDate, getFormattedDate, makeCode } from '../utils'
 import classNames from 'classnames'
 import Image from 'next/image'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 
 export const UPSContent = ({
   validateAdvance,
   upsTrackingCode: code,
   setUPSTrackingCode: setCode,
+  isMobile,
 }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
   const [deliveryStart, deliveryEnd] = useMemo(() => {
     const dateNow = new Date()
     const formattedNow = getFormattedDate(dateNow)

@@ -5,8 +5,6 @@ import Image from 'next/image'
 import classNames from 'classnames'
 import { makeAuthCode, shuffle } from '../utils'
 import { useElementDrag } from '../useElementDrag'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 
 type Discrepancy = {
   id: string
@@ -38,9 +36,7 @@ const DiscrepancyBase: Record<string, Discrepancy> = {
   ['coat']: { id: 'coat', title: 'Coat of Arms' },
 }
 
-export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
+export const PapersPleaseContent = ({ playerId, handleLevelAdvance, isMobile }: ContentProps) => {
   const [isShowingCitation, setIsShowingCitation] = useState(false)
   const { gameInfo: baseGameInfo, discrepancyKeys: baseDiscrepancyKeys } = useMemo(
     () => generateDiscrepancies(playerId),
@@ -152,12 +148,19 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance }: ContentPro
           playerId={playerId}
           gameInfo={gameInfo}
           addDiscrepancy={handleDiscrepancySelect}
+          isMobile={isMobile}
         />
       )}
       {typeof window !== 'undefined' && (
-        <EntryPermit gameInfo={gameInfo} addDiscrepancy={handleDiscrepancySelect} />
+        <EntryPermit
+          gameInfo={gameInfo}
+          addDiscrepancy={handleDiscrepancySelect}
+          isMobile={isMobile}
+        />
       )}
-      {isShowingCitation && <Citation discrepancyKeys={discrepancyKeys} onReset={handleReset} />}
+      {isShowingCitation && (
+        <Citation discrepancyKeys={discrepancyKeys} onReset={handleReset} isMobile={isMobile} />
+      )}
       <div className={classNames('flex justify-end mt-4 gap-8', { '!justify-center': isMobile })}>
         <button
           className="button-stamp bg-red-400 font-extrabold tracking-widest disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
@@ -185,13 +188,13 @@ const DriversLicense = ({
   playerId,
   gameInfo,
   addDiscrepancy,
+  isMobile,
 }: {
   playerId: PlayerIds
   gameInfo: GameInfo
   addDiscrepancy: (id: string) => void
+  isMobile?: boolean
 }) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
   const licenseRef = useRef<HTMLDivElement>(null)
 
   const { position, handlePointerDown, isDragging } = useElementDrag(
@@ -413,11 +416,12 @@ const IDDetail = ({
 const EntryPermit = ({
   gameInfo,
   addDiscrepancy,
+  isMobile,
 }: {
   gameInfo: GameInfo
   addDiscrepancy: (id: string) => void
+  isMobile?: boolean
 }) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const permitRef = useRef<HTMLDivElement>(null)
 
   const { position, handlePointerDown, isDragging } = useElementDrag(
@@ -534,12 +538,12 @@ const PermitDetail = ({
 const Citation = ({
   discrepancyKeys,
   onReset,
+  isMobile,
 }: {
   discrepancyKeys: Set<string>
   onReset: () => void
+  isMobile?: boolean
 }) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
   return (
     <>
       <div

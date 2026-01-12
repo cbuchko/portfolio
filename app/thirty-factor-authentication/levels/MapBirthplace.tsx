@@ -3,16 +3,18 @@ import { ContentProps, ControlProps } from './types'
 import { PlayerInformation } from '../player-constants'
 import dynamic from 'next/dynamic'
 import { MapProps } from './Map'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 
 //have to lazy load map because leaflet does not support SSR
 const Map = dynamic<MapProps>(() => import('./Map').then((mod) => mod.default), {
   ssr: false,
 })
 
-export const MapContent = ({ playerId, validateAdvance, cancelAdvance }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
+export const MapContent = ({
+  playerId,
+  validateAdvance,
+  cancelAdvance,
+  isMobile,
+}: ContentProps) => {
   const [selectedCity, setSelectedCity] = useState<string>()
 
   const handleCitySelect = (city?: string) => {

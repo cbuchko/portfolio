@@ -1,13 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import Image from 'next/image'
-import { mobileWidthBreakpoint } from '../constants'
-import { useIsMobile } from '@/app/utils/useIsMobile'
 
 const levelDuration = 1000 * 30
-export const MaintenanceContent = ({ handleLevelAdvance }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
+export const MaintenanceContent = ({ handleLevelAdvance, isMobile }: ContentProps) => {
   const timeoutRef = useRef<NodeJS.Timeout>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
   const [timeElapsed, setTimeElapsed] = useState(0)

@@ -4,13 +4,10 @@ import Image from 'next/image'
 import { useSound } from '@/app/utils/useSounds'
 import { interpolateThreeColors } from '../utils'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 
 const playAreaHeight = 300
 const rodHeight = 75
-export const FishingContent = ({ handleLevelAdvance }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
+export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) => {
   const [fishPosition, setFishPosition] = useState(100)
   const [rodPosition, setRodPosition] = useState(0)
   const [progress, setProgress] = useState(40)

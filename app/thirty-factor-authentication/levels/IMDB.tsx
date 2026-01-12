@@ -4,8 +4,6 @@ import { TextInput } from '../components/TextInput'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 import classNames from 'classnames'
 import { PlayerInformation } from '../player-constants'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 
 const selectInitialPuzzleIndex = () => {
   //currently assuming every player will have three options
@@ -13,9 +11,7 @@ const selectInitialPuzzleIndex = () => {
 }
 
 const maxTimeInSeconds = 59
-export const IMDBContent = ({ playerId, handleLevelAdvance }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
+export const IMDBContent = ({ playerId, handleLevelAdvance, isMobile }: ContentProps) => {
   const [timer, setTimer] = useState(maxTimeInSeconds)
   const [searchInput, setSearchInput] = useState('')
   const [questionIndex, setQuestionIndex] = useState<number | null>(null)

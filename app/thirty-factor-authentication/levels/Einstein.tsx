@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { DropdownSelector } from '../components/dropdown-selector'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 import classNames from 'classnames'
 
 type CategoryIds = 'color' | 'nationality' | 'drink' | 'cigarette' | 'pet'
 type Answer = Record<number, Record<CategoryIds, string>>
 
-export const EinsteinContent = ({ validateAdvance, cancelAdvance }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
+export const EinsteinContent = ({ validateAdvance, cancelAdvance, isMobile }: ContentProps) => {
   const [activeDropdownId, setActiveDropdownId] = useState<string>()
 
   const [selectedAnswers, setSelectedAnswers] = useState<Answer>({})
@@ -64,6 +60,7 @@ export const EinsteinContent = ({ validateAdvance, cancelAdvance }: ContentProps
           handleSelect={(option, houseNumber, categoryId) =>
             handleAnswerSelect(option, houseNumber, categoryId)
           }
+          isMobile={isMobile}
         />
         <SelectionContainer
           id="nationality"
@@ -73,6 +70,7 @@ export const EinsteinContent = ({ validateAdvance, cancelAdvance }: ContentProps
           handleSelect={(option, houseNumber, categoryId) =>
             handleAnswerSelect(option, houseNumber, categoryId)
           }
+          isMobile={isMobile}
         />
         <SelectionContainer
           id="drink"
@@ -82,6 +80,7 @@ export const EinsteinContent = ({ validateAdvance, cancelAdvance }: ContentProps
           handleSelect={(option, houseNumber, categoryId) =>
             handleAnswerSelect(option, houseNumber, categoryId)
           }
+          isMobile={isMobile}
         />
         <SelectionContainer
           id="cigarette"
@@ -91,6 +90,7 @@ export const EinsteinContent = ({ validateAdvance, cancelAdvance }: ContentProps
           handleSelect={(option, houseNumber, categoryId) =>
             handleAnswerSelect(option, houseNumber, categoryId)
           }
+          isMobile={isMobile}
         />
         <SelectionContainer
           id="pet"
@@ -100,6 +100,7 @@ export const EinsteinContent = ({ validateAdvance, cancelAdvance }: ContentProps
           handleSelect={(option, houseNumber, categoryId) =>
             handleAnswerSelect(option, houseNumber, categoryId)
           }
+          isMobile={isMobile}
         />
       </div>
     </>
@@ -112,6 +113,7 @@ type SelectionContainerProps = {
   options: string[]
   setActiveDropdownId: (id?: string) => void
   handleSelect: (option: string, houseNumber: number, category: CategoryIds) => void
+  isMobile?: boolean
 }
 
 const SelectionContainer = ({
@@ -120,9 +122,8 @@ const SelectionContainer = ({
   activeDropdownId,
   setActiveDropdownId,
   handleSelect,
+  isMobile,
 }: SelectionContainerProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
   const dropdownWidth = !isMobile ? 150 : 65
   return (
     <>

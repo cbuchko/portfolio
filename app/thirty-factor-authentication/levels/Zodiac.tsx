@@ -2,8 +2,6 @@ import { useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { PlayerInformation } from '../player-constants'
 import { DropdownSelector } from '../components/dropdown-selector'
-import { mobileWidthBreakpoint } from '../constants'
-import { useIsMobile } from '@/app/utils/useIsMobile'
 import classNames from 'classnames'
 
 const signs = [
@@ -22,8 +20,12 @@ const signs = [
 ]
 
 const defaultSign = 'Aries'
-export const ZodiacContent = ({ playerId, validateAdvance, cancelAdvance }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
+export const ZodiacContent = ({
+  playerId,
+  validateAdvance,
+  cancelAdvance,
+  isMobile,
+}: ContentProps) => {
   const [activeDropdownId, setActiveDropdownId] = useState<string>()
 
   const [selectedSun, setSelectedSun] = useState(defaultSign)

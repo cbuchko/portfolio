@@ -2,14 +2,11 @@ import { useState } from 'react'
 import { ContentProps } from './types'
 import classNames from 'classnames'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 
 const selectInitialPuzzleIndex = () => {
   return Math.floor(Math.random() * Statements.length)
 }
-export const ParlorRoomContent = ({ handleLevelAdvance, setIsLoading }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
+export const ParlorRoomContent = ({ handleLevelAdvance, setIsLoading, isMobile }: ContentProps) => {
   const [puzzleIndex, setPuzzleIndex] = useState<number | null>(null)
 
   useEffectInitializer(() => {

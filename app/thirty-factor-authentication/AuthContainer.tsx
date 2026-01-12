@@ -111,6 +111,7 @@ export const AuthContainer = ({
               upsTrackingTime={baseProps.upsTrackingTime}
               selectedSSOIds={baseProps.selectedSSOIds}
               setSelectedSSOIds={baseProps.setSelectedSSOIds}
+              isMobile={isMobile}
             />
           </div>
           {Controls && (

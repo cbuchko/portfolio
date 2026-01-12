@@ -3,10 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { addMinutesToDate, getFormattedDate } from '../utils'
 import classNames from 'classnames'
 import { useSound } from '@/app/utils/useSounds'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 
-type UPSTrackerProps = { code: string; time: number }
+type UPSTrackerProps = { code: string; time: number; isMobile: boolean }
 
 const firstDelay = 1000 * 30
 const secondDelay = 1000 * 60 * 2
@@ -15,9 +13,7 @@ const fourthDelay = 1000 * 60 * 8
 const fifthDelay = 1000 * 60 * 12
 const sixthDelay = 1000 * 60 * 15
 
-export const UPSTracker = ({ code, time }: UPSTrackerProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
+export const UPSTracker = ({ code, time, isMobile }: UPSTrackerProps) => {
   const [timeString, setTimeString] = useState(getFormattedDate(time))
   const [message, setMessage] = useState('Your package is On the Way.')
   const [isError, setIsError] = useState(false)

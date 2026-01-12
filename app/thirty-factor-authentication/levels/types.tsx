@@ -22,4 +22,5 @@ export type ContentProps = {
   setUPSTrackingTime: (time: number) => void
   selectedSSOIds: Set<SSOIds>
   setSelectedSSOIds: React.Dispatch<React.SetStateAction<Set<SSOIds>>>
+  isMobile?: boolean
 }

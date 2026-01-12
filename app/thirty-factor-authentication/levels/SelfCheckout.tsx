@@ -4,8 +4,6 @@ import { useDrag, useDrop } from 'react-dnd'
 import classNames from 'classnames'
 import Image from 'next/image'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
-import { mobileWidthBreakpoint } from '../constants'
-import { useIsMobile } from '@/app/utils/useIsMobile'
 
 type ShoppingItem = {
   id: string
@@ -79,9 +77,11 @@ const ShoppingItems: ShoppingItem[] = [
   },
 ]
 
-export const SelfCheckoutContent = ({ handleLevelAdvance, cancelAdvance }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
+export const SelfCheckoutContent = ({
+  handleLevelAdvance,
+  cancelAdvance,
+  isMobile,
+}: ContentProps) => {
   const [items, setItems] = useState(ShoppingItems)
   const scannedIdsRef = useRef<Set<string>>(new Set())
   const [isAgeVerified, setIsAgeVerified] = useState(false)
@@ -340,12 +340,13 @@ const ErrorContainer = ({
   text,
   isAgeVerificationError,
   setIsAgeVerified,
+  isMobile,
 }: {
   text?: string
   isAgeVerificationError?: boolean
   setIsAgeVerified: (isVerified: boolean) => void
+  isMobile?: boolean
 }) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const audioRef = useRef<HTMLAudioElement>(null)
 
   useEffect(() => {

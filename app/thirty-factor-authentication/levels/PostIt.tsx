@@ -4,8 +4,6 @@ import classNames from 'classnames'
 import { clampPositionsToScreen } from '../utils'
 import { TextInput } from '../components/TextInput'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 import { useElementDrag } from '../useElementDrag'
 
 const selectCode = () => {
@@ -17,8 +15,8 @@ export const PostItContent = ({
   validateAdvance,
   cancelAdvance,
   handleLevelAdvance,
+  isMobile,
 }: ContentProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const [code, setCode] = useState<string>('')
   const [keywordInput, setKeywordInput] = useState('')
 
@@ -55,9 +53,9 @@ export const PostItContent = ({
         onSubmit={handleLevelAdvance}
       />
       {postItNotes.map((note, idx) => (
-        <PostIt key={idx} message={note} />
+        <PostIt key={idx} message={note} isMobile={isMobile} />
       ))}
-      <PostIt code={code} />
+      <PostIt code={code} isMobile={isMobile} />
     </>
   )
 }
@@ -72,9 +70,15 @@ const getRandomPosition = (height: number, width: number, isMobile?: boolean) =>
   return { x: newX, y: newY }
 }
 
-const PostIt = ({ message, code }: { message?: string; code?: string }) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
-
+const PostIt = ({
+  message,
+  code,
+  isMobile,
+}: {
+  message?: string
+  code?: string
+  isMobile?: boolean
+}) => {
   const [postStyles, setPostStyles] = useState<CSSProperties>()
   const noteRef = useRef<HTMLDivElement>(null)
 
