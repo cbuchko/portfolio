@@ -189,6 +189,7 @@ export const SelfCheckoutContent = ({
           text={getErrorText(isUnexpectedItemError, isUnbaggedItemError, isAgeVerificationError)}
           isAgeVerificationError={isAgeVerificationError}
           setIsAgeVerified={setIsAgeVerified}
+          isMobile={isMobile}
         />
       )}
     </>

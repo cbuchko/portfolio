@@ -53,7 +53,9 @@ export default function ThirtyFactorAuthentication() {
   return (
     <>
       <div
-        className="relative w-screen h-screen flex flex-col overflow-y-auto"
+        className={classNames('relative w-screen h-screen flex flex-col overflow-y-auto', {
+          'select-none': isMobile,
+        })}
         style={{ scrollbarGutter: 'stable' }}
       >
         <div
@@ -88,7 +90,7 @@ export default function ThirtyFactorAuthentication() {
             </DndProvider>
             <div id="extras-portal" className={classNames({ '!mt-42': isMobile })} />
             {!!upsTrackingCode && !!upsTrackingTime && (
-              <UPSTracker code={upsTrackingCode} time={upsTrackingTime} />
+              <UPSTracker code={upsTrackingCode} time={upsTrackingTime} isMobile={isMobile} />
             )}
           </>
         )}
@@ -100,10 +102,17 @@ export default function ThirtyFactorAuthentication() {
               { '!top-[50%] w-full': isMobile, 'max-w-[650px]': !isMobile }
             )}
           >
-            <h2 className="text-4xl mb-4">You have failed to authenticate.</h2>
-            <h3>
+            <h2 className="text-4xl mb-2">You have failed to authenticate.</h2>
+            <p>
               To protect your account, it has been temporarily locked and all data has been deleted.
-            </h3>
+            </p>
+            {isMobile && (
+              <p>
+                {
+                  'Try Thirty Factor Authentication on your computer for a more optimized experience.'
+                }
+              </p>
+            )}
             <button
               className="mt-2 auth-button"
               onClick={() => {

@@ -105,7 +105,7 @@ export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
     return () => {
       clearInterval(interval)
     }
-  }, [playReel, isAudioPlayingRef, stopSound, gameUpdateLoop])
+  }, [gameUpdateLoop])
 
   useEffectInitializer(() => {
     if (progress >= 100) handleLevelAdvance(true)
@@ -155,7 +155,7 @@ export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
   }
 
   return (
-    <>
+    <div className="select-none">
       <p className="text-lg">Take a load off and catch a fish.</p>
       {!isMobile && <p className="text-lg">Hold SPACE to raise your lure.</p>}
       <p className="text-lg">Keep the lure on the fish to catch it.</p>
@@ -220,7 +220,7 @@ export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
           <SeaSvg className="fixed left-0 -bottom-10 -z-1" />
         </>
       )}
-    </>
+    </div>
   )
 }
 
