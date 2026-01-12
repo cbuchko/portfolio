@@ -11,10 +11,16 @@ const Map = dynamic<MapProps>(() => import('./Map').then((mod) => mod.default), 
   ssr: false,
 })
 
-export const RoadTripContent = ({ playerId, handleLevelAdvance, setIsLoading }: ContentProps) => {
+export const RoadTripContent = ({
+  playerId,
+  handleLevelAdvance,
+  setIsLoading,
+  isMobile,
+}: ContentProps) => {
   const [selectedCity, setSelectedCity] = useState<string>()
   const [startingPoint, setStartingPoint] = useState<number[]>([])
   const [markers, setMarkers] = useState<Marker[]>([])
+  const [resetIndex, setResetIndex] = useState<number>(0)
 
   const handleCitySelect = (city?: string) => {
     setSelectedCity(city)
@@ -40,17 +46,29 @@ export const RoadTripContent = ({ playerId, handleLevelAdvance, setIsLoading }: 
   if (!startingPoint || startingPoint.length !== 2) return null
 
   return (
-    <div className={classNames('fixed top-0 left-0 h-screen w-screen bg-gray-100')}>
-      <Map
-        handleCitySelect={handleCitySelect}
-        selectedCity={selectedCity}
-        minZoom={9} //9
-        markers={markers}
-        initialCoordinate={startingPoint as [number, number]}
-        className="map-full"
-        onLoad={() => setIsLoading(false)}
-      />
-    </div>
+    <>
+      <div
+        className={classNames('fixed top-0 left-0 h-screen w-screen bg-gray-100')}
+        key={resetIndex}
+      >
+        <Map
+          handleCitySelect={handleCitySelect}
+          selectedCity={selectedCity}
+          minZoom={isMobile ? 8 : 9} //make mobile a little easier
+          markers={markers}
+          initialCoordinate={startingPoint as [number, number]}
+          className="map-full"
+          onLoad={() => setIsLoading(false)}
+          touchZoom={false}
+        />
+      </div>
+      <button
+        className="fixed bottom-4 auth-button left-[50%] -translate-x-[50%] text-4xl !h-max !max-h-none"
+        onClick={() => setResetIndex((index) => index + 1)}
+      >
+        RESET
+      </button>
+    </>
   )
 }
 

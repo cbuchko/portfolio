@@ -11,6 +11,7 @@ export type MapProps = {
   initialCoordinate?: LatLngTuple
   className: string
   onLoad?: () => void
+  touchZoom?: boolean
 }
 
 export type Marker = { name: string; coordinates: number[]; message?: string }
@@ -41,6 +42,7 @@ export default function Map({
   initialCoordinate = [0, 0],
   className,
   onLoad,
+  touchZoom = true,
 }: MapProps) {
   useEffect(() => {
     onLoad?.()
@@ -55,6 +57,7 @@ export default function Map({
       zoomControl={false}
       minZoom={minZoom}
       worldCopyJump={true}
+      touchZoom={touchZoom}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

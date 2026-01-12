@@ -75,8 +75,6 @@ sections:
 Responsiveness Notes:
 Consolidate useMobile hook
     Shopping Cart: No ghost drag item
-    Road Trip: Way too hard on mobile, maybe needs some zoom assistance
     Fishing: clear performance issues, selection issues with holding button highlighting the screen
     Spotify: clear performance issues
-    Undertale: Needs a WASD replacement  
     Put a message on Game Over encouraging people to try it on browser?
