@@ -284,3 +284,83 @@ small {
 .undertale-movement-button:active {
   background-color: rgba(128, 128, 128, 0.351);
 }
+
+.dart {
+  background: repeating-conic-gradient(from 0deg, red 0deg 18deg, green 18deg 36deg);
+  width: 265px;
+  height: 265px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid antiquewhite;
+}
+
+.black {
+  background: repeating-conic-gradient(from 0deg, black 0deg 18deg, white 18deg 36deg);
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid antiquewhite;
+}
+
+.big-black {
+  border-radius: 50%;
+  background-color: black;
+  width: 321px;
+  height: 321px;
+}
+
+.green {
+  background-color: green;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.red {
+  background-color: red;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.green-red {
+  background: repeating-conic-gradient(from 0deg, red 0deg 18deg, green 18deg 36deg);
+  width: 165px;
+  height: 165px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid antiquewhite;
+}
+
+.bw {
+  background: repeating-conic-gradient(from 0deg, black 0deg 18deg, white 18deg 36deg);
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid antiquewhite;
+}

@@ -1,7 +1,8 @@
 Feedback actionables:
-Roadtrip reset
 Trim soudns like success so there isnt dead air beginning and end
 DO A FULL SFX PASS FOR TRIMMING
+Self Checkouts gotta go
+Brain Scan clearer UI for health bar
 
 
 Levels that NEED to be better:
@@ -37,12 +38,8 @@ Dark Mode support
 Count mistakes for endgame screen
 
 STRECH GOALS:
-Mobile
-Character randomizer
-Constant timer
 Stats in Game Over screen and Victory screen
-Achievements
-Leaderboards
+Dark Mode
 
 Character Suggestions:
 Jennifer Coolidge
@@ -73,8 +70,5 @@ sections:
 
 
 Responsiveness Notes:
-Consolidate useMobile hook
     Shopping Cart: No ghost drag item
-    Fishing: clear performance issues, selection issues with holding button highlighting the screen
     Spotify: clear performance issues
-    Put a message on Game Over encouraging people to try it on browser?

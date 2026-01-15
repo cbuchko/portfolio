@@ -70,7 +70,7 @@ export const DropdownSelector = ({
         </div>
       </button>
       {isOpen && (
-        <div className="absolute mt-0.5 bg-white w-full border rounded-md z-100">
+        <div className="absolute mt-0.5 bg-white w-full border rounded-md z-100 overflow-hidden">
           {(includeBlankOption ? ['', ...options] : [...options]).map((sign, idx) => (
             <div
               key={idx}

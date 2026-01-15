@@ -31,7 +31,7 @@ import { BrainScanContent, BrainScanControls } from './BrainScan'
 import { useSound } from '@/app/utils/useSounds'
 import { SpotifyContent } from './Spotify'
 import { MastermindContent } from './Mastermind'
-import { SelfCheckoutContent } from './SelfCheckout'
+import { DartboardContent, DartboardControls } from './Dartboard'
 
 export type LevelProps = {
   level: number
@@ -105,14 +105,14 @@ export const useLevels = () => {
     { content: ZodiacContent, controls: ZodiacControls },
     { content: UPSContent, controls: UPSControls }, //10
     { content: FallbackTwoContent, controls: FallbackTwoControls },
-    { content: AppCodeContent, controls: AppCodeControls }, //APP CODE BEFORE SSO FOR CLARITY
+    { content: AppCodeContent, controls: AppCodeControls },
     { content: QuotesContent },
-    { content: BrainScanContent, controls: BrainScanControls },
+    { content: DartboardContent, controls: DartboardControls },
     { content: MaintenanceContent, controls: MaintenanceControls }, //15
     { content: IMDBContent },
+    { content: BrainScanContent, controls: BrainScanControls },
     { content: RoadTripContent, requiresLoad: true },
-    { content: ParlorRoomContent, requiresLoad: true },
-    { content: SelfCheckoutContent }, //20
+    { content: ParlorRoomContent, requiresLoad: true }, //20
     { content: AquariumContent, controls: AquariumControls },
     { content: FishingContent, controls: FishingControls },
     { content: TaxReturnContent, controls: TaxReturnControls },
