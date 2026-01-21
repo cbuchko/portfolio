@@ -162,7 +162,7 @@ const Retical = ({
     }, 100)
 
     return () => clearInterval(interval)
-  }, [position])
+  }, [position, boardRef, setPosition])
 
   return (
     <Image
