@@ -31,7 +31,7 @@ import { BrainScanContent, BrainScanControls } from './BrainScan'
 import { useSound } from '@/app/utils/useSounds'
 import { SpotifyContent } from './Spotify'
 import { MastermindContent } from './Mastermind'
-import { DartboardContent, DartboardControls } from './Dartboard'
+import { DartboardContent } from './Dartboard'
 
 export type LevelProps = {
   level: number
@@ -107,15 +107,15 @@ export const useLevels = () => {
     { content: FallbackTwoContent, controls: FallbackTwoControls },
     { content: AppCodeContent, controls: AppCodeControls },
     { content: QuotesContent },
-    { content: DartboardContent, controls: DartboardControls },
+    { content: AquariumContent, controls: AquariumControls },
     { content: MaintenanceContent, controls: MaintenanceControls }, //15
     { content: IMDBContent },
     { content: BrainScanContent, controls: BrainScanControls },
     { content: RoadTripContent, requiresLoad: true },
-    { content: ParlorRoomContent, requiresLoad: true }, //20
-    { content: AquariumContent, controls: AquariumControls },
-    { content: FishingContent, controls: FishingControls },
+    { content: ParlorRoomContent, requiresLoad: true },
+    { content: DartboardContent }, //20
     { content: TaxReturnContent, controls: TaxReturnControls },
+    { content: FishingContent, controls: FishingControls },
     { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true },
     { content: MastermindContent },
     { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true }, //25

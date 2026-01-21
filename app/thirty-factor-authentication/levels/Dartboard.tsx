@@ -1,25 +1,73 @@
 import { RefObject, useEffect, useRef, useState } from 'react'
-import { ContentProps, ControlProps } from './types'
+import { ContentProps } from './types'
 import Image from 'next/image'
+import { useSound } from '@/app/utils/useSounds'
 
+const defaultReticlePos = { x: 150, y: 20 }
+const bullseyeSize = 32
 type Position = { x: number; y: number }
-export const DartboardContent = ({}: ContentProps) => {
+export const DartboardContent = ({ handleLevelAdvance }: ContentProps) => {
   const [dartPosition, setDartPosition] = useState<Position>()
-  const [reticlePosition, setReticlePosition] = useState<{ x: number; y: number }>({ x: 50, y: 20 })
+  const [reticlePosition, setReticlePosition] = useState<{ x: number; y: number }>(
+    defaultReticlePos
+  )
+  const [isPlaying, setIsPlaying] = useState(true)
+  const { playSound: playDartThrow } = useSound(
+    'thirty-factor-authentication/sounds/dart-throw.wav'
+  )
+  const { playSound: playNiceThrow } = useSound(
+    'thirty-factor-authentication/sounds/nice-throw.mp3'
+  )
+  const { playSound: playMiss } = useSound('thirty-factor-authentication/sounds/miss.mp3')
 
   const boardRef = useRef<HTMLDivElement>(null)
   const reticleRef = useRef<HTMLImageElement>(null)
 
-  const handleDartFire = () => {
-    const reticleRect = reticleRef.current?.getBoundingClientRect()
-    console.log(reticleRect)
-    if (!reticleRect) return
-    setDartPosition({
-      x: reticleRect.x + reticleSize / 2 - dartSize / 2,
-      y: reticleRect.y + reticleSize / 2 - dartSize / 2,
-    })
+  const resetGame = (isBullseye: boolean) => {
+    if (isBullseye) {
+      playNiceThrow()
+    } else {
+      playMiss()
+    }
+
+    setTimeout(() => {
+      setDartPosition(undefined)
+      setReticlePosition(defaultReticlePos)
+      setIsPlaying(true)
+      handleLevelAdvance(isBullseye)
+    }, 2000)
   }
 
+  const handleDartFire = () => {
+    playDartThrow()
+    const reticleRect = reticleRef.current?.getBoundingClientRect()
+    const boardRect = boardRef.current?.getBoundingClientRect()
+    if (!reticleRect || !boardRect) return
+    const dartPosition = {
+      x: reticleRect.x + reticleSize / 2 - dartSize / 2,
+      y: reticleRect.y + reticleSize / 2 - dartSize / 2,
+    }
+    setDartPosition(dartPosition)
+    setIsPlaying(false)
+
+    const bullseyePosition = {
+      x: boardRect.x + boardRect.width / 2,
+      y: boardRect.y + boardRect.height / 2,
+    }
+    let isBullseye = false
+    if (
+      dartPosition.x > bullseyePosition.x - bullseyeSize / 1.5 &&
+      dartPosition.x < bullseyePosition.x + bullseyeSize / 1.5 &&
+      dartPosition.y > bullseyePosition.y - bullseyeSize / 1.5 &&
+      dartPosition.y < bullseyePosition.y + bullseyeSize / 1.5
+    ) {
+      isBullseye = true
+    }
+
+    setTimeout(() => {
+      resetGame(isBullseye)
+    }, 500)
+  }
   return (
     <>
       <p className="text-lg">Get a Bullseye.</p>
@@ -28,17 +76,20 @@ export const DartboardContent = ({}: ContentProps) => {
         ref={boardRef}
       >
         <Board />
-        <Retical
-          position={reticlePosition}
-          setPosition={setReticlePosition}
-          boardRef={boardRef}
-          reticleRef={reticleRef}
-        />
+        {isPlaying && (
+          <Retical
+            position={reticlePosition}
+            setPosition={setReticlePosition}
+            boardRef={boardRef}
+            reticleRef={reticleRef}
+          />
+        )}
         {dartPosition && <Dart dartPosition={dartPosition} />}
       </div>
       <button
-        className="w-full mx-auto mt-8 shadow-lg select-none border rounded-lg py-4 cursor-pointer hold-button active:bg-gray-200"
+        className="w-full mx-auto mt-8 shadow-lg select-none border rounded-lg py-4 cursor-pointer hold-button active:bg-gray-200 disabled:bg-gray-300 disabled:pointer-events-none"
         onClick={handleDartFire}
+        disabled={!isPlaying}
       >
         THROW
       </button>
@@ -82,8 +133,8 @@ const Retical = ({
     const interval = setInterval(() => {
       const oldX = position.x
       const oldY = position.y
-      const moveMagnitudeX = Math.random() * (50 - 5) + 5
-      const moveMagnitudeY = Math.random() * (50 - 5) + 5
+      const moveMagnitudeX = Math.random() * (30 - 5) + 5
+      const moveMagnitudeY = Math.random() * (30 - 5) + 5
 
       let newX = directionRef.current.right ? moveMagnitudeX + oldX : -moveMagnitudeX + oldX
       let newY = directionRef.current.down ? moveMagnitudeY + oldY : -moveMagnitudeY + oldY
@@ -126,23 +177,12 @@ const Retical = ({
   )
 }
 
-const dartSize = 8
+const dartSize = 16
 const Dart = ({ dartPosition }: { dartPosition: Position }) => {
   return (
     <div
-      className="fixed bg-green-500"
+      className="fixed bg-black border-4 border-yellow-500 rounded-full"
       style={{ left: dartPosition.x, top: dartPosition.y, height: dartSize, width: dartSize }}
     />
-  )
-}
-
-export const DartboardControls = ({ handleLevelAdvance }: ControlProps) => {
-  return (
-    <>
-      <div className="grow" />
-      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
-        Submit
-      </button>
-    </>
   )
 }
