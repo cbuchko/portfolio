@@ -16,7 +16,7 @@ export default function Home() {
       <div className="py-14">
         <h2 className={primaryHeaderClass}>{`Hello! I'm Connor, a Full Stack Developer`}</h2>
         <h4 className="text-md md:text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
-          {`I'm currently searching for my next adventure, wherever that may be`}
+          {`Software Engineer at Ownright since February 2026`}
         </h4>
       </div>
 
