@@ -15,7 +15,7 @@ export default function Blog() {
         </Link>
         <h2 className={primaryHeaderClass}>Welcome to my Blog!</h2>
         <h4 className="text-md md:text-xl text-center tracking-lg leading-relaxed text-gray-800 mt-2">
-          This is where I obsess about Survivor and have semi-interesting opinions about TV shows
+          This is where I obsess about Survivor and am opinionated about TV series
         </h4>
       </div>
       <BlogContent posts={postMetadata.reverse()} />
