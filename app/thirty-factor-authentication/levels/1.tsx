@@ -9,12 +9,12 @@ export const OneContent = ({
   setPlayerId,
   validateAdvance,
   cancelAdvance,
+  isMobile,
 }: IdentitySelectProps) => {
   const characters = useMemo(() => {
     return Object.entries(PlayerInformation).map(([id, info]) => ({
       id: Number(id) as PlayerIds,
       name: info.name,
-      email: info.email,
       headshot: info.license.headshot,
     }))
   }, [])
@@ -41,10 +41,18 @@ export const OneContent = ({
 
   return (
     <>
-      <h2 className="mb-4 text-3xl">Welcome Back!</h2>
-      <p className="text-lg">{`It's been a while since we've seen you.`}</p>
-      <p className="text-lg">{`Please select your account to continue.`}</p>
-      <div className="mt-3 flex flex-col border border-gray-400 rounded-lg overflow-hidden">
+      <h2 className={classNames({ 'mb-1 text-2xl': isMobile, 'mb-3 text-3xl': !isMobile })}>
+        Welcome Back!
+      </h2>
+      <p className={classNames('text-gray-700', { 'text-base': isMobile, 'text-lg': !isMobile })}>
+        Select your account to continue.
+      </p>
+      <div
+        className={classNames('flex flex-col border border-gray-400 rounded-lg overflow-hidden', {
+          'mt-3': isMobile,
+          'mt-4': !isMobile,
+        })}
+      >
         {characters.map((character, index) => {
           const isSelected = playerId === character.id
           return (
@@ -53,25 +61,27 @@ export const OneContent = ({
               type="button"
               onClick={() => handleCharacterSelect(character.id)}
               className={classNames(
-                'flex items-center gap-3 w-full px-4 py-3 text-left cursor-pointer transition-colors duration-150 border-l-4 bg-white',
+                'flex items-center w-full text-left cursor-pointer transition-colors duration-150 border-l-4 bg-white',
                 {
                   'border-t border-gray-300': index > 0,
                   'bg-blue-50 border-l-blue-400': isSelected,
                   'border-l-transparent hover:bg-gray-50': !isSelected,
+                  'gap-2.5 px-3 py-2': isMobile,
+                  'gap-3 px-4 py-3': !isMobile,
                 }
               )}
             >
               <Image
                 src={`/thirty-factor-authentication/portraits/${character.headshot}`}
                 alt={character.name}
-                width={40}
-                height={40}
-                className="rounded-full object-cover shrink-0 h-10 w-10"
+                width={isMobile ? 32 : 40}
+                height={isMobile ? 32 : 40}
+                className={classNames('rounded-full object-cover shrink-0', {
+                  'h-8 w-8': isMobile,
+                  'h-10 w-10': !isMobile,
+                })}
               />
-              <div className="min-w-0 flex flex-col">
-                <span className="font-medium text-gray-900 truncate">{character.name}</span>
-                <span className="text-sm text-gray-500 truncate">{character.email}</span>
-              </div>
+              <span className="font-medium text-gray-900 truncate">{character.name}</span>
             </button>
           )
         })}

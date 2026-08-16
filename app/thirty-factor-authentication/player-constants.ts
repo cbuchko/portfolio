@@ -7,6 +7,12 @@ export enum PlayerIds {
   Coolidge,
 }
 
+export type EasyTriviaQuestion = {
+  prompt: string
+  options: string[]
+  answer: string
+}
+
 export type Player = {
   name: string
   fullName: string
@@ -14,6 +20,7 @@ export type Player = {
   birthCity: string
   zodiac: string
   email: string
+  easyTrivia: EasyTriviaQuestion[]
   taxReturn: {
     lastName: string
     firstName: string
@@ -72,6 +79,23 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     birthCity: 'scranton',
     zodiac: 'scorpio-taurus-sagittarius',
     email: 'potus46@thirtyfactor.gov',
+    easyTrivia: [
+      {
+        prompt: 'Who was your vice president?',
+        options: ['Kamala Harris', 'Barack Obama', 'George Santos', 'Hillary Clinton'],
+        answer: 'Kamala Harris',
+      },
+      {
+        prompt: 'Which party are you a member of?',
+        options: ['Libertarian', 'Democratic', 'Republican', 'Socialist'],
+        answer: 'Democratic',
+      },
+      {
+        prompt: 'Who was president while you were vice president?',    
+        options: ['Barack Obama', 'George W. Bush', 'Bill Clinton', 'Donald Trump'],
+        answer: 'Barack Obama',
+      },
+    ],
     taxReturn: {
       lastName: 'Biden',
       firstName: 'Joseph R',
@@ -229,6 +253,23 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     birthCity: 'hayward',
     zodiac: 'taurus-capricorn-libra',
     email: 'discipline@thirtyfactor.gov',
+    easyTrivia: [
+      {
+        prompt: 'What facial expression are you famous for?',
+        options: ['The raised eyebrow', 'The sad trombone face', 'The wink', 'The eye roll'],
+        answer: 'The raised eyebrow',
+      },
+      {
+        prompt: 'Before Hollywood, what were you best known as?',
+        options: ['A pro wrestler', 'A Nascar driver', 'A magician', 'A weather man'],
+        answer: 'A pro wrestler',
+      },
+      {
+        prompt: 'Finish your catchphrase: “Can you __ what The Rock is cooking?”',
+        options: ['smell', 'see', 'taste', 'feel'],
+        answer: 'smell',
+      },
+    ],
     taxReturn: {
       lastName: 'Johnson',
       firstName: 'Dwayne D',
@@ -392,6 +433,28 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     birthCity: 'neptune',
     zodiac: 'scorpio-sagittarius-sagittarius',
     email: 'email@thirtyfactor.gov',
+    easyTrivia: [
+      {
+        prompt: 'Which TV show are you currently most associated with?',
+        options: [
+          "It's Always Sunny in Philadelphia",
+          'The Office',
+          'Breaking Bad',
+          'Friends',
+        ],
+        answer: "It's Always Sunny in Philadelphia",
+      },
+      {
+        prompt: 'Who is your famous real-life partner?',
+        options: ['Rhea Perlman', 'Bonnie Bartlett', 'Carol Kane', 'Kaitlin Olson'],
+        answer: 'Rhea Perlman',
+      },
+      {
+        prompt: 'Which Batman villain did you play?',
+        options: ['The Penguin', 'Two-Face', 'The Riddler', 'Mr. Freeze'],
+        answer: 'The Penguin',
+      },
+    ],
     taxReturn: {
       lastName: 'DeVito',
       firstName: 'Danny M',
@@ -549,6 +612,23 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     birthCity: 'brookline',
     zodiac: 'aries-aquarius-virgo',
     email: 'teamcoco@thirtyfactor.gov',
+    easyTrivia: [
+      {
+        prompt: 'What are you best known as?',
+        options: ['Talk show host', 'Olympic skier', 'Federal judge', 'Chef'],
+        answer: 'Talk show host',
+      },
+      {
+        prompt: 'What is the name of your podcast?',
+        options: ['Conan O\'Brien Needs a Friend', 'Conan O\'Brien Must Go', 'Conan and Friends', 'Conan Without Borders'],
+        answer: 'Conan O\'Brien Needs a Friend',
+      },
+      {
+        prompt: 'Which late night host famously replaced you?',    
+        options: ['Jay Leno', 'David Letterman', 'Jimmy Fallon', 'Stephen Colbert'],
+        answer: 'Jay Leno',
+      },  
+    ],
     taxReturn: {
       lastName: "O'Brien",
       firstName: 'Conan C',
@@ -723,6 +803,28 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     birthCity: 'longbeach',
     zodiac: 'libra-scorpio-unknown',
     email: 'snoop@thirtyfactor.gov',
+    easyTrivia: [
+      {
+        prompt: 'Which song are you most famously tied to?',
+        options: ["Gin and Juice", "Sweet Child O' Mine", 'Mr. Brightside', 'Despacito'],
+        answer: 'Gin and Juice',
+      },
+      {
+        prompt: 'In which genre did you originally rise to fame?',
+        options: ['Hip-hop', 'Opera', 'Country', 'K-pop'],
+        answer: 'Hip-hop',
+      },
+      {
+        prompt: 'Which best describes your classic persona?',
+        options: [
+          'Laid-back and chill',
+          'Silent assassin',
+          'Medieval knight',
+          'Weatherman',
+        ],
+        answer: 'Laid-back and chill',
+      },
+    ],
     taxReturn: {
       lastName: 'Broadus',
       firstName: 'Calvin C',
@@ -888,6 +990,18 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     birthCity: 'boston',
     zodiac: 'virgo-aries-scorpio',
     email: 'muffin.hemingway@thirtyfactor.gov',
+    easyTrivia: [
+      {
+        prompt: 'Your breakout comedy role is often remembered as…',
+        options: ["A mom", 'A Bond girl', 'A news anchor', 'A superhero sidekick'],
+        answer: "A mom",
+      },
+      {
+        prompt: 'Which recent hit series won you an Emmy?',
+        options: ['The White Lotus', 'The Marvelous Mrs. Maisel', 'The Mandalorian', 'Succession'],
+        answer: 'The White Lotus',
+      },
+    ],
     taxReturn: {
       lastName: 'Coolidge',
       firstName: 'Jennifer A',

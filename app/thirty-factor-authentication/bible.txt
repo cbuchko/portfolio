@@ -1,29 +1,9 @@
-Feedback actionables:
-Trim soudns like success so there isnt dead air beginning and end
-DO A FULL SFX PASS FOR TRIMMING
-
 
 Levels that NEED to be better:
-Spotify 
-    - More aesthetic score (ticks up)
-    - Mouse trail
-    - Pads disappear instantly and the score lingers for a bit
-
-
-Brain Scan:
-    - People aren't understanding what they need to do right away
-    - Health bar is too similar to fingerprint
-    - Not enough positive feedback for staying in the zone
-    - It's unclear that you need to wait it out
-
-Papers Please:
-    - When other characters are added, make them show in every iteration, so you cant brute force
-
 "Feel" Ideas:
     - Bespoke Zodiac Selector
     - Aquarium add sfx and ocean elements
 
-Clean up SSO stuff when I know I'm done with it
 
 OTHER IDEAS:
 Cloudflare
@@ -69,5 +49,4 @@ Responsiveness Notes:
 
 August 16th revisit notes:
 - Mobile "Easyness" 
-- Buggy fishing and spotify
 - Test more

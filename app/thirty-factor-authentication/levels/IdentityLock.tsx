@@ -39,8 +39,8 @@ export const IdentityLockContent = ({
       <div className="mt-5 max-w-md w-full text-left border border-amber-300 bg-amber-50 rounded-md px-3 py-2">
         <p className="text-sm font-semibold text-amber-900">Warning</p>
         <p className="text-sm text-amber-950/80 mt-0.5">
-          Three failed verification attempts on a single step will lock this account and reset the
-          authentication attempt. Strikes reset when you clear a step.
+          Three failed verification attempts on the same step will reset the
+          authentication session.
         </p>
       </div>
       <label

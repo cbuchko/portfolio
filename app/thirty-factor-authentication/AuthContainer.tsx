@@ -128,8 +128,11 @@ export const AuthContainer = ({
           </div>
           <h6 className="text-xs">{`Step ${level}/${maxLevel}`}</h6>
         </div>
-        <div id="auth-body" className="border border-t-0 rounded-b-md overflow-hidden">
-          <div id="auth-content" className="px-4 py-8 bg-white">
+        <div id="auth-body" className="group/auth-body border border-t-0 rounded-b-md">
+          <div
+            id="auth-content"
+            className="px-4 py-8 bg-white rounded-b-md group-has-[#auth-controls:not(:empty)]/auth-body:rounded-b-none"
+          >
             <Content
               playerId={playerId}
               setPlayerId={setPlayerId}
@@ -149,12 +152,15 @@ export const AuthContainer = ({
           {Controls && (
             <div
               id="auth-controls"
-              className="px-4 py-3 border-t flex flex-wrap w-full justify-between gap-4 bg-gray-50 rounded-b-sm empty:hidden"
+              className="px-4 py-3 border-t flex flex-wrap w-full justify-between gap-4 bg-gray-50 rounded-b-md empty:hidden"
             >
               <Controls
                 key={level}
                 handleLevelAdvance={onAdvance}
-                handleGameOver={() => setIsGameOver(true)}
+                handleGameOver={() => {
+                  playErrorSound()
+                  setIsGameOver(true)
+                }}
                 validateAdvance={validateAdvance}
                 setUPSTrackingTime={baseProps.setUPSTrackingTime}
                 playerId={playerId}

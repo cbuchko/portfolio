@@ -32,6 +32,7 @@ import { useSound } from '@/app/utils/useSounds'
 import { SpotifyContent } from './Spotify'
 import { MastermindContent } from './Mastermind'
 import { DartboardContent } from './Dartboard'
+import { SecurityQuestionsContent, SecurityQuestionsControls } from './SecurityQuestions'
 import { ControlProps, IdentitySelectProps } from './types'
 
 type LevelContent = (props: IdentitySelectProps) => React.JSX.Element | null
@@ -75,24 +76,29 @@ export type LevelProps = {
 export const LEVELS: LevelDefinition[] = [
   { content: OneContent, controls: OneControls, title: 'Account Select' },
   { content: IdentityLockContent, controls: IdentityLockControls, title: 'Identity Lock' },
+  {
+    content: SecurityQuestionsContent,
+    controls: SecurityQuestionsControls,
+    title: 'Security Questions',
+  },
   { content: BasicAppCodeContent, controls: BasicAppCodeControls, title: 'App Code' },
+  { content: MessageSpamContent, controls: MessageSpamControls, title: 'Message Spam' }, //5
   { content: LegalNameContent, controls: LegalNameControls, title: 'Legal Name' },
-  { content: MessageSpamContent, controls: MessageSpamControls, title: 'Message Spam' },
   { content: FallbackOneContent, controls: FallbackOneControls, title: 'Password Reset' },
-  { content: MapContent, controls: MapControls, title: 'Birthplace' },
   { content: BiometricContent, controls: BiometricControls, title: 'Biometrics' },
+  { content: MapContent, controls: MapControls, title: 'Birthplace' }, //10
   { content: PostItContent, controls: PostItControls, title: 'Post-it Code' },
-  { content: ZodiacContent, controls: ZodiacControls, title: 'Zodiac' },
   { content: UPSContent, controls: UPSControls, title: 'Package Tracking' },
   { content: FallbackTwoContent, controls: FallbackTwoControls, title: 'Password Confirm' },
+  { content: ZodiacContent, controls: ZodiacControls, title: 'Zodiac' },
   { content: AppCodeContent, controls: AppCodeControls, title: 'Authenticator App' },
-  { content: QuotesContent, title: 'Quotes' },
-  { content: AquariumContent, controls: AquariumControls, title: 'Aquarium' },
+  { content: AquariumContent, controls: AquariumControls, title: 'Aquarium' }, //15
   { content: MaintenanceContent, controls: MaintenanceControls, title: 'Maintenance' },
-  { content: IMDBContent, title: 'Filmography' },
+  { content: QuotesContent, title: 'Quotes' }, 
   { content: RoadTripContent, requiresLoad: true, title: 'Road Trip' },
-  { content: ParlorRoomContent, requiresLoad: true, title: 'Parlor Room' },
-  { content: DartboardContent, title: 'Dartboard' },
+  { content: ParlorRoomContent, requiresLoad: true, title: 'Parlor Room' }, 
+  { content: DartboardContent, title: 'Dartboard' }, //20
+  { content: IMDBContent, title: 'Filmography' },
   { content: TaxReturnContent, controls: TaxReturnControls, title: 'Tax Return' },
   { content: FishingContent, controls: FishingControls, title: 'Fishing' },
   { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true, title: 'Bird Calls' },
