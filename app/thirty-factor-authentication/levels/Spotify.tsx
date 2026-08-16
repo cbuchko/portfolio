@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import classNames from 'classnames'
-import { useSound } from '@/app/utils/useSounds'
+import { playSfx, prefetchSound, useSound } from '@/app/utils/useSounds'
 import { ContentProps, ControlProps } from './types'
 
 type Position = { x: number; y: number }
@@ -235,35 +235,16 @@ export const SpotifyContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
     playSound: playSoundtrack,
     stopSound: stopSoundtrack,
     getCurrentTimeMs,
-    audioRef,
-  } = useSound('/thirty-factor-authentication/sounds/open-the-sky.wav', 0.3, false)
+  } = useSound('/thirty-factor-authentication/sounds/open-the-sky.wav', 0.3)
 
   const chartEndMs = chartEndMsFromCadences
-  const clickPoolRef = useRef<HTMLAudioElement[]>([])
-  const clickPoolIndexRef = useRef(0)
 
   useEffect(() => {
-    clickPoolRef.current = [0, 1, 2].map(() => {
-      const audio = new Audio('/thirty-factor-authentication/sounds/osu-click.mp3')
-      audio.preload = 'auto'
-      audio.volume = 0.25
-      return audio
-    })
-    return () => {
-      clickPoolRef.current.forEach((audio) => {
-        audio.pause()
-      })
-      clickPoolRef.current = []
-    }
+    prefetchSound('/thirty-factor-authentication/sounds/osu-click.mp3')
   }, [])
 
   const playClickSound = useCallback(() => {
-    const pool = clickPoolRef.current
-    if (!pool.length) return
-    const audio = pool[clickPoolIndexRef.current % pool.length]
-    clickPoolIndexRef.current += 1
-    audio.currentTime = 0
-    void audio.play()
+    playSfx('/thirty-factor-authentication/sounds/osu-click.mp3', 0.25)
   }, [])
 
   const [isStarted, setIsStarted] = useState(false)
@@ -410,8 +391,7 @@ export const SpotifyContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
     finishedRef.current = false
 
     const tick = () => {
-      const audio = audioRef.current
-      const nowMs = (audio?.currentTime ?? 0) * 1000
+      const nowMs = getCurrentTimeMs()
       // Chart-relative progress — audio.duration can be flaky mid-decode on some browsers
       setProgress(Math.min(1, nowMs / chartEndMs))
       setElapsedMs(Math.min(nowMs, chartEndMs))
@@ -483,7 +463,7 @@ export const SpotifyContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
       rafRef.current = null
     }
-  }, [isStarted, finishGame, audioRef, chartEndMs, pushJudgment, registerJudgment])
+  }, [isStarted, finishGame, getCurrentTimeMs, chartEndMs, pushJudgment, registerJudgment])
 
   const handleStart = () => {
     const nextChart = buildChart(padSize, !!isMobile)
