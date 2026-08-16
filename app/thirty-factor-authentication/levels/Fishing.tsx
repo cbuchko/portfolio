@@ -1,23 +1,49 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import Image from 'next/image'
 import { useSound } from '@/app/utils/useSounds'
 import { interpolateThreeColors } from '../utils'
-import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const playAreaHeight = 300
-const rodHeight = 75
-export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) => {
-  const [fishPosition, setFishPosition] = useState(100)
-  const [rodPosition, setRodPosition] = useState(0)
-  const [progress, setProgress] = useState(40)
-  const fishRef = useRef(fishPosition)
-  const rodRef = useRef(rodPosition)
-  const progressRef = useRef(progress)
+const rodHeight = 65
+const fishHeight = 32
+const fishWidth = 32
 
-  const ticksSinceLastSpace = useRef(1)
-  const isHoldingSpace = useRef(false)
-  const rodIntervalRef = useRef<NodeJS.Timeout>(null)
+const rodRisePerSec = 110
+const rodFallPerSec = 160
+const progressGainPerSec = 9
+const progressLosePerSec = 12
+
+const fishMinY = 0
+const fishMaxY = playAreaHeight - fishHeight
+
+function rangesOverlap(a0: number, a1: number, b0: number, b1: number) {
+  return a0 < b1 && a1 > b0
+}
+
+export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) => {
+  const [progressDisplay, setProgressDisplay] = useState(40)
+  const [progressColor, setProgressColor] = useState(() =>
+    interpolateThreeColors('#FF0000', '#FFFF00', '#00FF00', 0.4)
+  )
+  const [isHoldingVisual, setIsHoldingVisual] = useState(false)
+
+  const fishElRef = useRef<HTMLImageElement>(null)
+  const rodElRef = useRef<HTMLDivElement>(null)
+  const progressElRef = useRef<HTMLDivElement>(null)
+
+  const fishYRef = useRef(100)
+  const rodYRef = useRef(0)
+  const progressRef = useRef(40)
+  const fishVelRef = useRef(40)
+  const fishRetargetAtRef = useRef(0)
+  const fishDashUntilRef = useRef(0)
+  const isHoldingSpaceRef = useRef(false)
+  const finishedRef = useRef(false)
+  const rafRef = useRef<number | null>(null)
+  const lastTsRef = useRef<number | null>(null)
+  const lastUiPushRef = useRef(0)
+
   const { playSound: playSoundtrack, isAudioPlayingRef: isSoundtrackPlayingRef } = useSound(
     '/thirty-factor-authentication/sounds/stardew.mp3',
     0.25,
@@ -29,130 +55,210 @@ export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
     isAudioPlayingRef,
   } = useSound('/thirty-factor-authentication/sounds/reel.mp3', 0.05)
 
-  //keep track of state values in refs so they dont affect the gameplay loop
-  useEffect(() => {
-    fishRef.current = fishPosition
-  }, [fishPosition])
+  const paint = useCallback((progress: number) => {
+    if (fishElRef.current) {
+      fishElRef.current.style.bottom = `${fishYRef.current}px`
+    }
+    if (rodElRef.current) {
+      rodElRef.current.style.transform = `translateY(-${rodYRef.current}px)`
+    }
+    if (progressElRef.current) {
+      progressElRef.current.style.height = `${Math.min(100, Math.max(0, progress))}%`
+    }
+  }, [])
 
-  useEffect(() => {
-    rodRef.current = rodPosition
-  }, [rodPosition])
+  const resetRound = useCallback(() => {
+    fishYRef.current = 100
+    rodYRef.current = 0
+    progressRef.current = 40
+    fishVelRef.current = 40
+    fishRetargetAtRef.current = 0
+    fishDashUntilRef.current = 0
+    isHoldingSpaceRef.current = false
+    finishedRef.current = false
+    lastTsRef.current = null
+    setIsHoldingVisual(false)
+    setProgressDisplay(40)
+    const color = interpolateThreeColors('#FF0000', '#FFFF00', '#00FF00', 0.4)
+    setProgressColor(color)
+    paint(40)
+    if (progressElRef.current) {
+      progressElRef.current.style.backgroundColor = color
+    }
+  }, [paint])
 
-  useEffect(() => {
-    progressRef.current = progress
-  }, [progress])
+  const endRoundRef = useRef<(won: boolean) => void>(() => {})
+  const playReelRef = useRef(playReel)
+  const stopSoundRef = useRef(stopSound)
+  playReelRef.current = playReel
+  stopSoundRef.current = stopSound
 
-  const handleReel = useCallback(() => {
+  const endRound = useCallback(
+    (won: boolean) => {
+      if (finishedRef.current) return
+      finishedRef.current = true
+      stopSoundRef.current()
+      isHoldingSpaceRef.current = false
+      setIsHoldingVisual(false)
+
+      if (won) {
+        handleLevelAdvance(true)
+        return
+      }
+
+      // Strike, then hard-reset the minigame so the round starts fresh
+      handleLevelAdvance()
+      resetRound()
+    },
+    [handleLevelAdvance, resetRound]
+  )
+  endRoundRef.current = endRound
+
+  // Single simulation + render loop
+  useEffect(() => {
+    const tick = (ts: number) => {
+      if (finishedRef.current) {
+        rafRef.current = requestAnimationFrame(tick)
+        return
+      }
+
+      const last = lastTsRef.current ?? ts
+      const dt = Math.min(0.05, (ts - last) / 1000)
+      lastTsRef.current = ts
+
+      // --- fish: erratic continuous motion (bursts + frequent flips, no teleports) ---
+      if (ts >= fishRetargetAtRef.current) {
+        const dir = Math.random() < 0.5 ? -1 : 1
+        const roll = Math.random()
+
+        if (roll < 0.28) {
+          // Hard burst — covers a lot of distance quickly, but frame-by-frame
+          fishVelRef.current = dir * (190 + Math.random() * 110)
+          fishDashUntilRef.current = ts + 280 + Math.random() * 260
+          fishRetargetAtRef.current = ts + 180 + Math.random() * 220
+        } else if (roll < 0.58) {
+          // Medium burst / juke
+          fishVelRef.current = dir * (110 + Math.random() * 70)
+          fishDashUntilRef.current = ts + 140 + Math.random() * 200
+          fishRetargetAtRef.current = ts + 120 + Math.random() * 260
+        } else {
+          // Twitchy cruise — short segments so it never settles
+          fishVelRef.current = dir * (55 + Math.random() * 65)
+          fishDashUntilRef.current = 0
+          fishRetargetAtRef.current = ts + 90 + Math.random() * 200
+        }
+      }
+
+      // Random mid-path jukes while not already in a hard burst
+      if (ts >= fishDashUntilRef.current && Math.random() < 0.018) {
+        fishVelRef.current *= -1.15 - Math.random() * 0.4
+        fishRetargetAtRef.current = Math.min(fishRetargetAtRef.current, ts + 80)
+      }
+
+      // During a dash, don't let edge soft-damping kill the burst
+      const dashing = ts < fishDashUntilRef.current
+
+      let fishY = fishYRef.current + fishVelRef.current * dt
+      if (fishY <= fishMinY) {
+        fishY = fishMinY
+        fishVelRef.current = Math.abs(fishVelRef.current) * (dashing ? 1.05 : 1)
+      } else if (fishY >= fishMaxY) {
+        fishY = fishMaxY
+        fishVelRef.current = -Math.abs(fishVelRef.current) * (dashing ? 1.05 : 1)
+      }
+      if (!dashing) {
+        if (fishY < 40 && fishVelRef.current < 0) fishVelRef.current *= 0.85
+        if (fishY > fishMaxY - 40 && fishVelRef.current > 0) fishVelRef.current *= 0.85
+      }
+      fishYRef.current = fishY
+
+      // --- rod ---
+      let rodY = rodYRef.current
+      if (isHoldingSpaceRef.current) {
+        rodY = Math.min(playAreaHeight - rodHeight, rodY + rodRisePerSec * dt)
+      } else {
+        rodY = Math.max(0, rodY - rodFallPerSec * dt)
+      }
+      rodYRef.current = rodY
+
+      // Precise on-rod: fish sprite AABB vs rod bar (bottom-up coords)
+      const onRod = rangesOverlap(fishY, fishY + fishHeight, rodY, rodY + rodHeight)
+
+      let progress = progressRef.current
+      if (onRod) {
+        if (!isAudioPlayingRef.current) playReelRef.current()
+        progress = Math.min(100, progress + progressGainPerSec * dt)
+      } else {
+        if (isAudioPlayingRef.current) stopSoundRef.current()
+        progress = Math.max(0, progress - progressLosePerSec * dt)
+      }
+      progressRef.current = progress
+      paint(progress)
+
+      if (progress >= 100) {
+        endRoundRef.current(true)
+        rafRef.current = requestAnimationFrame(tick)
+        return
+      }
+      if (progress <= 0) {
+        endRoundRef.current(false)
+        rafRef.current = requestAnimationFrame(tick)
+        return
+      }
+
+      if (ts - lastUiPushRef.current > 100) {
+        lastUiPushRef.current = ts
+        setProgressDisplay(progress)
+        const color = interpolateThreeColors('#FF0000', '#FFFF00', '#00FF00', progress / 100)
+        setProgressColor(color)
+        if (progressElRef.current) {
+          progressElRef.current.style.backgroundColor = color
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(tick)
+    }
+
+    rafRef.current = requestAnimationFrame(tick)
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+      rafRef.current = null
+      lastTsRef.current = null
+    }
+  }, [isAudioPlayingRef, paint])
+
+  const startHold = useCallback(() => {
     if (!isSoundtrackPlayingRef.current) {
       playSoundtrack()
       isSoundtrackPlayingRef.current = true
     }
-    ticksSinceLastSpace.current = 1
-    isHoldingSpace.current = true
-
-    const loopHold = () => {
-      if (!isHoldingSpace.current) return
-      setRodPosition((position) => {
-        const newPosition = position + 5
-        if (newPosition > playAreaHeight - rodHeight) return playAreaHeight - rodHeight
-        return newPosition
-      })
-    }
-    rodIntervalRef.current = setInterval(loopHold, 50)
+    if (isHoldingSpaceRef.current) return
+    isHoldingSpaceRef.current = true
+    setIsHoldingVisual(true)
   }, [isSoundtrackPlayingRef, playSoundtrack])
 
-  const gameUpdateLoop = useCallback(() => {
-    const oldY = fishRef.current
-
-    /** fish movement */
-    let newY
-    const upOrDown = Math.random()
-    const shouldSpikeMovement = Math.random()
-    const moveMagnitude = shouldSpikeMovement < 0.05 ? 10 * Math.random() * (25 - 15) + 15 : 10
-
-    if ((upOrDown < 0.5 || oldY > playAreaHeight - 50) && oldY > 50) {
-      newY = oldY - moveMagnitude //move up
-    } else newY = oldY + moveMagnitude //move down
-
-    if (newY < 0) newY = 0
-    if (newY > playAreaHeight - 25) newY = playAreaHeight - 25
-    setFishPosition(newY)
-
-    /** rod falling */
-    if (ticksSinceLastSpace.current === 0 && !isHoldingSpace.current) {
-      setRodPosition((position) => {
-        const newPosition = position - 15
-        if (newPosition < 0) return 0
-        return newPosition
-      })
-    } else ticksSinceLastSpace.current = Math.max(ticksSinceLastSpace.current - 1, 0)
-
-    /** progress bar */
-    if (fishRef.current > rodRef.current && fishRef.current < rodRef.current + rodHeight) {
-      if (!isAudioPlayingRef.current) playReel()
-      setProgress((progress) => progress + 0.5)
-    } else if (progressRef.current > 0) {
-      stopSound()
-      setProgress((progress) => progress - 0.5)
-    }
-  }, [isAudioPlayingRef, playReel, stopSound])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      gameUpdateLoop()
-    }, 100)
-
-    return () => {
-      clearInterval(interval)
-    }
-  }, [gameUpdateLoop])
-
-  useEffectInitializer(() => {
-    if (progress >= 100) handleLevelAdvance(true)
-    if (progress <= 0) {
-      setFishPosition(0)
-      setRodPosition(0)
-      setProgress(40)
-      handleLevelAdvance()
-    }
-  }, [progress, handleLevelAdvance])
-
-  const handleRodMove = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.code.toLocaleLowerCase() !== 'space' || isHoldingSpace.current) return
-      handleReel()
-    },
-    [handleReel]
-  )
-
-  const handleRodRelease = useCallback((event: KeyboardEvent) => {
-    if (event.code.toLocaleLowerCase() !== 'space') return
-    isHoldingSpace.current = false
-    if (rodIntervalRef.current) clearInterval(rodIntervalRef.current)
+  const endHold = useCallback(() => {
+    isHoldingSpaceRef.current = false
+    setIsHoldingVisual(false)
   }, [])
 
   useEffect(() => {
-    window.addEventListener('keydown', handleRodMove)
-    window.addEventListener('keyup', handleRodRelease)
-
-    return () => {
-      window.removeEventListener('keydown', handleRodMove)
-      window.removeEventListener('keyup', handleRodRelease)
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.code !== 'Space' || event.repeat) return
+      event.preventDefault()
+      startHold()
     }
-  }, [handleRodMove, handleRodRelease])
-
-  const progressColor = useMemo(() => {
-    return interpolateThreeColors('#FF0000', '#FFFF00', '#00FF00', progress / 100)
-  }, [progress])
-
-  const handleMobileRodReel = () => {
-    handleReel()
-  }
-
-  const handleMobileRodRelease = () => {
-    isHoldingSpace.current = false
-    if (rodIntervalRef.current) clearInterval(rodIntervalRef.current)
-  }
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.code !== 'Space') return
+      endHold()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keyup', onKeyUp)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keyup', onKeyUp)
+    }
+  }, [endHold, startHold])
 
   return (
     <div className="select-none">
@@ -165,30 +271,49 @@ export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
           style={{ height: playAreaHeight }}
         >
           <div
-            className="absolute bg-green-500 w-full rounded-md transition-all bottom-0"
-            style={{ transform: `translateY(-${rodPosition}px)`, height: rodHeight }}
+            ref={rodElRef}
+            className="absolute bottom-0 bg-green-500 w-full rounded-md will-change-transform"
+            style={{
+              height: rodHeight,
+              transform: `translateY(-${rodYRef.current}px)`,
+            }}
           />
           <Image
+            ref={fishElRef}
             src={`/thirty-factor-authentication/fish/Anchovy.png`}
-            alt={'fish'}
-            height={32}
-            width={32}
-            className="absolute rotate-y-180 -rotate-z-45 transition-all"
-            style={{ bottom: fishPosition }}
+            alt="fish"
+            height={fishHeight}
+            width={fishWidth}
+            className="absolute rotate-y-180 -rotate-z-45 will-change-[bottom] pointer-events-none"
+            style={{ bottom: fishYRef.current }}
+            draggable={false}
+            priority
           />
         </div>
         <div className="relative w-3 border-2 rounded-lg" style={{ height: playAreaHeight }}>
           <div
-            className="absolute bottom-0 w-full  rounded-lg origin-bottom transition-all"
-            style={{ height: `${Math.min(100, progress)}%`, backgroundColor: progressColor }}
+            ref={progressElRef}
+            className="absolute bottom-0 w-full rounded-lg origin-bottom will-change-[height]"
+            style={{
+              height: `${Math.min(100, progressDisplay)}%`,
+              backgroundColor: progressColor,
+            }}
           />
         </div>
       </div>
       {isMobile && (
         <button
-          className="w-full mx-auto mt-8 shadow-lg select-none border rounded-lg py-4 pointer-cursor hold-button active:bg-gray-200"
-          onPointerDown={handleMobileRodReel}
-          onPointerUp={handleMobileRodRelease}
+          type="button"
+          className={`w-full mx-auto mt-8 shadow-lg select-none border rounded-lg py-4 pointer-cursor hold-button ${
+            isHoldingVisual ? 'bg-gray-200' : ''
+          }`}
+          onPointerDown={(e) => {
+            e.preventDefault()
+            startHold()
+          }}
+          onPointerUp={endHold}
+          onPointerCancel={endHold}
+          onPointerLeave={endHold}
         >
           REEL
         </button>
@@ -244,7 +369,6 @@ function SeaSvg(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 800 350"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Sky */}
       <defs>
         <radialGradient id="SVGID_1_" cx="400" cy="202.5" r="317.3423">
           <stop offset="0" stopColor="#E6DBFA" />
