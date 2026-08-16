@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { useMessageSpam } from '../useMessageSpam'
@@ -59,11 +60,8 @@ export const BombDefusalContent = ({
   const [timer, setTimer] = useState(maxTimeInSeconds)
   const [isGameOver, setIsGameOver] = useState(false)
 
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
-  const {
-    playSound: playBombMusic,
-    stopSound: stopBombMusic,
-  } = useSound('/thirty-factor-authentication/sounds/bomb-defusal.m4a', 1, true)
+  const timerRef = useRef<NodeJS.Timeout>(null)
+  const audioRef = useRef<HTMLAudioElement>(null)
   const { playSound: playExplosionSound } = useSound(
     '/thirty-factor-authentication/sounds/explosion.mp3',
     0.3
@@ -80,17 +78,7 @@ export const BombDefusalContent = ({
     setFormattedInstructiosn(formattedInstructions)
   }, [isGameOver])
 
-  const { message, handleResendCode } = useMessageSpam(
-    messages,
-    formattedInstructions,
-    4000,
-    !isGameOver
-  )
-
-  // Start bomb music once on mount
-  useEffectInitializer(() => {
-    playBombMusic()
-  }, [])
+  const { message, handleResendCode } = useMessageSpam(messages, formattedInstructions, 4000)
 
   //countdown
   useEffect(() => {
@@ -110,20 +98,21 @@ export const BombDefusalContent = ({
     setCode('')
     setIsGameOver(false)
     setInstructionStepIndex(0)
-    playBombMusic()
-  }, [playBombMusic])
+    if (!audioRef.current) return
+    audioRef.current.currentTime = 0
+    audioRef.current.play()
+  }, [])
 
   const handleExplosion = useCallback(() => {
     playExplosionSound()
-    stopBombMusic()
-    if (timerRef.current) clearInterval(timerRef.current)
-    timerRef.current = null
+    audioRef.current?.pause()
+    if (timerRef.current) clearTimeout(timerRef.current)
     setIsGameOver(true)
     handleLevelAdvance()
     setTimeout(() => {
       resetGame()
     }, 4000)
-  }, [handleLevelAdvance, resetGame, playExplosionSound, stopBombMusic])
+  }, [handleLevelAdvance, resetGame, playExplosionSound])
 
   useEffectInitializer(() => {
     if (timer === 0 && !isGameOver) {
@@ -146,7 +135,7 @@ export const BombDefusalContent = ({
     if (instructionStepIndex >= instructions.length - 1) {
       validateAdvance()
       if (timerRef.current) clearInterval(timerRef.current)
-      stopBombMusic()
+      audioRef.current?.pause()
     }
   }
 
@@ -215,7 +204,17 @@ export const BombDefusalContent = ({
           {message}
         </div>
       )}
-      {isGameOver && <div className="fixed top-0 left-0 h-screen w-screen bg-red-500/50 " />}
+      <audio
+        src="/thirty-factor-authentication/sounds/bomb-defusal.m4a"
+        autoPlay
+        loop
+        ref={audioRef}
+      />
+      {isGameOver &&
+        createPortal(
+          <div className="fixed inset-0 z-[9999] bg-red-500/50 pointer-events-none" />,
+          document.body
+        )}
     </>
   )
 }
