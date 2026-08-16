@@ -1,10 +1,11 @@
-import { PropsWithChildren, useRef, useState, useMemo } from 'react'
+import { PropsWithChildren, useRef, useState, useEffect } from 'react'
 import { ContentProps } from './types'
 import { Player, PlayerIds, PlayerInformation } from '../player-constants'
 import Image from 'next/image'
 import classNames from 'classnames'
 import { makeAuthCode, shuffle } from '../utils'
 import { useElementDrag } from '../useElementDrag'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 type Discrepancy = {
   id: string
@@ -36,17 +37,33 @@ const DiscrepancyBase: Record<string, Discrepancy> = {
   ['coat']: { id: 'coat', title: 'Coat of Arms' },
 }
 
+const getAllPlayerIds = (): PlayerIds[] =>
+  Object.values(PlayerIds).filter((value): value is PlayerIds => typeof value === 'number')
+
+const getUnselectedPlayerIds = (currentPlayerId: PlayerIds): PlayerIds[] =>
+  getAllPlayerIds().filter((id) => id !== currentPlayerId)
+
 export const PapersPleaseContent = ({ playerId, handleLevelAdvance, isMobile }: ContentProps) => {
+  const remainingSubjectsRef = useRef<PlayerIds[]>([])
+  const [subjectId, setSubjectId] = useState<PlayerIds | null>(null)
   const [isShowingCitation, setIsShowingCitation] = useState(false)
-  const { gameInfo: baseGameInfo, discrepancyKeys: baseDiscrepancyKeys } = useMemo(
-    () => generateDiscrepancies(playerId),
-    [playerId]
-  )
-  const [gameInfo, setGameInfo] = useState(baseGameInfo)
-  const [discrepancyKeys, setDiscrepancyKeys] = useState(baseDiscrepancyKeys)
+  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null)
+  const [discrepancyKeys, setDiscrepancyKeys] = useState<Set<string>>(new Set())
   const [selectedDiscrepancyIds, setSelectedDiscrepancyIds] = useState<Set<string>>(new Set())
 
+  // Client-only bootstrap: random subject + window docs need window (avoid SSR hydration mismatch)
+  useEffectInitializer(() => {
+    const pool = shuffle(getUnselectedPlayerIds(playerId))
+    const nextSubject = pool[0]
+    remainingSubjectsRef.current = pool.slice(1)
+    const generated = generateDiscrepancies(nextSubject)
+    setSubjectId(nextSubject)
+    setGameInfo(generated.gameInfo)
+    setDiscrepancyKeys(generated.discrepancyKeys)
+  }, [playerId])
+
   const handleApprove = () => {
+    if (!gameInfo) return
     setIsShowingCitation(true)
     if (discrepancyKeys.size === 0 && selectedDiscrepancyIds.size === 0) {
       handleLevelAdvance(true)
@@ -56,6 +73,7 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance, isMobile }: 
   }
 
   const handleDecline = () => {
+    if (!gameInfo) return
     if (
       discrepancyKeys.size !== 0 &&
       discrepancyKeys.size === selectedDiscrepancyIds.size &&
@@ -90,12 +108,29 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance, isMobile }: 
     })
 
   const handleReset = () => {
-    const { gameInfo, discrepancyKeys } = generateDiscrepancies(playerId)
-    setGameInfo(gameInfo)
-    setDiscrepancyKeys(discrepancyKeys)
+    if (subjectId === null) return
+    // Next unused unselected character — 3 lives ≈ 3 different people
+    let nextSubject = remainingSubjectsRef.current[0]
+    if (nextSubject !== undefined) {
+      remainingSubjectsRef.current = remainingSubjectsRef.current.slice(1)
+    } else {
+      const fallbackPool = shuffle(
+        getUnselectedPlayerIds(playerId).filter((id) => id !== subjectId)
+      )
+      nextSubject = fallbackPool[0] ?? subjectId
+      remainingSubjectsRef.current = fallbackPool.slice(1)
+    }
+
+    const { gameInfo: nextGameInfo, discrepancyKeys: nextDiscrepancyKeys } =
+      generateDiscrepancies(nextSubject)
+    setSubjectId(nextSubject)
+    setGameInfo(nextGameInfo)
+    setDiscrepancyKeys(nextDiscrepancyKeys)
     setIsShowingCitation(false)
     setSelectedDiscrepancyIds(new Set())
   }
+
+  const docsReady = subjectId !== null && gameInfo !== null
 
   return (
     <>
@@ -143,20 +178,22 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance, isMobile }: 
           </div>
         </div>
       </div>
-      {typeof window !== 'undefined' && (
-        <DriversLicense
-          playerId={playerId}
-          gameInfo={gameInfo}
-          addDiscrepancy={handleDiscrepancySelect}
-          isMobile={isMobile}
-        />
-      )}
-      {typeof window !== 'undefined' && (
-        <EntryPermit
-          gameInfo={gameInfo}
-          addDiscrepancy={handleDiscrepancySelect}
-          isMobile={isMobile}
-        />
+      {docsReady && (
+        <>
+          <DriversLicense
+            key={subjectId}
+            playerId={subjectId}
+            gameInfo={gameInfo}
+            addDiscrepancy={handleDiscrepancySelect}
+            isMobile={isMobile}
+          />
+          <EntryPermit
+            key={`permit-${subjectId}`}
+            gameInfo={gameInfo}
+            addDiscrepancy={handleDiscrepancySelect}
+            isMobile={isMobile}
+          />
+        </>
       )}
       {isShowingCitation && (
         <Citation discrepancyKeys={discrepancyKeys} onReset={handleReset} isMobile={isMobile} />
@@ -165,14 +202,14 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance, isMobile }: 
         <button
           className="button-stamp bg-red-400 font-extrabold tracking-widest disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
           onClick={handleDecline}
-          disabled={selectedDiscrepancyIds.size === 0}
+          disabled={!docsReady || selectedDiscrepancyIds.size === 0}
         >
           DENIED
         </button>
         <button
           className="button-stamp bg-green-400 font-extrabold tracking-widest disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
           onClick={handleApprove}
-          disabled={selectedDiscrepancyIds.size > 0}
+          disabled={!docsReady || selectedDiscrepancyIds.size > 0}
         >
           APPROVED
         </button>
