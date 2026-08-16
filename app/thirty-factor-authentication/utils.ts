@@ -101,11 +101,9 @@ export function addMinutesToDateAndFormat(date: Date | number, minutes: number) 
   return getFormattedDate(new Date(addMinutesToDate(date, minutes)))
 }
 
-export function formatElapsedTime(timestamp: number): string {
-  const now = Date.now()
-  const diff = Math.max(0, now - timestamp) // milliseconds
-
-  const seconds = Math.floor(diff / 1000)
+/** Verbose duration for victory copy (e.g. "1 minute 12 seconds"). */
+export function formatElapsedDuration(ms: number): string {
+  const seconds = Math.floor(Math.max(0, ms) / 1000)
   const minutes = Math.floor(seconds / 60)
   const hours = Math.floor(minutes / 60)
   const days = Math.floor(hours / 24)
@@ -124,6 +122,26 @@ export function formatElapsedTime(timestamp: number): string {
     parts.push(`${remainingSeconds} second${remainingSeconds === 1 ? '' : 's'}`)
 
   return parts.join(' ')
+}
+
+export function formatElapsedTime(timestamp: number): string {
+  return formatElapsedDuration(Date.now() - timestamp)
+}
+
+/** Compact duration for per-level run stats (e.g. "45s", "1m 12s", "1h 3m"). */
+export function formatDurationMs(ms: number): string {
+  const totalSeconds = Math.max(0, Math.floor(ms / 1000))
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+
+  if (hours > 0) {
+    return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`
+  }
+  if (minutes > 0) {
+    return seconds > 0 ? `${minutes}m ${seconds}s` : `${minutes}m`
+  }
+  return `${seconds}s`
 }
 
 type RGB = { r: number; g: number; b: number }

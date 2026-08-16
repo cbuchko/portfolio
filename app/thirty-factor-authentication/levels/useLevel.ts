@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { OneContent, OneControls } from './1'
 import { IdentityLockContent, IdentityLockControls } from './IdentityLock'
 import { LegalNameContent, LegalNameControls } from './LegalName'
 import { MessageSpamContent, MessageSpamControls } from './MessageSpam'
 import { ZodiacContent, ZodiacControls } from './Zodiac'
 import { FallbackOneContent, FallbackOneControls } from './Fallback1'
-import { forceLevel } from '../constants'
+import { forceLevel, maxLevel } from '../constants'
 import { FallbackTwoContent, FallbackTwoControls } from './Fallback2'
 import { MapContent, MapControls } from './MapBirthplace'
 import { PostItContent, PostItControls } from './PostIt'
@@ -37,10 +37,17 @@ import { ControlProps, IdentitySelectProps } from './types'
 type LevelContent = (props: IdentitySelectProps) => React.JSX.Element | null
 type LevelControls = (props: ControlProps) => React.JSX.Element | null
 
+export type LevelTiming = {
+  level: number
+  title: string
+  durationMs: number
+}
+
 type LevelDefinition = {
   content: LevelContent
   controls?: LevelControls
   requiresLoad?: boolean
+  title: string
 }
 
 export type LevelProps = {
@@ -56,13 +63,63 @@ export type LevelProps = {
   selectedSSOIds: Set<SSOIds>
   setSelectedSSOIds: React.Dispatch<React.SetStateAction<Set<SSOIds>>>
   startTime: number
+  levelTimings: LevelTiming[]
+  finalizeRunStats: () => void
 }
+
+// Character levels use ContentProps (playerId required). The shell passes
+// IdentitySelectProps; AuthContainer guarantees playerId after level 1.
+export const LEVELS: LevelDefinition[] = [
+  { content: OneContent, controls: OneControls, title: 'Account Select' },
+  { content: IdentityLockContent, controls: IdentityLockControls, title: 'Identity Lock' },
+  { content: BasicAppCodeContent, controls: BasicAppCodeControls, title: 'App Code' },
+  { content: LegalNameContent, controls: LegalNameControls, title: 'Legal Name' },
+  { content: MessageSpamContent, controls: MessageSpamControls, title: 'Message Spam' },
+  { content: FallbackOneContent, controls: FallbackOneControls, title: 'Password Reset' },
+  { content: MapContent, controls: MapControls, title: 'Birthplace' },
+  { content: BiometricContent, controls: BiometricControls, title: 'Biometrics' },
+  { content: PostItContent, controls: PostItControls, title: 'Post-it Code' },
+  { content: ZodiacContent, controls: ZodiacControls, title: 'Zodiac' },
+  { content: UPSContent, controls: UPSControls, title: 'Package Tracking' },
+  { content: FallbackTwoContent, controls: FallbackTwoControls, title: 'Password Confirm' },
+  { content: AppCodeContent, controls: AppCodeControls, title: 'Authenticator App' },
+  { content: QuotesContent, title: 'Quotes' },
+  { content: AquariumContent, controls: AquariumControls, title: 'Aquarium' },
+  { content: MaintenanceContent, controls: MaintenanceControls, title: 'Maintenance' },
+  { content: IMDBContent, title: 'Filmography' },
+  { content: RoadTripContent, requiresLoad: true, title: 'Road Trip' },
+  { content: ParlorRoomContent, requiresLoad: true, title: 'Parlor Room' },
+  { content: DartboardContent, title: 'Dartboard' },
+  { content: TaxReturnContent, controls: TaxReturnControls, title: 'Tax Return' },
+  { content: FishingContent, controls: FishingControls, title: 'Fishing' },
+  { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true, title: 'Bird Calls' },
+  { content: MastermindContent, title: 'Mastermind' },
+  {
+    content: UPSFinishContent,
+    controls: UPSFinishControls,
+    requiresLoad: true,
+    title: 'Package Delivery',
+  },
+  { content: SpotifyContent, title: 'Rhythm Challenge' },
+  { content: BombDefusalContent, controls: BombDefusalControls, title: 'Bomb Defusal' },
+  { content: PapersPleaseContent, title: 'Papers Please' },
+  { content: EinsteinContent, controls: EinsteinControls, title: 'Einstein Riddle' },
+  { content: UndertaleContent, title: 'Final Defense' },
+] as LevelDefinition[]
 
 //AAAA@@may00
 export const useLevels = () => {
   const [level, setLevel] = useState(1)
+  const levelRef = useRef(1)
+  levelRef.current = level
 
   const [startTime, setStartTime] = useState(new Date().getTime())
+  const [levelEnteredAt, setLevelEnteredAt] = useState(() => Date.now())
+  const levelEnteredAtRef = useRef(levelEnteredAt)
+  levelEnteredAtRef.current = levelEnteredAt
+
+  const [levelTimings, setLevelTimings] = useState<LevelTiming[]>([])
+  const levelTimingsRef = useRef<LevelTiming[]>([])
 
   const { playSound: playSuccessSound } = useSound(
     '/thirty-factor-authentication/sounds/success.mp3',
@@ -75,14 +132,40 @@ export const useLevels = () => {
 
   const [selectedSSOIds, setSelectedSSOIds] = useState<Set<SSOIds>>(new Set())
 
+  const recordLevelTiming = useCallback((levelNumber: number) => {
+    if (levelNumber < 1 || levelNumber > maxLevel) return
+    if (levelTimingsRef.current.some((entry) => entry.level === levelNumber)) return
+
+    const durationMs = Math.max(0, Date.now() - levelEnteredAtRef.current)
+    const title = LEVELS[levelNumber - 1]?.title ?? `Level ${levelNumber}`
+    const next = [...levelTimingsRef.current, { level: levelNumber, title, durationMs }]
+    levelTimingsRef.current = next
+    setLevelTimings(next)
+  }, [])
+
   const handleLevelAdvance = useCallback(() => {
     playSuccessSound()
-    setLevel((level) => level + 1)
-  }, [playSuccessSound])
+    const completedLevel = levelRef.current
+    recordLevelTiming(completedLevel)
+    const enteredAt = Date.now()
+    levelEnteredAtRef.current = enteredAt
+    setLevelEnteredAt(enteredAt)
+    setLevel((current) => current + 1)
+  }, [playSuccessSound, recordLevelTiming])
+
+  const finalizeRunStats = useCallback(() => {
+    recordLevelTiming(levelRef.current)
+  }, [recordLevelTiming])
 
   const resetLevel = () => {
     setLevel(1)
-    setStartTime(new Date().getTime())
+    levelRef.current = 1
+    const now = Date.now()
+    setStartTime(now)
+    levelEnteredAtRef.current = now
+    setLevelEnteredAt(now)
+    levelTimingsRef.current = []
+    setLevelTimings([])
     setUPSTrackingCode('')
     setUPSTrackingTime(0)
     setSelectedSSOIds(new Set())
@@ -100,44 +183,11 @@ export const useLevels = () => {
     selectedSSOIds,
     setSelectedSSOIds,
     startTime,
+    levelTimings,
+    finalizeRunStats,
   } as LevelProps
 
   const levelToUse = forceLevel > 0 ? forceLevel : level
-  // Character levels use ContentProps (playerId required). The shell passes
-  // IdentitySelectProps; AuthContainer guarantees playerId after level 1.
-  const LEVELS: LevelDefinition[] = [
-    { content: OneContent, controls: OneControls },
-    { content: IdentityLockContent, controls: IdentityLockControls },
-    { content: BasicAppCodeContent, controls: BasicAppCodeControls },
-    { content: LegalNameContent, controls: LegalNameControls },
-    { content: MessageSpamContent, controls: MessageSpamControls }, //5
-    { content: FallbackOneContent, controls: FallbackOneControls },
-    { content: MapContent, controls: MapControls },
-    { content: BiometricContent, controls: BiometricControls },
-    { content: PostItContent, controls: PostItControls },
-    { content: ZodiacContent, controls: ZodiacControls }, //10
-    { content: UPSContent, controls: UPSControls },
-    { content: FallbackTwoContent, controls: FallbackTwoControls },
-    { content: AppCodeContent, controls: AppCodeControls },
-    { content: QuotesContent },
-    { content: AquariumContent, controls: AquariumControls }, //15
-    { content: MaintenanceContent, controls: MaintenanceControls },
-    { content: IMDBContent },
-    { content: RoadTripContent, requiresLoad: true },
-    { content: ParlorRoomContent, requiresLoad: true },
-    { content: DartboardContent }, //20
-    { content: TaxReturnContent, controls: TaxReturnControls },
-    { content: FishingContent, controls: FishingControls },
-    { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true },
-    { content: MastermindContent },
-    { content: UPSFinishContent, controls: UPSFinishControls, requiresLoad: true }, //25
-    { content: SpotifyContent },
-    { content: BombDefusalContent, controls: BombDefusalControls },
-    { content: PapersPleaseContent },
-    { content: EinsteinContent, controls: EinsteinControls },
-    { content: UndertaleContent }, //30
-  ] as LevelDefinition[]
-
   const levelDef = LEVELS[levelToUse - 1]
   if (!levelDef) {
     // fallback
@@ -146,6 +196,7 @@ export const useLevels = () => {
       content: OneContent,
       controls: OneControls,
       requiresLoad: false,
+      title: 'Account Select',
     }
   }
   return { baseProps, ...levelDef, requiresLoad: levelDef.requiresLoad || false }

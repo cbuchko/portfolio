@@ -4,7 +4,7 @@ import { AuthContainer } from './AuthContainer'
 import './styles.css'
 import './waves.css'
 import { useLevels } from './levels/useLevel'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { PlayerIds, PlayerInformation } from './player-constants'
 import { devMode, maxLevel, mobileWidthBreakpoint } from './constants'
 import { DndProvider } from 'react-dnd'
@@ -13,6 +13,7 @@ import { TouchBackend } from 'react-dnd-touch-backend'
 import { UPSTracker } from './components/UPSTracker'
 import Image from 'next/image'
 import { VictoryScreen } from './VictoryScreen'
+import { RunStats } from './components/RunStats'
 import { useSound } from '../utils/useSounds'
 import { useEffectInitializer } from '../utils/useEffectUnsafe'
 import { useIsMobile } from '../utils/useIsMobile'
@@ -33,9 +34,14 @@ export default function ThirtyFactorAuthentication() {
   const { playSound: playErrorSound } = useSound('/thirty-factor-authentication/sounds/error.mp3')
 
   const { content, controls, requiresLoad, baseProps } = useLevels()
-  const { level, setLevel, upsTrackingCode, upsTrackingTime, resetLevel } = baseProps
+  const { level, setLevel, upsTrackingCode, upsTrackingTime, resetLevel, levelTimings, finalizeRunStats } =
+    baseProps
 
   const isCompleted = level === maxLevel + 1
+
+  useEffect(() => {
+    if (isGameOver) finalizeRunStats()
+  }, [isGameOver, finalizeRunStats])
 
   const dragBackend = useMemo(() => {
     if (typeof window === 'undefined') {
@@ -97,8 +103,8 @@ export default function ThirtyFactorAuthentication() {
         {isGameOver && (
           <div
             className={classNames(
-              'absolute top-[25%] -translate-y-[50%] left-[50%] -translate-x-[50%] bg-red-100 p-8 rounded-md shadow-lg',
-              { '!top-[50%] w-full': isMobile, 'max-w-[650px]': !isMobile }
+              'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-100 p-8 rounded-md shadow-lg max-h-[85vh] overflow-y-auto',
+              { 'w-full': isMobile, 'max-w-[650px]': !isMobile }
             )}
           >
             <h2 className="text-4xl mb-2">You have failed to authenticate.</h2>
@@ -112,6 +118,7 @@ export default function ThirtyFactorAuthentication() {
                 }
               </p>
             )}
+            <RunStats levelTimings={levelTimings} accent="defeat" />
             <button
               className="mt-2 auth-button"
               onClick={() => {

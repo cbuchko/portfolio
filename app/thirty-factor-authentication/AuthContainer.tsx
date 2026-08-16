@@ -58,16 +58,6 @@ export const AuthContainer = ({
   const validateAdvance = useCallback(() => setIsAdvanceVerified(true), [])
   const cancelAdvance = useCallback(() => setIsAdvanceVerified(false), [])
 
-  const controlsContent = Controls
-    ? Controls({
-        handleLevelAdvance: onAdvance,
-        handleGameOver: () => setIsGameOver(true),
-        validateAdvance,
-        setUPSTrackingTime: baseProps.setUPSTrackingTime,
-        playerId,
-      })
-    : null
-
   // After level 1, a character must have been selected
   if (level !== 1 && playerId === undefined) return null
 
@@ -108,13 +98,8 @@ export const AuthContainer = ({
           </div>
           <h6 className="text-xs">{`Level ${level}/${maxLevel}`}</h6>
         </div>
-        <div id="auth-body" className="border rounded-sm border-t-0 rounded-t-none">
-          <div
-            id="auth-content"
-            className={classNames('px-4 py-8 bg-white', {
-              'rounded-b-lg': !controlsContent,
-            })}
-          >
+        <div id="auth-body" className="border border-t-0 rounded-b-md overflow-hidden">
+          <div id="auth-content" className="px-4 py-8 bg-white">
             <Content
               playerId={playerId}
               setPlayerId={setPlayerId}
@@ -131,12 +116,19 @@ export const AuthContainer = ({
               isMobile={isMobile}
             />
           </div>
-          {controlsContent && (
+          {Controls && (
             <div
               id="auth-controls"
-              className="px-4 py-3 border-t flex flex-wrap w-full justify-between gap-4 bg-gray-50 rounded-b-sm"
+              className="px-4 py-3 border-t flex flex-wrap w-full justify-between gap-4 bg-gray-50 rounded-b-sm empty:hidden"
             >
-              {controlsContent}
+              <Controls
+                key={level}
+                handleLevelAdvance={onAdvance}
+                handleGameOver={() => setIsGameOver(true)}
+                validateAdvance={validateAdvance}
+                setUPSTrackingTime={baseProps.setUPSTrackingTime}
+                playerId={playerId}
+              />
             </div>
           )}
         </div>

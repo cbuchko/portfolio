@@ -1,8 +1,6 @@
 Feedback actionables:
 Trim soudns like success so there isnt dead air beginning and end
 DO A FULL SFX PASS FOR TRIMMING
-Self Checkouts gotta go
-Brain Scan clearer UI for health bar
 
 
 Levels that NEED to be better:
@@ -70,9 +68,6 @@ Responsiveness Notes:
 
 
 August 16th revisit notes:
-- Level 2 should be a select the picture level
-- Remove Brain Scan
-- Add more characters
 - Mobile "Easyness" 
-- Undertale difficulty tweak
-- Better character selector?
+- Buggy fishing and spotify
+- Test more

@@ -1,6 +1,7 @@
 import { LevelProps } from './levels/useLevel'
 import { PlayerIds, PlayerInformation } from './player-constants'
-import { formatElapsedTime } from './utils'
+import { formatElapsedDuration, formatElapsedTime } from './utils'
+import { RunStats } from './components/RunStats'
 
 export const VictoryScreen = ({
   playerId,
@@ -9,18 +10,22 @@ export const VictoryScreen = ({
   playerId: PlayerIds
   levelProps: LevelProps
 }) => {
-  const { startTime, resetLevel } = levelProps
+  const { startTime, resetLevel, levelTimings } = levelProps
   const characterName = PlayerInformation[playerId].name
+  const totalMs = levelTimings.reduce((sum, entry) => sum + entry.durationMs, 0)
+  const elapsedLabel =
+    totalMs > 0 ? formatElapsedDuration(totalMs) : formatElapsedTime(startTime)
   return (
-    <div className="absolute top-[50%] -translate-y-[50%] left-[50%] -translate-x-[50%] h-[50%]">
+    <div className="relative z-10 mx-auto mt-28 mb-12 w-full max-w-[650px] px-4">
       <div className="bg-green-100 p-8 rounded-md shadow-lg">
         <h2 className="text-4xl mb-4">Congratulations, you successfully authenticated!</h2>
         <p className="text-lg">
-          You authenticated as {characterName} in {formatElapsedTime(startTime)}.
+          You authenticated as {characterName} in {elapsedLabel}.
         </p>
         <p className="text-lg">
           Your reward is a sense of pride and accomplishment. And bragging rights.
         </p>
+        <RunStats levelTimings={levelTimings} accent="victory" />
         <button
           className="mt-2 auth-button"
           onClick={() => {
