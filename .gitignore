@@ -46,3 +46,6 @@ blog-ideas.txt
 playtesting.txt
 
 times.txt
+
+# Local originals from scripts/trim_sfx.py
+public/thirty-factor-authentication/sounds/_pretrim_backup/

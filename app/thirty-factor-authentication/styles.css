@@ -195,6 +195,47 @@ small {
   }
 }
 
+.spotify-pad {
+  will-change: transform;
+}
+
+.spotify-approach-ring {
+  animation: spotify-approach var(--approach-ms, 500ms) linear forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes spotify-approach {
+  0% {
+    transform: scale(2.75);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.25;
+  }
+}
+
+.spotify-judgment {
+  animation: spotify-judgment-pop 450ms ease-out forwards;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+@keyframes spotify-judgment-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -70%) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -120%) scale(1);
+  }
+}
+
+
 .liebe-heide {
   font-family: var(--liebe-heide);
 }

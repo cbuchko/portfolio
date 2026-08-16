@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 
 export function useSound(src: string, volume?: number, shouldLoop?: boolean) {
-  const audioRef = useRef<HTMLAudioElement>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
   const isAudioPlayingRef = useRef(false)
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export function useSound(src: string, volume?: number, shouldLoop?: boolean) {
     if (!audio) return
     isAudioPlayingRef.current = true
     audio.currentTime = 0
-    audio.play()
+    void audio.play()
   }, [])
 
   const stopSound = useCallback(() => {
@@ -33,5 +33,15 @@ export function useSound(src: string, volume?: number, shouldLoop?: boolean) {
     audio.pause()
   }, [])
 
-  return { playSound, stopSound, isAudioPlayingRef }
+  const getCurrentTimeMs = useCallback(() => {
+    return (audioRef.current?.currentTime ?? 0) * 1000
+  }, [])
+
+  const getDurationMs = useCallback(() => {
+    const duration = audioRef.current?.duration
+    if (!duration || Number.isNaN(duration)) return 0
+    return duration * 1000
+  }, [])
+
+  return { playSound, stopSound, isAudioPlayingRef, audioRef, getCurrentTimeMs, getDurationMs }
 }

@@ -1,14 +1,38 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { clampPositionsToScreen } from '../utils'
 import classNames from 'classnames'
 import { useSound } from '@/app/utils/useSounds'
 import { ContentProps, ControlProps } from './types'
-import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
-type RythymPadType = {
-  number: number
-  delayInMs: number
+type Position = { x: number; y: number }
+
+type ChartNote = {
+  id: number
+  hitTimeMs: number
+  approachMs: number
   color: string
+  comboIndex: number
+  x: number
+  y: number
+}
+
+type ActiveNote = ChartNote & {
+  judgment: Judgment | null
+  resolvedAtMs: number | null
+}
+
+type FloatingJudgment = {
+  id: number
+  judgment: Judgment
+  x: number
+  y: number
+  createdAt: number
+}
+
+enum Judgment {
+  miss = 'MISS',
+  ok = 'OK',
+  good = 'GOOD',
+  great = 'GREAT',
 }
 
 const colorHexArray = ['#fb923c', '#facc15', '#4ade80', '#60a5fa', '#a78bfa', '#9ca3af']
@@ -18,6 +42,16 @@ const halfTimeQuarter = 750
 const greatScore = 200
 const goodScore = 100
 const okScore = 50
+
+// Match original pad lifetime: miss only after hitTime + lateGraceMs.
+// Click scoring mirrors the old elapsed windows (early tap = OK, near ring close = GREAT).
+const lateGraceMs = 100
+const greatEarlyMs = 75
+// Negative = hit times earlier vs audio — compensates for feeling late-to-GREAT
+const chartOffsetMs = -70
+const judgmentLingerMs = 450
+const desktopPadSize = 100
+const mobilePadSize = 96
 
 const cadences = [
   { count: 5, delay: halfTimeQuarter, color: colorHexArray[0] },
@@ -43,309 +77,582 @@ const cadences = [
   { count: 7, delay: halfTimeQuarter, color: colorHexArray[2] },
 ]
 
-type Position = { x: number; y: number }
-export const SpotifyContent = ({ handleLevelAdvance }: ContentProps) => {
-  const maxRythym = useMemo(() => cadences.reduce((acc, curr) => acc + curr.count, 0), [])
-  const [rhythmPads, setRhythmPads] = useState<RythymPadType[]>([])
-  const cadenceIndexRef = useRef(0)
-  const [isStarted, setIsStarted] = useState(false)
-  const intervalRef = useRef<NodeJS.Timeout>(null)
-  const [previousPosition, setPreviousPosition] = useState<Position | null>(null)
-  const [secondaryPreviousPosition, setSecondaryPreviousPosition] = useState<Position | null>(null)
-  const { playSound: playSoundtrack, stopSound: stopSoundtrack } = useSound(
-    '/thirty-factor-authentication/sounds/open-the-sky.wav',
-    0.3,
-    true
-  )
-  const [score, setScore] = useState(0)
-  const [isInsideCadence, setIsInsideCadence] = useState(false)
-
-  const padAmount = rhythmPads.length
-
-  //must get the equivalent of 60% greats and 40% goods
-  const scoreThreshold = useMemo(() => {
-    return Math.floor(maxRythym * 0.6 * greatScore + maxRythym * 0.4 * goodScore)
-  }, [maxRythym])
-
-  const resetGame = useCallback(() => {
-    setRhythmPads([])
-    setIsStarted(false)
-    stopSoundtrack()
-    setPreviousPosition(null)
-    setSecondaryPreviousPosition(null)
-    setIsInsideCadence(false)
-    cadenceIndexRef.current = 0
-    if (intervalRef.current) clearInterval(intervalRef.current)
-    const hasWon = score >= scoreThreshold
-    if (!hasWon) handleLevelAdvance()
-    else handleLevelAdvance(true)
-  }, [handleLevelAdvance, stopSoundtrack, score, scoreThreshold])
-
-  //takes the list of Cadences and smartly spawns them based on their delays
-  useEffect(() => {
-    if (!isStarted) return
-    let cancelled = false
-
-    let innerCadenceCount = 0
-    const run = () => {
-      if (cancelled) return
-      const { delay, color, count } = cadences[cadenceIndexRef.current]
-
-      if (innerCadenceCount === 0) {
-        setIsInsideCadence(false)
-      } else {
-        setIsInsideCadence(true)
-      }
-      if (innerCadenceCount < count) {
-        innerCadenceCount++
-      }
-
-      setRhythmPads((pads) => [
-        ...pads,
-        { delayInMs: delay, number: innerCadenceCount === 0 ? count : innerCadenceCount, color },
-      ])
-
-      if (innerCadenceCount === count) {
-        cadenceIndexRef.current = cadenceIndexRef.current + 1
-        innerCadenceCount = 0
-      }
-
-      setTimeout(run, delay)
-    }
-    run()
-
-    return () => {
-      cancelled = true
-    }
-  }, [isStarted])
-
-  useEffect(() => {
-    if (padAmount >= maxRythym) {
-      resetGame()
-    }
-  }, [padAmount, maxRythym, resetGame])
-
-  return (
-    <>
-      <p className="text-lg">Please complete this Rhythm challenge.</p>
-      <p className="text-lg">
-        Click on the pads to score points. Score at least {scoreThreshold} points to win!
-      </p>
-      <p className="text-lg"></p>
-      <p className="text-2xl mono mt-4">Points: {score}</p>
-      <div className="w-full flex justify-center mt-4">
-        <button
-          className={classNames('border-2 py-1 px-3 rounded-md cursor-pointer auth-button', {
-            'opacity-0 pointer-events-none': isStarted,
-          })}
-          onClick={() => {
-            setIsStarted(true)
-            setScore(0)
-            playSoundtrack()
-          }}
-        >
-          {score > 0 ? 'Restart' : 'Start'}
-        </button>
-      </div>
-      {rhythmPads.map((pad, idx) => (
-        <RythymPad
-          key={idx}
-          number={pad.number}
-          delayInMs={pad.delayInMs}
-          resetGame={resetGame}
-          previousPosition={previousPosition}
-          secondaryPreviousPosition={secondaryPreviousPosition}
-          setPreviousPosition={setPreviousPosition}
-          setSecondaryPreviousPosition={setSecondaryPreviousPosition}
-          setScore={setScore}
-          color={pad.color}
-          handleWin={() => {
-            if (idx + 1 === maxRythym) {
-              handleLevelAdvance(true)
-              if (intervalRef.current) clearInterval(intervalRef.current)
-            }
-          }}
-          isInsideCadence={isInsideCadence}
-        />
-      ))}
-    </>
-  )
+const getPlayfieldBounds = (padSize: number, isMobile: boolean) => {
+  const vw = window.visualViewport?.width ?? window.innerWidth
+  const vh = window.visualViewport?.height ?? window.innerHeight
+  const top = vh * 0.52
+  const bottom = Math.max(top + padSize, vh - padSize - (isMobile ? 16 : 28))
+  const marginX = isMobile ? 10 : Math.max(24, (vw - 520) / 2)
+  const left = marginX
+  const right = Math.max(left + padSize, vw - padSize - marginX)
+  return { top, bottom, left, right }
 }
 
-const clamp = 200
-const getRandomPosition = (previousPosition: Position | null, callstackCount = 0) => {
-  const halfwayDown = window.innerHeight / 2
-  const height = window.innerHeight
-  const y = Math.random() * (height - halfwayDown - clamp) + halfwayDown - clamp
-  const maxX = window.innerWidth / 2 + clamp
-  const minxX = window.innerWidth / 2 - clamp
-  const x = Math.random() * (maxX - minxX) + minxX
-  const newPosition = clampPositionsToScreen(x, y, clamp, clamp)
+const clampToPlayfield = (x: number, y: number, padSize: number, isMobile: boolean): Position => {
+  const { top, bottom, left, right } = getPlayfieldBounds(padSize, isMobile)
+  return {
+    x: Math.min(right, Math.max(left, x)),
+    y: Math.min(bottom, Math.max(top, y)),
+  }
+}
 
-  //dont let it recursively go crazy, at a certain point just return anything
-  if (callstackCount > 5) return { x: newPosition.newX, y: newPosition.newY }
+const getRandomPosition = (
+  previousPosition: Position | null,
+  padSize: number,
+  isMobile: boolean,
+  callstackCount = 0
+): Position => {
+  const { top, bottom, left, right } = getPlayfieldBounds(padSize, isMobile)
+  const x = Math.random() * (right - left) + left
+  const y = Math.random() * (bottom - top) + top
+  const position = clampToPlayfield(x, y, padSize, isMobile)
 
-  //ensures it doesnt double back on itself
+  if (callstackCount > 5) return position
+
   if (
     previousPosition &&
-    newPosition.newX >= previousPosition.x - padSize * 2 &&
-    newPosition.newX <= previousPosition.x + padSize * 2 &&
-    newPosition.newY >= previousPosition.y - padSize * 2 &&
-    newPosition.newY <= previousPosition.y + padSize * 2
+    position.x >= previousPosition.x - padSize * 2 &&
+    position.x <= previousPosition.x + padSize * 2 &&
+    position.y >= previousPosition.y - padSize * 2 &&
+    position.y <= previousPosition.y + padSize * 2
   ) {
-    return getRandomPosition(previousPosition, callstackCount + 1)
+    return getRandomPosition(previousPosition, padSize, isMobile, callstackCount + 1)
   }
-  return { x: newPosition.newX, y: newPosition.newY }
+  return position
 }
 
-const getRelativePosition = (position: Position, secondaryPrevious: Position | null) => {
-  const magnitude = 75
-  const y = Math.random() > 0.5 ? position.y + magnitude : position.y - magnitude
-  const x = Math.random() > 0.5 ? position.x + magnitude : position.x - magnitude
-  const newPosition = clampPositionsToScreen(x, y, clamp, clamp)
+const getRelativePosition = (
+  position: Position,
+  secondaryPrevious: Position | null,
+  padSize: number,
+  isMobile: boolean
+): Position => {
+  const { top, bottom, left, right } = getPlayfieldBounds(padSize, isMobile)
+  const magnitude = Math.max(56, padSize * 0.75)
+  const edgeZone = Math.max(padSize * 1.15, 72)
 
-  //ensures it doesnt double back on itself
-  if (
-    secondaryPrevious &&
-    newPosition.newX === secondaryPrevious.x &&
-    newPosition.newY === secondaryPrevious.y
-  ) {
-    return getRelativePosition(position, secondaryPrevious)
+  const nearLeft = position.x - left < edgeZone
+  const nearRight = right - position.x < edgeZone
+  const nearTop = position.y - top < edgeZone
+  const nearBottom = bottom - position.y < edgeZone
+
+  // Always stay one combo-step away — never teleport mid-chain
+  const xOptions = nearLeft ? [magnitude] : nearRight ? [-magnitude] : [magnitude, -magnitude]
+  const yOptions = nearTop ? [magnitude] : nearBottom ? [-magnitude] : [magnitude, -magnitude]
+
+  const candidates: Position[] = []
+  for (const dx of xOptions) {
+    for (const dy of yOptions) {
+      candidates.push(clampToPlayfield(position.x + dx, position.y + dy, padSize, isMobile))
+    }
   }
-  return { x: newPosition.newX, y: newPosition.newY }
+
+  // Shuffle so mid-playfield chains still feel random among valid neighbors
+  for (let i = candidates.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[candidates[i], candidates[j]] = [candidates[j], candidates[i]]
+  }
+
+  const notDoubleBack = candidates.find(
+    (c) =>
+      !secondaryPrevious || c.x !== secondaryPrevious.x || c.y !== secondaryPrevious.y
+  )
+  return notDoubleBack ?? candidates[0]
 }
 
-enum Score {
-  miss = 'miss',
-  ok = 'ok',
-  good = 'good',
-  great = 'great',
+const buildChart = (padSize: number, isMobile: boolean): ChartNote[] => {
+  const notes: ChartNote[] = []
+  let hitTimeMs = chartOffsetMs
+  let previous: Position | null = null
+  let secondary: Position | null = null
+  let id = 0
+
+  for (const cadence of cadences) {
+    for (let i = 0; i < cadence.count; i++) {
+      hitTimeMs += cadence.delay
+      const insideCadence: boolean = i > 0 && previous !== null
+      const position: Position = insideCadence
+        ? getRelativePosition(previous!, secondary, padSize, isMobile)
+        : getRandomPosition(previous, padSize, isMobile)
+      secondary = previous
+      previous = position
+      notes.push({
+        id: id++,
+        hitTimeMs,
+        approachMs: cadence.delay,
+        color: cadence.color,
+        comboIndex: i + 1,
+        x: position.x,
+        y: position.y,
+      })
+    }
+  }
+
+  return notes
 }
 
-const padSize = 100
-const RythymPad = ({
-  number,
-  delayInMs,
-  previousPosition,
-  secondaryPreviousPosition,
-  color,
-  setPreviousPosition,
-  setSecondaryPreviousPosition,
-  setScore,
-  resetGame,
-  isInsideCadence,
-}: {
-  number: number
-  delayInMs: number
-  previousPosition: Position | null
-  secondaryPreviousPosition: Position | null
-  color: string
-  setPreviousPosition: (pos: Position | null) => void
-  setSecondaryPreviousPosition: (pos: Position | null) => void
-  setScore: React.Dispatch<React.SetStateAction<number>>
-  resetGame: () => void
-  handleWin: () => void
-  isInsideCadence: boolean
-}) => {
-  const [isCleared, setIsCleared] = useState(false)
-  const [position, setPosition] = useState<Position | null>(null)
-  const { playSound: playClickSound } = useSound(
-    'thirty-factor-authentication/sounds/osu-click.mp3',
-    0.25
-  )
-  const [scoreDisplay, setScoreDisplay] = useState<Score | null>(null)
-  const padLifeTimeRef = useRef(new Date().getTime())
+const scoreForJudgment = (judgment: Judgment) => {
+  if (judgment === Judgment.great) return greatScore
+  if (judgment === Judgment.good) return goodScore
+  if (judgment === Judgment.ok) return okScore
+  return 0
+}
 
-  //setScore and clear the pad
-  const handlePadCleanup = useCallback(
-    (scoreType: Score) => {
-      setScoreDisplay(scoreType)
-      setIsCleared(true)
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
-      if (scoreType === Score.great) setScore((score) => score + greatScore)
-      if (scoreType === Score.good) setScore((score) => score + goodScore)
-      if (scoreType === Score.ok) setScore((score) => score + okScore)
-    },
-    [setScore]
-  )
+/** Original feel: delta = now - hitTimeMs (negative = early). Any live press scores at least OK. */
+const judgmentFromTiming = (deltaMs: number, approachMs: number): Judgment => {
+  if (deltaMs >= -greatEarlyMs) return Judgment.great
+  if (deltaMs >= -approachMs / 3) return Judgment.good
+  return Judgment.ok
+}
 
-  useEffectInitializer(() => {
-    //makes its position a random position
-    if (!isInsideCadence || !previousPosition) {
-      const position = getRandomPosition(previousPosition)
-      setSecondaryPreviousPosition(previousPosition)
-      setPreviousPosition(position)
-      setPosition(position)
-    } else {
-      //makes its position relative to the previous position
-      const relativePosition = getRelativePosition(previousPosition, secondaryPreviousPosition)
-      setSecondaryPreviousPosition(previousPosition)
-      setPreviousPosition(relativePosition)
-      setPosition(relativePosition)
+const formatTrackTime = (ms: number) => {
+  const totalSec = Math.max(0, Math.floor(ms / 1000))
+  const minutes = Math.floor(totalSec / 60)
+  const seconds = totalSec % 60
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`
+}
+
+const noteCountFromCadences = cadences.reduce((acc, c) => acc + c.count, 0)
+
+const chartEndMsFromCadences = (() => {
+  let hitTimeMs = chartOffsetMs
+  for (const cadence of cadences) {
+    for (let i = 0; i < cadence.count; i++) hitTimeMs += cadence.delay
+  }
+  return hitTimeMs + lateGraceMs
+})()
+
+export const SpotifyContent = ({ handleLevelAdvance, isMobile }: ContentProps) => {
+  const padSize = isMobile ? mobilePadSize : desktopPadSize
+  const [chart, setChart] = useState<ChartNote[]>([])
+  const noteCount = noteCountFromCadences
+
+  const scoreThreshold = useMemo(() => {
+    return Math.floor(noteCount * 0.6 * greatScore + noteCount * 0.4 * goodScore)
+  }, [noteCount])
+
+  const {
+    playSound: playSoundtrack,
+    stopSound: stopSoundtrack,
+    getCurrentTimeMs,
+    audioRef,
+  } = useSound('/thirty-factor-authentication/sounds/open-the-sky.wav', 0.3, false)
+
+  const chartEndMs = chartEndMsFromCadences
+  const clickPoolRef = useRef<HTMLAudioElement[]>([])
+  const clickPoolIndexRef = useRef(0)
+
+  useEffect(() => {
+    clickPoolRef.current = [0, 1, 2].map(() => {
+      const audio = new Audio('/thirty-factor-authentication/sounds/osu-click.mp3')
+      audio.preload = 'auto'
+      audio.volume = 0.25
+      return audio
+    })
+    return () => {
+      clickPoolRef.current.forEach((audio) => {
+        audio.pause()
+      })
+      clickPoolRef.current = []
     }
   }, [])
 
-  const timeoutRef = useRef<NodeJS.Timeout>(null)
+  const playClickSound = useCallback(() => {
+    const pool = clickPoolRef.current
+    if (!pool.length) return
+    const audio = pool[clickPoolIndexRef.current % pool.length]
+    clickPoolIndexRef.current += 1
+    audio.currentTime = 0
+    void audio.play()
+  }, [])
 
-  useEffect(() => {
-    if (timeoutRef.current) return
-    const id = setTimeout(() => {
-      handlePadCleanup(Score.miss)
-    }, delayInMs + 100)
+  const [isStarted, setIsStarted] = useState(false)
+  const [score, setScore] = useState(0)
+  const [displayScore, setDisplayScore] = useState(0)
+  const [combo, setCombo] = useState(0)
+  const [failMessage, setFailMessage] = useState<string | null>(null)
+  const [activeNotes, setActiveNotes] = useState<ActiveNote[]>([])
+  const [judgments, setJudgments] = useState<FloatingJudgment[]>([])
+  const [progress, setProgress] = useState(0)
+  const [elapsedMs, setElapsedMs] = useState(0)
+  const [trailPoints, setTrailPoints] = useState<Position[]>([])
 
-    // eslint-disable-next-line react-hooks/immutability
-    timeoutRef.current = id
+  const nextSpawnIndexRef = useRef(0)
+  const activeNotesRef = useRef<ActiveNote[]>([])
+  const scoreRef = useRef(0)
+  const comboRef = useRef(0)
+  const finishedRef = useRef(false)
+  const rafRef = useRef<number | null>(null)
+  const chartRef = useRef(chart)
+  chartRef.current = chart
 
-    return () => {
-      clearTimeout(id)
-      timeoutRef.current = null
-    }
-  }, [resetGame, delayInMs, handlePadCleanup])
+  const pushJudgment = useCallback((note: ChartNote, judgment: Judgment) => {
+    setJudgments((prev) => [
+      ...prev,
+      {
+        id: note.id,
+        judgment,
+        x: note.x + padSize / 2,
+        y: note.y + padSize / 2,
+        createdAt: performance.now(),
+      },
+    ])
+  }, [padSize])
 
-  const handleClick = () => {
-    playClickSound()
-    const padSpawnTime = padLifeTimeRef.current
-    const currentTime = new Date().getTime()
-    const elapsedTime = currentTime - padSpawnTime
-    if (elapsedTime >= delayInMs - 40) {
-      handlePadCleanup(Score.great)
-    } else if (elapsedTime >= delayInMs / 1.5) {
-      handlePadCleanup(Score.good)
+  const registerJudgment = useCallback((judgment: Judgment) => {
+    if (judgment === Judgment.miss) {
+      comboRef.current = 0
     } else {
-      handlePadCleanup(Score.ok)
+      comboRef.current += 1
     }
+    setCombo(comboRef.current)
+  }, [])
+
+  const finishGame = useCallback(() => {
+    if (finishedRef.current) return
+    finishedRef.current = true
+    if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    rafRef.current = null
+    stopSoundtrack()
+    const hasWon = scoreRef.current >= scoreThreshold
+    if (hasWon) {
+      handleLevelAdvance(true)
+      return
+    }
+    // Strike + stay on level (AuthContainer adds the X when skipVerify is omitted)
+    handleLevelAdvance()
+    finishedRef.current = false
+    nextSpawnIndexRef.current = 0
+    setIsStarted(false)
+    setActiveNotes([])
+    activeNotesRef.current = []
+    setJudgments([])
+    setProgress(0)
+    setElapsedMs(0)
+    setTrailPoints([])
+    setCombo(0)
+    comboRef.current = 0
+    setFailMessage('Not enough listening activity. Try again.')
+  }, [handleLevelAdvance, scoreThreshold, stopSoundtrack])
+
+  const resolveNote = useCallback(
+    (noteId: number, judgment: Judgment, nowMs: number) => {
+      const notes = activeNotesRef.current
+      const index = notes.findIndex((n) => n.id === noteId)
+      if (index === -1) return
+      const note = notes[index]
+      if (note.judgment) return
+
+      const points = scoreForJudgment(judgment)
+      scoreRef.current += points
+      setScore(scoreRef.current)
+      registerJudgment(judgment)
+      pushJudgment(note, judgment)
+
+      const updated = [...notes]
+      updated[index] = { ...note, judgment, resolvedAtMs: nowMs }
+      activeNotesRef.current = updated
+      setActiveNotes(updated)
+    },
+    [pushJudgment, registerJudgment]
+  )
+
+  const handleNotePress = useCallback(
+    (noteId: number) => {
+      const nowMs = getCurrentTimeMs()
+      const note = activeNotesRef.current.find((n) => n.id === noteId)
+      if (!note || note.judgment) return
+      playClickSound()
+      const judgment = judgmentFromTiming(nowMs - note.hitTimeMs, note.approachMs)
+      resolveNote(noteId, judgment, nowMs)
+    },
+    [getCurrentTimeMs, playClickSound, resolveNote]
+  )
+
+  // Score tick-up animation
+  useEffect(() => {
+    if (displayScore === score) return
+    let raf = 0
+    let current = displayScore
+    const step = () => {
+      const diff = score - current
+      if (Math.abs(diff) <= 1) {
+        setDisplayScore(score)
+        return
+      }
+      current = current + Math.ceil(diff * 0.2)
+      if ((diff > 0 && current > score) || (diff < 0 && current < score)) current = score
+      setDisplayScore(current)
+      raf = requestAnimationFrame(step)
+    }
+    raf = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(raf)
+    // Only re-run when target score changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [score])
+
+  // Desktop cursor trail — listen on window so it works across the full playfield
+  useEffect(() => {
+    if (isMobile || !isStarted) return
+    const onMove = (e: PointerEvent) => {
+      setTrailPoints((prev) => {
+        const next = [...prev, { x: e.clientX, y: e.clientY }]
+        return next.slice(-14)
+      })
+    }
+    window.addEventListener('pointermove', onMove, { passive: true })
+    return () => window.removeEventListener('pointermove', onMove)
+  }, [isMobile, isStarted])
+
+  // Main audio-clock game loop
+  useEffect(() => {
+    if (!isStarted) return
+    finishedRef.current = false
+
+    const tick = () => {
+      const audio = audioRef.current
+      const nowMs = (audio?.currentTime ?? 0) * 1000
+      // Chart-relative progress — audio.duration can be flaky mid-decode on some browsers
+      setProgress(Math.min(1, nowMs / chartEndMs))
+      setElapsedMs(Math.min(nowMs, chartEndMs))
+
+      const chartNotes = chartRef.current
+      let notes = activeNotesRef.current
+      let changed = false
+
+      while (nextSpawnIndexRef.current < chartNotes.length) {
+        const next = chartNotes[nextSpawnIndexRef.current]
+        if (nowMs < next.hitTimeMs - next.approachMs) break
+        notes = [
+          ...notes,
+          {
+            ...next,
+            judgment: null,
+            resolvedAtMs: null,
+          },
+        ]
+        nextSpawnIndexRef.current += 1
+        changed = true
+      }
+
+      notes = notes.map((note) => {
+        if (note.judgment) return note
+        if (nowMs > note.hitTimeMs + lateGraceMs) {
+          changed = true
+          registerJudgment(Judgment.miss)
+          pushJudgment(note, Judgment.miss)
+          return { ...note, judgment: Judgment.miss, resolvedAtMs: nowMs }
+        }
+        return note
+      })
+
+      const kept = notes.filter((note) => {
+        if (!note.judgment || note.resolvedAtMs === null) return true
+        return nowMs - note.resolvedAtMs < judgmentLingerMs
+      })
+      if (kept.length !== notes.length) changed = true
+      notes = kept
+
+      if (changed) {
+        activeNotesRef.current = notes
+        setActiveNotes(notes)
+      }
+
+      setJudgments((prev) => {
+        const wallNow = performance.now()
+        const next = prev.filter((j) => wallNow - j.createdAt < judgmentLingerMs + 100)
+        return next.length === prev.length ? prev : next
+      })
+
+      const allSpawned = nextSpawnIndexRef.current >= chartNotes.length
+      const pastLastHit =
+        chartNotes.length > 0 &&
+        nowMs > chartNotes[chartNotes.length - 1].hitTimeMs + lateGraceMs + judgmentLingerMs
+
+      // Don't end on noneActive alone — brief gaps between notes are normal
+      if (allSpawned && pastLastHit) {
+        finishGame()
+        return
+      }
+
+      rafRef.current = requestAnimationFrame(tick)
+    }
+
+    rafRef.current = requestAnimationFrame(tick)
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+      rafRef.current = null
+    }
+  }, [isStarted, finishGame, audioRef, chartEndMs, pushJudgment, registerJudgment])
+
+  const handleStart = () => {
+    const nextChart = buildChart(padSize, !!isMobile)
+    chartRef.current = nextChart
+    setChart(nextChart)
+    nextSpawnIndexRef.current = 0
+    activeNotesRef.current = []
+    scoreRef.current = 0
+    comboRef.current = 0
+    finishedRef.current = false
+    setActiveNotes([])
+    setJudgments([])
+    setScore(0)
+    setDisplayScore(0)
+    setCombo(0)
+    setFailMessage(null)
+    setProgress(0)
+    setElapsedMs(0)
+    setTrailPoints([])
+    setIsStarted(true)
+    playSoundtrack()
   }
 
-  if (!position) return null
+  const liveNotes = activeNotes.filter((n) => !n.judgment)
+
   return (
-    <>
-      <div
-        onClick={handleClick}
-        onPointerDown={handleClick}
-        style={{
-          left: position.x,
-          top: position.y,
-          backgroundColor: color,
-          outlineColor: color + '33',
-          width: padSize,
-          height: padSize,
-          animation: `osu-outline ${delayInMs}ms linear`,
-        }}
-        className={classNames(
-          'fixed border-6 outline-8 border-black flex items-center justify-center rounded-full osu-outline cursor-pointer z-100',
-          { 'opacity-0 transition-opacity duration-500 pointer-events-none': isCleared }
-        )}
-      >
-        <p
-          className={classNames(
-            'mono text-4xl text-white select-none pointer-events-none uppercase',
-            { '!text-2xl font-bold': !!scoreDisplay, '!text-red-500': scoreDisplay === Score.miss }
-          )}
-        >
-          {scoreDisplay || number}
-        </p>
+    <div className="spotify-level">
+      <p className="text-lg">Verify listening activity</p>
+      <p className="text-sm text-gray-600 mb-3">
+        Keep the beat to your most listened to song. Score at least {scoreThreshold} to pass.
+      </p>
+
+      <div className="spotify-chrome rounded-xl border border-[#282828] bg-[#121212] text-white p-3">
+        <div className="flex items-center gap-3">
+          <div className="h-14 w-14 shrink-0 rounded-md overflow-hidden bg-[#191414]">
+            <img
+              src="/thirty-factor-authentication/kxdama.jpg"
+              alt="Kxdama"
+              className="h-full w-full object-cover"
+              draggable={false}
+            />
+          </div>
+          <div className="min-w-0 grow">
+            <div className="text-sm font-semibold truncate">Open the Sky</div>
+            <div className="text-xs text-[#b3b3b3] truncate">Kxdama</div>
+            <div className="mt-2 flex items-center gap-2">
+              <span className="shrink-0 text-[11px] tabular-nums text-[#b3b3b3]">
+                {formatTrackTime(elapsedMs)}
+              </span>
+              <div className="h-1 min-w-0 grow rounded-full bg-[#404040] overflow-hidden">
+                <div
+                  className="h-full bg-white"
+                  style={{ width: `${progress * 100}%` }}
+                />
+              </div>
+              <span className="shrink-0 text-[11px] tabular-nums text-[#b3b3b3]">
+                {formatTrackTime(chartEndMs)}
+              </span>
+            </div>
+          </div>
+          <button
+            type="button"
+            className={classNames(
+              'shrink-0 rounded-full bg-white text-black font-semibold px-4 py-2 text-sm cursor-pointer hover:scale-105 transition-transform',
+              { 'opacity-0 pointer-events-none': isStarted }
+            )}
+            onClick={handleStart}
+          >
+            {score > 0 || failMessage ? 'Retry' : 'Play'}
+          </button>
+        </div>
+
+        <div className="mt-3 flex items-baseline justify-between gap-2">
+          <div className="flex items-baseline gap-3">
+            <div className="font-mono text-2xl tabular-nums">{displayScore}</div>
+            <div
+              className={classNames(
+                'font-mono text-lg tabular-nums text-[#1db954] transition-opacity',
+                { 'opacity-0': combo < 2 }
+              )}
+            >
+              ×{combo}
+            </div>
+          </div>
+          <div className="text-xs text-[#b3b3b3]">Target {scoreThreshold}</div>
+        </div>
       </div>
-    </>
+
+      {failMessage && (
+        <p className="mt-2 text-sm text-red-600 font-medium">{failMessage}</p>
+      )}
+
+      {!isMobile &&
+        trailPoints.map((point, idx) => (
+          <div
+            key={`trail-${idx}`}
+            className="pointer-events-none fixed z-[120] rounded-full bg-[#1db954]"
+            style={{
+              left: point.x,
+              top: point.y,
+              width: 6 + idx * 0.4,
+              height: 6 + idx * 0.4,
+              opacity: (idx + 1) / trailPoints.length / 2,
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        ))}
+
+      {liveNotes.map((note) => (
+        <RhythmPad key={note.id} note={note} padSize={padSize} onPress={handleNotePress} />
+      ))}
+
+      {judgments.map((j) => (
+        <div
+          key={`judge-${j.id}-${j.createdAt}`}
+          className={classNames(
+            'fixed z-[130] pointer-events-none font-bold text-3xl tracking-wide spotify-judgment',
+            {
+              'text-[#4ade80]': j.judgment === Judgment.great,
+              'text-[#60a5fa]': j.judgment === Judgment.good,
+              'text-[#facc15]': j.judgment === Judgment.ok,
+              'text-[#f87171]': j.judgment === Judgment.miss,
+            }
+          )}
+          style={{ left: j.x, top: j.y }}
+        >
+          {j.judgment}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const RhythmPad = ({
+  note,
+  padSize,
+  onPress,
+}: {
+  note: ActiveNote
+  padSize: number
+  onPress: (id: number) => void
+}) => {
+  const handlePointerDown = (e: React.PointerEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    onPress(note.id)
+  }
+
+  return (
+    <div
+      onPointerDown={handlePointerDown}
+      style={{
+        left: note.x,
+        top: note.y,
+        width: padSize,
+        height: padSize,
+        backgroundColor: note.color,
+        ['--approach-ms' as string]: `${note.approachMs}ms`,
+      }}
+      className="fixed border-[5px] border-black flex items-center justify-center rounded-full cursor-pointer z-[100] select-none touch-none spotify-pad"
+    >
+      <div
+        className="spotify-approach-ring pointer-events-none absolute inset-0 rounded-full border-4"
+        style={{ borderColor: note.color }}
+      />
+      <p className="mono text-3xl text-white select-none pointer-events-none relative z-10">
+        {note.comboIndex}
+      </p>
+    </div>
   )
 }
 

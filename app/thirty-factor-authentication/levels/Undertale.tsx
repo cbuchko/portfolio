@@ -217,7 +217,7 @@ function BulletHell({
     )
     const spearsTimeout = setTimeout(
       () => setBulletTypes((types) => ({ ...types, spear: true })),
-      1000 * 24
+      1000 * 22.5
     )
     const laserTimeout = setTimeout(
       () => setBulletTypes((types) => ({ ...types, laser: true })),
@@ -244,7 +244,7 @@ function BulletHell({
     if (bulletTypes.spear)
       spearInterval = setInterval(() => {
         spawnBullet('spear')
-      }, 1500)
+      }, 3000)
     if (bulletTypes.laser)
       laserInterval = setInterval(() => {
         spawnLaser()
