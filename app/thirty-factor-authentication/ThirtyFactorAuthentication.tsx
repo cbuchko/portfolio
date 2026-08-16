@@ -5,7 +5,7 @@ import './styles.css'
 import './waves.css'
 import { useLevels } from './levels/useLevel'
 import { useMemo, useState } from 'react'
-import { PlayerIds } from './player-constants'
+import { PlayerIds, PlayerInformation } from './player-constants'
 import { devMode, maxLevel, mobileWidthBreakpoint } from './constants'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -23,11 +23,9 @@ export default function ThirtyFactorAuthentication() {
   const [playerId, setPlayerId] = useState<PlayerIds>()
 
   useEffectInitializer(() => {
-    const storedPlayerId = localStorage.getItem('playerId') as PlayerIds | null
-    if (storedPlayerId) {
-      setPlayerId(storedPlayerId)
-    } else {
-      setPlayerId(PlayerIds.Biden)
+    const storedPlayerId = localStorage.getItem('playerId')
+    if (storedPlayerId !== null && storedPlayerId in PlayerInformation) {
+      setPlayerId(Number(storedPlayerId) as PlayerIds)
     }
   }, [])
 
@@ -49,7 +47,6 @@ export default function ThirtyFactorAuthentication() {
     return isTouch ? TouchBackend : HTML5Backend
   }, [])
 
-  if (playerId === undefined) return
   return (
     <>
       <div
@@ -94,7 +91,9 @@ export default function ThirtyFactorAuthentication() {
             )}
           </>
         )}
-        {isCompleted && <VictoryScreen playerId={playerId} levelProps={baseProps} />}
+        {isCompleted && playerId !== undefined && (
+          <VictoryScreen playerId={playerId} levelProps={baseProps} />
+        )}
         {isGameOver && (
           <div
             className={classNames(

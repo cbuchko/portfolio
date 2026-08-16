@@ -2,11 +2,9 @@ export enum PlayerIds {
   Biden,
   TheRock,
   Devito,
-  // Snoop,
-  // Labeouf,
-  // Coolidge,
-  // Hilton,
-  // Swift,
+  Conan,
+  Snoop,
+  Coolidge,
 }
 
 export type Player = {
@@ -537,6 +535,508 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       eyes: 'BLU',
       hair: 'GRA',
       children: '1',
+      coat: 'new_york.svg',
+    },
+  },
+  [PlayerIds.Conan]: {
+    name: "Conan O'Brien",
+    fullName: "Conan Christopher O'Brien",
+    fullNameAliases: ["Conan Christopher O'Brien"],
+    birthCity: 'brookline',
+    zodiac: 'aries-aquarius-virgo',
+    taxReturn: {
+      lastName: "O'Brien",
+      firstName: 'Conan C',
+      dob: '1963/04/18',
+    },
+    imdb: [
+      {
+        type: 'TV Show',
+        date: '1993',
+        creator: 'Conan O\'Brien, Robert Smigel',
+        genre: 'Late Night Comedy',
+        starring: 'Conan O\'Brien, Andy Richter, Max Weinberg',
+        synopsis:
+          'A gangly Harvard-educated comedian hosts a late-night talk show filled with absurd sketches and remote segments.',
+        answer: 'Late Night with Conan O\'Brien',
+      },
+      {
+        type: 'TV Show',
+        date: '2010',
+        creator: 'Conan O\'Brien, Mike Sweeney',
+        genre: 'Late Night Comedy',
+        starring: 'Conan O\'Brien, Andy Richter, The Band',
+        synopsis:
+          'After leaving network television, the host moves to cable and continues his brand of surreal celebrity interviews.',
+        answer: 'Conan',
+      },
+      {
+        type: 'TV Show',
+        date: '2011',
+        creator: 'Greg Daniels',
+        genre: 'Sitcom',
+        starring: 'Steve Carell, Ed Helms, Rainn Wilson',
+        synopsis:
+          'Andy Bernard\'s older brother arrives at Dunder Mifflin and immediately dominates every conversation with loud piano playing.',
+        answer: 'The Office',
+      },
+    ],
+    quotes: [
+      {
+        quote:
+          'I like to stand near ATM machines, and when people type in their pin number, I just stand there and go, "Got it. Got it. Got it."',
+        isValid: true,
+        origin: "Conan O'Brien",
+      },
+      {
+        quote:
+          "I'd like a streaker. And you know what I'd really like? A streaker to slap me. That would just satisfy so many of my dormant Catholic hangups.",
+        isValid: true,
+        origin: "Conan O'Brien",
+      },
+      {
+        quote:
+          "In a prime-time slot, the show would be more erotic and bloodier. That's what America wants.",
+        isValid: true,
+        origin: "Conan O'Brien",
+      },
+      {
+        quote:
+          'I reached into his pocket, we had a little tug of war, and I pulled out a condom. He said, "Safe sex everybody."',
+        isValid: true,
+        origin: "Conan O'Brien",
+      },
+      {
+        quote:
+          "I used to daydream about being a writer on my own show, because the writers got to hang out in the hallway while I put out fires.",
+        isValid: true,
+        origin: "Conan O'Brien",
+      },
+      {
+        quote:
+          "Am I an athlete? No. Do the girls go crazy for me? No. Am I a math whiz? No, you are not.",
+        isValid: true,
+        origin: "Conan O'Brien",
+      },
+      {
+        quote:
+          "I now realize I will never understand the times I live in. Every time I think I have a handle on it, the handle falls off.",
+        isValid: true,
+        origin: "Conan O'Brien",
+      },
+      {
+        quote:
+          "Then I said, I'll probably end up dead in the East River. Why are we rekindling this? We'll be shot by snipers.",
+        isValid: true,
+        origin: "Conan O'Brien",
+      },
+      {
+        quote:
+          "I don't like country music, but I don't mean to denigrate those who do. And for the people who like country music, denigrate means 'put down.'",
+        isValid: false,
+        origin: 'Bob Newhart',
+      },
+      {
+        quote:
+          "I was on the subway the other day, and there was this guy sitting across from me, and he was reading a book. And I thought, 'Wow. I wonder what that feels like.'",
+        isValid: false,
+        origin: 'John Mulaney',
+      },
+      {
+        quote:
+          "I'm not a vegetarian because I love animals. I'm a vegetarian because I hate plants.",
+        isValid: false,
+        origin: 'A. Whitney Brown',
+      },
+      {
+        quote:
+          "I used to think that the brain was the most wonderful organ in my body. Then I realized who was telling me this.",
+        isValid: false,
+        origin: 'Emo Philips',
+      },
+      {
+        quote:
+          "I went to a restaurant that serves breakfast at any time. So I ordered French toast during the Renaissance.",
+        isValid: false,
+        origin: 'Steven Wright',
+      },
+      {
+        quote:
+          "My therapist told me the way to achieve true inner peace is to finish what I start. So far today, I have finished two bags of M&Ms and a chocolate cake. I feel better already.",
+        isValid: false,
+        origin: 'Dave Barry',
+      },
+      {
+        quote:
+          "I haven't spoken to my wife in years. I didn't want to interrupt her.",
+        isValid: false,
+        origin: 'Rodney Dangerfield',
+      },
+      {
+        quote:
+          "I told my doctor I broke my leg in two places. He told me to quit going to those places.",
+        isValid: false,
+        origin: 'Henny Youngman',
+      },
+    ],
+    license: {
+      location: 'Massachusetts',
+      headshot: 'conan.jpg',
+      signature: 'conan.webp',
+      name: "Conan Christopher O'Brien",
+      dob: '1963-Apr-18',
+      height: '1.93 m',
+      eyes: 'BLU',
+      hair: 'RED',
+      children: '2',
+      coat: 'mass.webp',
+    },
+    fakeLicense: {
+      location: 'Connecticut',
+      headshot: 'leno.jpg',
+      signature: 'bush.svg',
+      name: "Conan Christopher O'Brian",
+      dob: '1963-Apr-08',
+      height: '1.80 m',
+      eyes: 'BRO',
+      hair: 'BRO',
+      children: '0',
+      coat: 'new_york.svg',
+    },
+  },
+  [PlayerIds.Snoop]: {
+    name: 'Snoop Dogg',
+    fullName: 'Calvin Cordozar Broadus Jr.',
+    fullNameAliases: [
+      'Calvin Cordozar Broadus Jr.',
+      'Calvin Cordozar Broadus Jr',
+      'Calvin Cordozar Broadus Junior',
+      'Calvin Cordozar Broadus, Jr.',
+      'Calvin Cordozar Broadus, Jr',
+      'Calvin Cordozar Broadus, Junior',
+    ],
+    birthCity: 'longbeach',
+    zodiac: 'libra-scorpio-unknown',
+    taxReturn: {
+      lastName: 'Broadus',
+      firstName: 'Calvin C',
+      dob: '1971/10/20',
+    },
+    imdb: [
+      {
+        type: 'Movie',
+        date: '2001',
+        creator: 'Antoine Fuqua',
+        genre: 'Crime/Thriller',
+        starring: 'Denzel Washington, Ethan Hawke',
+        synopsis:
+          'A veteran LAPD narcotics officer takes a rookie under his wing during a brutal 24-hour training evaluation.',
+        answer: 'Training Day',
+      },
+      {
+        type: 'Movie',
+        date: '2004',
+        creator: 'Todd Phillips',
+        genre: 'Comedy/Action',
+        starring: 'Ben Stiller, Owen Wilson',
+        synopsis:
+          'Two mismatched detectives go undercover as street racers to bust a drug kingpin in 1970s Bay City.',
+        answer: 'Starsky & Hutch',
+      },
+      {
+        type: 'Movie',
+        date: '1998',
+        creator: 'Tamra Davis',
+        genre: 'Comedy',
+        starring: 'Dave Chappelle, Guillermo Díaz',
+        synopsis:
+          'Three friends try to bail their buddy out of jail by selling marijuana, but their plan goes up in smoke.',
+        answer: 'Half Baked',
+      },
+    ],
+    quotes: [
+      {
+        quote: 'I was raised on fried chicken. My pacifier was a drumstick.',
+        isValid: true,
+        origin: 'Snoop Dogg',
+      },
+      {
+        quote:
+          "Snakes are straight assholes, you could tell, the way they lookin' at him.",
+        isValid: true,
+        origin: 'Snoop Dogg',
+      },
+      {
+        quote:
+          "Are we in a fucking movie right now, or what? Shit, what the fuck? I'm lost, I don't know.",
+        isValid: true,
+        origin: 'Snoop Dogg',
+      },
+      {
+        quote:
+          "I know it's supposed to be ladies first, but when it comes to chicken, there's no rules.",
+        isValid: true,
+        origin: 'Snoop Dogg',
+      },
+      {
+        quote:
+          "Can somebody explain to me how you can get a billion streams and not get a million dollars? That shit don't make sense to me.",
+        isValid: true,
+        origin: 'Snoop Dogg',
+      },
+      {
+        quote:
+          "How the fuck do you think I feel? I don't feel like shit right now. Stop asking me these dumbass questions!",
+        isValid: true,
+        origin: 'Snoop Dogg',
+      },
+      {
+        quote:
+          'It was African Americans who took that bland ass chicken and made that thang do what it do.',
+        isValid: true,
+        origin: 'Snoop Dogg',
+      },
+      {
+        quote: 'Pie in the horse.',
+        isValid: true,
+        origin: 'Snoop Dogg',
+      },
+      {
+        quote:
+          "I don't trust water. Because fish fuck in it.",
+        isValid: false,
+        origin: 'W.C. Fields',
+      },
+      {
+        quote:
+          "I smoke because I'm hoping for an early death, and it's not coming quick enough.",
+        isValid: false,
+        origin: 'Bette Davis',
+      },
+      {
+        quote:
+          "You can't trust nobody. Not even yourself. Especially not yourself.",
+        isValid: false,
+        origin: 'Ice Cube',
+      },
+      {
+        quote:
+          "I don't know karate, but I know ka-razy.",
+        isValid: false,
+        origin: 'James Brown',
+      },
+      {
+        quote:
+          "Never let your left hand know what your right hand is smoking.",
+        isValid: false,
+        origin: 'Redman',
+      },
+      {
+        quote:
+          "I'm not saying I'm gonna change the world, but I guarantee that I will spark the brain that will change the world.",
+        isValid: false,
+        origin: 'Tupac Shakur',
+      },
+      {
+        quote:
+          "I don't even know how to use a computer, but I know how to use people.",
+        isValid: false,
+        origin: 'Dr. Dre',
+      },
+      {
+        quote:
+          "I'd rather have a bottle in front of me than a frontal lobotomy.",
+        isValid: false,
+        origin: 'Tom Waits',
+      },
+    ],
+    license: {
+      location: 'California',
+      headshot: 'snoop.webp',
+      signature: 'snoop.png',
+      name: 'Calvin Cordozar Broadus Jr.',
+      dob: '1971-Oct-20',
+      height: '1.93 m',
+      eyes: 'BRO',
+      hair: 'BRO',
+      children: '4',
+      coat: 'california.png',
+    },
+    fakeLicense: {
+      location: 'Nevada',
+      headshot: 'wiz.jpg',
+      signature: 'bush.svg',
+      name: 'Calvin Cordozar Broadus Jr',
+      dob: '1971-Oct-02',
+      height: '1.85 m',
+      eyes: 'BLU',
+      hair: 'BLO',
+      children: '2',
+      coat: 'nevada.svg',
+    },
+  },
+  [PlayerIds.Coolidge]: {
+    name: 'Jennifer Coolidge',
+    fullName: 'Jennifer Audrey Coolidge',
+    fullNameAliases: ['Jennifer Audrey Coolidge'],
+    birthCity: 'boston',
+    zodiac: 'virgo-aries-scorpio',
+    taxReturn: {
+      lastName: 'Coolidge',
+      firstName: 'Jennifer A',
+      dob: '1961/08/28',
+    },
+    imdb: [
+      {
+        type: 'Movie',
+        date: '2001',
+        creator: 'Robert Luketic',
+        genre: 'Comedy/Romance',
+        starring: 'Reese Witherspoon, Luke Wilson',
+        synopsis:
+          'A fashion merchandising major follows her ex to Harvard Law and discovers she has a knack for legal arguments and pink outfits.',
+        answer: 'Legally Blonde',
+      },
+      {
+        type: 'Movie',
+        date: '1999',
+        creator: 'Paul Weitz, Chris Weitz',
+        genre: 'Comedy',
+        starring: 'Jason Biggs, Alyson Hannigan',
+        synopsis:
+          'Four high school friends make a pact to lose their virginity before graduation, leading to awkward encounters with each other\'s parents.',
+        answer: 'American Pie',
+      },
+      {
+        type: 'TV Show',
+        date: '2021',
+        creator: 'Mike White',
+        genre: 'Comedy/Drama',
+        starring: 'Murray Bartlett, Sydney Sweeney',
+        synopsis:
+          'Wealthy guests and employees at a luxury Hawaiian resort navigate privilege, secrets, and murder over the course of a week.',
+        answer: 'The White Lotus',
+      },
+    ],
+    quotes: [
+      {
+        quote:
+          'I\'d turn up to New York clubs and tell them I was Muffin Hemingway, the granddaughter who wasn\'t Mariel or Margaux.',
+        isValid: true,
+        origin: 'Jennifer Coolidge',
+      },
+      {
+        quote:
+          'One time I got thrown out of a club because I was behaving badly, and they said, "Don\'t ever come back here, Muffin!"',
+        isValid: true,
+        origin: 'Jennifer Coolidge',
+      },
+      {
+        quote:
+          'I thought I was going to be queen of Monaco even though someone else did it.',
+        isValid: true,
+        origin: 'Jennifer Coolidge',
+      },
+      {
+        quote: 'My dream role would be playing a dolphin.',
+        isValid: true,
+        origin: 'Jennifer Coolidge',
+      },
+      {
+        quote:
+          'I took a lavender bath before the Emmys and it made me swell up inside my dress.',
+        isValid: true,
+        origin: 'Jennifer Coolidge',
+      },
+      {
+        quote:
+          "I'm the only person I know that has become less intelligent as they've gotten older.",
+        isValid: true,
+        origin: 'Jennifer Coolidge',
+      },
+      {
+        quote:
+          'I used to call in sick by saying someone put a cigarette out in my eye. I went to the hospital and got them to bandage my head.',
+        isValid: true,
+        origin: 'Jennifer Coolidge',
+      },
+      {
+        quote:
+          'You look like the Fourth of July! Makes me want a hot dog real bad.',
+        isValid: true,
+        origin: "Jennifer Coolidge as Paulette Bonafonté",
+      },
+      {
+        quote:
+          "I have a lot of growing up to do. I realized that the other day when I was sitting in my office having a water balloon fight with myself.",
+        isValid: false,
+        origin: 'Deep Thoughts by Jack Handey',
+      },
+      {
+        quote:
+          "I don't exercise. If God had wanted me to bend over, he would have put diamonds on the floor.",
+        isValid: false,
+        origin: 'Joan Rivers',
+      },
+      {
+        quote:
+          "My mother always said, 'If you want to get married, marry a man who loves you more than you love him.'",
+        isValid: false,
+        origin: 'Joan Rivers',
+      },
+      {
+        quote:
+          "I always wanted to be somebody, but now I realize I should have been more specific.",
+        isValid: false,
+        origin: 'Lily Tomlin',
+      },
+      {
+        quote:
+          "I don't know how I do it. I just do it. It's like I have a gift for being wrong.",
+        isValid: false,
+        origin: "Catherine O'Hara as Moira Rose",
+      },
+      {
+        quote:
+          "I don't want any more of those weird little cookies. They're making me feel funny.",
+        isValid: false,
+        origin: 'Eugene Levy as Gerry Fleck',
+      },
+      {
+        quote:
+          "I used to be Snow White, but I drifted.",
+        isValid: false,
+        origin: 'Mae West',
+      },
+      {
+        quote:
+          "I finally got a fur coat for Christmas. I've always wanted one. My husband said, 'What do you need a coat for? You've got a fur.'",
+        isValid: false,
+        origin: 'Phyllis Diller',
+      },
+    ],
+    license: {
+      location: 'Massachusetts',
+      headshot: 'jennifer.webp',
+      signature: 'coolidge.svg',
+      name: 'Jennifer Audrey Coolidge',
+      dob: '1961-Aug-28',
+      height: '1.78 m',
+      eyes: 'BLU',
+      hair: 'BLO',
+      children: '0',
+      coat: 'mass.webp',
+    },
+    fakeLicense: {
+      location: 'New York',
+      headshot: 'goldie.webp',
+      signature: 'bush.svg',
+      name: 'Jennifer Audrey Coolidge',
+      dob: '1961-Aug-08',
+      height: '1.70 m',
+      eyes: 'BRO',
+      hair: 'GRA',
+      children: '2',
       coat: 'new_york.svg',
     },
   },

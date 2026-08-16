@@ -1,6 +1,6 @@
 import { JSX, useCallback, useState } from 'react'
 import { PlayerIds, PlayerInformation } from './player-constants'
-import { ContentProps, ControlProps } from './levels/types'
+import { ControlProps, IdentitySelectProps } from './levels/types'
 import { devMode, maxLevel, mobileWidthBreakpoint } from './constants'
 import classNames from 'classnames'
 import { LevelProps } from './levels/useLevel'
@@ -9,12 +9,12 @@ import { useEffectInitializer } from '../utils/useEffectUnsafe'
 import { useIsMobile } from '../utils/useIsMobile'
 
 type AuthContainerProps = {
-  playerId: PlayerIds
-  setPlayerId: (id: PlayerIds) => void
+  playerId: PlayerIds | undefined
+  setPlayerId: (id: PlayerIds | undefined) => void
   baseProps: LevelProps
   setIsGameOver: (value: boolean) => void
-  Content: (props: ContentProps) => JSX.Element | null
-  Controls?: (props: ControlProps) => JSX.Element
+  Content: (props: IdentitySelectProps) => JSX.Element | null
+  Controls?: (props: ControlProps) => JSX.Element | null
   playErrorSound: () => void
   requiresLoad?: boolean
 }
@@ -58,6 +58,19 @@ export const AuthContainer = ({
   const validateAdvance = useCallback(() => setIsAdvanceVerified(true), [])
   const cancelAdvance = useCallback(() => setIsAdvanceVerified(false), [])
 
+  const controlsContent = Controls
+    ? Controls({
+        handleLevelAdvance: onAdvance,
+        handleGameOver: () => setIsGameOver(true),
+        validateAdvance,
+        setUPSTrackingTime: baseProps.setUPSTrackingTime,
+        playerId,
+      })
+    : null
+
+  // After level 1, a character must have been selected
+  if (level !== 1 && playerId === undefined) return null
+
   return (
     <>
       <div
@@ -77,7 +90,9 @@ export const AuthContainer = ({
           )}
         >
           <div className="flex gap-2 items-center min-h-[20px]">
-            <h6 className="w-full text-xs">{`Authenticating: ${PlayerInformation[playerId].name}`}</h6>
+            <h6 className="w-full text-xs">
+              {`Authenticating: ${playerId !== undefined ? PlayerInformation[playerId].name : '—'}`}
+            </h6>
             <div className="flex itsems-center w-max">
               {Array.from({ length: errorCount }).map((_, idx) => (
                 <small key={idx} className="text-red-500 h-5 w-5">
@@ -96,7 +111,9 @@ export const AuthContainer = ({
         <div id="auth-body" className="border rounded-sm border-t-0 rounded-t-none">
           <div
             id="auth-content"
-            className={classNames('px-4 py-8 bg-white', { 'rounded-b-lg': !Controls })}
+            className={classNames('px-4 py-8 bg-white', {
+              'rounded-b-lg': !controlsContent,
+            })}
           >
             <Content
               playerId={playerId}
@@ -114,17 +131,12 @@ export const AuthContainer = ({
               isMobile={isMobile}
             />
           </div>
-          {Controls && (
+          {controlsContent && (
             <div
               id="auth-controls"
               className="px-4 py-3 border-t flex flex-wrap w-full justify-between gap-4 bg-gray-50 rounded-b-sm"
             >
-              <Controls
-                handleLevelAdvance={onAdvance}
-                handleGameOver={() => setIsGameOver(true)}
-                validateAdvance={validateAdvance}
-                setUPSTrackingTime={baseProps.setUPSTrackingTime}
-              />
+              {controlsContent}
             </div>
           )}
         </div>

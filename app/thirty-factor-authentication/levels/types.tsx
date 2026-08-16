@@ -7,11 +7,11 @@ export type ControlProps = {
   handleGameOver: () => void
   validateAdvance: () => void
   setUPSTrackingTime: (time: number) => void
+  playerId?: PlayerIds
 }
 
-export type ContentProps = {
-  playerId: PlayerIds
-  setPlayerId: (id: PlayerIds) => void
+type ContentPropsBase = {
+  setPlayerId: (id: PlayerIds | undefined) => void
   validateAdvance: () => void
   cancelAdvance: () => void
   handleLevelAdvance: (skipVerify?: boolean) => void
@@ -23,4 +23,14 @@ export type ContentProps = {
   selectedSSOIds: Set<SSOIds>
   setSelectedSSOIds: React.Dispatch<React.SetStateAction<Set<SSOIds>>>
   isMobile?: boolean
+}
+
+/** Level 1 only — player may not be chosen yet */
+export type IdentitySelectProps = ContentPropsBase & {
+  playerId: PlayerIds | undefined
+}
+
+/** All other levels — a character has already been selected */
+export type ContentProps = ContentPropsBase & {
+  playerId: PlayerIds
 }

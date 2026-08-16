@@ -32,6 +32,16 @@ import { useSound } from '@/app/utils/useSounds'
 import { SpotifyContent } from './Spotify'
 import { MastermindContent } from './Mastermind'
 import { DartboardContent } from './Dartboard'
+import { ControlProps, IdentitySelectProps } from './types'
+
+type LevelContent = (props: IdentitySelectProps) => React.JSX.Element | null
+type LevelControls = (props: ControlProps) => React.JSX.Element | null
+
+type LevelDefinition = {
+  content: LevelContent
+  controls?: LevelControls
+  requiresLoad?: boolean
+}
 
 export type LevelProps = {
   level: number
@@ -93,7 +103,9 @@ export const useLevels = () => {
   } as LevelProps
 
   const levelToUse = forceLevel > 0 ? forceLevel : level
-  const LEVELS = [
+  // Character levels use ContentProps (playerId required). The shell passes
+  // IdentitySelectProps; AuthContainer guarantees playerId after level 1.
+  const LEVELS: LevelDefinition[] = [
     { content: OneContent, controls: OneControls },
     { content: TwoContent, controls: TwoControls },
     { content: BasicAppCodeContent, controls: BasicAppCodeControls },
@@ -124,7 +136,7 @@ export const useLevels = () => {
     { content: PapersPleaseContent },
     { content: EinsteinContent, controls: EinsteinControls },
     { content: UndertaleContent }, //30
-  ]
+  ] as LevelDefinition[]
 
   const levelDef = LEVELS[levelToUse - 1]
   if (!levelDef) {

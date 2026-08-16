@@ -1,59 +1,79 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { PlayerIds, PlayerInformation } from '../player-constants'
-import { ContentProps, ControlProps } from './types'
-import { DropdownSelector } from '../components/dropdown-selector'
+import { ControlProps, IdentitySelectProps } from './types'
+import classNames from 'classnames'
 
-export const OneContent = ({ playerId, setPlayerId, validateAdvance }: ContentProps) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-
-  useEffect(() => {
-    validateAdvance()
-  }, [validateAdvance])
-
-  const [options, nameKeys] = useMemo(() => {
-    const options = Object.entries(PlayerInformation).map(([id, info]) => {
-      return { id: id as unknown as PlayerIds, name: info.name }
-    })
-    const nameKeys: Record<string, PlayerIds> = {}
-    options.forEach((option) => {
-      nameKeys[option.name] = option.id
-    })
-    return [options.map((option) => option.name), nameKeys]
+export const OneContent = ({
+  playerId,
+  setPlayerId,
+  validateAdvance,
+  cancelAdvance,
+  isMobile,
+}: IdentitySelectProps) => {
+  const characters = useMemo(() => {
+    return Object.entries(PlayerInformation).map(([id, info]) => ({
+      id: Number(id) as PlayerIds,
+      name: info.name,
+    }))
   }, [])
 
-  const handleCharacterSelect = (option: string) => {
-    const id = nameKeys[option]
+  useEffect(() => {
+    if (playerId !== undefined) {
+      validateAdvance()
+    } else {
+      cancelAdvance()
+    }
+  }, [playerId, validateAdvance, cancelAdvance])
+
+  const handleCharacterSelect = (id: PlayerIds) => {
+    if (playerId === id) {
+      setPlayerId(undefined)
+      localStorage.removeItem('playerId')
+      cancelAdvance()
+      return
+    }
     setPlayerId(id)
     localStorage.setItem('playerId', id.toString())
+    validateAdvance()
   }
 
   return (
     <>
       <h2 className="mb-4 text-3xl">Welcome Back!</h2>
       <p className="text-lg">{`It's been a while since we've seen you.`}</p>
-      <p className="text-lg">{` Please confirm your identity to continue.`}</p>
-      <div className="mt-4 flex items-center gap-4">
-        {`Previously Signed In As:`}{' '}
-        <span className="font-semibold">
-          <DropdownSelector
-            id="character-select"
-            onOptionSelect={handleCharacterSelect}
-            options={options}
-            setActiveId={() =>
-              isDropdownOpen ? setIsDropdownOpen(false) : setIsDropdownOpen(true)
-            }
-            defaultOption={PlayerInformation[playerId].name}
-            activeId={isDropdownOpen ? 'character-select' : undefined}
-            width={150}
-            includeBlankOption={false}
-          />
-        </span>
+      <p className="text-lg">{`Please confirm your identity to continue.`}</p>
+      <p className="mt-4 text-lg">Previously Signed In As:</p>
+      <div
+        className={classNames('grid grid-cols-3 gap-3 mt-3', {
+          '!grid-cols-2': isMobile,
+        })}
+      >
+        {characters.map((character) => {
+          const isSelected = playerId === character.id
+          return (
+            <button
+              key={character.id}
+              type="button"
+              onClick={() => handleCharacterSelect(character.id)}
+              className={classNames(
+                'aspect-square w-[80%] justify-self-center cursor-pointer transition-transform duration-500 border border-black rounded-md bg-white font-semibold flex items-center justify-center text-center px-2',
+                {
+                  'outline-2 outline-yellow-300 scale-80 shadow-lg': isSelected,
+                }
+              )}
+            >
+              {character.name}
+            </button>
+          )
+        })}
       </div>
     </>
   )
 }
 
-export const OneControls = ({ handleLevelAdvance, handleGameOver }: ControlProps) => {
+export const OneControls = ({ handleLevelAdvance, handleGameOver, playerId }: ControlProps) => {
+  if (playerId === undefined) return null
+
   return (
     <>
       <button className="auth-button" onClick={handleGameOver}>

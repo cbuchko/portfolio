@@ -17,6 +17,7 @@ const signs = [
   'Scorpio',
   'Taurus',
   'Virgo',
+  'Unknown',
 ]
 
 const defaultSign = 'Aries'

@@ -6,8 +6,6 @@ Brain Scan clearer UI for health bar
 
 
 Levels that NEED to be better:
-Self Checkout - missing sauce
-              - make it more skillbased? have to order things by weight?
 Spotify 
     - More aesthetic score (ticks up)
     - Mouse trail
@@ -49,12 +47,10 @@ Taylor Swift
 Conan O'Brien
 Shia Labeouf
 Mark Zuckerberg
-Danny DeVito
 Guy Fieri
 Paris Hilton
 Lady Gaga
 Mike Tyson
-The Rock
 
 devlog ideas:
 sections:
@@ -70,5 +66,13 @@ sections:
 
 
 Responsiveness Notes:
-    Shopping Cart: No ghost drag item
     Spotify: clear performance issues
+
+
+August 16th revisit notes:
+- Level 2 should be a select the picture level
+- Remove Brain Scan
+- Add more characters
+- Mobile "Easyness" 
+- Undertale difficulty tweak
+- Better character selector?

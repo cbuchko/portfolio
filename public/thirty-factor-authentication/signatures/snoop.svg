@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 90">
+  <path d="M15 50 C50 15, 90 75, 130 40 C170 20, 210 70, 250 35 C280 55, 300 45, 310 50" fill="none" stroke="#1a1a1a" stroke-width="3.5" stroke-linecap="round"/>
+  <text x="20" y="78" font-family="cursive" font-size="24" fill="#1a1a1a">Snoop Dogg</text>
+</svg>
