@@ -54,7 +54,7 @@ export const BasicAppCodeContent = ({
               codeDefault={targetCode}
               isTarget={true}
               setTargetCode={handleTargetSet}
-              duration={3}
+              duration={8}
             />
           </div>,
           portalElement

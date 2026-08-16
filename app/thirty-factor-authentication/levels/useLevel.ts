@@ -108,8 +108,8 @@ export const useLevels = () => {
   const LEVELS: LevelDefinition[] = [
     { content: OneContent, controls: OneControls },
     { content: IdentityLockContent, controls: IdentityLockControls },
-    { content: LegalNameContent, controls: LegalNameControls },
     { content: BasicAppCodeContent, controls: BasicAppCodeControls },
+    { content: LegalNameContent, controls: LegalNameControls },
     { content: MessageSpamContent, controls: MessageSpamControls }, //5
     { content: FallbackOneContent, controls: FallbackOneControls },
     { content: MapContent, controls: MapControls },
