@@ -80,6 +80,53 @@ small {
   animation-iteration-count: infinite;
 }
 
+@keyframes auth-strike-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.auth-strike-shake {
+  animation: auth-strike-shake 0.4s ease-out;
+}
+
+@keyframes auth-header-strike-flash {
+  0% {
+    filter: brightness(1);
+  }
+  35% {
+    filter: brightness(1.25);
+    background-color: #f87171;
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+.auth-header-strike-flash {
+  animation: auth-header-strike-flash 0.4s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-strike-shake,
+  .auth-header-strike-flash {
+    animation: none;
+  }
+}
+
 @keyframes scan-swipe {
   0% {
     transform: translateX(0%);

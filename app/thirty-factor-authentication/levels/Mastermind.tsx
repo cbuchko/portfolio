@@ -35,7 +35,6 @@ export const MastermindContent = ({ handleLevelAdvance }: ContentProps) => {
     setAttemptCount(1)
     setSelectedBall(undefined)
     setIsGameOver(false)
-    handleLevelAdvance()
   }
 
   return (
@@ -109,6 +108,8 @@ const MasterMindRow = ({
     }
     if (attemptCount >= maxAttempts) {
       setIsGameOver(true)
+      // Spend a level strike when attempts run out (Reset is free)
+      handleLevelAdvance()
     } else {
       setAttemptCount((c) => c + 1)
     }
