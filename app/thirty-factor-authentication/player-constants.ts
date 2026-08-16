@@ -13,6 +13,7 @@ export type Player = {
   fullNameAliases: string[]
   birthCity: string
   zodiac: string
+  email: string
   taxReturn: {
     lastName: string
     firstName: string
@@ -70,6 +71,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     ],
     birthCity: 'scranton',
     zodiac: 'scorpio-taurus-sagittarius',
+    email: 'potus46@thirtyfactor.gov',
     taxReturn: {
       lastName: 'Biden',
       firstName: 'Joseph R',
@@ -226,6 +228,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     fullNameAliases: ['Dwayne Douglas Johnson'],
     birthCity: 'hayward',
     zodiac: 'taurus-capricorn-libra',
+    email: 'discipline@thirtyfactor.gov',
     taxReturn: {
       lastName: 'Johnson',
       firstName: 'Dwayne D',
@@ -388,6 +391,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     ],
     birthCity: 'neptune',
     zodiac: 'scorpio-sagittarius-sagittarius',
+    email: 'email@thirtyfactor.gov',
     taxReturn: {
       lastName: 'DeVito',
       firstName: 'Danny M',
@@ -544,6 +548,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     fullNameAliases: ["Conan Christopher O'Brien"],
     birthCity: 'brookline',
     zodiac: 'aries-aquarius-virgo',
+    email: 'teamcoco@thirtyfactor.gov',
     taxReturn: {
       lastName: "O'Brien",
       firstName: 'Conan C',
@@ -717,6 +722,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     ],
     birthCity: 'longbeach',
     zodiac: 'libra-scorpio-unknown',
+    email: 'snoop@thirtyfactor.gov',
     taxReturn: {
       lastName: 'Broadus',
       firstName: 'Calvin C',
@@ -881,6 +887,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     fullNameAliases: ['Jennifer Audrey Coolidge'],
     birthCity: 'boston',
     zodiac: 'virgo-aries-scorpio',
+    email: 'muffin.hemingway@thirtyfactor.gov',
     taxReturn: {
       lastName: 'Coolidge',
       firstName: 'Jennifer A',

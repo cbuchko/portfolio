@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { OneContent, OneControls } from './1'
-import { TwoContent, TwoControls } from './2'
+import { IdentityLockContent, IdentityLockControls } from './IdentityLock'
+import { LegalNameContent, LegalNameControls } from './LegalName'
 import { MessageSpamContent, MessageSpamControls } from './MessageSpam'
 import { ZodiacContent, ZodiacControls } from './Zodiac'
 import { FallbackOneContent, FallbackOneControls } from './Fallback1'
@@ -27,7 +28,6 @@ import { UPSFinishContent, UPSFinishControls } from './UPSFinish'
 import { SSOIds } from './SSO'
 import { FishingContent, FishingControls } from './Fishing'
 import { RoadTripContent } from './RoadTrip'
-import { BrainScanContent, BrainScanControls } from './BrainScan'
 import { useSound } from '@/app/utils/useSounds'
 import { SpotifyContent } from './Spotify'
 import { MastermindContent } from './Mastermind'
@@ -107,22 +107,22 @@ export const useLevels = () => {
   // IdentitySelectProps; AuthContainer guarantees playerId after level 1.
   const LEVELS: LevelDefinition[] = [
     { content: OneContent, controls: OneControls },
-    { content: TwoContent, controls: TwoControls },
+    { content: IdentityLockContent, controls: IdentityLockControls },
+    { content: LegalNameContent, controls: LegalNameControls },
     { content: BasicAppCodeContent, controls: BasicAppCodeControls },
-    { content: MessageSpamContent, controls: MessageSpamControls },
-    { content: FallbackOneContent, controls: FallbackOneControls }, //5
+    { content: MessageSpamContent, controls: MessageSpamControls }, //5
+    { content: FallbackOneContent, controls: FallbackOneControls },
     { content: MapContent, controls: MapControls },
     { content: BiometricContent, controls: BiometricControls },
     { content: PostItContent, controls: PostItControls },
-    { content: ZodiacContent, controls: ZodiacControls },
-    { content: UPSContent, controls: UPSControls }, //10
+    { content: ZodiacContent, controls: ZodiacControls }, //10
+    { content: UPSContent, controls: UPSControls },
     { content: FallbackTwoContent, controls: FallbackTwoControls },
     { content: AppCodeContent, controls: AppCodeControls },
     { content: QuotesContent },
-    { content: AquariumContent, controls: AquariumControls },
-    { content: MaintenanceContent, controls: MaintenanceControls }, //15
+    { content: AquariumContent, controls: AquariumControls }, //15
+    { content: MaintenanceContent, controls: MaintenanceControls },
     { content: IMDBContent },
-    { content: BrainScanContent, controls: BrainScanControls },
     { content: RoadTripContent, requiresLoad: true },
     { content: ParlorRoomContent, requiresLoad: true },
     { content: DartboardContent }, //20
