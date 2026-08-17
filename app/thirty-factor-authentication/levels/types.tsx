@@ -25,12 +25,12 @@ type ContentPropsBase = {
   isMobile?: boolean
 }
 
-/** Level 1 only — player may not be chosen yet */
+/** Pre-game Account Select — player may not be chosen yet */
 export type IdentitySelectProps = ContentPropsBase & {
   playerId: PlayerIds | undefined
 }
 
-/** All other levels — a character has already been selected */
+/** Level content — a character has already been selected */
 export type ContentProps = ContentPropsBase & {
   playerId: PlayerIds
 }

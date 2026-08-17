@@ -4,9 +4,10 @@ import { AuthContainer } from './AuthContainer'
 import './styles.css'
 import './waves.css'
 import { useLevels } from './levels/useLevel'
-import { useEffect, useMemo, useState } from 'react'
+import { OneContent, OneControls } from './levels/1'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { PlayerIds, PlayerInformation } from './player-constants'
-import { devMode, maxLevel, mobileWidthBreakpoint } from './constants'
+import { devMode, forceLevel, maxLevel, mobileWidthBreakpoint } from './constants'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { TouchBackend } from 'react-dnd-touch-backend'
@@ -22,6 +23,7 @@ import classNames from 'classnames'
 export default function ThirtyFactorAuthentication() {
   const isMobile = useIsMobile(mobileWidthBreakpoint)
   const [playerId, setPlayerId] = useState<PlayerIds>()
+  const [hasStarted, setHasStarted] = useState(forceLevel > 0)
 
   useEffectInitializer(() => {
     const storedPlayerId = localStorage.getItem('playerId')
@@ -32,16 +34,42 @@ export default function ThirtyFactorAuthentication() {
 
   const [isGameOver, setIsGameOver] = useState(false)
   const { playSound: playErrorSound } = useSound('/thirty-factor-authentication/sounds/error.mp3')
+  const { playSound: playSuccessSound } = useSound(
+    '/thirty-factor-authentication/sounds/success.mp3',
+    0.2
+  )
 
   const { content, controls, requiresLoad, baseProps } = useLevels()
   const { level, setLevel, upsTrackingCode, upsTrackingTime, resetLevel, levelTimings, finalizeRunStats } =
     baseProps
 
-  const isCompleted = level === maxLevel + 1
+  const isCompleted = hasStarted && level === maxLevel + 1
+
+  const resetRun = useCallback(() => {
+    resetLevel()
+    setHasStarted(false)
+    setIsGameOver(false)
+  }, [resetLevel])
+
+  const startRun = useCallback(() => {
+    resetLevel()
+    playSuccessSound()
+    setHasStarted(true)
+  }, [resetLevel, playSuccessSound])
+
+  const runBaseProps = useMemo(
+    () => ({ ...baseProps, resetLevel: resetRun }),
+    [baseProps, resetRun]
+  )
+
+  const pregameBaseProps = useMemo(
+    () => ({ ...runBaseProps, handleLevelAdvance: startRun }),
+    [runBaseProps, startRun]
+  )
 
   useEffect(() => {
-    if (isGameOver) finalizeRunStats()
-  }, [isGameOver, finalizeRunStats])
+    if (isGameOver && hasStarted) finalizeRunStats()
+  }, [isGameOver, hasStarted, finalizeRunStats])
 
   const dragBackend = useMemo(() => {
     if (typeof window === 'undefined') {
@@ -52,6 +80,10 @@ export default function ThirtyFactorAuthentication() {
 
     return isTouch ? TouchBackend : HTML5Backend
   }, [])
+
+  const showPregame = !hasStarted && !isGameOver
+  const showLevels = hasStarted && !isGameOver && !isCompleted
+  const showAuth = showPregame || (showLevels && playerId !== undefined)
 
   return (
     <>
@@ -74,23 +106,30 @@ export default function ThirtyFactorAuthentication() {
             width={516}
           />
         </div>
-        {!isGameOver && !isCompleted && (
+        {showAuth && (
+          <DndProvider
+            backend={dragBackend}
+            options={{ delayTouchStart: 0, enableMouseEvents: true }}
+          >
+            <AuthContainer
+              variant={showPregame ? 'pregame' : 'run'}
+              playerId={playerId}
+              setPlayerId={setPlayerId}
+              setIsGameOver={setIsGameOver}
+              Content={
+                showPregame
+                  ? OneContent
+                  : (content as typeof OneContent)
+              }
+              Controls={showPregame ? OneControls : controls}
+              baseProps={showPregame ? pregameBaseProps : runBaseProps}
+              playErrorSound={playErrorSound}
+              requiresLoad={showPregame ? false : requiresLoad}
+            />
+          </DndProvider>
+        )}
+        {showLevels && (
           <>
-            <DndProvider
-              backend={dragBackend}
-              options={{ delayTouchStart: 0, enableMouseEvents: true }}
-            >
-              <AuthContainer
-                playerId={playerId}
-                setPlayerId={setPlayerId}
-                setIsGameOver={setIsGameOver}
-                Content={content}
-                Controls={controls}
-                baseProps={baseProps}
-                playErrorSound={playErrorSound}
-                requiresLoad={requiresLoad}
-              />
-            </DndProvider>
             <div id="extras-portal" className={classNames({ '!mt-42': isMobile })} />
             {!!upsTrackingCode && !!upsTrackingTime && (
               <UPSTracker code={upsTrackingCode} time={upsTrackingTime} isMobile={isMobile} />
@@ -98,7 +137,7 @@ export default function ThirtyFactorAuthentication() {
           </>
         )}
         {isCompleted && playerId !== undefined && (
-          <VictoryScreen playerId={playerId} levelProps={baseProps} />
+          <VictoryScreen playerId={playerId} levelProps={runBaseProps} />
         )}
         {isGameOver && (
           <div
@@ -119,18 +158,12 @@ export default function ThirtyFactorAuthentication() {
               </p>
             )}
             <RunStats levelTimings={levelTimings} accent="defeat" />
-            <button
-              className="mt-2 auth-button"
-              onClick={() => {
-                resetLevel()
-                setIsGameOver(false)
-              }}
-            >
+            <button className="mt-2 auth-button" onClick={resetRun}>
               Restart
             </button>
           </div>
         )}
-        {devMode && (
+        {devMode && hasStarted && (
           <div className="fixed flex flex-col text-left w-max p-2 gap-3">
             <h2 className="mb-2">Dev Mode:</h2>
             <button

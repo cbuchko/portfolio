@@ -15,10 +15,13 @@ type AuthContainerProps = {
   setPlayerId: (id: PlayerIds | undefined) => void
   baseProps: LevelProps
   setIsGameOver: (value: boolean) => void
+  /** IdentitySelectProps is the wider shell shape (playerId optional). */
   Content: (props: IdentitySelectProps) => JSX.Element | null
   Controls?: (props: ControlProps) => JSX.Element | null
   playErrorSound: () => void
   requiresLoad?: boolean
+  /** Pregame cast pick — same chrome, no step/strikes. Default: run. */
+  variant?: 'pregame' | 'run'
 }
 
 export const AuthContainer = ({
@@ -30,8 +33,10 @@ export const AuthContainer = ({
   Controls,
   playErrorSound,
   requiresLoad,
+  variant = 'run',
 }: AuthContainerProps) => {
   const isMobile = useIsMobile(mobileWidthBreakpoint)
+  const isPregame = variant === 'pregame'
 
   const [isLoading, setIsLoading] = useState(false)
   const [isAdvanceVerified, setIsAdvanceVerified] = useState(false)
@@ -46,6 +51,7 @@ export const AuthContainer = ({
 
   const onAdvance = (skipVerify?: boolean) => {
     if (!isAdvanceVerified && !devMode && !skipVerify) {
+      if (isPregame) return
       playErrorSound()
       setStrikeFeedback(true)
       const next = registerStrike()
@@ -66,10 +72,15 @@ export const AuthContainer = ({
   const validateAdvance = useCallback(() => setIsAdvanceVerified(true), [])
   const cancelAdvance = useCallback(() => setIsAdvanceVerified(false), [])
 
-  // After level 1, a character must have been selected
-  if (level !== 1 && playerId === undefined) return null
+  if (!isPregame && playerId === undefined) return null
 
-  const headerThreatened = strikesThisLevel >= 2
+  const headerThreatened = !isPregame && strikesThisLevel >= 2
+  const accountLabel =
+    playerId !== undefined
+      ? isPregame
+        ? `Account: ${PlayerInformation[playerId].name}`
+        : `Authenticating: ${PlayerInformation[playerId].name}`
+      : 'Select an account'
 
   return (
     <>
@@ -96,37 +107,42 @@ export const AuthContainer = ({
           )}
         >
           <div className="flex gap-2 items-center min-h-[20px]">
-            <h6 className="w-full text-xs">
-              {`Authenticating: ${playerId !== undefined ? PlayerInformation[playerId].name : '—'}`}
-            </h6>
-            <div className="flex items-center w-max gap-0.5" aria-label={`${strikesThisLevel} of ${maxStrikes} strikes`}>
-              {Array.from({ length: maxStrikes }).map((_, idx) => {
-                const filled = idx < strikesThisLevel
-                return (
-                  <small
-                    key={idx}
-                    className={classNames('h-5 w-5', {
-                      'text-red-600': filled,
-                      'text-gray-400/70': !filled,
-                    })}
-                  >
-                    <Image
-                      src={
-                        filled
-                          ? '/thirty-factor-authentication/icons/red-x.svg'
-                          : '/thirty-factor-authentication/icons/x.svg'
-                      }
-                      alt={filled ? 'Strike' : 'Strike slot'}
-                      width={20}
-                      height={20}
-                      className={classNames({ 'opacity-20': !filled })}
-                    />
-                  </small>
-                )
-              })}
-            </div>
+            <h6 className="w-full text-xs">{accountLabel}</h6>
+            {!isPregame && (
+              <div
+                className="flex items-center w-max gap-0.5"
+                aria-label={`${strikesThisLevel} of ${maxStrikes} strikes`}
+              >
+                {Array.from({ length: maxStrikes }).map((_, idx) => {
+                  const filled = idx < strikesThisLevel
+                  return (
+                    <small
+                      key={idx}
+                      className={classNames('h-5 w-5', {
+                        'text-red-600': filled,
+                        'text-gray-400/70': !filled,
+                      })}
+                    >
+                      <Image
+                        src={
+                          filled
+                            ? '/thirty-factor-authentication/icons/red-x.svg'
+                            : '/thirty-factor-authentication/icons/x.svg'
+                        }
+                        alt={filled ? 'Strike' : 'Strike slot'}
+                        width={20}
+                        height={20}
+                        className={classNames({ 'opacity-20': !filled })}
+                      />
+                    </small>
+                  )
+                })}
+              </div>
+            )}
           </div>
-          <h6 className="text-xs">{`Step ${level}/${maxLevel}`}</h6>
+          {!isPregame && (
+            <h6 className="text-xs">{`Step ${level}/${maxLevel}`}</h6>
+          )}
         </div>
         <div id="auth-body" className="group/auth-body border border-t-0 rounded-b-md">
           <div
@@ -155,7 +171,7 @@ export const AuthContainer = ({
               className="px-4 py-3 border-t flex flex-wrap w-full justify-between gap-4 bg-gray-50 rounded-b-md empty:hidden"
             >
               <Controls
-                key={level}
+                key={isPregame ? 'pregame' : level}
                 handleLevelAdvance={onAdvance}
                 handleGameOver={() => {
                   playErrorSound()

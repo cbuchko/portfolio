@@ -1,5 +1,4 @@
 import React, { useCallback, useRef, useState } from 'react'
-import { OneContent, OneControls } from './1'
 import { IdentityLockContent, IdentityLockControls } from './IdentityLock'
 import { LegalNameContent, LegalNameControls } from './LegalName'
 import { MessageSpamContent, MessageSpamControls } from './MessageSpam'
@@ -33,9 +32,9 @@ import { SpotifyContent } from './Spotify'
 import { MastermindContent } from './Mastermind'
 import { DartboardContent } from './Dartboard'
 import { SecurityQuestionsContent, SecurityQuestionsControls } from './SecurityQuestions'
-import { ControlProps, IdentitySelectProps } from './types'
+import { ContentProps, ControlProps } from './types'
 
-type LevelContent = (props: IdentitySelectProps) => React.JSX.Element | null
+type LevelContent = (props: ContentProps) => React.JSX.Element | null
 type LevelControls = (props: ControlProps) => React.JSX.Element | null
 
 export type LevelTiming = {
@@ -71,10 +70,8 @@ export type LevelProps = {
   registerStrike: () => number
 }
 
-// Character levels use ContentProps (playerId required). The shell passes
-// IdentitySelectProps; AuthContainer guarantees playerId after level 1.
+// True 30 factors — Account Select is pre-game, not in this list.
 export const LEVELS: LevelDefinition[] = [
-  { content: OneContent, controls: OneControls, title: 'Account Select' },
   { content: IdentityLockContent, controls: IdentityLockControls, title: 'Identity Lock' },
   {
     content: SecurityQuestionsContent,
@@ -82,23 +79,23 @@ export const LEVELS: LevelDefinition[] = [
     title: 'Security Questions',
   },
   { content: BasicAppCodeContent, controls: BasicAppCodeControls, title: 'App Code' },
-  { content: MessageSpamContent, controls: MessageSpamControls, title: 'Message Spam' }, //5
-  { content: LegalNameContent, controls: LegalNameControls, title: 'Legal Name' },
+  { content: MessageSpamContent, controls: MessageSpamControls, title: 'Message Spam' },
+  { content: LegalNameContent, controls: LegalNameControls, title: 'Legal Name' }, //5
   { content: FallbackOneContent, controls: FallbackOneControls, title: 'Password Reset' },
   { content: BiometricContent, controls: BiometricControls, title: 'Biometrics' },
-  { content: MapContent, controls: MapControls, title: 'Birthplace' }, //10
+  { content: MapContent, controls: MapControls, title: 'Birthplace' },
   { content: PostItContent, controls: PostItControls, title: 'Post-it Code' },
-  { content: UPSContent, controls: UPSControls, title: 'Package Tracking' },
+  { content: UPSContent, controls: UPSControls, title: 'Package Tracking' }, //10
   { content: FallbackTwoContent, controls: FallbackTwoControls, title: 'Password Confirm' },
   { content: ZodiacContent, controls: ZodiacControls, title: 'Zodiac' },
   { content: AppCodeContent, controls: AppCodeControls, title: 'Authenticator App' },
-  { content: AquariumContent, controls: AquariumControls, title: 'Aquarium' }, //15
-  { content: MaintenanceContent, controls: MaintenanceControls, title: 'Maintenance' },
-  { content: QuotesContent, title: 'Quotes' }, 
+  { content: AquariumContent, controls: AquariumControls, title: 'Aquarium' },
+  { content: MaintenanceContent, controls: MaintenanceControls, title: 'Maintenance' }, //15
+  { content: QuotesContent, title: 'Quotes' },
   { content: RoadTripContent, requiresLoad: true, title: 'Road Trip' },
-  { content: ParlorRoomContent, requiresLoad: true, title: 'Parlor Room' }, 
-  { content: DartboardContent, title: 'Dartboard' }, //20
-  { content: IMDBContent, title: 'Filmography' },
+  { content: ParlorRoomContent, requiresLoad: true, title: 'Parlor Room' },
+  { content: DartboardContent, title: 'Dartboard' },
+  { content: IMDBContent, title: 'Filmography' }, //20
   { content: TaxReturnContent, controls: TaxReturnControls, title: 'Tax Return' },
   { content: FishingContent, controls: FishingControls, title: 'Fishing' },
   { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true, title: 'Bird Calls' },
@@ -108,12 +105,12 @@ export const LEVELS: LevelDefinition[] = [
     controls: UPSFinishControls,
     requiresLoad: true,
     title: 'Package Delivery',
-  },
+  }, //25
   { content: SpotifyContent, title: 'Rhythm Challenge' },
   { content: BombDefusalContent, controls: BombDefusalControls, title: 'Bomb Defusal' },
   { content: PapersPleaseContent, title: 'Papers Please' },
   { content: EinsteinContent, controls: EinsteinControls, title: 'Einstein Riddle' },
-  { content: UndertaleContent, title: 'Final Defense' },
+  { content: UndertaleContent, title: 'Final Defense' }, //30
 ] as LevelDefinition[]
 
 //AAAA@@may00
@@ -183,7 +180,8 @@ export const useLevels = () => {
     recordLevelTiming(levelRef.current)
   }, [recordLevelTiming])
 
-  const resetLevel = () => {
+  /** Fresh run clocks at Identity Lock — call when leaving pre-game or on full reset. */
+  const resetLevel = useCallback(() => {
     setLevel(1)
     levelRef.current = 1
     const now = Date.now()
@@ -196,7 +194,7 @@ export const useLevels = () => {
     setUPSTrackingCode('')
     setUPSTrackingTime(0)
     setSelectedSSOIds(new Set())
-  }
+  }, [clearStrikes])
 
   const baseProps = {
     level,
@@ -219,13 +217,12 @@ export const useLevels = () => {
   const levelToUse = forceLevel > 0 ? forceLevel : level
   const levelDef = LEVELS[levelToUse - 1]
   if (!levelDef) {
-    // fallback
     return {
       baseProps,
-      content: OneContent,
-      controls: OneControls,
+      content: IdentityLockContent,
+      controls: IdentityLockControls,
       requiresLoad: false,
-      title: 'Account Select',
+      title: 'Identity Lock',
     }
   }
   return { baseProps, ...levelDef, requiresLoad: levelDef.requiresLoad || false }
