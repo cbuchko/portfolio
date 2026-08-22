@@ -13,7 +13,6 @@ import { TaxReturnContent, TaxReturnControls } from './TaxReturn'
 import { AppCodeContent, AppCodeControls } from './AppCode'
 import { IMDBContent } from './IMDB'
 import { ParlorRoomContent } from './ParlorRoom'
-import { MaintenanceContent, MaintenanceControls } from './Maintenance'
 import { QuotesContent } from './Quotes'
 import { PapersPleaseContent } from './PapersPlease'
 import { AquariumContent, AquariumControls } from './Aquarium'
@@ -71,7 +70,7 @@ export type LevelProps = {
   registerStrike: () => number
 }
 
-// True 31 factors — Account Select is pre-game, not in this list.
+// True 30 factors — Account Select is pre-game, not in this list.
 export const LEVELS: LevelDefinition[] = [
   { content: IdentityLockContent, controls: IdentityLockControls, title: 'Identity Lock' },
   {
@@ -91,7 +90,6 @@ export const LEVELS: LevelDefinition[] = [
   { content: ZodiacContent, controls: ZodiacControls, title: 'Zodiac' },
   { content: AppCodeContent, controls: AppCodeControls, title: 'Authenticator App' },
   { content: AquariumContent, controls: AquariumControls, title: 'Aquarium' },
-  { content: MaintenanceContent, controls: MaintenanceControls, title: 'Maintenance' }, //15
   { content: QuotesContent, title: 'Quotes' },
   { content: RoadTripContent, requiresLoad: true, title: 'Road Trip' },
   { content: ParlorRoomContent, requiresLoad: true, title: 'Parlor Room' },
