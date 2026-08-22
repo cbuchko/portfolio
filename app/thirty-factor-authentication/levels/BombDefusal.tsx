@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { useMessageSpam } from '../useMessageSpam'
@@ -210,12 +209,9 @@ export const BombDefusalContent = ({
         loop
         ref={audioRef}
       />
-      {isGameOver &&
-        createPortal(
-          <div className="fixed inset-0 z-[9999] bg-red-500/50 pointer-events-none" />,
-          document.body
-        )}
-    </>
+      {isGameOver && (
+        <div className="fixed inset-0 z-[9999] bg-red-500/50 pointer-events-none" />
+      )}    </>
   )
 }
 

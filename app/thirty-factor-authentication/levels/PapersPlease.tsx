@@ -1,4 +1,4 @@
-import { PropsWithChildren, useRef, useState, useEffect } from 'react'
+import { PropsWithChildren, useRef, useState } from 'react'
 import { ContentProps } from './types'
 import { Player, PlayerIds, PlayerInformation } from '../player-constants'
 import Image from 'next/image'

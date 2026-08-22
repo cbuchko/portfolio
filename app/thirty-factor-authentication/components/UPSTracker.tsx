@@ -80,7 +80,7 @@ export const UPSTracker = ({ code, time, isMobile }: UPSTrackerProps) => {
       clearTimeout(fifthTimeout)
       clearTimeout(sixthTimeout)
     }
-  }, [])
+  }, [handleDelay])
 
   if (!code || !time) return null
   return (

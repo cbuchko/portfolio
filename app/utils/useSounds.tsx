@@ -98,9 +98,12 @@ export function useSound(src: string, volume?: number, shouldLoop?: boolean, htm
   const useHtmlAudioRef = useRef(useHtmlAudio)
   const volRef = useRef(vol)
   const loopRef = useRef(loop)
-  useHtmlAudioRef.current = useHtmlAudio
-  volRef.current = vol
-  loopRef.current = loop
+
+  useEffect(() => {
+    useHtmlAudioRef.current = useHtmlAudio
+    volRef.current = vol
+    loopRef.current = loop
+  })
 
   useEffect(() => {
     bindAudioUnlock()

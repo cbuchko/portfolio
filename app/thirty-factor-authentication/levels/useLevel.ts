@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { IdentityLockContent, IdentityLockControls } from './IdentityLock'
 import { LegalNameContent, LegalNameControls } from './LegalName'
 import { MessageSpamContent, MessageSpamControls } from './MessageSpam'
@@ -12,7 +12,6 @@ import { BiometricContent, BiometricControls } from './Biometric'
 import { TaxReturnContent, TaxReturnControls } from './TaxReturn'
 import { AppCodeContent, AppCodeControls } from './AppCode'
 import { IMDBContent } from './IMDB'
-import { BirdCallContent, BirdCallControls } from './BirdCalls'
 import { ParlorRoomContent } from './ParlorRoom'
 import { MaintenanceContent, MaintenanceControls } from './Maintenance'
 import { QuotesContent } from './Quotes'
@@ -26,12 +25,14 @@ import { UPSContent, UPSControls } from './UPS'
 import { UPSFinishContent, UPSFinishControls } from './UPSFinish'
 import { SSOIds } from './SSO'
 import { FishingContent, FishingControls } from './Fishing'
+import { BirdCallContent, BirdCallControls } from './BirdCalls'
 import { RoadTripContent } from './RoadTrip'
 import { useSound } from '@/app/utils/useSounds'
 import { SpotifyContent } from './Spotify'
 import { MastermindContent } from './Mastermind'
 import { DartboardContent } from './Dartboard'
 import { SecurityQuestionsContent, SecurityQuestionsControls } from './SecurityQuestions'
+import { PizzatronContent } from './Pizzatron'
 import { ContentProps, ControlProps } from './types'
 
 type LevelContent = (props: ContentProps) => React.JSX.Element | null
@@ -70,7 +71,7 @@ export type LevelProps = {
   registerStrike: () => number
 }
 
-// True 30 factors — Account Select is pre-game, not in this list.
+// True 31 factors — Account Select is pre-game, not in this list.
 export const LEVELS: LevelDefinition[] = [
   { content: IdentityLockContent, controls: IdentityLockControls, title: 'Identity Lock' },
   {
@@ -99,6 +100,7 @@ export const LEVELS: LevelDefinition[] = [
   { content: TaxReturnContent, controls: TaxReturnControls, title: 'Tax Return' },
   { content: FishingContent, controls: FishingControls, title: 'Fishing' },
   { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true, title: 'Bird Calls' },
+  { content: PizzatronContent, title: 'Pizzatron' },
   { content: MastermindContent, title: 'Mastermind' },
   {
     content: UPSFinishContent,
@@ -110,19 +112,22 @@ export const LEVELS: LevelDefinition[] = [
   { content: BombDefusalContent, controls: BombDefusalControls, title: 'Bomb Defusal' },
   { content: PapersPleaseContent, title: 'Papers Please' },
   { content: EinsteinContent, controls: EinsteinControls, title: 'Einstein Riddle' },
-  { content: UndertaleContent, title: 'Final Defense' }, //30
+  { content: UndertaleContent, title: 'Undertale' }, //31
 ] as LevelDefinition[]
 
 //AAAA@@may00
 export const useLevels = () => {
   const [level, setLevel] = useState(1)
   const levelRef = useRef(1)
-  levelRef.current = level
 
   const [startTime, setStartTime] = useState(new Date().getTime())
   const [levelEnteredAt, setLevelEnteredAt] = useState(() => Date.now())
   const levelEnteredAtRef = useRef(levelEnteredAt)
-  levelEnteredAtRef.current = levelEnteredAt
+
+  useEffect(() => {
+    levelRef.current = level
+    levelEnteredAtRef.current = levelEnteredAt
+  }, [level, levelEnteredAt])
 
   const [levelTimings, setLevelTimings] = useState<LevelTiming[]>([])
   const levelTimingsRef = useRef<LevelTiming[]>([])

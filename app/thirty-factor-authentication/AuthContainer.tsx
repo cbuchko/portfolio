@@ -90,7 +90,6 @@ export const AuthContainer = ({
           'opacity-0 pointer-events-none': isLoading && requiresLoad,
           'mb-4 !mt-0 top-[20%]': isMobile,
           'mx-auto': !isMobile,
-          'auth-strike-shake': strikeFeedback,
         })}
       >
         <div

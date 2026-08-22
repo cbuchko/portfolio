@@ -2,50 +2,13 @@
 Levels that NEED to be better:
 "Feel" Ideas:
     - Bespoke Zodiac Selector
-    - Aquarium add sfx and ocean elements
+    - Aquarium add sfx and ocean element
+    - Bomb Defusal has opportunity
+    - Maintenance has opportunity
 
+Sign In screen needs more love as the first impression to the game
 
-OTHER IDEAS:
-Cloudflare
-Sentry for monitoring
-Re-add Name logo
-Devlog in my blog
-Dark Mode support
-Count mistakes for endgame screen
-
-STRECH GOALS:
-Stats in Game Over screen and Victory screen
-Dark Mode
-
-Character Suggestions:
-Jennifer Coolidge
-Snoop Dogg
-Jack Black
-Taylor Swift
-Conan O'Brien
-Shia Labeouf
-Mark Zuckerberg
-Guy Fieri
-Paris Hilton
-Lady Gaga
-Mike Tyson
-
-devlog ideas:
-sections:
-    - ideation/inspirations
-    - level creation
-        - how did i come up with levels
-        - methodology
-    - playtesting
-    - revisions
-    - what worked/what didn't
-    - using ai
-
-
-
-Responsiveness Notes:
-    Spotify: clear performance issues
-
+Identity Lock could be more?
 
 August 16th revisit notes:
 - Mobile "Easyness" 

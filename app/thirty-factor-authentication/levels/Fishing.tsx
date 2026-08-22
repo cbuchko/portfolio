@@ -12,7 +12,7 @@ const fishWidth = 32
 const rodRisePerSec = 110
 const rodFallPerSec = 160
 const progressGainPerSec = 9
-const progressLosePerSec = 12
+const progressLosePerSec = 10
 
 const fishMinY = 0
 const fishMaxY = playAreaHeight - fishHeight
@@ -90,8 +90,6 @@ export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
   const endRoundRef = useRef<(won: boolean) => void>(() => {})
   const playReelRef = useRef(playReel)
   const stopSoundRef = useRef(stopSound)
-  playReelRef.current = playReel
-  stopSoundRef.current = stopSound
 
   const endRound = useCallback(
     (won: boolean) => {
@@ -112,7 +110,12 @@ export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
     },
     [handleLevelAdvance, resetRound]
   )
-  endRoundRef.current = endRound
+
+  useEffect(() => {
+    playReelRef.current = playReel
+    stopSoundRef.current = stopSound
+    endRoundRef.current = endRound
+  })
 
   // Single simulation + render loop
   useEffect(() => {
@@ -273,10 +276,7 @@ export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
           <div
             ref={rodElRef}
             className="absolute bottom-0 bg-green-500 w-full rounded-md will-change-transform"
-            style={{
-              height: rodHeight,
-              transform: `translateY(-${rodYRef.current}px)`,
-            }}
+            style={{ height: rodHeight }}
           />
           <Image
             ref={fishElRef}
@@ -284,8 +284,7 @@ export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
             alt="fish"
             height={fishHeight}
             width={fishWidth}
-            className="absolute rotate-y-180 -rotate-z-45 will-change-[bottom] pointer-events-none"
-            style={{ bottom: fishYRef.current }}
+            className="absolute bottom-[100px] rotate-y-180 -rotate-z-45 will-change-[bottom] pointer-events-none"
             draggable={false}
             priority
           />

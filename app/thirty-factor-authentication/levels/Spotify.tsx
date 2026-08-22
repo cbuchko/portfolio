@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import classNames from 'classnames'
+import Image from 'next/image'
 import { playSfx, prefetchSound, useSound } from '@/app/utils/useSounds'
 import { ContentProps, ControlProps } from './types'
 
@@ -499,9 +500,11 @@ export const SpotifyContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
       <div className="spotify-chrome rounded-xl border border-[#282828] bg-[#121212] text-white p-3">
         <div className="flex items-center gap-3">
           <div className="h-14 w-14 shrink-0 rounded-md overflow-hidden bg-[#191414]">
-            <img
+            <Image
               src="/thirty-factor-authentication/kxdama.jpg"
               alt="Kxdama"
+              width={56}
+              height={56}
               className="h-full w-full object-cover"
               draggable={false}
             />
