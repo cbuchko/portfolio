@@ -29,7 +29,7 @@ type RoundState = {
   beltMs: number
 }
 
-type Phase = 'idle' | 'running' | 'ejecting' | 'miss' | 'failed'
+type Phase = 'idle' | 'running' | 'ejecting' | 'miss'
 
 export const PizzatronContent = ({ handleLevelAdvance, isMobile }: ContentProps) => {
   const [completed, setCompleted] = useState(0)
@@ -112,7 +112,10 @@ export const PizzatronContent = ({ handleLevelAdvance, isMobile }: ContentProps)
       schedule(() => {
         stopSoundtrack()
         handleLevelAdvance()
-        setPhase('failed')
+        setRound(null)
+        setBuild(emptyBuild())
+        setEjectLeftPct(null)
+        setPhase('idle')
         resolvingRef.current = false
       }, RESULT_FLASH_MS)
       return
@@ -190,6 +193,7 @@ export const PizzatronContent = ({ handleLevelAdvance, isMobile }: ContentProps)
   }
 
   const interacting = phase === 'running'
+  const awaitingRestart = phase === 'idle' && mistakes >= MISTAKES_BEFORE_STRIKE
 
   return (
     <div className={classNames({ 'min-w-[580px]': !isMobile })}>
@@ -216,36 +220,26 @@ export const PizzatronContent = ({ handleLevelAdvance, isMobile }: ContentProps)
         </div>
       </div>
 
-      {phase === 'idle' && (
-        <div className="text-center mb-3">
-          <button type="button" className="auth-button" onClick={startShift}>
-            Play
-          </button>
-        </div>
-      )}
+      <div
+        className={classNames('pizzatron-stage', {
+          'pizzatron-stage--mobile': isMobile,
+        })}
+      >
+        <OrderTicket
+          blank={phase === 'idle'}
+          recipe={round?.recipe}
+          orderNumber={round?.id}
+          verdict={phase === 'ejecting' ? 'ok' : phase === 'miss' ? 'miss' : null}
+        />
 
-      {phase === 'failed' && (
-        <div className="pizzatron-gate pizzatron-gate--fail border border-black rounded-md p-6 text-center mb-3">
-          <p className="mb-3 font-medium">Shift failed</p>
-          <button type="button" className="auth-button auth-button-primary" onClick={startShift}>
-            Restart
-          </button>
-        </div>
-      )}
-
-      {phase !== 'idle' && phase !== 'failed' && round && (
-        <>
-          <div
-            className={classNames('pizzatron-stage', {
-              'pizzatron-stage--mobile': isMobile,
-            })}
-          >
-            <OrderTicket
-              recipe={round.recipe}
-              orderNumber={round.id}
-              verdict={phase === 'ejecting' ? 'ok' : phase === 'miss' ? 'miss' : null}
-            />
-
+        {phase === 'idle' ? (
+          <div className="pizzatron-belt pizzatron-belt--idle border border-black rounded-md">
+            <button type="button" className="pizzatron-play-button" onClick={startShift}>
+              {awaitingRestart ? 'Restart' : 'Play'}
+            </button>
+          </div>
+        ) : (
+          round && (
             <div
               className={classNames('pizzatron-belt border border-black rounded-md', {
                 'pizzatron-belt--miss': phase === 'miss',
@@ -281,19 +275,17 @@ export const PizzatronContent = ({ handleLevelAdvance, isMobile }: ContentProps)
                 )}
               </div>
             </div>
-          </div>
+          )
+        )}
+      </div>
 
-          <IngredientStation
-            disabled={!interacting}
-            onPick={handleIngredient}
-            onDump={handleClear}
-            canDump={
-              interacting && (build.sauce !== null || build.cheese || build.extras.length > 0)
-            }
-            isMobile={isMobile}
-          />
-        </>
-      )}
+      <IngredientStation
+        disabled={!interacting}
+        onPick={handleIngredient}
+        onDump={handleClear}
+        canDump={interacting && (build.sauce !== null || build.cheese || build.extras.length > 0)}
+        isMobile={isMobile}
+      />
     </div>
   )
 }
@@ -302,11 +294,19 @@ const OrderTicket = ({
   recipe,
   orderNumber,
   verdict,
+  blank,
 }: {
-  recipe: PizzaRecipe
-  orderNumber: number
+  recipe?: PizzaRecipe
+  orderNumber?: number
   verdict: 'ok' | 'miss' | null
+  blank?: boolean
 }) => {
+  if (blank) {
+    return <div className="pizzatron-ticket border border-black" aria-hidden />
+  }
+
+  if (!recipe || orderNumber === undefined) return null
+
   const sauce = getIngredient(recipe.sauce)
   const extraLines = (Object.entries(recipe.extras) as [ExtraId, number][])
     .filter(([, count]) => count > 0)
