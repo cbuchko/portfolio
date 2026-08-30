@@ -60,8 +60,8 @@ export default function Map({
       touchZoom={touchZoom}
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        url={`https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png?key=${process.env.NEXT_PUBLIC_CARTO_API_KEY ?? ''}`}
       />
       {markers.map((city, idx) => (
         <LeafletMarker
