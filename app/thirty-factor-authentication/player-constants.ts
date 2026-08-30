@@ -247,7 +247,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     },
   },
   [PlayerIds.TheRock]: {
-    name: 'The Rock',
+    name: 'Dwayne Johnson',
     fullName: 'Dwayne Douglas Johnson',
     fullNameAliases: ['Dwayne Douglas Johnson'],
     birthCity: 'hayward',

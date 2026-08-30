@@ -45,10 +45,10 @@ export const OneContent = ({
         Welcome Back!
       </h2>
       <p className={classNames('text-gray-700', { 'text-base': isMobile, 'text-lg': !isMobile })}>
-        Select your account to continue.
+        Select your account to continue
       </p>
       <div
-        className={classNames('flex flex-col border border-gray-400 rounded-lg overflow-hidden', {
+        className={classNames('flex flex-col border border-gray-200 rounded-sm bg-gray-50 shadow-lg overflow-hidden', {
           'mt-3': isMobile,
           'mt-4': !isMobile,
         })}
@@ -61,11 +61,11 @@ export const OneContent = ({
               type="button"
               onClick={() => handleCharacterSelect(character.id)}
               className={classNames(
-                'flex items-center w-full text-left cursor-pointer transition-colors duration-150 border-l-4 bg-white',
+                'flex items-center w-full text-left cursor-pointer transition-colors duration-150 border-l-4',
                 {
                   'border-t border-gray-300': index > 0,
                   'bg-blue-50 border-l-blue-400': isSelected,
-                  'border-l-transparent hover:bg-gray-50': !isSelected,
+                  'border-l-transparent hover:bg-gray-100': !isSelected,
                   'gap-2.5 px-3 py-2': isMobile,
                   'gap-3 px-4 py-3': !isMobile,
                 }
