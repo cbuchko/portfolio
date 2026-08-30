@@ -23,6 +23,27 @@ small {
   background-color: rgb(142, 197, 255);
 }
 
+@keyframes identity-lock-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.identity-lock-ack {
+  animation: identity-lock-fade-in 0.35s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .identity-lock-ack {
+    animation: none;
+  }
+}
+
 .pizzatron-play-button {
   border: 2px solid black;
   padding: 4px 12px;

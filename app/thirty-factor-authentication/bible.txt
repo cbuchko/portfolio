@@ -1,7 +1,10 @@
+Should the authenticator have more personality? Should it get more deranged and start justifying why the game turns into chaos?
+Should other levels leave artifacts? A rogue post-it? A fish that swims by? Honestly hard to not make that look like a bug
+Funny easter egg: If you don't accept the "three mistakes" checkbox, the game enters an infinite mode where you can't fail? lol
+
 
 Levels that NEED to be better:
 "Feel" Ideas:
-    - Bespoke Zodiac Selector
     - Aquarium add sfx and ocean element
     - Bomb Defusal has opportunity
     - Maintenance has opportunity
@@ -13,3 +16,4 @@ Identity Lock could be more?
 August 16th revisit notes:
 - Mobile "Easyness" 
 - Test more
+- Handpick Quotes and Films for new characters
