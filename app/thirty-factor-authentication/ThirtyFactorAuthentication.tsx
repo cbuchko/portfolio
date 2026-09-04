@@ -94,6 +94,7 @@ export default function ThirtyFactorAuthentication() {
         style={{ scrollbarGutter: 'stable' }}
       >
         <div
+          id="tfa-logo"
           className={classNames('absolute flex items-center gap-2 bg-white rounded-md p-2', {
             'left-[50%] -translate-x-[50%] top-8 ': !isMobile,
             'top-16': isMobile,

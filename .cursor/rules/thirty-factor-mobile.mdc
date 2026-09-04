@@ -1,0 +1,28 @@
+---
+description: Thirty Factor Authentication — always weigh mobile feasibility in design, feedback, and implementation
+globs: app/thirty-factor-authentication/**
+alwaysApply: true
+---
+
+# Thirty Factor — mobile feasibility
+
+When proposing, reviewing, or building anything in Thirty Factor Authentication, **always** account for mobile (touch, ~≤500px via `mobileWidthBreakpoint`), not only desktop.
+
+## Feedback & design
+
+- Call out mobile risk early: hit targets, finger-as-cursor, overlays, drag/DnD, tiny text, viewport chrome, safe areas.
+- Prefer one-screen or short flows on phone; multi-room / precision-aim / hover-only ideas need a mobile plan or an explicit desktop-primary tradeoff.
+- If a level is likely painful on touch, say so before expanding scope.
+
+## Implementation defaults
+
+- Use `isMobile` from level `ContentProps` (or `useIsMobile(mobileWidthBreakpoint)`) for layout, hit slop, and copy ("tap" vs "click").
+- Touch targets ≥ ~44px where players must aim; enlarge props or add invisible hit padding on mobile.
+- Full-viewport overlays (`position: fixed` / portals): no `transform` on `#auth-container`; leave room for bottom UI / home indicator (`env(safe-area-inset-*)`).
+- Finger-as-flashlight / aim: sync light to the tap point; soften lit/aim checks on mobile; don't require mouse-style sweeping.
+- Inventory / message chrome should not cover critical props; park interactables away from the auth card and bottom UI band on small screens.
+- Drag: prefer pointer events or existing touch DnD patterns; avoid hover-only affordances.
+
+## When unsure
+
+Ship a thinner mobile path (bigger targets, fewer props, clearer tap flow) rather than assuming desktop controls will transfer.

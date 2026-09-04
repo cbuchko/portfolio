@@ -47,14 +47,15 @@ export const VictoryScreen = ({
           , for inspiring this entire concept.
         </p>
         <p className="text-md mt-2">
-          Thank you Lucas Pope, Toby Fox, Eric Barone, Dean Herbert and Tonda Ros for creating some
-          of my favourite games ever and directly inspiring levels of this game.
+          Thank you Lucas Pope, Toby Fox, Eric Barone, Dean Herbert, Tonda Ros, and Derek Yu for
+          creating some of my favourite games ever and directly inspiring levels of this game.
         </p>
         <p className="mt-4">Soundtrack:</p>
         <ul className="list-disc ml-4">
-          <li>{`Rythm Challenge: "Open the Skies" by Kxdama`}</li>
-          <li>{`Fishing: "Fishing Song" by Kai Mikkelsen`}</li>
-          <li>{`Final Level: "Death by Glamour" by Toby Fox from Undertale`}</li>
+          <li>{`"Open the Skies" by Kxdama`}</li>
+          <li>{`"Fishing Song" by Kai Mikkelsen`}</li>
+          <li>{`"Night Manor - Interior" by Eirik Suhrke from UFO 50`}</li>
+          <li>{`"Death by Glamour" by Toby Fox from Undertale`}</li>
         </ul>
       </div>
     </div>

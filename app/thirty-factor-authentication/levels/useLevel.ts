@@ -104,7 +104,7 @@ export const LEVELS: LevelDefinition[] = [
     content: UPSFinishContent,
     controls: UPSFinishControls,
     requiresLoad: true,
-    title: 'Package Delivery',
+    title: 'Package Arrival',
   }, //25
   { content: SpotifyContent, title: 'Rhythm Challenge' },
   { content: BombDefusalContent, controls: BombDefusalControls, title: 'Bomb Defusal' },
