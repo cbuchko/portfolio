@@ -142,6 +142,7 @@ export const UPSFinishContent = ({
   const panRef = useRef(pan)
   const mobileMetricsRef = useRef(mobileMetrics)
   const mobileLayoutReadyRef = useRef(false)
+  const lastTapRef = useRef<Point>({ x: -1, y: -1 })
   const dragRef = useRef({
     active: false,
     pointerId: -1,
@@ -158,11 +159,11 @@ export const UPSFinishContent = ({
   panRef.current = pan
   mobileMetricsRef.current = mobileMetrics
 
-  const { playSound: playSoundtrack, stopSound: stopSoundtrack } = useSound(
-    '/thirty-factor-authentication/sounds/night-manor-interior.mp3',
-    0.35,
-    true
-  )
+  const {
+    playSound: playSoundtrack,
+    stopSound: stopSoundtrack,
+    isAudioPlayingRef: isMusicPlayingRef,
+  } = useSound('/thirty-factor-authentication/sounds/night-manor-interior.mp3', 0.35, true)
 
   const tracking = upsTrackingCode || '1Z-AUTH-KEY'
 
@@ -173,13 +174,26 @@ export const UPSFinishContent = ({
     showText
   )
 
+  /** Start music on a real user gesture; safe to call repeatedly until it sticks. */
+  const ensureMusic = useCallback(() => {
+    if (wonRef.current) return
+    if (isMusicPlayingRef.current) {
+      musicStartedRef.current = true
+      return
+    }
+    // Do not latch on failed autoplay — browsers block play() outside a gesture.
+    musicStartedRef.current = false
+    playSoundtrack()
+  }, [isMusicPlayingRef, playSoundtrack])
+
   const handleTextClick = useCallback(() => {
+    ensureMusic()
     if (!typingDone) {
       completeTyping()
       return
     }
     dismissText()
-  }, [typingDone, completeTyping, dismissText])
+  }, [typingDone, completeTyping, dismissText, ensureMusic])
 
   useEffect(() => {
     setMounted(true)
@@ -191,12 +205,6 @@ export const UPSFinishContent = ({
       stopSoundtrack()
     }
   }, [stopSoundtrack])
-
-  const ensureMusic = useCallback(() => {
-    if (wonRef.current || musicStartedRef.current) return
-    musicStartedRef.current = true
-    playSoundtrack()
-  }, [playSoundtrack])
 
   useEffect(() => {
     if (!mounted) return
@@ -210,7 +218,6 @@ export const UPSFinishContent = ({
       pointerRef.current = next
       setPointer(next)
       setCursorReady(true)
-      ensureMusic()
 
       if (FLASHLIGHT_ENABLED) {
         if (next.y < window.innerHeight * (1 - uiFraction)) {
@@ -222,11 +229,16 @@ export const UPSFinishContent = ({
         setCone(next)
       }
     }
+    // pointermove is NOT a user gesture — only start music from pointerdown.
+    const onPointerDown = (e: PointerEvent) => {
+      syncPointer(e)
+      ensureMusic()
+    }
     window.addEventListener('pointermove', syncPointer)
-    window.addEventListener('pointerdown', syncPointer)
+    window.addEventListener('pointerdown', onPointerDown)
     return () => {
       window.removeEventListener('pointermove', syncPointer)
-      window.removeEventListener('pointerdown', syncPointer)
+      window.removeEventListener('pointerdown', onPointerDown)
     }
   }, [mounted, mobile, ensureMusic])
 
@@ -238,7 +250,7 @@ export const UPSFinishContent = ({
     const root = document.documentElement
     root.style.setProperty('--nm-pan-x', `${panRef.current.x}px`)
     root.style.setProperty('--nm-pan-y', `${panRef.current.y}px`)
-    root.style.setProperty('--nm-ui-h', '28vh')
+    root.style.setProperty('--nm-ui-h', '24vh')
     document.body.classList.add('nm-mobile-pan')
 
     const syncScene = () => {
@@ -294,7 +306,7 @@ export const UPSFinishContent = ({
     const root = document.documentElement
     root.style.setProperty('--nm-pan-x', `${pan.x}px`)
     root.style.setProperty('--nm-pan-y', `${pan.y}px`)
-    root.style.setProperty('--nm-ui-h', '28vh')
+    root.style.setProperty('--nm-ui-h', '24vh')
     document.body.classList.add('nm-mobile-pan')
     return () => {
       root.style.removeProperty('--nm-pan-x')
@@ -305,12 +317,7 @@ export const UPSFinishContent = ({
   }, [mounted, mobile, pan.x, pan.y])
 
   const getAimPoint = useCallback((): Point => {
-    if (mobile) {
-      const scene = sceneRef.current
-      if (!scene) return { x: -1, y: -1 }
-      const rect = scene.getBoundingClientRect()
-      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }
-    }
+    if (mobile) return lastTapRef.current
     return FLASHLIGHT_ENABLED ? coneRef.current : pointerRef.current
   }, [mobile])
 
@@ -521,133 +528,120 @@ export const UPSFinishContent = ({
   }
 
   const handlePlayClick = () => {
-    if (showText) {
-      handleTextClick()
-      return
-    }
     ensureMusic()
 
     const cursor = getAimPoint()
-    if (!cursorReady || cursor.x < 0) return
+    if (!cursorReady || cursor.x < 0) {
+      if (showText) {
+        if (!typingDone) completeTyping()
+        else dismissText()
+      }
+      return
+    }
 
     const hitPad = mobile ? 14 : 8
+    let acted = false
 
     for (const pickup of WORLD_PICKUPS) {
       if (worldGone[pickup.id]) continue
       const rect = itemRefs.current[pickup.id]?.getBoundingClientRect()
       if (atCursor(cursor, rect, hitPad)) {
-        if (holding) {
-          useOn(pickup.id as TargetId)
-          return
-        }
-        takeItem(pickup.id, itemLabel(pickup.id))
-        return
+        if (holding) useOn(pickup.id as TargetId)
+        else takeItem(pickup.id, itemLabel(pickup.id))
+        acted = true
+        break
       }
     }
 
-    if (atCursor(cursor, hedgeRef.current?.getBoundingClientRect(), hitPad)) {
-      if (holding) {
-        useOn('hedge')
-        return
-      }
-      if (worldGone.box) {
-        say(SCENE_PROP_COPY.hedge.emptied)
-        return
-      }
-      if (boxFreed) {
-        takeBoxFromHedge()
-        return
-      }
-      say(SCENE_PROP_COPY.hedge.blocked)
-      return
+    if (!acted && atCursor(cursor, hedgeRef.current?.getBoundingClientRect(), hitPad)) {
+      if (holding) useOn('hedge')
+      else if (worldGone.box) say(SCENE_PROP_COPY.hedge.emptied)
+      else if (boxFreed) takeBoxFromHedge()
+      else say(SCENE_PROP_COPY.hedge.blocked)
+      acted = true
     }
 
-    if (atCursor(cursor, envelopeRef.current?.getBoundingClientRect(), hitPad)) {
+    if (!acted && atCursor(cursor, envelopeRef.current?.getBoundingClientRect(), hitPad)) {
       activateTarget('envelope', {
         examine: SCENE_PROP_COPY.envelope(tracking),
       })
-      return
+      acted = true
     }
 
-    if (atCursor(cursor, matRef.current?.getBoundingClientRect(), hitPad)) {
-      if (holding) {
-        useOn('mat')
-        return
-      }
-      if (!worldGone.toolboxKey) {
+    if (!acted && atCursor(cursor, matRef.current?.getBoundingClientRect(), hitPad)) {
+      if (holding) useOn('mat')
+      else if (!worldGone.toolboxKey) {
         setInventory((prev) => (prev.includes('toolboxKey') ? prev : [...prev, 'toolboxKey']))
         setWorldGone((prev) => ({ ...prev, toolboxKey: true }))
         say(SCENE_PROP_COPY.mat.foundKey)
-        return
+      } else {
+        activateTarget('mat', { examine: SCENE_PROP_COPY.mat.examine })
       }
-      activateTarget('mat', { examine: SCENE_PROP_COPY.mat.examine })
-      return
+      acted = true
     }
 
-    if (atCursor(cursor, toolboxRef.current?.getBoundingClientRect(), hitPad)) {
-      if (holding) {
-        useOn('toolbox')
-        return
+    if (!acted && atCursor(cursor, toolboxRef.current?.getBoundingClientRect(), hitPad)) {
+      if (holding) useOn('toolbox')
+      else {
+        activateTarget('toolbox', {
+          examine: toolboxOpen
+            ? SCENE_PROP_COPY.toolbox.open
+            : SCENE_PROP_COPY.toolbox.locked,
+        })
       }
-      activateTarget('toolbox', {
-        examine: toolboxOpen
-          ? SCENE_PROP_COPY.toolbox.open
-          : SCENE_PROP_COPY.toolbox.locked,
-      })
-      return
+      acted = true
     }
 
-    if (atCursor(cursor, dirtRef.current?.getBoundingClientRect(), hitPad)) {
-      if (holding) {
-        useOn('dirtMound')
-        return
+    if (!acted && atCursor(cursor, dirtRef.current?.getBoundingClientRect(), hitPad)) {
+      if (holding) useOn('dirtMound')
+      else {
+        activateTarget('dirtMound', {
+          examine: dirtDug ? SCENE_PROP_COPY.dirtMound.dug : SCENE_PROP_COPY.dirtMound.buried,
+        })
       }
-      activateTarget('dirtMound', {
-        examine: dirtDug ? SCENE_PROP_COPY.dirtMound.dug : SCENE_PROP_COPY.dirtMound.buried,
-      })
-      return
+      acted = true
     }
 
-    if (atCursor(cursor, garbageCanRef.current?.getBoundingClientRect(), hitPad)) {
-      if (holding) {
-        useOn('garbageCan')
-        return
-      }
-      if (!garbageRummaged) {
-        rummageGarbageCan()
-        return
-      }
-      activateTarget('garbageCan', { examine: SCENE_PROP_COPY.garbageCan.rummaged })
-      return
+    if (!acted && atCursor(cursor, garbageCanRef.current?.getBoundingClientRect(), hitPad)) {
+      if (holding) useOn('garbageCan')
+      else if (!garbageRummaged) rummageGarbageCan()
+      else activateTarget('garbageCan', { examine: SCENE_PROP_COPY.garbageCan.rummaged })
+      acted = true
     }
 
-    if (atCursor(cursor, dropzoneRef.current?.getBoundingClientRect(), mobile ? 18 : 10)) {
-      if (holding) {
-        useOn('session')
-        return
-      }
-      activateTarget('session', { examine: SCENE_PROP_COPY.session.examine })
-      return
+    if (
+      !acted &&
+      atCursor(cursor, dropzoneRef.current?.getBoundingClientRect(), mobile ? 18 : 10)
+    ) {
+      if (holding) useOn('session')
+      else activateTarget('session', { examine: SCENE_PROP_COPY.session.examine })
+      acted = true
     }
 
-    for (const decoId of DECO_PROP_ORDER) {
-      const rect = decoRefs.current[decoId]?.getBoundingClientRect()
-      if (atCursor(cursor, rect, hitPad)) {
-        examineDeco(decoId)
-        return
+    if (!acted) {
+      for (const decoId of DECO_PROP_ORDER) {
+        const rect = decoRefs.current[decoId]?.getBoundingClientRect()
+        if (atCursor(cursor, rect, hitPad)) {
+          examineDeco(decoId)
+          acted = true
+          break
+        }
       }
     }
 
-    say(holding ? UI_COPY.nothingHappens : UI_COPY.nothingHere)
+    if (acted) return
+
+    // Blank space: advance/dismiss narrative only
+    if (showText) {
+      if (!typingDone) completeTyping()
+      else dismissText()
+    }
   }
 
   const handlePlayPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (showText) {
-      handleTextClick()
-      return
-    }
-    if (!mobile) return
     ensureMusic()
+    if (!mobile) return
+    lastTapRef.current = { x: e.clientX, y: e.clientY }
     dragRef.current = {
       active: true,
       pointerId: e.pointerId,
@@ -682,7 +676,10 @@ export const UPSFinishContent = ({
     const moved = dragRef.current.moved
     dragRef.current.active = false
     e.currentTarget.releasePointerCapture(e.pointerId)
-    if (!moved) handlePlayClick()
+    if (!moved) {
+      lastTapRef.current = { x: e.clientX, y: e.clientY }
+      handlePlayClick()
+    }
   }
 
   const posStyle = (id: PropSpawnId) => spawnPosStyle(propLayout?.[id])
@@ -919,23 +916,20 @@ export const UPSFinishContent = ({
               </div>
             )}
 
-            {showText && (
-              <button
-                type="button"
-                className="nm-text-dismiss"
-                onClick={handleTextClick}
-                aria-label="Dismiss text"
-              />
-            )}
-
             <div className="nm-ui">
               {showText ? (
-                <div className="nm-message" role="status">
+                <button
+                  type="button"
+                  className="nm-message"
+                  role="status"
+                  onClick={handleTextClick}
+                  aria-label="Dismiss text"
+                >
                   <span className="nm-message-body">
                     {typedMessage}
                     {!typingDone && <span className="nm-message-caret">|</span>}
                   </span>
-                </div>
+                </button>
               ) : (
                 <div className="nm-inventory" aria-label="Inventory">
                   <div className="nm-inventory-slots">
@@ -944,8 +938,11 @@ export const UPSFinishContent = ({
                       <button
                         key={id}
                         type="button"
-                        className="nm-inventory-item"
+                        className={classNames('nm-inventory-item', {
+                          'nm-inventory-item--held': holding === id,
+                        })}
                         aria-label={itemLabel(id)}
+                        aria-pressed={holding === id}
                         onClick={() => onInventoryClick(id)}
                       >
                         <InventoryItemIcon id={id} tapedTrimmerHalf={tapedTrimmerHalf} mobile={mobile} />

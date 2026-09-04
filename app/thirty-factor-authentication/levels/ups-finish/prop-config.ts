@@ -7,16 +7,16 @@ export const CONE_MOBILE = 150
 export const MOBILE_PAN_THRESHOLD = 8
 export const TYPEWRITER_MS = 16
 
-export const MOBILE_PAN_RADIUS_RATIO = 0.9
-export const MOBILE_SPAWN_EDGE_MARGIN = 8
-export const MOBILE_AUTH_EXCLUSION_PAD_PX = 20
-export const MOBILE_MIN_PROP_GAP_PX = 110
-export const MOBILE_DECO_GAP_PX = 48
+export const MOBILE_PAN_RADIUS_RATIO = 1.25
+export const MOBILE_SPAWN_EDGE_MARGIN = 4
+export const MOBILE_AUTH_EXCLUSION_PAD_PX = 12
+export const MOBILE_MIN_PROP_GAP_PX = 56
+export const MOBILE_DECO_GAP_PX = 24
 
 /** Percent padding between puzzle-prop footprints on desktop (edge-to-edge). */
-export const DESKTOP_MIN_PROP_GAP = 5
+export const DESKTOP_MIN_PROP_GAP = 3
 /** Percent padding for deco vs props / other deco on desktop. */
-export const DESKTOP_DECO_GAP = 3
+export const DESKTOP_DECO_GAP = 2
 
 export const AUTH_EXCLUSION = {
   desktop: { left: 26, top: 5, right: 74, bottom: 46 },

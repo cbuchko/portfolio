@@ -6,6 +6,9 @@ let sharedContext: AudioContext | null = null
 const bufferCache = new Map<string, Promise<AudioBuffer>>()
 let unlockBound = false
 
+/** Plays queued after the first real user gesture unlocks audio. */
+const pendingAfterUnlock = new Set<() => void>()
+
 function getAudioContext(): AudioContext {
   if (!sharedContext) {
     const AC = window.AudioContext || (window as WebkitWindow).webkitAudioContext
@@ -15,6 +18,18 @@ function getAudioContext(): AudioContext {
   return sharedContext
 }
 
+function flushPendingUnlockPlays() {
+  const queued = [...pendingAfterUnlock]
+  pendingAfterUnlock.clear()
+  for (const fn of queued) {
+    try {
+      fn()
+    } catch {
+      // ignore
+    }
+  }
+}
+
 function bindAudioUnlock() {
   if (unlockBound || typeof window === 'undefined') return
   unlockBound = true
@@ -22,9 +37,11 @@ function bindAudioUnlock() {
   const unlock = () => {
     try {
       const ctx = getAudioContext()
-      void ctx.resume()
+      void ctx.resume().finally(() => {
+        flushPendingUnlockPlays()
+      })
     } catch {
-      // ignore
+      flushPendingUnlockPlays()
     }
     document.removeEventListener('pointerdown', unlock)
     document.removeEventListener('touchstart', unlock)
@@ -34,6 +51,20 @@ function bindAudioUnlock() {
   document.addEventListener('pointerdown', unlock, { once: true, passive: true })
   document.addEventListener('touchstart', unlock, { once: true, passive: true })
   document.addEventListener('keydown', unlock, { once: true })
+}
+
+/** Run now if AudioContext is already running; otherwise wait for unlock gesture. */
+function runAfterAudioUnlock(fn: () => void) {
+  bindAudioUnlock()
+  try {
+    if (getAudioContext().state === 'running') {
+      fn()
+      return
+    }
+  } catch {
+    // queue below
+  }
+  pendingAfterUnlock.add(fn)
 }
 
 function loadBuffer(src: string): Promise<AudioBuffer> {
@@ -54,17 +85,31 @@ function loadBuffer(src: string): Promise<AudioBuffer> {
 export function playSfx(src: string, volume = 1) {
   if (typeof window === 'undefined') return
   bindAudioUnlock()
+
+  const start = (buffer: AudioBuffer) => {
+    const ctx = getAudioContext()
+    const source = ctx.createBufferSource()
+    source.buffer = buffer
+    const gain = ctx.createGain()
+    gain.gain.value = volume
+    source.connect(gain)
+    gain.connect(ctx.destination)
+    source.start(0)
+  }
+
   void loadBuffer(src)
     .then((buffer) => {
       const ctx = getAudioContext()
-      void ctx.resume()
-      const source = ctx.createBufferSource()
-      source.buffer = buffer
-      const gain = ctx.createGain()
-      gain.gain.value = volume
-      source.connect(gain)
-      gain.connect(ctx.destination)
-      source.start(0)
+      if (ctx.state === 'running') {
+        start(buffer)
+        return
+      }
+      void ctx.resume().then(() => {
+        if (ctx.state === 'running') start(buffer)
+        else runAfterAudioUnlock(() => start(buffer))
+      }).catch(() => {
+        runAfterAudioUnlock(() => start(buffer))
+      })
     })
     .catch(() => {
       // ignore decode/play failures
@@ -157,7 +202,6 @@ export function useSound(src: string, volume?: number, shouldLoop?: boolean, htm
   }, [src, vol, loop, useHtmlAudio])
 
   const playHtml = useCallback((audio: HTMLAudioElement) => {
-    isAudioPlayingRef.current = true
     audio.volume = volRef.current
     audio.loop = loopRef.current
     try {
@@ -165,9 +209,30 @@ export function useSound(src: string, volume?: number, shouldLoop?: boolean, htm
     } catch {
       // iOS can throw if not ready
     }
-    void audio.play().catch(() => {
-      isAudioPlayingRef.current = false
-    })
+
+    const attempt = () => {
+      void audio
+        .play()
+        .then(() => {
+          isAudioPlayingRef.current = true
+        })
+        .catch(() => {
+          isAudioPlayingRef.current = false
+          // Autoplay blocked — retry on the next real user gesture.
+          runAfterAudioUnlock(() => {
+            void audio
+              .play()
+              .then(() => {
+                isAudioPlayingRef.current = true
+              })
+              .catch(() => {
+                isAudioPlayingRef.current = false
+              })
+          })
+        })
+    }
+
+    attempt()
   }, [])
 
   const playSound = useCallback(() => {
@@ -178,26 +243,8 @@ export function useSound(src: string, volume?: number, shouldLoop?: boolean, htm
       return
     }
 
-    try {
+    const startFromBuffer = (buffer: AudioBuffer) => {
       const ctx = getAudioContext()
-      void ctx.resume()
-
-      const buffer = bufferRef.current
-      if (!buffer) {
-        const audio = audioRef.current
-        if (audio) playHtml(audio)
-        else {
-          const fallback = new Audio(src)
-          fallback.volume = volRef.current
-          audioRef.current = fallback
-          playHtml(fallback)
-          void loadBuffer(src).then((decoded) => {
-            bufferRef.current = decoded
-          })
-        }
-        return
-      }
-
       try {
         sourceRef.current?.stop()
       } catch {
@@ -221,6 +268,42 @@ export function useSound(src: string, volume?: number, shouldLoop?: boolean, htm
       isAudioPlayingRef.current = true
       startedAtCtxRef.current = ctx.currentTime
       source.start(0)
+    }
+
+    try {
+      const ctx = getAudioContext()
+      const buffer = bufferRef.current
+
+      if (!buffer) {
+        const audio = audioRef.current
+        if (audio) playHtml(audio)
+        else {
+          const fallback = new Audio(src)
+          fallback.volume = volRef.current
+          fallback.loop = loopRef.current
+          audioRef.current = fallback
+          playHtml(fallback)
+          void loadBuffer(src).then((decoded) => {
+            bufferRef.current = decoded
+          })
+        }
+        return
+      }
+
+      if (ctx.state === 'running') {
+        startFromBuffer(buffer)
+        return
+      }
+
+      void ctx
+        .resume()
+        .then(() => {
+          if (ctx.state === 'running') startFromBuffer(buffer)
+          else runAfterAudioUnlock(() => startFromBuffer(buffer))
+        })
+        .catch(() => {
+          runAfterAudioUnlock(() => startFromBuffer(buffer))
+        })
     } catch {
       const audio = audioRef.current
       if (audio) playHtml(audio)

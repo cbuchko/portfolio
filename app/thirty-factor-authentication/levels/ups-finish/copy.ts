@@ -23,7 +23,6 @@ export const UI_COPY = {
   putAway: 'You put it away.',
   useless: 'That is not going to help.',
   nothingHappens: 'Nothing happens.',
-  nothingHere: 'Nothing here.',
 } as const
 
 // ---------------------------------------------------------------------------

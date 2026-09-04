@@ -107,8 +107,8 @@ const getMobileSpawnSlots = (metrics: MobilePanMetrics): SpawnPos[] => {
   const { spawnBounds: b } = metrics
   const cx = 50
   const cy = 50
-  const rx = ((b.leftMax - b.leftMin) / 2) * 0.9
-  const ry = ((b.topMax - b.topMin) / 2) * 0.9
+  const rx = ((b.leftMax - b.leftMin) / 2) * 0.98
+  const ry = ((b.topMax - b.topMin) / 2) * 0.98
   const degrees = [270, 315, 0, 45, 90, 135, 180, 225]
 
   return degrees.map((deg) => {
