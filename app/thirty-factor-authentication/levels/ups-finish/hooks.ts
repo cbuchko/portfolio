@@ -30,8 +30,9 @@ export const useTypewriter = (text: string, active: boolean) => {
       return
     }
 
-    indexRef.current = 0
-    setVisible('')
+    // Start on the first character immediately — never flash an empty message panel.
+    indexRef.current = 1
+    setVisible(text.slice(0, 1))
     setDone(false)
 
     intervalRef.current = window.setInterval(() => {

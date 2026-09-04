@@ -167,12 +167,27 @@ export const UPSFinishContent = ({
 
   const tracking = upsTrackingCode || '1Z-AUTH-KEY'
 
-  const dismissText = useCallback(() => setShowText(false), [])
+  const introMessage = mobile ? INTRO_COPY.mobile : INTRO_COPY.desktop
+
+  const dismissText = useCallback(() => {
+    // Never reveal an empty inventory — keep the opening message up until the player has items.
+    if (inventoryRef.current.length === 0) {
+      setMessage(introMessage)
+      setShowText(true)
+      return
+    }
+    setShowText(false)
+  }, [introMessage])
 
   const { visible: typedMessage, done: typingDone, complete: completeTyping } = useTypewriter(
     message,
     showText
   )
+
+  const say = useCallback((text: string) => {
+    setMessage(text)
+    setShowText(true)
+  }, [])
 
   /** Start music on a real user gesture; safe to call repeatedly until it sticks. */
   const ensureMusic = useCallback(() => {
@@ -340,11 +355,6 @@ export const UPSFinishContent = ({
     },
     [mobile, coneRadius, getMobileFlashlightCenter]
   )
-
-  const say = useCallback((text: string) => {
-    setMessage(text)
-    setShowText(true)
-  }, [])
 
   const takeItem = (id: ItemId, label: string) => {
     setInventory((prev) => (prev.includes(id) ? prev : [...prev, id]))
@@ -963,7 +973,6 @@ export const UPSFinishContent = ({
               ) : (
                 <div className="nm-inventory" aria-label="Inventory">
                   <div className="nm-inventory-slots">
-                    {inventory.length === 0 && <span className="nm-inventory-empty">—</span>}
                     {inventory.map((id) => (
                       <button
                         key={id}
