@@ -321,6 +321,26 @@ export const UPSFinishContent = ({
     return FLASHLIGHT_ENABLED ? coneRef.current : pointerRef.current
   }, [mobile])
 
+  /** Mobile flashlight is fixed at the center of the playfield (above the UI band). */
+  const getMobileFlashlightCenter = useCallback((): Point => {
+    const scene = sceneRef.current
+    if (!scene) return { x: -1, y: -1 }
+    const rect = scene.getBoundingClientRect()
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }
+  }, [])
+
+  /** Soft radius — inside the fully black ring so only reasonably lit taps count. */
+  const isTapInFlashlight = useCallback(
+    (tap: Point) => {
+      if (!FLASHLIGHT_ENABLED || !mobile) return true
+      const center = getMobileFlashlightCenter()
+      if (center.x < 0) return false
+      const softRadius = coneRadius * 0.82
+      return Math.hypot(tap.x - center.x, tap.y - center.y) <= softRadius
+    },
+    [mobile, coneRadius, getMobileFlashlightCenter]
+  )
+
   const say = useCallback((text: string) => {
     setMessage(text)
     setShowText(true)
@@ -532,6 +552,16 @@ export const UPSFinishContent = ({
 
     const cursor = getAimPoint()
     if (!cursorReady || cursor.x < 0) {
+      if (showText) {
+        if (!typingDone) completeTyping()
+        else dismissText()
+      }
+      return
+    }
+
+    // Mobile: only interact with what you can see in the flashlight.
+    // Tap position still aims the click; the cone stays centered.
+    if (!isTapInFlashlight(cursor)) {
       if (showText) {
         if (!typingDone) completeTyping()
         else dismissText()

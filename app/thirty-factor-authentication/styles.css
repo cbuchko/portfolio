@@ -1971,7 +1971,7 @@ body.nm-mobile-pan #tfa-logo {
 }
 
 .nm-dark--mobile .nm-message {
-  font-size: clamp(0.78rem, 2.6vw, 0.95rem);
+  font-size: clamp(0.92rem, 3.4vw, 1.15rem);
   line-height: 1.35;
   letter-spacing: 0.01em;
   padding: 10px 12px;
