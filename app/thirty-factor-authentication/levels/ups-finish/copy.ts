@@ -3,7 +3,10 @@
  */
 
 import { DECO_PROP_ORDER } from './prop-config'
-import type { DecoCopyContext, DecoSpawnId, ItemId, TargetId, WorldPickup } from './types'
+import type { DecoCopyContext, DecoSpawnId, ItemId, KioskState, TargetId, WorldPickup } from './types'
+
+/** Quiet wrong-house tell on the tracking slip. */
+export const NEIGHBOR_UNIT = '14B'
 
 // ---------------------------------------------------------------------------
 // Intro & UI chrome
@@ -11,7 +14,7 @@ import type { DecoCopyContext, DecoSpawnId, ItemId, TargetId, WorldPickup } from
 
 export const INTRO_COPY = {
   headline: 'The UPS package has arrived. Please enter your physical authentication key.',
-  body: 'The lights are out. The last thing you remember is a notification that your package arrived.',
+  body: 'The lights are out. Disoriented, you try to make sense of your surroundings.',
 } as const
 
 export const UI_COPY = {
@@ -28,13 +31,13 @@ export const UI_COPY = {
 
 export const ITEM_LABELS: Record<ItemId, string> = {
   cutter: 'Box cutter',
-  key: 'Auth key',
-  scrap: 'Torn label',
+  screwdriver: 'Screwdriver',
+  packingSlip: 'Packing slip',
   box: 'UPS package',
   toolboxKey: 'Brass key',
   trimmers: 'Hedge trimmers',
-  trimmersPartA: 'Trimmer blade',
-  trimmersPartB: 'Trimmer body',
+  trimmersPartA: 'Hedge trimmer half',
+  trimmersPartB: 'Hedge trimmer half',
   shovel: 'Shovel',
   ductTape: 'Duct tape',
 }
@@ -48,7 +51,6 @@ export const itemLabel = (id: ItemId) => ITEM_LABELS[id]
 export const WORLD_PICKUPS: WorldPickup[] = [
   { id: 'shovel', spawnId: 'shovel', visual: 'shovel' },
   { id: 'trimmersPartB', spawnId: 'trimmersHalf', visual: 'trimmers-body' },
-  { id: 'scrap', spawnId: 'scrap', visual: 'scrap' },
 ]
 
 // ---------------------------------------------------------------------------
@@ -58,10 +60,10 @@ export const WORLD_PICKUPS: WorldPickup[] = [
 export const SCENE_PROP_COPY = {
   hedge: {
     blocked: 'A dense hedge. A UPS package is wedged deep inside.',
+    freed: 'The package comes loose. The label is facing you now.',
+    taken: 'You take the package. You try to tear it open but it\'s sealed securely.',
     emptied: 'The bush is trimmed back. The package is gone.',
   },
-  envelope: (trackingCode: string) =>
-    `A discarded tracking slip. Code ${trackingCode}. Delivered. Left by the hedge.`,
   mat: {
     foundKey: 'You lift the corner of the mat. A small brass key was taped underneath.',
     examine: 'A doormat that says WELCOME. It is lying.',
@@ -81,11 +83,18 @@ export const SCENE_PROP_COPY = {
     foundTape: 'You rummage through the trash and find a roll of duct tape.',
   },
   session: {
-    examine: 'A narrow key slot in the login terminal. It wants a physical authentication key.',
-    win: 'The key turns. Somewhere behind the glass, a session unlocks.',
+    examine: 'A key slot screwed onto the terminal. It needs my authentication key.',
+    examineAfterOpen: 'Four screws. A metal plate pretending to be a keyhole.',
+    exposed: 'Cheap colored wire sits behind the plate.',
+    cut: 'The hardware is dead.',
+    unscrewed: 'The plate falls to the ground exposing the wires underneath.',
+    wireCut: 'The trimmers easily cut the wires, something has changed.',
+    plateStillOn: 'The plate is still on. The screws are in the way.',
+    nothingToUnscrew: 'Nothing left to unscrew.',
+    alreadyDead: 'The reader is already dead.',
   },
-  /** Any held item used on envelope or mat */
-  envelopeOrMatUseless: 'That does nothing useful. Night presses closer.',
+  /** Any held item used on the mat */
+  matUseless: 'That does nothing useful. Night presses closer.',
 } as const
 
 // ---------------------------------------------------------------------------
@@ -111,7 +120,7 @@ export const DECO_COPY: Record<DecoSpawnId, (ctx: DecoCopyContext) => string> = 
     `A DVD: “${ctx.dvdTitles.nightManorDvd}.” Now's not the time to watch it.`,
   zodiacChart: (ctx) =>
     `A crumpled zodiac chart. Sun: ${ctx.zodiac.sun}. Moon: ${ctx.zodiac.moon}. Rising: ${ctx.zodiac.rising}.`,
-  pizzaSlice: () => 'A cold slice on a grease-stained ticket. Leftovers from lunch.',
+  pizzaSlice: () => 'A cold slice. Leftovers from lunch.',
   fishBowl: () => 'An empty fish bowl. The fish are nowhere to be found.',
 }
 
@@ -134,12 +143,21 @@ export const parsePlayerZodiac = (zodiac: string) => {
 // ---------------------------------------------------------------------------
 
 export const ACTION_COPY = {
-  openPackage: 'The blade cuts the seam. The package contained a gold authentication key.',
+  openPackage:
+    'You open the package but you don\'t find the authentication key. Instead, a screwdriver, and a tracking slip for your neighbors address. This was not your package to open.',
   cutHedge: 'The trimmers tear through the hedge. The UPS package comes loose.',
   tapeTrimmer: 'You wrap duct tape around the join. It might actually hold.',
   trimmersNeedTape: 'The halves wobble apart. You need something to hold them together.',
   combineTrimmers: 'You attach the two halves together. This should do the trick.',
+  readSlip: `A packing slip. Ship to: ${NEIGHBOR_UNIT}, next door. This package was never yours.`,
 } as const
+
+export const getSessionExamine = (kiosk: KioskState, packageOpened: boolean) => {
+  if (kiosk === 'cut') return SCENE_PROP_COPY.session.cut
+  if (kiosk === 'exposed') return SCENE_PROP_COPY.session.exposed
+  if (packageOpened) return SCENE_PROP_COPY.session.examineAfterOpen
+  return SCENE_PROP_COPY.session.examine
+}
 
 // ---------------------------------------------------------------------------
 // Wrong item-on-target responses (useOn failures)
@@ -159,18 +177,24 @@ export const USE_ON_FAILURES: Partial<Record<ItemId, Partial<Record<TargetId, st
     toolbox: 'Prying it would ruin a perfectly good toolbox.',
     session: 'Threatening the login screen feels correct, but changes nothing.',
   },
-  trimmers: { box: 'The package is already free. Take it first.' },
-  key: {
-    toolbox: 'The authentication key is too large for this lock.',
-    box: 'The key does not open cardboard. That would be too kind.',
+  trimmers: {
+    box: 'The package is already free. Take it first.',
+    session: SCENE_PROP_COPY.session.plateStillOn,
+  },
+  screwdriver: {
+    hedge: 'That will not unscrew a hedge.',
+    box: 'The screws are not on the package.',
+    toolbox: 'Wrong screws.',
+    session: SCENE_PROP_COPY.session.nothingToUnscrew,
+  },
+  packingSlip: {
+    session: 'The terminal does not accept paperwork.',
+    box: 'You already opened it.',
+    hedge: 'The slip already told you whose hedge this was.',
   },
   toolboxKey: {
     session: 'The terminal wants a different kind of key.',
     box: 'Cardboard does not have a keyhole. Yet.',
-  },
-  scrap: {
-    session: 'You hold the torn label up to the terminal. It does not care.',
-    box: 'You tape the scrap to the box. Now it looks worse.',
   },
   box: {
     session: 'The terminal does not accept cardboard.',
@@ -182,6 +206,6 @@ export const isDecoTarget = (target: TargetId): target is DecoSpawnId =>
 
 export const getUseOnFailure = (holding: ItemId, target: TargetId): string | null => {
   if (isDecoTarget(target)) return UI_COPY.useless
-  if (target === 'envelope' || target === 'mat') return SCENE_PROP_COPY.envelopeOrMatUseless
+  if (target === 'mat') return SCENE_PROP_COPY.matUseless
   return USE_ON_FAILURES[holding]?.[target] ?? null
 }

@@ -13,7 +13,6 @@ import {
   type ScenePropAssetId,
   type TrimmerVisualHalf,
 } from './assets'
-import { getCssItemDisplay } from './css-item-display'
 import { DECO_VISUAL_CLASSES } from './prop-config'
 import {
   propFrameClassName,
@@ -37,6 +36,9 @@ export const PropImage = ({ assetId, className }: { assetId: PropAssetId; classN
         { 'nm-prop-img--pixel': 'pixelated' in asset && asset.pixelated },
         className
       )}
+      unoptimized
+      priority
+      loading="eager"
       draggable={false}
     />
   )
@@ -148,20 +150,6 @@ export const BushVisual = ({
   />
 )
 
-const CssItemVisual = ({
-  id,
-  context,
-  mobile,
-}: {
-  id: ItemId
-  context: PropDisplayContext
-  mobile?: boolean
-}) => (
-  <PropFrame context={context} display={getCssItemDisplay(id)} mobile={mobile}>
-    <span className={classNames('nm-prop', `nm-prop--${id}`)} />
-  </PropFrame>
-)
-
 export const ScenePropVisual = ({
   assetId,
   mobile,
@@ -206,11 +194,9 @@ const renderItemVisual = (
   }
 
   const assetId = ITEM_ASSET_IDS[id]
-  if (assetId) {
-    return <AssetVisual assetId={assetId} context={context} mobile={opts.mobile} />
-  }
+  if (!assetId) return null
 
-  return <CssItemVisual id={id} context={context} mobile={opts.mobile} />
+  return <AssetVisual assetId={assetId} context={context} mobile={opts.mobile} />
 }
 
 type DecoPropVisualProps = {
@@ -273,7 +259,6 @@ export const DecoPropVisual = forwardRef<HTMLDivElement, DecoPropVisualProps>(
 
         {id === 'pizzaSlice' && (
           <>
-            <span className="nm-deco-pizza-ticket">PIZZATRON</span>
             <span className="nm-deco-pizza-crust" />
             <span className="nm-deco-pizza-slice" />
             <span className="nm-deco-pizza-pep nm-deco-pizza-pep--1" />

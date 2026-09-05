@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { ContentProps, ControlProps } from './types'
+import './ups-finish/night-manor.css'
 import classNames from 'classnames'
 import { useSound, playSfx, prefetchSound } from '@/app/utils/useSounds'
 import { PlayerInformation } from '../player-constants'
 import {
   ACTION_COPY,
   getDecoText,
+  getSessionExamine,
   getUseOnFailure,
   INTRO_COPY,
   itemLabel,
@@ -40,6 +42,7 @@ import {
 import type {
   DecoSpawnId,
   ItemId,
+  KioskState,
   MobilePanMetrics,
   Point,
   PropSpawnId,
@@ -47,8 +50,8 @@ import type {
   TargetId,
   TrimmerHalfId,
 } from './ups-finish/types'
-import { getAssetDisplay, getBushAssetId, SFX } from './ups-finish/assets'
-import { getCssItemDisplay } from './ups-finish/css-item-display'
+import { setSharedKioskState, useKioskState } from './ups-finish/kiosk-state'
+import { getAssetDisplay, getBushAssetId, prefetchPropImages, SFX } from './ups-finish/assets'
 import { worldPropOuterStyle } from './ups-finish/prop-display'
 import {
   BushVisual,
@@ -69,7 +72,6 @@ export const UPSFinishContent = ({
   validateAdvance,
   setIsLoading,
   setUPSTrackingTime,
-  upsTrackingCode,
   isMobile,
   playerId,
 }: ContentProps) => {
@@ -112,10 +114,13 @@ export const UPSFinishContent = ({
   const [dirtDug, setDirtDug] = useState(false)
   const [garbageRummaged, setGarbageRummaged] = useState(false)
   const [tapedTrimmerHalf, setTapedTrimmerHalf] = useState<TrimmerHalfId | null>(null)
+  const [packageOpened, setPackageOpened] = useState(false)
+  const kiosk = useKioskState()
   const [worldGone, setWorldGone] = useState<Partial<Record<ItemId, boolean>>>({})
   const [message, setMessage] = useState<string>(INTRO_COPY.body)
   const [showText, setShowText] = useState(true)
   const [cursorReady, setCursorReady] = useState(false)
+  const [overHotspot, setOverHotspot] = useState(false)
   const [pan, setPan] = useState<Point>({ x: 0, y: 0 })
   const [mobileMetrics, setMobileMetrics] = useState<MobilePanMetrics | null>(null)
   const [propLayout, setPropLayout] = useState<Record<PropSpawnId, SpawnPos> | null>(
@@ -126,7 +131,6 @@ export const UPSFinishContent = ({
   )
 
   const sceneRef = useRef<HTMLDivElement>(null)
-  const envelopeRef = useRef<HTMLDivElement>(null)
   const matRef = useRef<HTMLDivElement>(null)
   const toolboxRef = useRef<HTMLDivElement>(null)
   const hedgeRef = useRef<HTMLDivElement>(null)
@@ -143,6 +147,7 @@ export const UPSFinishContent = ({
   const mobileMetricsRef = useRef(mobileMetrics)
   const mobileLayoutReadyRef = useRef(false)
   const lastTapRef = useRef<Point>({ x: -1, y: -1 })
+  const messageSourceRef = useRef<string | null>(null)
   const dragRef = useRef({
     active: false,
     pointerId: -1,
@@ -163,13 +168,12 @@ export const UPSFinishContent = ({
     playSound: playSoundtrack,
     stopSound: stopSoundtrack,
     isAudioPlayingRef: isMusicPlayingRef,
-  } = useSound('/thirty-factor-authentication/sounds/night-manor-interior.mp3', 0.35, true)
-
-  const tracking = upsTrackingCode || '1Z-AUTH-KEY'
+  } = useSound('/thirty-factor-authentication/sounds/night-manor-interior.mp3', 0.15, true)
 
   const dismissText = useCallback(() => {
     // Never reveal an empty inventory — keep the opening message up until the player has items.
     if (inventoryRef.current.length === 0) {
+      messageSourceRef.current = null
       setMessage(INTRO_COPY.body)
       setShowText(true)
       return
@@ -182,10 +186,19 @@ export const UPSFinishContent = ({
     showText
   )
 
-  const say = useCallback((text: string) => {
+  const say = useCallback((text: string, source?: string) => {
+    messageSourceRef.current = source ?? null
     setMessage(text)
     setShowText(true)
   }, [])
+
+  /** Same object that opened the line: finish typewriter, then dismiss, then replay. */
+  const consumePromptClick = (source: string) => {
+    if (!showText || messageSourceRef.current !== source) return false
+    if (!typingDone) completeTyping()
+    else dismissText()
+    return true
+  }
 
   /** Start music on a real user gesture; safe to call repeatedly until it sticks. */
   const ensureMusic = useCallback(() => {
@@ -216,10 +229,14 @@ export const UPSFinishContent = ({
   useEffect(() => {
     prefetchSound(SFX.pickup)
     prefetchSound(SFX.use)
+    prefetchPropImages()
   }, [])
+
+  const updateKiosk = (next: KioskState) => setSharedKioskState(next)
 
   useEffect(() => {
     return () => {
+      setSharedKioskState('plate')
       stopSoundtrack()
     }
   }, [stopSoundtrack])
@@ -363,66 +380,93 @@ export const UPSFinishContent = ({
     setInventory((prev) => (prev.includes(id) ? prev : [...prev, id]))
     setWorldGone((prev) => ({ ...prev, [id]: true }))
     playSfx(SFX.pickup, 0.4)
-    say(UI_COPY.taken(label))
+    say(UI_COPY.taken(label), id)
   }
 
   const holdItem = (id: ItemId) => {
     setHolding(id)
-    say(UI_COPY.holdItem(itemLabel(id)))
+    say(UI_COPY.holdItem(itemLabel(id)), id)
   }
 
   const examineDeco = (id: DecoSpawnId) => {
     if (holding) {
-      say(UI_COPY.useless)
+      say(UI_COPY.useless, id)
       return
     }
-    say(getDecoText(id, decoCopyContext))
+    say(getDecoText(id, decoCopyContext), id)
   }
 
   const openToolboxWithKey = () => {
     if (toolboxOpen || !inventoryRef.current.includes('toolboxKey')) return
     setToolboxOpen(true)
-    setInventory((prev) => {
-      const withoutKey = prev.filter((i) => i !== 'toolboxKey')
-      return withoutKey.includes('cutter') ? withoutKey : [...withoutKey, 'cutter']
-    })
+    setInventory((prev) => (prev.includes('cutter') ? prev : [...prev, 'cutter']))
     setHolding(null)
     playSfx(SFX.use, 0.35)
-    say(SCENE_PROP_COPY.toolbox.unlocked)
+    say(SCENE_PROP_COPY.toolbox.unlocked, 'toolbox')
   }
 
   const openPackageWithCutter = () => {
-    if (!inventoryRef.current.includes('box')) return
+    if (!inventoryRef.current.includes('box') || packageOpened) return
+    setPackageOpened(true)
     setInventory((prev) => {
-      const next = prev.filter((i) => i !== 'box' && i !== 'cutter')
-      return next.includes('key') ? next : [...next, 'key']
+      const next: ItemId[] = [...prev]
+      if (!next.includes('screwdriver')) next.push('screwdriver')
+      if (!next.includes('packingSlip')) next.push('packingSlip')
+      return next
     })
     setHolding(null)
     playSfx(SFX.use, 0.35)
-    say(ACTION_COPY.openPackage)
+    say(ACTION_COPY.openPackage, 'box')
   }
 
   const cutBoxFree = () => {
-    if (boxFreed) return
+    if (boxFreed) {
+      say(
+        boxFreed && worldGone.box ? SCENE_PROP_COPY.hedge.emptied : SCENE_PROP_COPY.hedge.freed,
+        'hedge'
+      )
+      return
+    }
     setBoxFreed(true)
-    setInventory((prev) => prev.filter((i) => i !== 'trimmers'))
     setHolding(null)
     playSfx(SFX.use, 0.35)
-    say(ACTION_COPY.cutHedge)
+    say(ACTION_COPY.cutHedge, 'hedge')
   }
+
+  const unscrewKeyhole = () => {
+    if (kiosk !== 'plate') return
+    updateKiosk('exposed')
+    setHolding(null)
+    playSfx(SFX.use, 0.35)
+    say(SCENE_PROP_COPY.session.unscrewed, 'session')
+  }
+
+  const cutKioskWire = () => {
+    if (kiosk !== 'exposed') return
+    updateKiosk('cut')
+    setHolding(null)
+    playSfx(SFX.use, 0.35)
+    say(SCENE_PROP_COPY.session.wireCut, 'session')
+    validateAdvance()
+  }
+
+  const getAuthSubmitRects = () =>
+    [...document.querySelectorAll<HTMLElement>('#auth-controls .auth-button')].map((el) =>
+      el.getBoundingClientRect()
+    )
+
+  const atSubmit = (cursor: Point, pad: number) =>
+    getAuthSubmitRects().some((rect) => atCursor(cursor, rect, pad))
 
   const digDirtMound = () => {
     if (dirtDug) return
     setDirtDug(true)
-    setInventory((prev) => {
-      const withoutShovel = prev.filter((i) => i !== 'shovel')
-      return withoutShovel.includes('trimmersPartA')
-        ? withoutShovel
-        : [...withoutShovel, 'trimmersPartA']
-    })
+    setInventory((prev) =>
+      prev.includes('trimmersPartA') ? prev : [...prev, 'trimmersPartA']
+    )
     setHolding(null)
     playSfx(SFX.use, 0.35)
-    say(SCENE_PROP_COPY.dirtMound.dugOutcome)
+    say(SCENE_PROP_COPY.dirtMound.dugOutcome, 'dirtMound')
   }
 
   const combineTrimmers = () => {
@@ -430,7 +474,7 @@ export const UPSFinishContent = ({
     if (!inv.includes('trimmersPartA') || !inv.includes('trimmersPartB')) return false
 
     if (!tapedTrimmerHalf) {
-      say(ACTION_COPY.trimmersNeedTape)
+      say(ACTION_COPY.trimmersNeedTape, 'trimmers')
       return true
     }
 
@@ -441,18 +485,17 @@ export const UPSFinishContent = ({
     setTapedTrimmerHalf(null)
     setHolding(null)
     playSfx(SFX.use, 0.35)
-    say(ACTION_COPY.combineTrimmers)
+    say(ACTION_COPY.combineTrimmers, 'trimmers')
     return true
   }
 
   const tapeTrimmerHalf = (half: TrimmerHalfId) => {
     const inv = inventoryRef.current
     if (!inv.includes('ductTape') || !inv.includes(half) || tapedTrimmerHalf) return false
-    setInventory((prev) => prev.filter((i) => i !== 'ductTape'))
     setTapedTrimmerHalf(half)
     setHolding(null)
     playSfx(SFX.use, 0.35)
-    say(ACTION_COPY.tapeTrimmer)
+    say(ACTION_COPY.tapeTrimmer, 'ductTape')
     return true
   }
 
@@ -461,12 +504,15 @@ export const UPSFinishContent = ({
     setGarbageRummaged(true)
     setInventory((prev) => (prev.includes('ductTape') ? prev : [...prev, 'ductTape']))
     playSfx(SFX.pickup, 0.4)
-    say(SCENE_PROP_COPY.garbageCan.foundTape)
+    say(SCENE_PROP_COPY.garbageCan.foundTape, 'garbageCan')
   }
 
   const takeBoxFromHedge = () => {
     if (worldGone.box || !boxFreed) return
-    takeItem('box', itemLabel('box'))
+    setInventory((prev) => (prev.includes('box') ? prev : [...prev, 'box']))
+    setWorldGone((prev) => ({ ...prev, box: true }))
+    playSfx(SFX.pickup, 0.4)
+    say(SCENE_PROP_COPY.hedge.taken, 'hedge')
   }
 
   const useOn = (target: TargetId) => {
@@ -514,27 +560,27 @@ export const UPSFinishContent = ({
       return true
     }
 
-    if (holding === 'key' && target === 'session') {
-      if (wonRef.current) return true
-      wonRef.current = true
-      setHolding(null)
-      setInventory((prev) => prev.filter((i) => i !== 'key'))
-      playSfx(SFX.use, 0.35)
-      say(SCENE_PROP_COPY.session.win)
-      validateAdvance()
-      stopSoundtrack()
-      setUPSTrackingTime(0)
-      window.setTimeout(() => handleLevelAdvance(true), 700)
-      return true
+    if (target === 'session') {
+      if (holding === 'screwdriver') {
+        if (kiosk === 'plate') unscrewKeyhole()
+        else say(SCENE_PROP_COPY.session.nothingToUnscrew, 'session')
+        return true
+      }
+      if (holding === 'trimmers') {
+        if (kiosk === 'exposed') cutKioskWire()
+        else if (kiosk === 'cut') say(SCENE_PROP_COPY.session.alreadyDead, 'session')
+        else say(SCENE_PROP_COPY.session.plateStillOn, 'session')
+        return true
+      }
     }
 
     const failure = getUseOnFailure(holding, target)
     if (failure) {
-      say(failure)
+      say(failure, target)
       return true
     }
 
-    say(UI_COPY.nothingHappens)
+    say(UI_COPY.nothingHappens, target)
     return true
   }
 
@@ -553,14 +599,23 @@ export const UPSFinishContent = ({
       return
     }
 
-    say(opts.examine)
+    say(opts.examine, target)
   }
 
   const onInventoryClick = (id: ItemId) => {
+    if (id === 'packingSlip') {
+      if (holding && holding !== 'packingSlip') {
+        useOn('packingSlip')
+        return
+      }
+      setHolding(null)
+      say(ACTION_COPY.readSlip, id)
+      return
+    }
     if (holding) {
       if (holding === id) {
         setHolding(null)
-        say(UI_COPY.putAway)
+        say(UI_COPY.putAway, id)
         return
       }
       useOn(id as TargetId)
@@ -568,6 +623,60 @@ export const UPSFinishContent = ({
     }
     holdItem(id)
   }
+
+  const isOverInteractable = useCallback(
+    (cursor: Point) => {
+      if (cursor.x < 0) return false
+      const hitPad = mobile ? 14 : 8
+      const sessionPad = mobile ? 18 : 10
+
+      for (const pickup of WORLD_PICKUPS) {
+        if (worldGone[pickup.id]) continue
+        if (atCursor(cursor, itemRefs.current[pickup.id]?.getBoundingClientRect(), hitPad)) {
+          return true
+        }
+      }
+
+      const sceneRects = [
+        hedgeRef.current,
+        matRef.current,
+        toolboxRef.current,
+        dirtRef.current,
+        garbageCanRef.current,
+      ]
+      if (sceneRects.some((el) => atCursor(cursor, el?.getBoundingClientRect(), hitPad))) {
+        return true
+      }
+      if (atCursor(cursor, dropzoneRef.current?.getBoundingClientRect(), sessionPad)) {
+        return true
+      }
+      if (kiosk === 'cut' && atSubmit(cursor, sessionPad)) {
+        return true
+      }
+      return DECO_PROP_ORDER.some((decoId) =>
+        atCursor(cursor, decoRefs.current[decoId]?.getBoundingClientRect(), hitPad)
+      )
+    },
+    [mobile, worldGone, kiosk]
+  )
+
+  useEffect(() => {
+    if (!cursorReady) return
+    const cursor = mobile ? getMobileFlashlightCenter() : pointer
+    const next = isOverInteractable(cursor)
+    setOverHotspot((prev) => (prev === next ? prev : next))
+  }, [
+    cursorReady,
+    mobile,
+    pointer,
+    pan.x,
+    pan.y,
+    worldGone,
+    propLayout,
+    decoLayout,
+    isOverInteractable,
+    getMobileFlashlightCenter,
+  ])
 
   const handlePlayClick = () => {
     ensureMusic()
@@ -598,67 +707,72 @@ export const UPSFinishContent = ({
       if (worldGone[pickup.id]) continue
       const rect = itemRefs.current[pickup.id]?.getBoundingClientRect()
       if (atCursor(cursor, rect, hitPad)) {
-        if (holding) useOn(pickup.id as TargetId)
-        else takeItem(pickup.id, itemLabel(pickup.id))
+        if (!consumePromptClick(pickup.id)) {
+          if (holding) useOn(pickup.id as TargetId)
+          else takeItem(pickup.id, itemLabel(pickup.id))
+        }
         acted = true
         break
       }
     }
 
     if (!acted && atCursor(cursor, hedgeRef.current?.getBoundingClientRect(), hitPad)) {
-      if (holding) useOn('hedge')
-      else if (worldGone.box) say(SCENE_PROP_COPY.hedge.emptied)
-      else if (boxFreed) takeBoxFromHedge()
-      else say(SCENE_PROP_COPY.hedge.blocked)
-      acted = true
-    }
-
-    if (!acted && atCursor(cursor, envelopeRef.current?.getBoundingClientRect(), hitPad)) {
-      activateTarget('envelope', {
-        examine: SCENE_PROP_COPY.envelope(tracking),
-      })
+      if (!consumePromptClick('hedge')) {
+        if (holding) useOn('hedge')
+        else if (worldGone.box) say(SCENE_PROP_COPY.hedge.emptied, 'hedge')
+        else if (boxFreed) takeBoxFromHedge()
+        else say(SCENE_PROP_COPY.hedge.blocked, 'hedge')
+      }
       acted = true
     }
 
     if (!acted && atCursor(cursor, matRef.current?.getBoundingClientRect(), hitPad)) {
-      if (holding) useOn('mat')
-      else if (!worldGone.toolboxKey) {
-        setInventory((prev) => (prev.includes('toolboxKey') ? prev : [...prev, 'toolboxKey']))
-        setWorldGone((prev) => ({ ...prev, toolboxKey: true }))
-        playSfx(SFX.pickup, 0.4)
-        say(SCENE_PROP_COPY.mat.foundKey)
-      } else {
-        activateTarget('mat', { examine: SCENE_PROP_COPY.mat.examine })
+      if (!consumePromptClick('mat')) {
+        if (holding) useOn('mat')
+        else if (!worldGone.toolboxKey) {
+          setInventory((prev) => (prev.includes('toolboxKey') ? prev : [...prev, 'toolboxKey']))
+          setWorldGone((prev) => ({ ...prev, toolboxKey: true }))
+          playSfx(SFX.pickup, 0.4)
+          say(SCENE_PROP_COPY.mat.foundKey, 'mat')
+        } else {
+          activateTarget('mat', { examine: SCENE_PROP_COPY.mat.examine })
+        }
       }
       acted = true
     }
 
     if (!acted && atCursor(cursor, toolboxRef.current?.getBoundingClientRect(), hitPad)) {
-      if (holding) useOn('toolbox')
-      else {
-        activateTarget('toolbox', {
-          examine: toolboxOpen
-            ? SCENE_PROP_COPY.toolbox.open
-            : SCENE_PROP_COPY.toolbox.locked,
-        })
+      if (!consumePromptClick('toolbox')) {
+        if (holding) useOn('toolbox')
+        else {
+          activateTarget('toolbox', {
+            examine: toolboxOpen
+              ? SCENE_PROP_COPY.toolbox.open
+              : SCENE_PROP_COPY.toolbox.locked,
+          })
+        }
       }
       acted = true
     }
 
     if (!acted && atCursor(cursor, dirtRef.current?.getBoundingClientRect(), hitPad)) {
-      if (holding) useOn('dirtMound')
-      else {
-        activateTarget('dirtMound', {
-          examine: dirtDug ? SCENE_PROP_COPY.dirtMound.dug : SCENE_PROP_COPY.dirtMound.buried,
-        })
+      if (!consumePromptClick('dirtMound')) {
+        if (holding) useOn('dirtMound')
+        else {
+          activateTarget('dirtMound', {
+            examine: dirtDug ? SCENE_PROP_COPY.dirtMound.dug : SCENE_PROP_COPY.dirtMound.buried,
+          })
+        }
       }
       acted = true
     }
 
     if (!acted && atCursor(cursor, garbageCanRef.current?.getBoundingClientRect(), hitPad)) {
-      if (holding) useOn('garbageCan')
-      else if (!garbageRummaged) rummageGarbageCan()
-      else activateTarget('garbageCan', { examine: SCENE_PROP_COPY.garbageCan.rummaged })
+      if (!consumePromptClick('garbageCan')) {
+        if (holding) useOn('garbageCan')
+        else if (!garbageRummaged) rummageGarbageCan()
+        else activateTarget('garbageCan', { examine: SCENE_PROP_COPY.garbageCan.rummaged })
+      }
       acted = true
     }
 
@@ -666,8 +780,15 @@ export const UPSFinishContent = ({
       !acted &&
       atCursor(cursor, dropzoneRef.current?.getBoundingClientRect(), mobile ? 18 : 10)
     ) {
-      if (holding) useOn('session')
-      else activateTarget('session', { examine: SCENE_PROP_COPY.session.examine })
+      if (!consumePromptClick('session')) {
+        if (holding) useOn('session')
+        else activateTarget('session', { examine: getSessionExamine(kiosk, packageOpened) })
+      }
+      acted = true
+    }
+
+    if (!acted && kiosk === 'cut' && atSubmit(cursor, mobile ? 18 : 10)) {
+      handleLevelAdvance()
       acted = true
     }
 
@@ -675,7 +796,7 @@ export const UPSFinishContent = ({
       for (const decoId of DECO_PROP_ORDER) {
         const rect = decoRefs.current[decoId]?.getBoundingClientRect()
         if (atCursor(cursor, rect, hitPad)) {
-          examineDeco(decoId)
+          if (!consumePromptClick(decoId)) examineDeco(decoId)
           acted = true
           break
         }
@@ -738,6 +859,13 @@ export const UPSFinishContent = ({
   const posStyle = (id: PropSpawnId) => spawnPosStyle(propLayout?.[id])
   const decoStyle = (id: DecoSpawnId) => spawnPosStyle(decoLayout?.[id])
 
+  const invRows = mobile && inventory.length >= 6 ? 2 : 1
+  const inventoryStyle = {
+    '--nm-inv-count': Math.max(inventory.length, 1),
+    '--nm-inv-rows': invRows,
+    '--nm-inv-cols': Math.ceil(Math.max(inventory.length, 1) / invRows),
+  } as CSSProperties
+
   const worldTransform =
     mobile && mobileMetrics
       ? {
@@ -753,12 +881,38 @@ export const UPSFinishContent = ({
       <div
         ref={dropzoneRef}
         className={classNames('nm-key-dropzone', {
-          'nm-key-dropzone--holding': holding === 'key',
+          'nm-key-dropzone--holding':
+            (holding === 'screwdriver' && kiosk === 'plate') ||
+            (holding === 'trimmers' && kiosk === 'exposed'),
           'nm-key-dropzone--mobile': mobile,
+          'nm-key-dropzone--exposed': kiosk === 'exposed',
+          'nm-key-dropzone--cut': kiosk === 'cut',
         })}
         aria-hidden
       >
-        <PropImage assetId="keyhole" />
+        {kiosk === 'plate' ? (
+          <>
+            <PropImage assetId="keyhole" />
+            <span className="nm-key-screws" aria-hidden>
+              <i />
+              <i />
+              <i />
+              <i />
+            </span>
+          </>
+        ) : (
+          <span className="nm-key-wires" aria-hidden>
+            {(['r', 'b', 'y'] as const).map((color) => (
+              <span key={color} className={classNames('nm-key-wire', `nm-key-wire--${color}`)}>
+                <i className="nm-key-wire-end" />
+                <i className="nm-key-wire-run" />
+                <i className="nm-key-wire-gap" />
+                <i className="nm-key-wire-run nm-key-wire-run--lower" />
+                <i className="nm-key-wire-end" />
+              </span>
+            ))}
+          </span>
+        )}
       </div>
       {mounted &&
         createPortal(
@@ -766,6 +920,7 @@ export const UPSFinishContent = ({
             className={classNames('nm-dark', {
               'nm-dark--mobile': mobile,
               'nm-dark--lit': !FLASHLIGHT_ENABLED,
+              'nm-dark--hot': overHotspot && !holding,
             })}
           >
             <div className="nm-scene" ref={sceneRef}>
@@ -796,38 +951,21 @@ export const UPSFinishContent = ({
                       )
                     }
 
-                    if (pickup.visual === 'trimmers-body') {
-                      return (
-                        <div
-                          key={pickup.id}
-                          ref={(el) => {
-                            itemRefs.current.trimmersPartB = el
-                          }}
-                          className="nm-prop-visual nm-prop nm-prop--trimmers"
-                          style={{
-                            ...posStyle(pickup.spawnId),
-                            ...worldPropOuterStyle(getAssetDisplay('trimmersPartB'), mobile),
-                          }}
-                          aria-hidden
-                        >
-                          <TrimmersVisual context="world" half="body" mobile={mobile} />
-                        </div>
-                      )
-                    }
-
                     return (
                       <div
                         key={pickup.id}
                         ref={(el) => {
-                          itemRefs.current[pickup.id] = el
+                          itemRefs.current.trimmersPartB = el
                         }}
-                        className={classNames('nm-prop-visual', 'nm-prop', `nm-prop--${pickup.id}`)}
+                        className="nm-prop-visual nm-prop nm-prop--trimmers"
                         style={{
                           ...posStyle(pickup.spawnId),
-                          ...worldPropOuterStyle(getCssItemDisplay(pickup.id), mobile),
+                          ...worldPropOuterStyle(getAssetDisplay('trimmersPartB'), mobile),
                         }}
                         aria-hidden
-                      />
+                      >
+                        <TrimmersVisual context="world" half="body" mobile={mobile} />
+                      </div>
                     )
                   })}
 
@@ -859,14 +997,6 @@ export const UPSFinishContent = ({
                         boxTaken={!!worldGone.box}
                         mobile={mobile}
                       />
-                    </div>
-
-                    <div
-                      ref={envelopeRef}
-                      className="nm-prop-visual nm-envelope"
-                      style={posStyle('envelope')}
-                    >
-                      <span className="nm-envelope-code">{tracking}</span>
                     </div>
 
                     <div ref={matRef} className="nm-prop-visual nm-mat" style={posStyle('mat')}>
@@ -954,6 +1084,7 @@ export const UPSFinishContent = ({
               <div
                 className={classNames('nm-cursor', {
                   'nm-cursor--holding': !!holding,
+                  'nm-cursor--hot': overHotspot,
                   'nm-cursor--mobile-center': mobile,
                 })}
                 style={mobile ? undefined : { left: pointer.x, top: pointer.y }}
@@ -970,21 +1101,13 @@ export const UPSFinishContent = ({
             )}
 
             <div className="nm-ui">
-              {showText ? (
-                <button
-                  type="button"
-                  className="nm-message"
-                  role="status"
-                  onClick={handleTextClick}
-                  aria-label="Dismiss text"
+              {inventory.length > 0 && (
+                <div
+                  className="nm-inventory"
+                  aria-label="Inventory"
+                  style={inventoryStyle}
+                  hidden={showText}
                 >
-                  <span className="nm-message-body">
-                    {typedMessage}
-                    {!typingDone && <span className="nm-message-caret">|</span>}
-                  </span>
-                </button>
-              ) : (
-                <div className="nm-inventory" aria-label="Inventory">
                   <div className="nm-inventory-slots">
                     {inventory.map((id) => (
                       <button
@@ -1003,6 +1126,20 @@ export const UPSFinishContent = ({
                   </div>
                 </div>
               )}
+              {showText && (
+                <button
+                  type="button"
+                  className="nm-message"
+                  role="status"
+                  onClick={handleTextClick}
+                  aria-label="Dismiss text"
+                >
+                  <span className="nm-message-body">
+                    {typedMessage}
+                    {!typingDone && <span className="nm-message-caret">|</span>}
+                  </span>
+                </button>
+              )}
             </div>
           </div>,
           document.body
@@ -1011,6 +1148,16 @@ export const UPSFinishContent = ({
   )
 }
 
-export const UPSFinishControls = (_props: ControlProps) => {
-  return null
+export const UPSFinishControls = ({ handleLevelAdvance }: ControlProps) => {
+  const kiosk = useKioskState()
+  if (kiosk !== 'cut') return null
+
+  return (
+    <>
+      <div className="grow" />
+      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
+        Submit
+      </button>
+    </>
+  )
 }

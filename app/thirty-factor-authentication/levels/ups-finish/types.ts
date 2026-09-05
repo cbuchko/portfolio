@@ -1,9 +1,11 @@
 export type Point = { x: number; y: number }
 
+export type KioskState = 'plate' | 'exposed' | 'cut'
+
 export type ItemId =
   | 'cutter'
-  | 'key'
-  | 'scrap'
+  | 'screwdriver'
+  | 'packingSlip'
   | 'box'
   | 'toolboxKey'
   | 'trimmers'
@@ -16,9 +18,7 @@ export type TrimmerHalfId = 'trimmersPartA' | 'trimmersPartB'
 
 export type PropSpawnId =
   | 'trimmersHalf'
-  | 'scrap'
   | 'hedge'
-  | 'envelope'
   | 'mat'
   | 'toolbox'
   | 'dirtMound'
@@ -36,11 +36,10 @@ export type DecoSpawnId =
 export type TargetId =
   | 'box'
   | 'session'
-  | 'envelope'
   | 'mat'
   | 'cutter'
-  | 'key'
-  | 'scrap'
+  | 'screwdriver'
+  | 'packingSlip'
   | 'toolbox'
   | 'toolboxKey'
   | 'hedge'
@@ -55,12 +54,12 @@ export type TargetId =
 
 export type SpawnPos = { left: number; top: number }
 
-export type WorldPickupId = 'shovel' | 'trimmersPartB' | 'scrap'
+export type WorldPickupId = 'shovel' | 'trimmersPartB'
 
 export type WorldPickup = {
   id: WorldPickupId
   spawnId: PropSpawnId
-  visual: 'shovel' | 'trimmers-body' | 'scrap'
+  visual: 'shovel' | 'trimmers-body'
 }
 
 export type ZodiacDisplay = {

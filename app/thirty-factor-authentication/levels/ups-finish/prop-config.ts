@@ -25,12 +25,10 @@ export const AUTH_EXCLUSION = {
 export const PUZZLE_PROP_ORDER: PropSpawnId[] = [
   'hedge',
   'toolbox',
-  'envelope',
   'mat',
   'dirtMound',
   'shovel',
   'trimmersHalf',
-  'scrap',
   'garbageCan',
 ]
 
@@ -46,10 +44,8 @@ export const DECO_PROP_ORDER: DecoSpawnId[] = [
 export const PROP_FOOTPRINTS: Record<PropSpawnId, { w: number; h: number }> = {
   hedge: { w: 14, h: 14 },
   toolbox: { w: 6, h: 6 },
-  envelope: { w: 4, h: 3 },
   mat: { w: 8, h: 4 },
   trimmersHalf: { w: 6, h: 6 },
-  scrap: { w: 5, h: 4 },
   dirtMound: { w: 7, h: 5 },
   shovel: { w: 7, h: 7 },
   garbageCan: { w: 9, h: 9 },
@@ -58,10 +54,8 @@ export const PROP_FOOTPRINTS: Record<PropSpawnId, { w: number; h: number }> = {
 export const MOBILE_PROP_PIXELS: Record<PropSpawnId, { w: number; h: number }> = {
   hedge: { w: 100, h: 100 },
   toolbox: { w: 56, h: 56 },
-  envelope: { w: 68, h: 44 },
   mat: { w: 140, h: 36 },
   trimmersHalf: { w: 64, h: 64 },
-  scrap: { w: 84, h: 64 },
   dirtMound: { w: 96, h: 56 },
   shovel: { w: 72, h: 72 },
   garbageCan: { w: 72, h: 72 },
@@ -70,10 +64,8 @@ export const MOBILE_PROP_PIXELS: Record<PropSpawnId, { w: number; h: number }> =
 export const FALLBACK_LAYOUT: Record<PropSpawnId, SpawnPos> = {
   hedge: { left: 16, top: 58 },
   toolbox: { left: 82, top: 28 },
-  envelope: { left: 74, top: 70 },
   mat: { left: 48, top: 86 },
   trimmersHalf: { left: 10, top: 44 },
-  scrap: { left: 28, top: 78 },
   dirtMound: { left: 62, top: 52 },
   shovel: { left: 38, top: 32 },
   garbageCan: { left: 90, top: 62 },
@@ -82,10 +74,8 @@ export const FALLBACK_LAYOUT: Record<PropSpawnId, SpawnPos> = {
 export const MOBILE_FALLBACK_LAYOUT: Record<PropSpawnId, SpawnPos> = {
   hedge: { left: 50, top: 16 },
   toolbox: { left: 82, top: 32 },
-  envelope: { left: 78, top: 78 },
   mat: { left: 50, top: 82 },
   trimmersHalf: { left: 18, top: 32 },
-  scrap: { left: 22, top: 68 },
   dirtMound: { left: 78, top: 52 },
   shovel: { left: 24, top: 52 },
   garbageCan: { left: 28, top: 78 },
@@ -105,7 +95,7 @@ export const DECO_MOBILE_PIXELS: Record<DecoSpawnId, { w: number; h: number }> =
   postItNote: { w: 44, h: 44 },
   nightManorDvd: { w: 40, h: 40 },
   zodiacChart: { w: 64, h: 56 },
-  pizzaSlice: { w: 52, h: 48 },
+  pizzaSlice: { w: 52, h: 36 },
   fishBowl: { w: 56, h: 56 },
 }
 

@@ -84,10 +84,26 @@ export const PROP_ASSETS = {
     display: sprite64Display,
   },
   ductTape: {
-    src: '/thirty-factor-authentication/props/duct%20tape.webp',
+    src: `${SPRITES}/tape.png`,
     width: 64,
     height: 64,
     alt: 'Duct tape',
+    pixelated: true,
+    display: sprite64Display,
+  },
+  screwdriver: {
+    src: `${SPRITES}/screwdriver.png`,
+    width: 64,
+    height: 64,
+    alt: 'Screwdriver',
+    pixelated: true,
+    display: sprite64Display,
+  },
+  packingSlip: {
+    src: `${SPRITES}/packageslip.png`,
+    width: 64,
+    height: 64,
+    alt: 'Packing slip',
     pixelated: true,
     display: sprite64Display,
   },
@@ -155,7 +171,7 @@ export const PROP_ASSETS = {
     src: `${SPRITES}/trimmer-half1.png`,
     width: 64,
     height: 64,
-    alt: 'Trimmer blade',
+    alt: 'Hedge trimmer half',
     pixelated: true,
     display: sprite64Display,
   },
@@ -163,7 +179,7 @@ export const PROP_ASSETS = {
     src: `${SPRITES}/trimmer-half1-taped.png`,
     width: 64,
     height: 64,
-    alt: 'Trimmer blade with tape',
+    alt: 'Hedge trimmer half with tape',
     pixelated: true,
     display: sprite64Display,
   },
@@ -171,7 +187,7 @@ export const PROP_ASSETS = {
     src: `${SPRITES}/trimmer-half2.png`,
     width: 64,
     height: 64,
-    alt: 'Trimmer body',
+    alt: 'Hedge trimmer half',
     pixelated: true,
     display: sprite64Display,
   },
@@ -179,7 +195,7 @@ export const PROP_ASSETS = {
     src: `${SPRITES}/trimmer-half2-taped.png`,
     width: 64,
     height: 64,
-    alt: 'Trimmer body with tape',
+    alt: 'Hedge trimmer half with tape',
     pixelated: true,
     display: sprite64Display,
   },
@@ -238,9 +254,10 @@ export const ITEM_ASSET_IDS: Partial<Record<ItemId, PropAssetId>> = {
   shovel: 'shovel',
   cutter: 'cutter',
   ductTape: 'ductTape',
+  screwdriver: 'screwdriver',
+  packingSlip: 'packingSlip',
   trimmers: 'trimmers',
   box: 'upsBox',
-  key: 'authKey',
   toolboxKey: 'rustyKey',
 }
 
@@ -271,4 +288,14 @@ export const getBushAssetId = (
   if (boxTaken) return 'bush'
   if (boxFreed) return 'bushCutWithBox'
   return 'bushWithBox'
+}
+
+/** Warm the sprite cache so inventory remounts do not flash empty slots. */
+export const prefetchPropImages = () => {
+  if (typeof window === 'undefined') return
+  for (const asset of Object.values(PROP_ASSETS)) {
+    const img = new window.Image()
+    img.decoding = 'async'
+    img.src = asset.src
+  }
 }
