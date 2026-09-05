@@ -71,6 +71,7 @@ export const UPSFinishContent = ({
   handleLevelAdvance,
   validateAdvance,
   setIsLoading,
+  setUPSTrackingCode,
   setUPSTrackingTime,
   isMobile,
   playerId,
@@ -227,7 +228,9 @@ export const UPSFinishContent = ({
   useEffect(() => {
     setMounted(true)
     setIsLoading(false)
-  }, [setIsLoading])
+    setUPSTrackingCode('')
+    setUPSTrackingTime(0)
+  }, [setIsLoading, setUPSTrackingCode, setUPSTrackingTime])
 
   useEffect(() => {
     if (!mounted) return
@@ -1171,14 +1174,20 @@ export const UPSFinishContent = ({
   )
 }
 
-export const UPSFinishControls = ({ handleLevelAdvance }: ControlProps) => {
+export const UPSFinishControls = ({ handleLevelAdvance, setUPSTrackingTime }: ControlProps) => {
   const kiosk = useKioskState()
   if (kiosk !== 'cut') return null
 
   return (
     <>
       <div className="grow" />
-      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
+      <button
+        className="auth-button auth-button-primary"
+        onClick={() => {
+          setUPSTrackingTime(0)
+          handleLevelAdvance()
+        }}
+      >
         Submit
       </button>
     </>

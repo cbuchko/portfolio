@@ -72,12 +72,7 @@ export type LevelProps = {
 
 // True 30 factors — Account Select is pre-game, not in this list.
 export const LEVELS: LevelDefinition[] = [
-  {
-    content: UPSFinishContent,
-    controls: UPSFinishControls,
-    requiresLoad: true,
-    title: 'Package Arrival',
-  }, //25
+ 
   { content: IdentityLockContent, controls: IdentityLockControls, title: 'Identity Lock' },
 
   {
@@ -107,11 +102,17 @@ export const LEVELS: LevelDefinition[] = [
   { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true, title: 'Bird Calls' },
   { content: PizzatronContent, title: 'Pizzatron' },
   { content: MastermindContent, title: 'Mastermind' },
+  {
+    content: UPSFinishContent,
+    controls: UPSFinishControls,
+    requiresLoad: true,
+    title: 'Package Arrival',
+  }, //25
   { content: SpotifyContent, title: 'Rhythm Challenge' },
   { content: BombDefusalContent, controls: BombDefusalControls, title: 'Bomb Defusal' },
   { content: PapersPleaseContent, title: 'Papers Please' },
   { content: EinsteinContent, controls: EinsteinControls, title: 'Einstein Riddle' },
-  { content: UndertaleContent, title: 'Undertale' }, //31
+  { content: UndertaleContent, title: 'Undertale' }, //30
 ] as LevelDefinition[]
 
 //AAAA@@may00
