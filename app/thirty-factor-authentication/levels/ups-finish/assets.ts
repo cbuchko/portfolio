@@ -23,6 +23,7 @@ const SOUNDS = '/thirty-factor-authentication/sounds'
 export const SFX = {
   pickup: `${SOUNDS}/place.mp3`,
   use: `${SOUNDS}/osu-click.mp3`,
+  wireCut: `${SOUNDS}/sfx_thud03.wav`,
 } as const
 
 /** Auth key slot on the login card */

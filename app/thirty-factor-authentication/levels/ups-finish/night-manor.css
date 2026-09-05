@@ -156,7 +156,7 @@
 }
 
 body.nm-mobile-pan {
-  --nm-ui-h: 24vh;
+  --nm-ui-h: 28vh;
 }
 
 body.nm-mobile-pan #auth-container {
@@ -736,12 +736,8 @@ body.nm-mobile-pan #tfa-logo {
   transform: translateX(3px);
 }
 
-.nm-dark--lit .nm-scene {
-  background: rgba(8, 7, 5, 0.35);
-}
-
 .nm-dark--mobile {
-  --nm-ui-h: 24vh;
+  --nm-ui-h: 28vh;
 }
 
 .nm-dark--mobile .nm-message {

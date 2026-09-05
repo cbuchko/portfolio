@@ -77,6 +77,8 @@ export const UPSFinishContent = ({
 }: ContentProps) => {
   const mobile = !!isMobile
   const coneRadius = mobile ? CONE_MOBILE : CONE_DESKTOP
+  const kiosk = useKioskState()
+  const flashlightOn = FLASHLIGHT_ENABLED && kiosk !== 'cut'
 
   // Generate desktop layouts once — never inside the render body (flashlight moves every frame).
   const [desktopLayouts] = useState(() => {
@@ -115,7 +117,6 @@ export const UPSFinishContent = ({
   const [garbageRummaged, setGarbageRummaged] = useState(false)
   const [tapedTrimmerHalf, setTapedTrimmerHalf] = useState<TrimmerHalfId | null>(null)
   const [packageOpened, setPackageOpened] = useState(false)
-  const kiosk = useKioskState()
   const [worldGone, setWorldGone] = useState<Partial<Record<ItemId, boolean>>>({})
   const [message, setMessage] = useState<string>(INTRO_COPY.body)
   const [showText, setShowText] = useState(true)
@@ -158,7 +159,9 @@ export const UPSFinishContent = ({
     moved: false,
   })
   const inventoryRef = useRef(inventory)
+  const holdingRef = useRef(holding)
   inventoryRef.current = inventory
+  holdingRef.current = holding
   pointerRef.current = pointer
   coneRef.current = cone
   panRef.current = pan
@@ -227,8 +230,19 @@ export const UPSFinishContent = ({
   }, [setIsLoading])
 
   useEffect(() => {
+    if (!mounted) return
+    const onContextMenu = (e: MouseEvent) => {
+      e.preventDefault()
+      putAwayHeld()
+    }
+    window.addEventListener('contextmenu', onContextMenu)
+    return () => window.removeEventListener('contextmenu', onContextMenu)
+  }, [mounted])
+
+  useEffect(() => {
     prefetchSound(SFX.pickup)
     prefetchSound(SFX.use)
+    prefetchSound(SFX.wireCut)
     prefetchPropImages()
   }, [])
 
@@ -285,7 +299,7 @@ export const UPSFinishContent = ({
     const root = document.documentElement
     root.style.setProperty('--nm-pan-x', `${panRef.current.x}px`)
     root.style.setProperty('--nm-pan-y', `${panRef.current.y}px`)
-    root.style.setProperty('--nm-ui-h', '24vh')
+    root.style.setProperty('--nm-ui-h', '28vh')
     document.body.classList.add('nm-mobile-pan')
 
     const syncScene = () => {
@@ -341,7 +355,7 @@ export const UPSFinishContent = ({
     const root = document.documentElement
     root.style.setProperty('--nm-pan-x', `${pan.x}px`)
     root.style.setProperty('--nm-pan-y', `${pan.y}px`)
-    root.style.setProperty('--nm-ui-h', '24vh')
+    root.style.setProperty('--nm-ui-h', '28vh')
     document.body.classList.add('nm-mobile-pan')
     return () => {
       root.style.removeProperty('--nm-pan-x')
@@ -353,8 +367,8 @@ export const UPSFinishContent = ({
 
   const getAimPoint = useCallback((): Point => {
     if (mobile) return lastTapRef.current
-    return FLASHLIGHT_ENABLED ? coneRef.current : pointerRef.current
-  }, [mobile])
+    return flashlightOn ? coneRef.current : pointerRef.current
+  }, [mobile, flashlightOn])
 
   /** Mobile flashlight is fixed at the center of the playfield (above the UI band). */
   const getMobileFlashlightCenter = useCallback((): Point => {
@@ -367,13 +381,13 @@ export const UPSFinishContent = ({
   /** Soft radius — inside the fully black ring so only reasonably lit taps count. */
   const isTapInFlashlight = useCallback(
     (tap: Point) => {
-      if (!FLASHLIGHT_ENABLED || !mobile) return true
+      if (!flashlightOn || !mobile) return true
       const center = getMobileFlashlightCenter()
       if (center.x < 0) return false
       const softRadius = coneRadius * 0.82
       return Math.hypot(tap.x - center.x, tap.y - center.y) <= softRadius
     },
-    [mobile, coneRadius, getMobileFlashlightCenter]
+    [flashlightOn, mobile, coneRadius, getMobileFlashlightCenter]
   )
 
   const takeItem = (id: ItemId, label: string) => {
@@ -386,6 +400,14 @@ export const UPSFinishContent = ({
   const holdItem = (id: ItemId) => {
     setHolding(id)
     say(UI_COPY.holdItem(itemLabel(id)), id)
+  }
+
+  const putAwayHeld = () => {
+    const id = holdingRef.current
+    if (!id) return false
+    setHolding(null)
+    say(UI_COPY.putAway, id)
+    return true
   }
 
   const examineDeco = (id: DecoSpawnId) => {
@@ -409,7 +431,7 @@ export const UPSFinishContent = ({
     if (!inventoryRef.current.includes('box') || packageOpened) return
     setPackageOpened(true)
     setInventory((prev) => {
-      const next: ItemId[] = [...prev]
+      const next: ItemId[] = prev.filter((i) => i !== 'box')
       if (!next.includes('screwdriver')) next.push('screwdriver')
       if (!next.includes('packingSlip')) next.push('packingSlip')
       return next
@@ -445,7 +467,9 @@ export const UPSFinishContent = ({
     if (kiosk !== 'exposed') return
     updateKiosk('cut')
     setHolding(null)
-    playSfx(SFX.use, 0.35)
+    wonRef.current = true
+    stopSoundtrack()
+    playSfx(SFX.wireCut, 0.2)
     say(SCENE_PROP_COPY.session.wireCut, 'session')
     validateAdvance()
   }
@@ -614,8 +638,7 @@ export const UPSFinishContent = ({
     }
     if (holding) {
       if (holding === id) {
-        setHolding(null)
-        say(UI_COPY.putAway, id)
+        putAwayHeld()
         return
       }
       useOn(id as TargetId)
@@ -919,7 +942,7 @@ export const UPSFinishContent = ({
           <div
             className={classNames('nm-dark', {
               'nm-dark--mobile': mobile,
-              'nm-dark--lit': !FLASHLIGHT_ENABLED,
+              'nm-dark--lit': !flashlightOn,
               'nm-dark--hot': overHotspot && !holding,
             })}
           >
@@ -1064,7 +1087,7 @@ export const UPSFinishContent = ({
               />
             </div>
 
-            {FLASHLIGHT_ENABLED && (
+            {flashlightOn && (
               <div
                 className={classNames('nm-cone', { 'nm-cone--mobile-center': mobile })}
                 aria-hidden
@@ -1080,12 +1103,12 @@ export const UPSFinishContent = ({
               />
             )}
 
-            {cursorReady && (
+            {cursorReady && (flashlightOn || !mobile || holding) && (
               <div
                 className={classNames('nm-cursor', {
                   'nm-cursor--holding': !!holding,
                   'nm-cursor--hot': overHotspot,
-                  'nm-cursor--mobile-center': mobile,
+                  'nm-cursor--mobile-center': mobile && flashlightOn,
                 })}
                 style={mobile ? undefined : { left: pointer.x, top: pointer.y }}
                 aria-hidden

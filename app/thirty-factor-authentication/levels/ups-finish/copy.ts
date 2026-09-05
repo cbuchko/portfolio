@@ -85,10 +85,10 @@ export const SCENE_PROP_COPY = {
   session: {
     examine: 'A key slot screwed onto the terminal. It needs my authentication key.',
     examineAfterOpen: 'Four screws. A metal plate pretending to be a keyhole.',
-    exposed: 'Cheap colored wire sits behind the plate.',
+    exposed: 'Cheap colored wire sits behind the plate. The terminal hums behind it.',
     cut: 'The hardware is dead.',
     unscrewed: 'The plate falls to the ground exposing the wires underneath.',
-    wireCut: 'The trimmers easily cut the wires, something has changed.',
+    wireCut: 'The trimmers easily cut the wires and the terminal goes quiet.',
     plateStillOn: 'The plate is still on. The screws are in the way.',
     nothingToUnscrew: 'Nothing left to unscrew.',
     alreadyDead: 'The reader is already dead.',
