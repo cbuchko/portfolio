@@ -17,6 +17,13 @@ export type PropAssetDefinition = {
 }
 
 const SPRITES = '/thirty-factor-authentication/props/sprites'
+const SOUNDS = '/thirty-factor-authentication/sounds'
+
+/** Short one-shots for inventory / use interactions */
+export const SFX = {
+  pickup: `${SOUNDS}/place.mp3`,
+  use: `${SOUNDS}/osu-click.mp3`,
+} as const
 
 /** Auth key slot on the login card */
 const keyholeDisplay: PropDisplayConfig = {

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
-import { useSound } from '@/app/utils/useSounds'
+import { useSound, playSfx, prefetchSound } from '@/app/utils/useSounds'
 import { PlayerInformation } from '../player-constants'
 import {
   ACTION_COPY,
@@ -47,7 +47,7 @@ import type {
   TargetId,
   TrimmerHalfId,
 } from './ups-finish/types'
-import { getAssetDisplay, getBushAssetId } from './ups-finish/assets'
+import { getAssetDisplay, getBushAssetId, SFX } from './ups-finish/assets'
 import { getCssItemDisplay } from './ups-finish/css-item-display'
 import { worldPropOuterStyle } from './ups-finish/prop-display'
 import {
@@ -113,7 +113,7 @@ export const UPSFinishContent = ({
   const [garbageRummaged, setGarbageRummaged] = useState(false)
   const [tapedTrimmerHalf, setTapedTrimmerHalf] = useState<TrimmerHalfId | null>(null)
   const [worldGone, setWorldGone] = useState<Partial<Record<ItemId, boolean>>>({})
-  const [message, setMessage] = useState<string>(mobile ? INTRO_COPY.mobile : INTRO_COPY.desktop)
+  const [message, setMessage] = useState<string>(INTRO_COPY.body)
   const [showText, setShowText] = useState(true)
   const [cursorReady, setCursorReady] = useState(false)
   const [pan, setPan] = useState<Point>({ x: 0, y: 0 })
@@ -167,17 +167,15 @@ export const UPSFinishContent = ({
 
   const tracking = upsTrackingCode || '1Z-AUTH-KEY'
 
-  const introMessage = mobile ? INTRO_COPY.mobile : INTRO_COPY.desktop
-
   const dismissText = useCallback(() => {
     // Never reveal an empty inventory — keep the opening message up until the player has items.
     if (inventoryRef.current.length === 0) {
-      setMessage(introMessage)
+      setMessage(INTRO_COPY.body)
       setShowText(true)
       return
     }
     setShowText(false)
-  }, [introMessage])
+  }, [])
 
   const { visible: typedMessage, done: typingDone, complete: completeTyping } = useTypewriter(
     message,
@@ -214,6 +212,11 @@ export const UPSFinishContent = ({
     setMounted(true)
     setIsLoading(false)
   }, [setIsLoading])
+
+  useEffect(() => {
+    prefetchSound(SFX.pickup)
+    prefetchSound(SFX.use)
+  }, [])
 
   useEffect(() => {
     return () => {
@@ -359,6 +362,7 @@ export const UPSFinishContent = ({
   const takeItem = (id: ItemId, label: string) => {
     setInventory((prev) => (prev.includes(id) ? prev : [...prev, id]))
     setWorldGone((prev) => ({ ...prev, [id]: true }))
+    playSfx(SFX.pickup, 0.4)
     say(UI_COPY.taken(label))
   }
 
@@ -383,6 +387,7 @@ export const UPSFinishContent = ({
       return withoutKey.includes('cutter') ? withoutKey : [...withoutKey, 'cutter']
     })
     setHolding(null)
+    playSfx(SFX.use, 0.35)
     say(SCENE_PROP_COPY.toolbox.unlocked)
   }
 
@@ -393,6 +398,7 @@ export const UPSFinishContent = ({
       return next.includes('key') ? next : [...next, 'key']
     })
     setHolding(null)
+    playSfx(SFX.use, 0.35)
     say(ACTION_COPY.openPackage)
   }
 
@@ -401,6 +407,7 @@ export const UPSFinishContent = ({
     setBoxFreed(true)
     setInventory((prev) => prev.filter((i) => i !== 'trimmers'))
     setHolding(null)
+    playSfx(SFX.use, 0.35)
     say(ACTION_COPY.cutHedge)
   }
 
@@ -414,6 +421,7 @@ export const UPSFinishContent = ({
         : [...withoutShovel, 'trimmersPartA']
     })
     setHolding(null)
+    playSfx(SFX.use, 0.35)
     say(SCENE_PROP_COPY.dirtMound.dugOutcome)
   }
 
@@ -432,6 +440,7 @@ export const UPSFinishContent = ({
     })
     setTapedTrimmerHalf(null)
     setHolding(null)
+    playSfx(SFX.use, 0.35)
     say(ACTION_COPY.combineTrimmers)
     return true
   }
@@ -442,6 +451,7 @@ export const UPSFinishContent = ({
     setInventory((prev) => prev.filter((i) => i !== 'ductTape'))
     setTapedTrimmerHalf(half)
     setHolding(null)
+    playSfx(SFX.use, 0.35)
     say(ACTION_COPY.tapeTrimmer)
     return true
   }
@@ -450,6 +460,7 @@ export const UPSFinishContent = ({
     if (garbageRummaged) return
     setGarbageRummaged(true)
     setInventory((prev) => (prev.includes('ductTape') ? prev : [...prev, 'ductTape']))
+    playSfx(SFX.pickup, 0.4)
     say(SCENE_PROP_COPY.garbageCan.foundTape)
   }
 
@@ -508,6 +519,7 @@ export const UPSFinishContent = ({
       wonRef.current = true
       setHolding(null)
       setInventory((prev) => prev.filter((i) => i !== 'key'))
+      playSfx(SFX.use, 0.35)
       say(SCENE_PROP_COPY.session.win)
       validateAdvance()
       stopSoundtrack()
@@ -613,6 +625,7 @@ export const UPSFinishContent = ({
       else if (!worldGone.toolboxKey) {
         setInventory((prev) => (prev.includes('toolboxKey') ? prev : [...prev, 'toolboxKey']))
         setWorldGone((prev) => ({ ...prev, toolboxKey: true }))
+        playSfx(SFX.pickup, 0.4)
         say(SCENE_PROP_COPY.mat.foundKey)
       } else {
         activateTarget('mat', { examine: SCENE_PROP_COPY.mat.examine })

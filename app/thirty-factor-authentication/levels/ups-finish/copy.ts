@@ -11,10 +11,7 @@ import type { DecoCopyContext, DecoSpawnId, ItemId, TargetId, WorldPickup } from
 
 export const INTRO_COPY = {
   headline: 'The UPS package has arrived. Please enter your physical authentication key.',
-  desktop:
-    'The lights are out. The last thing you remember is a notification that your package arrived.',
-  mobile:
-    'The lights are out. The last thing you remember is a notification that your package arrived. Drag to pan. Tap to interact.',
+  body: 'The lights are out. The last thing you remember is a notification that your package arrived.',
 } as const
 
 export const UI_COPY = {

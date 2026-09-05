@@ -5,7 +5,7 @@ export const FLASHLIGHT_ENABLED = true
 export const CONE_DESKTOP = 118
 export const CONE_MOBILE = 150
 export const MOBILE_PAN_THRESHOLD = 8
-export const TYPEWRITER_MS = 16
+export const TYPEWRITER_MS = 32
 
 export const MOBILE_PAN_RADIUS_RATIO = 1.25
 export const MOBILE_SPAWN_EDGE_MARGIN = 4
