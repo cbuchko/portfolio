@@ -3,7 +3,17 @@ import { devMode, forceLevel } from './constants'
 
 const RUN_INDEX_KEY = 'tfa_run_index'
 const PENDING_END_KEY = 'tfa_pending_run_end'
+const PENDING_ABANDON_KEY = 'tfa_pending_abandon'
 export const TFA_AFK_MS = 5 * 60 * 1000
+export const TFA_ABANDON_STASH_MS = 15 * 1000
+export const TFA_RUN_HEARTBEAT_MS = 30 * 1000
+/** Reopen + start within this of hide = continue, not a quit. */
+export const TFA_CONTINUE_MS = 90 * 1000
+
+type TfaCaptureOptions = {
+  send_instantly?: boolean
+  transport?: 'sendBeacon' | 'XHR' | 'fetch'
+}
 
 export type TfaEventProps = Record<string, string | number | boolean | undefined>
 
@@ -12,7 +22,24 @@ export type TfaPendingEnd = {
   last_level: number
   last_level_id?: string
   last_level_title: string
+  total_duration_ms?: number
   endedAt: number
+}
+
+export type TfaPendingAbandon = {
+  abandon_id: string
+  reason: 'tab_close' | 'afk'
+  run_index?: number
+  character_id?: number
+  character_name?: string
+  is_mobile?: boolean
+  level: number
+  level_id?: string
+  level_title?: string
+  duration_on_level_ms: number
+  total_duration_ms: number
+  strikes_this_level: number
+  hiddenAt: number
 }
 
 export type TfaSession = {
@@ -20,6 +47,7 @@ export type TfaSession = {
   characterName?: string
   isMobile?: boolean
   runIndex?: number
+  runStartedAt?: number
   level?: number
   levelId?: string
   levelTitle?: string
@@ -28,6 +56,7 @@ export type TfaSession = {
 }
 
 let initialized = false
+let flushedPendingAbandon = false
 let session: TfaSession = {}
 
 const isLocalHost = () => {
@@ -69,13 +98,17 @@ export const setTfaSession = (next: Partial<TfaSession>) => {
 
 export const getTfaSession = () => session
 
-export const captureTfaEvent = (event: string, props: TfaEventProps = {}) => {
+export const captureTfaEvent = (
+  event: string,
+  props: TfaEventProps = {},
+  options?: TfaCaptureOptions
+) => {
   if (!initialized) return
   const cleaned: Record<string, string | number | boolean> = {}
   for (const [key, value] of Object.entries(props)) {
     if (value !== undefined) cleaned[key] = value
   }
-  posthog.capture(event, cleaned)
+  posthog.capture(event, cleaned, options)
 }
 
 export const sessionProps = (): TfaEventProps => ({
@@ -108,4 +141,87 @@ export const writePendingEnd = (pending: TfaPendingEnd) => {
 
 export const clearPendingEnd = () => {
   localStorage.removeItem(PENDING_END_KEY)
+}
+
+export const readPendingAbandon = (): TfaPendingAbandon | null => {
+  try {
+    const raw = localStorage.getItem(PENDING_ABANDON_KEY)
+    if (!raw) return null
+    return JSON.parse(raw) as TfaPendingAbandon
+  } catch {
+    return null
+  }
+}
+
+export const writePendingAbandon = (pending: TfaPendingAbandon) => {
+  flushedPendingAbandon = false
+  try {
+    localStorage.setItem(PENDING_ABANDON_KEY, JSON.stringify(pending))
+  } catch {
+    // Private mode / quota — live sendBeacon is the only path left.
+  }
+}
+
+export const clearPendingAbandon = () => {
+  try {
+    localStorage.removeItem(PENDING_ABANDON_KEY)
+  } catch {
+    // ignore
+  }
+}
+
+const abandonEventProps = (
+  pending: TfaPendingAbandon,
+  deliveredVia: 'live' | 'beacon' | 'flush'
+): TfaEventProps => ({
+  abandon_id: pending.abandon_id,
+  delivered_via: deliveredVia,
+  reason: pending.reason,
+  character_id: pending.character_id,
+  character_name: pending.character_name,
+  is_mobile: pending.is_mobile,
+  run_index: pending.run_index,
+  level: pending.level,
+  level_id: pending.level_id,
+  level_title: pending.level_title,
+  duration_on_level_ms: pending.duration_on_level_ms,
+  total_duration_ms: pending.total_duration_ms,
+  strikes_this_level: pending.strikes_this_level,
+})
+
+export const captureAbandonEvent = (
+  pending: TfaPendingAbandon,
+  deliveredVia: 'live' | 'beacon' | 'flush'
+) => {
+  captureTfaEvent(
+    'tfa_run_abandoned',
+    abandonEventProps(pending, deliveredVia),
+    deliveredVia === 'beacon'
+      ? { send_instantly: true, transport: 'sendBeacon' }
+      : { send_instantly: true }
+  )
+}
+
+export const flushPendingAbandon = () => {
+  if (flushedPendingAbandon) return
+  flushedPendingAbandon = true
+  const pending = readPendingAbandon()
+  if (!pending) return
+  clearPendingAbandon()
+  captureAbandonEvent(pending, 'flush')
+}
+
+export const isFreshPendingAbandon = (pending: TfaPendingAbandon | null, now = Date.now()) =>
+  Boolean(pending && now - pending.hiddenAt <= TFA_CONTINUE_MS)
+
+export const captureResumeEvent = (abandonId: string, extra: TfaEventProps = {}) => {
+  captureTfaEvent(
+    'tfa_run_resumed',
+    {
+      ...sessionProps(),
+      abandon_id: abandonId,
+      ...extra,
+    },
+    { send_instantly: true }
+  )
 }
