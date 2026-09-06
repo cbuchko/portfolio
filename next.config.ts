@@ -1,7 +1,26 @@
 import type { NextConfig } from 'next'
 
+const POSTHOG_PROXY = '/factor-relay'
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  skipTrailingSlashRedirect: true,
+  async rewrites() {
+    return [
+      {
+        source: `${POSTHOG_PROXY}/static/:path*`,
+        destination: 'https://us-assets.i.posthog.com/static/:path*',
+      },
+      {
+        source: `${POSTHOG_PROXY}/array/:path*`,
+        destination: 'https://us-assets.i.posthog.com/array/:path*',
+      },
+      {
+        source: `${POSTHOG_PROXY}/:path*`,
+        destination: 'https://us.i.posthog.com/:path*',
+      },
+    ]
+  },
   images: {
     remotePatterns: [
       {

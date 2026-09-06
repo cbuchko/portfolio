@@ -19,6 +19,7 @@ import { useSound } from '../utils/useSounds'
 import { useEffectInitializer } from '../utils/useEffectUnsafe'
 import { useIsMobile } from '../utils/useIsMobile'
 import classNames from 'classnames'
+import { useTfaAnalytics } from './useTfaAnalytics'
 
 export default function ThirtyFactorAuthentication() {
   const isMobile = useIsMobile(mobileWidthBreakpoint)
@@ -40,10 +41,28 @@ export default function ThirtyFactorAuthentication() {
   )
 
   const { content, controls, requiresLoad, baseProps } = useLevels()
-  const { level, setLevel, upsTrackingCode, upsTrackingTime, resetLevel, levelTimings, finalizeRunStats } =
-    baseProps
+  const {
+    level,
+    setLevel,
+    upsTrackingCode,
+    upsTrackingTime,
+    resetLevel,
+    levelTimings,
+    finalizeRunStats,
+    strikesThisLevel,
+  } = baseProps
 
   const isCompleted = hasStarted && level === maxLevel + 1
+  const { captureRunStarted, markRunEnded } = useTfaAnalytics({
+    hasStarted,
+    isGameOver,
+    isCompleted,
+    isMobile,
+    level,
+    playerId,
+    strikesThisLevel,
+    levelTimings,
+  })
 
   const resetRun = useCallback(() => {
     resetLevel()
@@ -53,9 +72,10 @@ export default function ThirtyFactorAuthentication() {
 
   const startRun = useCallback(() => {
     resetLevel()
+    captureRunStarted()
     playSuccessSound()
     setHasStarted(true)
-  }, [resetLevel, playSuccessSound])
+  }, [resetLevel, captureRunStarted, playSuccessSound])
 
   const runBaseProps = useMemo(
     () => ({ ...baseProps, resetLevel: resetRun }),
@@ -68,8 +88,9 @@ export default function ThirtyFactorAuthentication() {
   )
 
   useEffect(() => {
-    if (isGameOver && hasStarted) finalizeRunStats()
-  }, [isGameOver, hasStarted, finalizeRunStats])
+    if (!isGameOver || !hasStarted) return
+    markRunEnded('lost', finalizeRunStats())
+  }, [isGameOver, hasStarted, finalizeRunStats, markRunEnded])
 
   const dragBackend = useMemo(() => {
     if (typeof window === 'undefined') {

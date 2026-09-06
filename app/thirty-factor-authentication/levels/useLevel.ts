@@ -33,6 +33,7 @@ import { DartboardContent } from './Dartboard'
 import { SecurityQuestionsContent, SecurityQuestionsControls } from './SecurityQuestions'
 import { PizzatronContent } from './Pizzatron'
 import { ContentProps, ControlProps } from './types'
+import { captureTfaEvent, sessionProps } from '../analytics'
 
 type LevelContent = (props: ContentProps) => React.JSX.Element | null
 type LevelControls = (props: ControlProps) => React.JSX.Element | null
@@ -65,7 +66,7 @@ export type LevelProps = {
   setSelectedSSOIds: React.Dispatch<React.SetStateAction<Set<SSOIds>>>
   startTime: number
   levelTimings: LevelTiming[]
-  finalizeRunStats: () => void
+  finalizeRunStats: () => LevelTiming[]
   strikesThisLevel: number
   registerStrike: () => number
 }
@@ -155,6 +156,13 @@ export const useLevels = () => {
     const next = Math.min(3, strikesThisLevelRef.current + 1)
     strikesThisLevelRef.current = next
     setStrikesThisLevel(next)
+    const currentLevel = levelRef.current
+    captureTfaEvent('tfa_strike', {
+      ...sessionProps(),
+      level: currentLevel,
+      level_title: LEVELS[currentLevel - 1]?.title ?? `Level ${currentLevel}`,
+      strike_number: next,
+    })
     return next
   }, [])
 
@@ -174,6 +182,16 @@ export const useLevels = () => {
     playSuccessSound()
     const completedLevel = levelRef.current
     recordLevelTiming(completedLevel)
+    const completed = levelTimingsRef.current.find((entry) => entry.level === completedLevel)
+    if (completed) {
+      captureTfaEvent('tfa_level_completed', {
+        ...sessionProps(),
+        level: completed.level,
+        level_title: completed.title,
+        duration_ms: completed.durationMs,
+        strikes: completed.strikes,
+      })
+    }
     clearStrikes()
     const enteredAt = Date.now()
     levelEnteredAtRef.current = enteredAt
@@ -183,6 +201,7 @@ export const useLevels = () => {
 
   const finalizeRunStats = useCallback(() => {
     recordLevelTiming(levelRef.current)
+    return levelTimingsRef.current
   }, [recordLevelTiming])
 
   /** Fresh run clocks at Identity Lock — call when leaving pre-game or on full reset. */
