@@ -4,6 +4,8 @@ import { devMode, forceLevel } from './constants'
 const RUN_INDEX_KEY = 'tfa_run_index'
 const PENDING_END_KEY = 'tfa_pending_run_end'
 const PENDING_ABANDON_KEY = 'tfa_pending_abandon'
+/** Sticky skip for Connor’s own production playtests. Phone and desktop each need it once. */
+const INTERNAL_KEY = 'tfa_internal'
 export const TFA_AFK_MS = 5 * 60 * 1000
 export const TFA_ABANDON_STASH_MS = 15 * 1000
 export const TFA_RUN_HEARTBEAT_MS = 30 * 1000
@@ -64,11 +66,29 @@ const isLocalHost = () => {
   return host === 'localhost' || host === '127.0.0.1' || host === '[::1]' || host.endsWith('.local')
 }
 
+const isInternalPlaytest = () => {
+  try {
+    const raw = new URLSearchParams(window.location.search).get('tfa_internal')
+    if (raw === '1' || raw === 'true') {
+      localStorage.setItem(INTERNAL_KEY, '1')
+      return true
+    }
+    if (raw === '0' || raw === 'false') {
+      localStorage.removeItem(INTERNAL_KEY)
+      return false
+    }
+    return localStorage.getItem(INTERNAL_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
 const analyticsAllowed = () => {
   if (typeof window === 'undefined') return false
   if (process.env.NODE_ENV === 'development') return false
   if (isLocalHost()) return false
   if (devMode || forceLevel > 0) return false
+  if (isInternalPlaytest()) return false
   return Boolean(process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN)
 }
 
