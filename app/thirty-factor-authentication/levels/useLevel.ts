@@ -40,6 +40,7 @@ type LevelControls = (props: ControlProps) => React.JSX.Element | null
 
 export type LevelTiming = {
   level: number
+  id: string
   title: string
   durationMs: number
   strikes: number
@@ -49,7 +50,17 @@ type LevelDefinition = {
   content: LevelContent
   controls?: LevelControls
   requiresLoad?: boolean
+  /** Stable analytics identity. Never rename or reuse after a level is replaced. */
+  id: string
   title: string
+}
+
+export const getLevelMeta = (levelNumber: number) => {
+  const def = LEVELS[levelNumber - 1]
+  return {
+    id: def?.id ?? `level-${levelNumber}`,
+    title: def?.title ?? `Level ${levelNumber}`,
+  }
 }
 
 export type LevelProps = {
@@ -73,48 +84,94 @@ export type LevelProps = {
 
 // True 30 factors — Account Select is pre-game, not in this list.
 export const LEVELS: LevelDefinition[] = [
- 
-  { content: IdentityLockContent, controls: IdentityLockControls, title: 'Identity Lock' },
-
   {
+    id: 'identity-lock',
+    content: IdentityLockContent,
+    controls: IdentityLockControls,
+    title: 'Identity Lock',
+  },
+  {
+    id: 'security-questions',
     content: SecurityQuestionsContent,
     controls: SecurityQuestionsControls,
     title: 'Security Questions',
   },
-  { content: BasicAppCodeContent, controls: BasicAppCodeControls, title: 'App Code' },
-  { content: MessageSpamContent, controls: MessageSpamControls, title: 'Message Spam' },
-  { content: LegalNameContent, controls: LegalNameControls, title: 'Legal Name' }, //5
-  { content: FallbackOneContent, controls: FallbackOneControls, title: 'Password Reset' },
-  { content: BiometricContent, controls: BiometricControls, title: 'Biometrics' },
-  { content: MapContent, controls: MapControls, title: 'Birthplace' },
-  { content: PostItContent, controls: PostItControls, title: 'Post-it Code' },
-  { content: UPSContent, controls: UPSControls, title: 'Package Tracking' }, //10
-  { content: FallbackTwoContent, controls: FallbackTwoControls, title: 'Password Confirm' },
-  { content: ZodiacContent, controls: ZodiacControls, title: 'Zodiac' },
-  { content: AppCodeContent, controls: AppCodeControls, title: 'Authenticator App' },
-  { content: AquariumContent, controls: AquariumControls, title: 'Aquarium' },
-  { content: QuotesContent, title: 'Quotes' },
-  { content: RoadTripContent, requiresLoad: true, title: 'Road Trip' },
-  { content: ParlorRoomContent, requiresLoad: true, title: 'Parlor Room' },
-  { content: DartboardContent, title: 'Dartboard' },
-  { content: IMDBContent, title: 'Filmography' }, //20
-  { content: TaxReturnContent, controls: TaxReturnControls, title: 'Tax Return' },
-  { content: FishingContent, controls: FishingControls, title: 'Fishing' },
-  { content: BirdCallContent, controls: BirdCallControls, requiresLoad: true, title: 'Bird Calls' },
-  { content: PizzatronContent, title: 'Pizzatron' },
-  { content: MastermindContent, title: 'Mastermind' },
+  { id: 'app-code', content: BasicAppCodeContent, controls: BasicAppCodeControls, title: 'App Code' },
   {
+    id: 'message-spam',
+    content: MessageSpamContent,
+    controls: MessageSpamControls,
+    title: 'Message Spam',
+  },
+  { id: 'legal-name', content: LegalNameContent, controls: LegalNameControls, title: 'Legal Name' },
+  {
+    id: 'password-reset',
+    content: FallbackOneContent,
+    controls: FallbackOneControls,
+    title: 'Password Reset',
+  },
+  { id: 'biometrics', content: BiometricContent, controls: BiometricControls, title: 'Biometrics' },
+  { id: 'birthplace', content: MapContent, controls: MapControls, title: 'Birthplace' },
+  { id: 'post-it-code', content: PostItContent, controls: PostItControls, title: 'Post-it Code' },
+  {
+    id: 'package-tracking',
+    content: UPSContent,
+    controls: UPSControls,
+    title: 'Package Tracking',
+  },
+  {
+    id: 'password-confirm',
+    content: FallbackTwoContent,
+    controls: FallbackTwoControls,
+    title: 'Password Confirm',
+  },
+  { id: 'zodiac', content: ZodiacContent, controls: ZodiacControls, title: 'Zodiac' },
+  {
+    id: 'authenticator-app',
+    content: AppCodeContent,
+    controls: AppCodeControls,
+    title: 'Authenticator App',
+  },
+  { id: 'aquarium', content: AquariumContent, controls: AquariumControls, title: 'Aquarium' },
+  { id: 'quotes', content: QuotesContent, title: 'Quotes' },
+  { id: 'road-trip', content: RoadTripContent, requiresLoad: true, title: 'Road Trip' },
+  { id: 'parlor-room', content: ParlorRoomContent, requiresLoad: true, title: 'Parlor Room' },
+  { id: 'dartboard', content: DartboardContent, title: 'Dartboard' },
+  { id: 'filmography', content: IMDBContent, title: 'Filmography' },
+  { id: 'tax-return', content: TaxReturnContent, controls: TaxReturnControls, title: 'Tax Return' },
+  { id: 'fishing', content: FishingContent, controls: FishingControls, title: 'Fishing' },
+  {
+    id: 'bird-calls',
+    content: BirdCallContent,
+    controls: BirdCallControls,
+    requiresLoad: true,
+    title: 'Bird Calls',
+  },
+  { id: 'pizzatron', content: PizzatronContent, title: 'Pizzatron' },
+  { id: 'mastermind', content: MastermindContent, title: 'Mastermind' },
+  {
+    id: 'package-arrival',
     content: UPSFinishContent,
     controls: UPSFinishControls,
     requiresLoad: true,
     title: 'Package Arrival',
-  }, //25
-  { content: SpotifyContent, title: 'Rhythm Challenge' },
-  { content: BombDefusalContent, controls: BombDefusalControls, title: 'Bomb Defusal' },
-  { content: PapersPleaseContent, title: 'Papers Please' },
-  { content: EinsteinContent, controls: EinsteinControls, title: 'Einstein Riddle' },
-  { content: UndertaleContent, title: 'Undertale' }, //30
-] as LevelDefinition[]
+  },
+  { id: 'rhythm-challenge', content: SpotifyContent, title: 'Rhythm Challenge' },
+  {
+    id: 'bomb-defusal',
+    content: BombDefusalContent,
+    controls: BombDefusalControls,
+    title: 'Bomb Defusal',
+  },
+  { id: 'papers-please', content: PapersPleaseContent, title: 'Papers Please' },
+  {
+    id: 'einstein-riddle',
+    content: EinsteinContent,
+    controls: EinsteinControls,
+    title: 'Einstein Riddle',
+  },
+  { id: 'undertale', content: UndertaleContent, title: 'Undertale' },
+]
 
 //AAAA@@may00
 export const useLevels = () => {
@@ -157,10 +214,12 @@ export const useLevels = () => {
     strikesThisLevelRef.current = next
     setStrikesThisLevel(next)
     const currentLevel = levelRef.current
+    const meta = getLevelMeta(currentLevel)
     captureTfaEvent('tfa_strike', {
       ...sessionProps(),
       level: currentLevel,
-      level_title: LEVELS[currentLevel - 1]?.title ?? `Level ${currentLevel}`,
+      level_id: meta.id,
+      level_title: meta.title,
       strike_number: next,
     })
     return next
@@ -171,9 +230,12 @@ export const useLevels = () => {
     if (levelTimingsRef.current.some((entry) => entry.level === levelNumber)) return
 
     const durationMs = Math.max(0, Date.now() - levelEnteredAtRef.current)
-    const title = LEVELS[levelNumber - 1]?.title ?? `Level ${levelNumber}`
+    const meta = getLevelMeta(levelNumber)
     const strikes = strikesThisLevelRef.current
-    const next = [...levelTimingsRef.current, { level: levelNumber, title, durationMs, strikes }]
+    const next = [
+      ...levelTimingsRef.current,
+      { level: levelNumber, id: meta.id, title: meta.title, durationMs, strikes },
+    ]
     levelTimingsRef.current = next
     setLevelTimings(next)
   }, [])
@@ -187,6 +249,7 @@ export const useLevels = () => {
       captureTfaEvent('tfa_level_completed', {
         ...sessionProps(),
         level: completed.level,
+        level_id: completed.id,
         level_title: completed.title,
         duration_ms: completed.durationMs,
         strikes: completed.strikes,
@@ -247,6 +310,7 @@ export const useLevels = () => {
       controls: IdentityLockControls,
       requiresLoad: false,
       title: 'Identity Lock',
+      id: 'identity-lock',
     }
   }
   return { baseProps, ...levelDef, requiresLoad: levelDef.requiresLoad || false }

@@ -10,6 +10,7 @@ export type TfaEventProps = Record<string, string | number | boolean | undefined
 export type TfaPendingEnd = {
   outcome: 'won' | 'lost'
   last_level: number
+  last_level_id?: string
   last_level_title: string
   endedAt: number
 }
@@ -20,6 +21,7 @@ export type TfaSession = {
   isMobile?: boolean
   runIndex?: number
   level?: number
+  levelId?: string
   levelTitle?: string
   strikesThisLevel?: number
   levelEnteredAt?: number
