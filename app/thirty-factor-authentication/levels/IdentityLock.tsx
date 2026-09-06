@@ -54,7 +54,7 @@ export const IdentityLockContent = ({
       <p className="text-sm text-gray-500">{player.email}</p>
       <p className="mt-6 text-lg max-w-lg">
         This account uses <span className="font-bold">THIRTY FACTOR AUTHENTICATION</span> to
-        protect its data. Our state of the art verification via attrition software exploits the human tedency to give up when things get slightly difficult. 
+        protect its data. Our state of the art verification via attrition software exploits the human tendency to give up when things get slightly difficult. 
       </p>
       <div className="mt-6 flex flex-col gap-3 w-full max-w-lg">
         {ACKNOWLEDGMENTS.slice(0, shownCount).map((label, index) => (

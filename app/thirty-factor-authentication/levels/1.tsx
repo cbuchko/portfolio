@@ -90,16 +90,14 @@ export const OneContent = ({
   )
 }
 
-export const OneControls = ({ handleLevelAdvance, handleGameOver, playerId }: ControlProps) => {
+export const OneControls = ({ handleLevelAdvance, playerId }: ControlProps) => {
   if (playerId === undefined) return null
 
   return (
     <>
-      <button className="auth-button" onClick={handleGameOver}>
-        {`That's Not Me!`}
-      </button>
-      <button className="auth-button" onClick={() => handleLevelAdvance()}>
-        {`That's Me!`}
+      <div className="grow" />
+      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
+        Authenticate
       </button>
     </>
   )
