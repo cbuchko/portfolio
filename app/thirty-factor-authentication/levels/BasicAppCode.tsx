@@ -3,7 +3,7 @@ import { ContentProps, ControlProps } from './types'
 import { makeAuthCode } from '../utils'
 import { createPortal } from 'react-dom'
 import { AppCode } from './AppCode'
-import { TextInput } from '../components/TextInput'
+import { PinInput } from '../components/PinInput'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 export const BasicAppCodeContent = ({
@@ -40,12 +40,7 @@ export const BasicAppCodeContent = ({
   return (
     <>
       <p className="text-lg">Enter the code from your Authenticator App.</p>
-      <TextInput
-        value={codeInput}
-        placeholder="Enter code..."
-        onChange={handleInputChange}
-        onSubmit={handleLevelAdvance}
-      />
+      <PinInput value={codeInput} onChange={handleInputChange} onSubmit={handleLevelAdvance} />
       {portalElement &&
         createPortal(
           <div className="flex flex-wrap justify-center mt-6">
