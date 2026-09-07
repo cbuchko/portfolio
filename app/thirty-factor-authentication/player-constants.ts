@@ -3,7 +3,7 @@ export enum PlayerIds {
   TheRock,
   Devito,
   Conan,
-  Snoop,
+  Jackson,
   Coolidge,
 }
 
@@ -290,7 +290,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
         date: '2017',
         creator: 'Seth Gordon',
         genre: 'Comedy/Action',
-        starring: 'Zach Efron, Kelly Rohrbach',
+        starring: 'Zac Efron, Kelly Rohrbach',
         synopsis:
           'When a dangerous crime wave hits the beach, Mitch Buchannon leads his squad of lifeguards.',
         answer: 'Baywatch',
@@ -320,7 +320,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       },
       {
         quote:
-          'Losers whine about how they tried their "Best". Winners go home and fuck the prom queen.',
+          "Success isn't always about greatness. It's about consistency. Consistent hard work leads to success.",
         isValid: true,
         origin: 'The Rock',
       },
@@ -403,7 +403,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       height: '1.96 m',
       eyes: 'BRO',
       hair: 'BALD',
-      children: '1',
+      children: '3',
       coat: 'california.png',
     },
     fakeLicense: {
@@ -415,13 +415,13 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       height: '1.85 m',
       eyes: 'BLU',
       hair: 'BLO',
-      children: '3',
+      children: '1',
       coat: 'nevada.svg',
     },
   },
   [PlayerIds.Devito]: {
     name: 'Danny DeVito',
-    fullName: 'Daniel Michael DeVito Jr. ',
+    fullName: 'Daniel Michael DeVito Jr.',
     fullNameAliases: [
       'Daniel Michael DeVito Jr.',
       'Daniel Michael DeVito Jr',
@@ -457,7 +457,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     ],
     taxReturn: {
       lastName: 'DeVito',
-      firstName: 'Danny M',
+      firstName: 'Daniel M',
       dob: '1944/11/17',
     },
     imdb: [
@@ -494,7 +494,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     quotes: [
       {
         quote:
-          "I don't know how how many years on this Earth I got left. I'm gonna get real weird with it.",
+          "I don't know how many years on this Earth I got left. I'm gonna get real weird with it.",
         isValid: true,
         origin: 'Danny Devito as Frank Reynolds',
       },
@@ -511,7 +511,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       },
       {
         quote:
-          "We're just air conditioners, walking around this planet, screwing eachothers brains out.",
+          "We're just air conditioners, walking around this planet, screwing each other's brains out.",
         isValid: true,
         origin: 'Danny DeVito as Frank Reynolds',
       },
@@ -581,7 +581,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       },
     ],
     license: {
-      location: 'New Jeresey',
+      location: 'New Jersey',
       headshot: 'danny.webp',
       signature: 'danny.svg',
       name: 'Daniel Michael DeVito Jr.',
@@ -636,34 +636,34 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     },
     imdb: [
       {
-        type: 'TV Show',
-        date: '1993',
-        creator: 'Conan O\'Brien, Robert Smigel',
-        genre: 'Late Night Comedy',
-        starring: 'Conan O\'Brien, Andy Richter, Max Weinberg',
+        type: 'Movie',
+        date: '2013',
+        creator: 'Louis Leterrier',
+        genre: 'Heist/Thriller',
+        starring: 'Jesse Eisenberg, Mark Ruffalo',
         synopsis:
-          'A gangly Harvard-educated comedian hosts a late-night talk show filled with absurd sketches and remote segments.',
-        answer: 'Late Night with Conan O\'Brien',
+          'Illusionists pull off bank heists during their magic shows while the FBI tries to catch them.',
+        answer: 'Now You See Me',
       },
       {
-        type: 'TV Show',
-        date: '2010',
-        creator: 'Conan O\'Brien, Mike Sweeney',
-        genre: 'Late Night Comedy',
-        starring: 'Conan O\'Brien, Andy Richter, The Band',
+        type: 'Movie',
+        date: '2017',
+        creator: 'Chris McKay',
+        genre: 'Animation/Comedy',
+        starring: 'Will Arnett, Zach Galifianakis',
         synopsis:
-          'After leaving network television, the host moves to cable and continues his brand of surreal celebrity interviews.',
-        answer: 'Conan',
+          'Batman must team up with new allies when the Joker frees Gotham’s villains from the Phantom Zone.',
+        answer: 'The Lego Batman Movie',
       },
       {
-        type: 'TV Show',
-        date: '2011',
-        creator: 'Greg Daniels',
-        genre: 'Sitcom',
-        starring: 'Steve Carell, Ed Helms, Rainn Wilson',
+        type: 'Movie',
+        date: '2026',
+        creator: 'Andrew Stanton',
+        genre: 'Animation/Comedy',
+        starring: 'Tom Hanks, Tim Allen',
         synopsis:
-          'Andy Bernard\'s older brother arrives at Dunder Mifflin and immediately dominates every conversation with loud piano playing.',
-        answer: 'The Office',
+          'Woody, Buzz, and the gang compete with a kid’s new favorite plaything — a high-tech tablet.',
+        answer: 'Toy Story 5',
       },
     ],
     quotes: [
@@ -789,198 +789,179 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       coat: 'new_york.svg',
     },
   },
-  [PlayerIds.Snoop]: {
-    name: 'Snoop Dogg',
-    fullName: 'Calvin Cordozar Broadus Jr.',
-    fullNameAliases: [
-      'Calvin Cordozar Broadus Jr.',
-      'Calvin Cordozar Broadus Jr',
-      'Calvin Cordozar Broadus Junior',
-      'Calvin Cordozar Broadus, Jr.',
-      'Calvin Cordozar Broadus, Jr',
-      'Calvin Cordozar Broadus, Junior',
-    ],
-    birthCity: 'longbeach',
-    zodiac: 'libra-scorpio-unknown',
-    email: 'snoop@thirtyfactor.gov',
+  [PlayerIds.Jackson]: {
+    name: 'Samuel L. Jackson',
+    fullName: 'Samuel Leroy Jackson',
+    fullNameAliases: ['Samuel Leroy Jackson'],
+    birthCity: 'washington',
+    zodiac: 'sagittarius-virgo-unknown',
+    email: 'jedi.master@thirtyfactor.gov',
     easyTrivia: [
       {
-        prompt: 'Which song are you most famously tied to?',
-        options: ["Gin and Juice", "Sweet Child O' Mine", 'Mr. Brightside', 'Despacito'],
-        answer: 'Gin and Juice',
+        prompt: 'Which of these directors are you most associated with?',
+        options: ['Quentin Tarantino', 'Robert Rodriguez', 'Martin Scorsese', 'Alfred Hitchcock'],
+        answer: 'Quentin Tarantino',
       },
       {
-        prompt: 'In which genre did you originally rise to fame?',
-        options: ['Hip-hop', 'Opera', 'Country', 'K-pop'],
-        answer: 'Hip-hop',
+        prompt: 'Which of these movies are you most associated with?',
+        options: ['Pulp Fiction', 'Reservoir Dogs', 'Inglorious Basterds', 'Kill Bill'],
+        answer: 'Pulp Fiction',
       },
       {
-        prompt: 'Which best describes your classic persona?',
-        options: [
-          'Laid-back and chill',
-          'Silent assassin',
-          'Medieval knight',
-          'Weatherman',
-        ],
-        answer: 'Laid-back and chill',
+        prompt: 'Finish the line: “I have had it with these motherfucking snakes on this motherfucking __!”',
+        options: ['plane', 'train', 'boat', 'stage'],
+        answer: 'plane',
       },
     ],
     taxReturn: {
-      lastName: 'Broadus',
-      firstName: 'Calvin C',
-      dob: '1971/10/20',
+      lastName: 'Jackson',
+      firstName: 'Samuel L',
+      dob: '1948/12/21',
     },
     imdb: [
       {
         type: 'Movie',
-        date: '2001',
-        creator: 'Antoine Fuqua',
-        genre: 'Crime/Thriller',
-        starring: 'Denzel Washington, Ethan Hawke',
+        date: '1993',
+        creator: 'Steven Spielberg',
+        genre: 'Adventure/Sci-fi',
+        starring: 'Sam Neill, Laura Dern',
         synopsis:
-          'A veteran LAPD narcotics officer takes a rookie under his wing during a brutal 24-hour training evaluation.',
-        answer: 'Training Day',
+          'A theme park of cloned dinosaurs loses containment after a saboteur shuts down the security systems.',
+        answer: 'Jurassic Park',
       },
       {
         type: 'Movie',
-        date: '2004',
-        creator: 'Todd Phillips',
-        genre: 'Comedy/Action',
-        starring: 'Ben Stiller, Owen Wilson',
+        date: '1995',
+        creator: 'John McTiernan',
+        genre: 'Action/Thriller',
+        starring: 'Bruce Willis, Samuel L. Jackson',
         synopsis:
-          'Two mismatched detectives go undercover as street racers to bust a drug kingpin in 1970s Bay City.',
-        answer: 'Starsky & Hutch',
+          'A cop and a Harlem shopkeeper are forced to play a bomber’s riddles across New York to keep the city from blowing up.',
+        answer: 'Die Hard with a Vengeance',
       },
       {
         type: 'Movie',
-        date: '1998',
-        creator: 'Tamra Davis',
-        genre: 'Comedy',
-        starring: 'Dave Chappelle, Guillermo Díaz',
+        date: '2005',
+        creator: 'Thomas Carter',
+        genre: 'Drama/Sport',
+        starring: 'Samuel L. Jackson, Rob Brown',
         synopsis:
-          'Three friends try to bail their buddy out of jail by selling marijuana, but their plan goes up in smoke.',
-        answer: 'Half Baked',
+          'A high-school basketball coach benches his undefeated team until the players raise their grades.',
+        answer: 'Coach Carter',
       },
     ],
     quotes: [
       {
-        quote: 'I was raised on fried chicken. My pacifier was a drumstick.',
+        quote:
+          "When I was a kid I stuttered. Then I figured out that if I cursed, I didn't stutter.",
         isValid: true,
-        origin: 'Snoop Dogg',
+        origin: 'Samuel L. Jackson',
       },
       {
         quote:
-          "Snakes are straight assholes, you could tell, the way they lookin' at him.",
+          'I asked George for a purple lightsaber so I could find myself in the toy store.',
         isValid: true,
-        origin: 'Snoop Dogg',
+        origin: 'Samuel L. Jackson',
       },
       {
         quote:
-          "Are we in a fucking movie right now, or what? Shit, what the fuck? I'm lost, I don't know.",
+          'You are on this council, but we do not grant you the rank of Master.',
         isValid: true,
-        origin: 'Snoop Dogg',
+        origin: 'Samuel L. Jackson as Mace Windu',
       },
       {
         quote:
-          "I know it's supposed to be ladies first, but when it comes to chicken, there's no rules.",
+          "I recognize the council has made a decision, but given that it's a stupid-ass decision, I've elected to ignore it.",
         isValid: true,
-        origin: 'Snoop Dogg',
+        origin: 'Samuel L. Jackson as Nick Fury',
       },
       {
-        quote:
-          "Can somebody explain to me how you can get a billion streams and not get a million dollars? That shit don't make sense to me.",
+        quote: 'Hold onto your butts.',
         isValid: true,
-        origin: 'Snoop Dogg',
+        origin: 'Samuel L. Jackson as Ray Arnold',
       },
       {
         quote:
-          "How the fuck do you think I feel? I don't feel like shit right now. Stop asking me these dumbass questions!",
+          'I came to coach basketball players, and you became students. I came to teach boys, and you became men.',
         isValid: true,
-        origin: 'Snoop Dogg',
+        origin: 'Samuel L. Jackson as Ken Carter',
       },
       {
-        quote:
-          'It was African Americans who took that bland ass chicken and made that thang do what it do.',
+        quote: 'Yes, they deserved to die, and I hope they burn in hell!',
         isValid: true,
-        origin: 'Snoop Dogg',
+        origin: 'Samuel L. Jackson as Carl Lee Hailey',
       },
       {
-        quote: 'Pie in the horse.',
+        quote:
+          "Do you know what the scariest thing is? To not know your place in this world, to not know why you're here.",
         isValid: true,
-        origin: 'Snoop Dogg',
+        origin: 'Samuel L. Jackson as Elijah Price',
+      },
+      {
+        quote: "King Kong ain't got shit on me!",
+        isValid: false,
+        origin: 'Denzel Washington as Alonzo Harris',
+      },
+      {
+        quote: 'Some motherfuckers are always trying to ice-skate uphill.',
+        isValid: false,
+        origin: 'Wesley Snipes as Blade',
+      },
+      {
+        quote: "I'm too old for this shit.",
+        isValid: false,
+        origin: 'Danny Glover as Roger Murtaugh',
+      },
+      {
+        quote: 'Get busy living, or get busy dying.',
+        isValid: false,
+        origin: 'Morgan Freeman as Red',
+      },
+      {
+        quote: 'You take the blue pill, the story ends.',
+        isValid: false,
+        origin: 'Laurence Fishburne as Morpheus',
+      },
+      {
+        quote: 'Welcome to Earth!',
+        isValid: false,
+        origin: 'Will Smith as Captain Steven Hiller',
+      },
+      {
+        quote: 'You got knocked the fuck out!',
+        isValid: false,
+        origin: 'Ice Cube as Craig Jones',
       },
       {
         quote:
-          "I don't trust water. Because fish fuck in it.",
+          'Bury me in the ocean with my ancestors that jumped from the ships, because they knew death was better than bondage.',
         isValid: false,
-        origin: 'W.C. Fields',
-      },
-      {
-        quote:
-          "I smoke because I'm hoping for an early death, and it's not coming quick enough.",
-        isValid: false,
-        origin: 'Bette Davis',
-      },
-      {
-        quote:
-          "You can't trust nobody. Not even yourself. Especially not yourself.",
-        isValid: false,
-        origin: 'Ice Cube',
-      },
-      {
-        quote:
-          "I don't know karate, but I know ka-razy.",
-        isValid: false,
-        origin: 'James Brown',
-      },
-      {
-        quote:
-          "Never let your left hand know what your right hand is smoking.",
-        isValid: false,
-        origin: 'Redman',
-      },
-      {
-        quote:
-          "I'm not saying I'm gonna change the world, but I guarantee that I will spark the brain that will change the world.",
-        isValid: false,
-        origin: 'Tupac Shakur',
-      },
-      {
-        quote:
-          "I don't even know how to use a computer, but I know how to use people.",
-        isValid: false,
-        origin: 'Dr. Dre',
-      },
-      {
-        quote:
-          "I'd rather have a bottle in front of me than a frontal lobotomy.",
-        isValid: false,
-        origin: 'Tom Waits',
+        origin: 'Michael B. Jordan as Killmonger',
       },
     ],
     license: {
-      location: 'California',
-      headshot: 'snoop.webp',
-      signature: 'snoop.png',
-      name: 'Calvin Cordozar Broadus Jr.',
-      dob: '1971-Oct-20',
-      height: '1.93 m',
+      location: 'Washington D.C.',
+      headshot: 'Samuel-L-Jackson.webp',
+      signature: 'samuel.jpg',
+      name: 'Samuel Leroy Jackson',
+      dob: '1948-Dec-21',
+      height: '1.88 m',
       eyes: 'BRO',
-      hair: 'BRO',
-      children: '4',
-      coat: 'california.png',
+      hair: 'BALD',
+      children: '1',
+      coat: 'dc.svg',
     },
     fakeLicense: {
-      location: 'Nevada',
-      headshot: 'wiz.jpg',
+      location: 'Tennessee',
+      headshot: 'lawrence.jpg',
       signature: 'bush.svg',
-      name: 'Calvin Cordozar Broadus Jr',
-      dob: '1971-Oct-02',
-      height: '1.85 m',
+      name: 'Samuel Leroy Jacksen',
+      dob: '1948-Dec-12',
+      height: '1.80 m',
       eyes: 'BLU',
-      hair: 'BLO',
-      children: '2',
-      coat: 'nevada.svg',
+      hair: 'GRA',
+      children: '3',
+      coat: 'maryland.svg',
     },
   },
   [PlayerIds.Coolidge]: {
@@ -1019,24 +1000,24 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
         answer: 'Legally Blonde',
       },
       {
-        type: 'Movie',
-        date: '1999',
-        creator: 'Paul Weitz, Chris Weitz',
-        genre: 'Comedy',
-        starring: 'Jason Biggs, Alyson Hannigan',
+        type: 'TV Show',
+        date: '2009',
+        creator: 'Ryan Murphy, Brad Falchuk, Ian Brennan',
+        genre: 'Musical/Comedy',
+        starring: 'Lea Michele, Matthew Morrison',
         synopsis:
-          'Four high school friends make a pact to lose their virginity before graduation, leading to awkward encounters with each other\'s parents.',
-        answer: 'American Pie',
+          'A high-school Spanish teacher starts a glee club that turns misfit students into show-choir stars.',
+        answer: 'Glee',
       },
       {
-        type: 'TV Show',
-        date: '2021',
-        creator: 'Mike White',
-        genre: 'Comedy/Drama',
-        starring: 'Murray Bartlett, Sydney Sweeney',
+        type: 'Movie',
+        date: '2004',
+        creator: 'Mark Rosman',
+        genre: 'Comedy/Romance',
+        starring: 'Hilary Duff, Chad Michael Murray',
         synopsis:
-          'Wealthy guests and employees at a luxury Hawaiian resort navigate privilege, secrets, and murder over the course of a week.',
-        answer: 'The White Lotus',
+          'A teenager slaving at her stepmother’s diner secretly texts a popular classmate and hopes to meet him at the Halloween dance.',
+        answer: 'A Cinderella Story',
       },
     ],
     quotes: [
@@ -1152,7 +1133,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       location: 'New York',
       headshot: 'goldie.webp',
       signature: 'bush.svg',
-      name: 'Jennifer Audrey Coolidge',
+      name: 'Jennifer Audry Coolidge',
       dob: '1961-Aug-08',
       height: '1.70 m',
       eyes: 'BRO',
