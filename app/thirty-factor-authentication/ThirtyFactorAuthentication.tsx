@@ -24,7 +24,7 @@ import { useTfaAnalytics } from './useTfaAnalytics'
 
 export default function ThirtyFactorAuthentication() {
   const layout = useTfaLayout()
-  const { isMobile, isCompact, isTouch } = layout
+  const { isMobile, isTouch } = layout
   const [playerId, setPlayerId] = useState<PlayerIds>()
   const [hasStarted, setHasStarted] = useState(forceLevel > 0)
   const [devHudReady, setDevHudReady] = useState(false)
@@ -114,13 +114,12 @@ export default function ThirtyFactorAuthentication() {
   const showAuth = showPregame || (showLevels && playerId !== undefined)
 
   return (
-    <>
-      <div
-        className={classNames('relative w-screen h-screen flex flex-col overflow-y-auto', {
-          'select-none': isMobile,
-        })}
-        style={{ scrollbarGutter: 'stable' }}
-      >
+    <div
+      className={classNames('relative w-screen h-screen flex flex-col overflow-y-auto tfa-shell', {
+        'select-none': isMobile,
+      })}
+      style={{ scrollbarGutter: 'stable' }}
+    >
         <div
           id="tfa-logo"
           className={classNames(
@@ -198,7 +197,7 @@ export default function ThirtyFactorAuthentication() {
           hasStarted &&
           devHudReady &&
           createPortal(
-            <div className="fixed top-0 left-0 z-[200] flex flex-col text-left w-max p-2 gap-3">
+            <div className="fixed top-0 left-0 z-[200] flex flex-col text-left w-max p-2 gap-3 bg-white">
               <h2 className="mb-2">Dev Mode:</h2>
               <button
                 className="border p-1 cursor-pointer bg-white"
@@ -216,7 +215,6 @@ export default function ThirtyFactorAuthentication() {
             document.body
           )}
         {/* <PortfolioHeader /> */}
-      </div>
-    </>
+    </div>
   )
 }

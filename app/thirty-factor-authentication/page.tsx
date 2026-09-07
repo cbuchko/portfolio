@@ -1,4 +1,6 @@
 import ThirtyFactorAuthentication from './ThirtyFactorAuthentication'
+import type { Viewport } from 'next'
+import './light-lock.css'
 
 export const generateMetadata = () => {
   return {
@@ -8,6 +10,11 @@ export const generateMetadata = () => {
     },
     description: 'Verify yourself by completing thirty different authentication challenges.',
   }
+}
+
+export const viewport: Viewport = {
+  colorScheme: 'only light',
+  themeColor: '#ffffff',
 }
 
 export default function ThirtyFactorAuthenticationContainer() {
