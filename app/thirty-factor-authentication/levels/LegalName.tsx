@@ -4,6 +4,15 @@ import { PlayerInformation } from '../player-constants'
 import { TextInput } from '../components/TextInput'
 import Image from 'next/image'
 
+/** iOS/Android smart punctuation uses ’ (U+2019), not the ASCII ' in O'Brien. */
+const foldLegalName = (value: string) =>
+  value
+    .normalize('NFKC')
+    .replace(/[\u2018\u2019\u201B\u2032\u00B4`]/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLocaleLowerCase()
+
 export const LegalNameContent = ({
   playerId,
   validateAdvance,
@@ -16,7 +25,8 @@ export const LegalNameContent = ({
 
   const handleInputChange = (input: string) => {
     setNameInput(input)
-    if (inputTarget.find((alias) => alias.toLocaleLowerCase() === input.toLocaleLowerCase())) {
+    const typed = foldLegalName(input)
+    if (inputTarget.find((alias) => foldLegalName(alias) === typed)) {
       validateAdvance()
     } else {
       cancelAdvance()
