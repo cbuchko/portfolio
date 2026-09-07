@@ -4,6 +4,7 @@ import { useDrag, useDrop } from 'react-dnd'
 import classNames from 'classnames'
 import Image from 'next/image'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { useMusic } from '@/app/utils/audio'
 
 type ShoppingItem = {
   id: string
@@ -348,13 +349,11 @@ const ErrorContainer = ({
   setIsAgeVerified: (isVerified: boolean) => void
   isMobile?: boolean
 }) => {
-  const audioRef = useRef<HTMLAudioElement>(null)
-
+  // Siren loops for as long as the error overlay is mounted; useMusic stops it on unmount.
+  const siren = useMusic('siren')
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.2
-    }
-  }, [])
+    siren.play()
+  }, [siren])
 
   return (
     <>
@@ -375,14 +374,6 @@ const ErrorContainer = ({
           </button>
         )}
       </div>
-
-      <audio
-        ref={audioRef}
-        controls={false}
-        src="/thirty-factor-authentication/sounds/siren.mp3"
-        autoPlay
-        loop
-      />
     </>
   )
 }

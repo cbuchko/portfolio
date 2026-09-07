@@ -5,6 +5,7 @@
 
 import type { DecoSpawnId, ItemId } from './types'
 import type { PropDisplayConfig } from './prop-display'
+import type { SfxKey } from '@/app/utils/audio'
 
 export type PropAssetDefinition = {
   src: string
@@ -17,14 +18,13 @@ export type PropAssetDefinition = {
 }
 
 const SPRITES = '/thirty-factor-authentication/props/sprites'
-const SOUNDS = '/thirty-factor-authentication/sounds'
 
-/** Short one-shots for inventory / use interactions */
+/** Short one-shots for inventory / use interactions (audio registry keys) */
 export const SFX = {
-  pickup: `${SOUNDS}/place.mp3`,
-  use: `${SOUNDS}/osu-click.mp3`,
-  wireCut: `${SOUNDS}/sfx_thud03.wav`,
-} as const
+  pickup: 'place',
+  use: 'osuClick',
+  wireCut: 'thud',
+} as const satisfies Record<string, SfxKey>
 
 /** Auth key slot on the login card */
 const keyholeDisplay: PropDisplayConfig = {

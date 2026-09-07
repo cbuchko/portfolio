@@ -26,7 +26,7 @@ import { SSOIds } from './SSO'
 import { FishingContent, FishingControls } from './Fishing'
 import { BirdCallContent, BirdCallControls } from './BirdCalls'
 import { RoadTripContent } from './RoadTrip'
-import { useSound } from '@/app/utils/useSounds'
+import { useSfx } from '@/app/utils/audio'
 import { SpotifyContent } from './Spotify'
 import { MastermindContent } from './Mastermind'
 import { DartboardContent } from './Dartboard'
@@ -193,10 +193,7 @@ export const useLevels = () => {
   const [strikesThisLevel, setStrikesThisLevel] = useState(0)
   const strikesThisLevelRef = useRef(0)
 
-  const { playSound: playSuccessSound } = useSound(
-    '/thirty-factor-authentication/sounds/success.mp3',
-    0.2
-  )
+  const playSuccessSound = useSfx('success')
 
   //details for tracking the overarching UPS mechanics
   const [upsTrackingCode, setUPSTrackingCode] = useState('')

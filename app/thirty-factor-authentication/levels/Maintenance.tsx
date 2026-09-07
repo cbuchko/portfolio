@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import Image from 'next/image'
+import { useMusic } from '@/app/utils/audio'
 
 const levelDuration = 1000 * 30
 export const MaintenanceContent = ({ handleLevelAdvance, isMobile }: ContentProps) => {
   const timeoutRef = useRef<NodeJS.Timeout>(null)
-  const audioRef = useRef<HTMLAudioElement>(null)
+  const jazz = useMusic('jazz')
   const [timeElapsed, setTimeElapsed] = useState(0)
 
   useEffect(() => {
@@ -19,11 +20,8 @@ export const MaintenanceContent = ({ handleLevelAdvance, isMobile }: ContentProp
   }, [])
 
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.2
-      audioRef.current.play()
-    }
-  }, [])
+    jazz.play()
+  }, [jazz])
 
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {
@@ -81,7 +79,6 @@ export const MaintenanceContent = ({ handleLevelAdvance, isMobile }: ContentProp
           in the future.`}
         </p>
       )}
-      <audio ref={audioRef} src="/idle_Game/audio/jazz.mp3" autoPlay loop />
     </>
   )
 }

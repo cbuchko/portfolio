@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useSound } from '../utils/useSounds'
+import { useSfx } from '../utils/audio'
 import { useEffectInitializer } from '../utils/useEffectUnsafe'
 
 export const useMessageSpam = (
@@ -10,10 +10,7 @@ export const useMessageSpam = (
 ) => {
   const [message, setMessage] = useState<string | undefined>(realMessage)
 
-  const { playSound: playMessageSound, stopSound: stopMessageSound } = useSound(
-    '/thirty-factor-authentication/sounds/message.mp3',
-    0.2
-  )
+  const playMessageSound = useSfx('message')
   const messageIndexRef = useRef(-1)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -30,7 +27,6 @@ export const useMessageSpam = (
     if (!enabled) {
       if (intervalRef.current) clearInterval(intervalRef.current)
       intervalRef.current = null
-      stopMessageSound()
       messageIndexRef.current = -1
       return
     }
@@ -49,7 +45,7 @@ export const useMessageSpam = (
       if (intervalRef.current) clearInterval(intervalRef.current)
       intervalRef.current = null
     }
-  }, [delayInMs, spamMessages, playMessageSound, stopMessageSound, enabled])
+  }, [delayInMs, spamMessages, playMessageSound, enabled])
 
   const handleResendCode = () => {
     if (!enabled) return

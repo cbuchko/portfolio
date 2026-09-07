@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { ContentProps, ControlProps } from './types'
 import './ups-finish/night-manor.css'
 import classNames from 'classnames'
-import { useSound, playSfx, prefetchSound } from '@/app/utils/useSounds'
+import { useMusic, playSfx } from '@/app/utils/audio'
 import { PlayerInformation } from '../player-constants'
 import {
   ACTION_COPY,
@@ -169,10 +169,10 @@ export const UPSFinishContent = ({
   mobileMetricsRef.current = mobileMetrics
 
   const {
-    playSound: playSoundtrack,
-    stopSound: stopSoundtrack,
-    isAudioPlayingRef: isMusicPlayingRef,
-  } = useSound('/thirty-factor-authentication/sounds/night-manor-interior.mp3', 0.15, true)
+    play: playSoundtrack,
+    stop: stopSoundtrack,
+    isPlaying: isMusicPlaying,
+  } = useMusic('nightManor')
 
   const dismissText = useCallback(() => {
     // Never reveal an empty inventory — keep the opening message up until the player has items.
@@ -207,14 +207,14 @@ export const UPSFinishContent = ({
   /** Start music on a real user gesture; safe to call repeatedly until it sticks. */
   const ensureMusic = useCallback(() => {
     if (wonRef.current) return
-    if (isMusicPlayingRef.current) {
+    if (isMusicPlaying()) {
       musicStartedRef.current = true
       return
     }
     // Do not latch on failed autoplay — browsers block play() outside a gesture.
     musicStartedRef.current = false
     playSoundtrack()
-  }, [isMusicPlayingRef, playSoundtrack])
+  }, [isMusicPlaying, playSoundtrack])
 
   const handleTextClick = useCallback(() => {
     ensureMusic()
@@ -243,9 +243,6 @@ export const UPSFinishContent = ({
   }, [mounted])
 
   useEffect(() => {
-    prefetchSound(SFX.pickup)
-    prefetchSound(SFX.use)
-    prefetchSound(SFX.wireCut)
     prefetchPropImages()
   }, [])
 
@@ -254,9 +251,8 @@ export const UPSFinishContent = ({
   useEffect(() => {
     return () => {
       setSharedKioskState('plate')
-      stopSoundtrack()
     }
-  }, [stopSoundtrack])
+  }, [])
 
   useEffect(() => {
     if (!mounted) return
@@ -396,7 +392,7 @@ export const UPSFinishContent = ({
   const takeItem = (id: ItemId, label: string) => {
     setInventory((prev) => (prev.includes(id) ? prev : [...prev, id]))
     setWorldGone((prev) => ({ ...prev, [id]: true }))
-    playSfx(SFX.pickup, 0.4)
+    playSfx(SFX.pickup, { volume: 0.4 })
     say(UI_COPY.taken(label), id)
   }
 
@@ -426,7 +422,7 @@ export const UPSFinishContent = ({
     setToolboxOpen(true)
     setInventory((prev) => (prev.includes('cutter') ? prev : [...prev, 'cutter']))
     setHolding(null)
-    playSfx(SFX.use, 0.35)
+    playSfx(SFX.use, { volume: 0.35 })
     say(SCENE_PROP_COPY.toolbox.unlocked, 'toolbox')
   }
 
@@ -440,7 +436,7 @@ export const UPSFinishContent = ({
       return next
     })
     setHolding(null)
-    playSfx(SFX.use, 0.35)
+    playSfx(SFX.use, { volume: 0.35 })
     say(ACTION_COPY.openPackage, 'box')
   }
 
@@ -454,7 +450,7 @@ export const UPSFinishContent = ({
     }
     setBoxFreed(true)
     setHolding(null)
-    playSfx(SFX.use, 0.35)
+    playSfx(SFX.use, { volume: 0.35 })
     say(ACTION_COPY.cutHedge, 'hedge')
   }
 
@@ -462,7 +458,7 @@ export const UPSFinishContent = ({
     if (kiosk !== 'plate') return
     updateKiosk('exposed')
     setHolding(null)
-    playSfx(SFX.use, 0.35)
+    playSfx(SFX.use, { volume: 0.35 })
     say(SCENE_PROP_COPY.session.unscrewed, 'session')
   }
 
@@ -472,7 +468,7 @@ export const UPSFinishContent = ({
     setHolding(null)
     wonRef.current = true
     stopSoundtrack()
-    playSfx(SFX.wireCut, 0.2)
+    playSfx(SFX.wireCut, { volume: 0.2 })
     say(SCENE_PROP_COPY.session.wireCut, 'session')
     validateAdvance()
   }
@@ -492,7 +488,7 @@ export const UPSFinishContent = ({
       prev.includes('trimmersPartA') ? prev : [...prev, 'trimmersPartA']
     )
     setHolding(null)
-    playSfx(SFX.use, 0.35)
+    playSfx(SFX.use, { volume: 0.35 })
     say(SCENE_PROP_COPY.dirtMound.dugOutcome, 'dirtMound')
   }
 
@@ -511,7 +507,7 @@ export const UPSFinishContent = ({
     })
     setTapedTrimmerHalf(null)
     setHolding(null)
-    playSfx(SFX.use, 0.35)
+    playSfx(SFX.use, { volume: 0.35 })
     say(ACTION_COPY.combineTrimmers, 'trimmers')
     return true
   }
@@ -521,7 +517,7 @@ export const UPSFinishContent = ({
     if (!inv.includes('ductTape') || !inv.includes(half) || tapedTrimmerHalf) return false
     setTapedTrimmerHalf(half)
     setHolding(null)
-    playSfx(SFX.use, 0.35)
+    playSfx(SFX.use, { volume: 0.35 })
     say(ACTION_COPY.tapeTrimmer, 'ductTape')
     return true
   }
@@ -530,7 +526,7 @@ export const UPSFinishContent = ({
     if (garbageRummaged) return
     setGarbageRummaged(true)
     setInventory((prev) => (prev.includes('ductTape') ? prev : [...prev, 'ductTape']))
-    playSfx(SFX.pickup, 0.4)
+    playSfx(SFX.pickup, { volume: 0.4 })
     say(SCENE_PROP_COPY.garbageCan.foundTape, 'garbageCan')
   }
 
@@ -538,7 +534,7 @@ export const UPSFinishContent = ({
     if (worldGone.box || !boxFreed) return
     setInventory((prev) => (prev.includes('box') ? prev : [...prev, 'box']))
     setWorldGone((prev) => ({ ...prev, box: true }))
-    playSfx(SFX.pickup, 0.4)
+    playSfx(SFX.pickup, { volume: 0.4 })
     say(SCENE_PROP_COPY.hedge.taken, 'hedge')
   }
 
@@ -758,7 +754,7 @@ export const UPSFinishContent = ({
         else if (!worldGone.toolboxKey) {
           setInventory((prev) => (prev.includes('toolboxKey') ? prev : [...prev, 'toolboxKey']))
           setWorldGone((prev) => ({ ...prev, toolboxKey: true }))
-          playSfx(SFX.pickup, 0.4)
+          playSfx(SFX.pickup, { volume: 0.4 })
           say(SCENE_PROP_COPY.mat.foundKey, 'mat')
         } else {
           activateTarget('mat', { examine: SCENE_PROP_COPY.mat.examine })

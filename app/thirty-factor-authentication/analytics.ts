@@ -106,6 +106,19 @@ export const initTfaAnalytics = () => {
     capture_pageleave: false,
     autocapture: false,
     disable_session_recording: true,
+    session_recording: {
+      maskAllInputs: false,
+    },
+    loaded: (ph) => {
+      const syncReplay = () => {
+        if (ph.isFeatureEnabled('tfa-session-replay')) {
+          ph.startSessionRecording()
+        } else {
+          ph.stopSessionRecording()
+        }
+      }
+      ph.onFeatureFlags(syncReplay)
+    },
   })
   initialized = true
 }

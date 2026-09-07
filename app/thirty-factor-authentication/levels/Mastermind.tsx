@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 import { arraysEqual } from '../utils'
 import Image from 'next/image'
-import { useSound } from '@/app/utils/useSounds'
+import { useSfx } from '@/app/utils/audio'
 import { ModalContainer } from '@/app/idle_game/menus/ModalContainer'
 
 const answerLength = 4
@@ -194,7 +194,7 @@ const MasterMindHole = ({
   selectedBall?: Colors
   handleBallPlacement?: (color: Colors) => void
 }) => {
-  const { playSound } = useSound('/thirty-factor-authentication/sounds/place.mp3')
+  const playSound = useSfx('place')
   const [color, setColor] = useState<Colors | undefined>(defaultColor)
 
   const onBallPlacement = () => {

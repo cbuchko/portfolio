@@ -3,7 +3,7 @@ import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { clampPositionsToScreen } from '../utils'
 import Image from 'next/image'
-import { useSound } from '@/app/utils/useSounds'
+import { useMusic, useSfx } from '@/app/utils/audio'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const maxHealth = 100
@@ -14,15 +14,9 @@ export const BrainScanContent = ({ handleLevelAdvance, validateAdvance }: Conten
   const [health, setHealth] = useState(maxHealth)
   const [isStarted, setIsStarted] = useState(false)
   const [isCompleted, setIsCompleted] = useState(false)
-  const { playSound, isAudioPlayingRef, stopSound } = useSound(
-    '/thirty-factor-authentication/sounds/heartbeat.mp3',
-    1,
-    true
-  )
-  const { playSound: playBloodSound } = useSound(
-    '/thirty-factor-authentication/sounds/splatter.wav',
-    0.3
-  )
+  const heartbeat = useMusic('heartbeat')
+  const { play: playSound, stop: stopSound, isPlaying: isHeartbeatPlaying } = heartbeat
+  const playBloodSound = useSfx('splatter')
 
   const [isScreenBlackedOut, setIsScreenBlackedOut] = useState(false)
   const blackOutIntervalRef = useRef<NodeJS.Timeout>(null)
@@ -64,7 +58,7 @@ export const BrainScanContent = ({ handleLevelAdvance, validateAdvance }: Conten
   }, [startPosition])
 
   const handleHealthUpdate = () => {
-    if (!isAudioPlayingRef.current) playSound()
+    if (!isHeartbeatPlaying()) playSound()
     const isDead = health <= 0.5
     setHealth((prevHealth) => prevHealth - 0.45)
     if (isDead) {

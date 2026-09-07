@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { ContentProps } from './types'
 import { PlayerInformation } from '../player-constants'
 import Image from 'next/image'
-import { useSound } from '@/app/utils/useSounds'
+import { useMusic, useMusicEnded, useSfx } from '@/app/utils/audio'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const maxHealth = 100
@@ -12,10 +12,7 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance, isMobile }: Con
   const characterName = PlayerInformation[playerId].name
   const [health, setHealth] = useState(maxHealth)
   const damageTimestampRef = useRef<number>(0)
-  const { playSound: playDamageSound } = useSound(
-    '/thirty-factor-authentication/sounds/undertale-damage.mp3',
-    0.5
-  )
+  const playDamageSound = useSfx('undertaleDamage')
   const handleHit = () => {
     const now = new Date().getTime()
     const elapsed = now - damageTimestampRef.current
@@ -116,7 +113,9 @@ function BulletHell({
 }: BulletHellProps) {
   const [gameStarted, setGameStarted] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+  // Level length is the song: when Death by Glamour ends, the player has survived.
+  const music = useMusic('deathByGlamour')
+  useMusicEnded(music, () => handleLevelAdvance(true))
 
   // --- Game State (kept in refs for performance) ---
   const bulletsRef = useRef<Bullet[]>([])
@@ -394,12 +393,6 @@ function BulletHell({
     requestAnimationFrame(frame)
   }, [width, height, onPlayerHit, gameStarted])
 
-  useEffect(() => {
-    if (audioRef.current && gameStarted) {
-      audioRef.current.volume = 0.5
-    }
-  }, [gameStarted])
-
   //mobile movement handlers
   const handleDirectionClick = (direction: 'left' | 'right' | 'up' | 'down') => {
     handleDirectionRelease()
@@ -431,18 +424,11 @@ function BulletHell({
             onClick={() => {
               setGameStarted(true)
               soulRef.current = { x: width / 2, y: height / 2 }
+              music.play()
             }}
           >
             Start
           </button>
-        )}
-        {gameStarted && (
-          <audio
-            src="/thirty-factor-authentication/sounds/death-by-glamor.flac"
-            autoPlay
-            onEnded={() => handleLevelAdvance(true)}
-            ref={audioRef}
-          />
         )}
       </div>
       {/** Mobile Movement Buttons */}

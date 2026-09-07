@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import classNames from 'classnames'
 import Image from 'next/image'
-import { playSfx, prefetchSound, useSound } from '@/app/utils/useSounds'
+import { useMusic, useSfx } from '@/app/utils/audio'
 import { ContentProps, ControlProps } from './types'
 
 type Position = { x: number; y: number }
@@ -232,21 +232,17 @@ export const SpotifyContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
     return Math.floor(noteCount * 0.6 * greatScore + noteCount * 0.4 * goodScore)
   }, [noteCount])
 
+  // `track` kind: decoded into a buffer so the clock is AudioContext.currentTime,
+  // not the jittery <audio>.currentTime. Buffer is freed when the level unmounts.
   const {
-    playSound: playSoundtrack,
-    stopSound: stopSoundtrack,
-    getCurrentTimeMs,
-  } = useSound('/thirty-factor-authentication/sounds/open-the-sky.wav', 0.3)
+    play: playSoundtrack,
+    stop: stopSoundtrack,
+    currentTimeMs: getCurrentTimeMs,
+  } = useMusic('openTheSky')
 
   const chartEndMs = chartEndMsFromCadences
 
-  useEffect(() => {
-    prefetchSound('/thirty-factor-authentication/sounds/osu-click.mp3')
-  }, [])
-
-  const playClickSound = useCallback(() => {
-    playSfx('/thirty-factor-authentication/sounds/osu-click.mp3', 0.25)
-  }, [])
+  const playClickSound = useSfx('osuClick')
 
   const [isStarted, setIsStarted] = useState(false)
   const [score, setScore] = useState(0)

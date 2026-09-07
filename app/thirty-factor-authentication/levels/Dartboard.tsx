@@ -1,7 +1,7 @@
 import { RefObject, useEffect, useRef, useState } from 'react'
 import { ContentProps } from './types'
 import Image from 'next/image'
-import { useSound } from '@/app/utils/useSounds'
+import { useSfx } from '@/app/utils/audio'
 
 const defaultReticlePos = { x: 150, y: 20 }
 const bullseyeSize = 32
@@ -12,13 +12,9 @@ export const DartboardContent = ({ handleLevelAdvance }: ContentProps) => {
     defaultReticlePos
   )
   const [isPlaying, setIsPlaying] = useState(true)
-  const { playSound: playDartThrow } = useSound(
-    'thirty-factor-authentication/sounds/dart-throw.wav'
-  )
-  const { playSound: playNiceThrow } = useSound(
-    'thirty-factor-authentication/sounds/nice-throw.mp3'
-  )
-  const { playSound: playMiss } = useSound('thirty-factor-authentication/sounds/miss.mp3')
+  const playDartThrow = useSfx('dartThrow')
+  const playNiceThrow = useSfx('niceThrow')
+  const playMiss = useSfx('miss')
 
   const boardRef = useRef<HTMLDivElement>(null)
   const reticleRef = useRef<HTMLImageElement>(null)

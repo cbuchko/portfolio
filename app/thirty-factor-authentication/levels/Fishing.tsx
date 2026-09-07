@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import Image from 'next/image'
-import { useSound } from '@/app/utils/useSounds'
+import { useMusic } from '@/app/utils/audio'
 import { interpolateThreeColors } from '../utils'
 
 const playAreaHeight = 300
@@ -44,16 +44,9 @@ export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
   const lastTsRef = useRef<number | null>(null)
   const lastUiPushRef = useRef(0)
 
-  const { playSound: playSoundtrack, isAudioPlayingRef: isSoundtrackPlayingRef } = useSound(
-    '/thirty-factor-authentication/sounds/stardew.mp3',
-    0.25,
-    true
-  )
-  const {
-    playSound: playReel,
-    stopSound,
-    isAudioPlayingRef,
-  } = useSound('/thirty-factor-authentication/sounds/reel.mp3', 0.05)
+  const { play: playSoundtrack, isPlaying: isSoundtrackPlaying } = useMusic('stardew')
+  // Reel is started/stopped from the RAF loop; keep it on a pausable channel.
+  const { play: playReel, pause: stopSound, isPlaying: isReelPlaying } = useMusic('reel')
 
   const paint = useCallback((progress: number) => {
     if (fishElRef.current) {
@@ -189,10 +182,10 @@ export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
 
       let progress = progressRef.current
       if (onRod) {
-        if (!isAudioPlayingRef.current) playReelRef.current()
+        if (!isReelPlaying()) playReelRef.current()
         progress = Math.min(100, progress + progressGainPerSec * dt)
       } else {
-        if (isAudioPlayingRef.current) stopSoundRef.current()
+        if (isReelPlaying()) stopSoundRef.current()
         progress = Math.max(0, progress - progressLosePerSec * dt)
       }
       progressRef.current = progress
@@ -228,17 +221,14 @@ export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) =
       rafRef.current = null
       lastTsRef.current = null
     }
-  }, [isAudioPlayingRef, paint])
+  }, [isReelPlaying, paint])
 
   const startHold = useCallback(() => {
-    if (!isSoundtrackPlayingRef.current) {
-      playSoundtrack()
-      isSoundtrackPlayingRef.current = true
-    }
+    if (!isSoundtrackPlaying()) playSoundtrack()
     if (isHoldingSpaceRef.current) return
     isHoldingSpaceRef.current = true
     setIsHoldingVisual(true)
-  }, [isSoundtrackPlayingRef, playSoundtrack])
+  }, [isSoundtrackPlaying, playSoundtrack])
 
   const endHold = useCallback(() => {
     isHoldingSpaceRef.current = false

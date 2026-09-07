@@ -15,7 +15,7 @@ import { UPSTracker } from './components/UPSTracker'
 import Image from 'next/image'
 import { VictoryScreen } from './VictoryScreen'
 import { RunStats } from './components/RunStats'
-import { useSound } from '../utils/useSounds'
+import { audioEngine, preloadAll, useSfx } from '../utils/audio'
 import { useEffectInitializer } from '../utils/useEffectUnsafe'
 import { useIsMobile } from '../utils/useIsMobile'
 import classNames from 'classnames'
@@ -34,11 +34,14 @@ export default function ThirtyFactorAuthentication() {
   }, [])
 
   const [isGameOver, setIsGameOver] = useState(false)
-  const { playSound: playErrorSound } = useSound('/thirty-factor-authentication/sounds/error.mp3')
-  const { playSound: playSuccessSound } = useSound(
-    '/thirty-factor-authentication/sounds/success.mp3',
-    0.2
-  )
+  const playErrorSound = useSfx('error')
+  const playSuccessSound = useSfx('success')
+
+  // Decoding doesn't need a gesture, so warm every SFX buffer as soon as the game
+  // mounts; the first tap then plays instantly instead of racing the preload.
+  useEffectInitializer(() => {
+    preloadAll()
+  }, [])
 
   const { content, controls, requiresLoad, baseProps } = useLevels()
   const {
@@ -71,6 +74,8 @@ export default function ThirtyFactorAuthentication() {
   }, [resetLevel])
 
   const startRun = useCallback(() => {
+    // Real click: unlock the audio context + iOS session before anything plays.
+    audioEngine.unlock()
     resetLevel()
     captureRunStarted()
     playSuccessSound()

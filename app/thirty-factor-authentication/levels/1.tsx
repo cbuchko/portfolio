@@ -3,6 +3,7 @@ import { PlayerIds, PlayerInformation } from '../player-constants'
 import { ControlProps, IdentitySelectProps } from './types'
 import classNames from 'classnames'
 import Image from 'next/image'
+import { audioEngine } from '@/app/utils/audio'
 
 export const OneContent = ({
   playerId,
@@ -28,6 +29,8 @@ export const OneContent = ({
   }, [playerId, validateAdvance, cancelAdvance])
 
   const handleCharacterSelect = (id: PlayerIds) => {
+    // Earliest tap in the whole flow — unlock audio here so the run's first SFX is instant.
+    audioEngine.unlock()
     if (playerId === id) {
       setPlayerId(undefined)
       localStorage.removeItem('playerId')

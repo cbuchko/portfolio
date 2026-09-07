@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { useMessageSpam } from '../useMessageSpam'
-import { useSound } from '@/app/utils/useSounds'
+import { useMusic, useSfx } from '@/app/utils/audio'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const messages = [
@@ -60,11 +60,23 @@ export const BombDefusalContent = ({
   const [isGameOver, setIsGameOver] = useState(false)
 
   const timerRef = useRef<NodeJS.Timeout>(null)
-  const audioRef = useRef<HTMLAudioElement>(null)
-  const { playSound: playExplosionSound } = useSound(
-    '/thirty-factor-authentication/sounds/explosion.mp3',
-    0.3
-  )
+  const resetTimeoutRef = useRef<NodeJS.Timeout>(null)
+  const ticking = useMusic('bombTicking')
+
+  // The post-explosion reset must not outlive the level, or it restarts the ticking
+  // after the strike has already moved the player on.
+  useEffect(() => {
+    return () => {
+      if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current)
+    }
+  }, [])
+  const playExplosionSound = useSfx('explosion')
+
+  // Ticking starts on mount (replaces the old <audio autoPlay loop>). This is a few
+  // seconds after the "advance" click so document activation still allows it.
+  useEffect(() => {
+    ticking.play()
+  }, [ticking])
 
   const [instructions, setInstructions] = useState<Instruction[]>()
   const [formattedInstructions, setFormattedInstructiosn] = useState<string>()
@@ -97,21 +109,21 @@ export const BombDefusalContent = ({
     setCode('')
     setIsGameOver(false)
     setInstructionStepIndex(0)
-    if (!audioRef.current) return
-    audioRef.current.currentTime = 0
-    audioRef.current.play()
-  }, [])
+    ticking.play({ restart: true })
+  }, [ticking])
 
   const handleExplosion = useCallback(() => {
     playExplosionSound()
-    audioRef.current?.pause()
+    ticking.pause()
     if (timerRef.current) clearTimeout(timerRef.current)
     setIsGameOver(true)
     handleLevelAdvance()
-    setTimeout(() => {
+    if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current)
+    resetTimeoutRef.current = setTimeout(() => {
+      resetTimeoutRef.current = null
       resetGame()
     }, 4000)
-  }, [handleLevelAdvance, resetGame, playExplosionSound])
+  }, [handleLevelAdvance, resetGame, playExplosionSound, ticking])
 
   useEffectInitializer(() => {
     if (timer === 0 && !isGameOver) {
@@ -134,7 +146,7 @@ export const BombDefusalContent = ({
     if (instructionStepIndex >= instructions.length - 1) {
       validateAdvance()
       if (timerRef.current) clearInterval(timerRef.current)
-      audioRef.current?.pause()
+      ticking.pause()
     }
   }
 
@@ -203,12 +215,6 @@ export const BombDefusalContent = ({
           {message}
         </div>
       )}
-      <audio
-        src="/thirty-factor-authentication/sounds/bomb-defusal.m4a"
-        autoPlay
-        loop
-        ref={audioRef}
-      />
       {isGameOver && (
         <div className="fixed inset-0 z-[9999] bg-red-500/50 pointer-events-none" />
       )}    </>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import classNames from 'classnames'
-import { playSfx, prefetchSound, useSound } from '@/app/utils/useSounds'
+import { playSfx, useMusic } from '@/app/utils/audio'
 import { ContentProps } from './types'
 import {
   CHEESE,
@@ -46,22 +46,13 @@ export const PizzatronContent = ({ handleLevelAdvance, isMobile }: ContentProps)
   const pizzaWrapRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
 
-  const { playSound: playSoundtrack, stopSound: stopSoundtrack } = useSound(
-    '/thirty-factor-authentication/sounds/pizzasong.mp3',
-    0.2,
-    true
-  )
-
-  useEffect(() => {
-    prefetchSound('/thirty-factor-authentication/sounds/place.mp3')
-  }, [])
+  const { play: playSoundtrack, stop: stopSoundtrack } = useMusic('pizzaSong')
 
   useEffect(() => {
     return () => {
       if (timeoutRef.current !== null) window.clearTimeout(timeoutRef.current)
-      stopSoundtrack()
     }
-  }, [stopSoundtrack])
+  }, [])
 
   useEffect(() => {
     if (phase !== 'ejecting' || ejectLeftPct === null) return
@@ -180,7 +171,7 @@ export const PizzatronContent = ({ handleLevelAdvance, isMobile }: ContentProps)
       nextBuild = { ...build, extras: [...build.extras, id as ExtraId] }
     }
     setBuild(nextBuild)
-    playSfx('/thirty-factor-authentication/sounds/place.mp3', 0.4)
+    playSfx('place', { volume: 0.4 })
 
     if (round && recipeMatches(round.recipe, nextBuild)) {
       requestAnimationFrame(() => resolveSuccess())
