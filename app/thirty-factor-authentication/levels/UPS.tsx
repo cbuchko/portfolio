@@ -37,7 +37,7 @@ export const UPSContent = ({
       </p>
       <div
         className={classNames('flex gap-12 mt-8 p-8 bg-gray-100 w-max mx-auto', {
-          'flex-col': isMobile,
+          'flex-col !mx-0 !w-full !max-w-full !p-4 !gap-6': isMobile,
         })}
       >
         <div>
@@ -61,7 +61,7 @@ export const UPSContent = ({
             className="mt-10"
           />
         </div>
-        <div className="my-6 ml-3">
+        <div className={classNames('my-6', { 'ml-3': !isMobile })}>
           <DeliveryNode title="Label Created" isComplete dateString={deliveryStart} />
           <DeliveryNode
             title="Dropped off at UPS Access Point"

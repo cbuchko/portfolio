@@ -299,11 +299,13 @@ export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => 
           }`}
           onPointerDown={(e) => {
             e.preventDefault()
+            e.currentTarget.setPointerCapture(e.pointerId)
             startHold()
           }}
           onPointerUp={endHold}
           onPointerCancel={endHold}
           onPointerLeave={endHold}
+          onContextMenu={(e) => e.preventDefault()}
         >
           REEL
         </button>

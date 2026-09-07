@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { useMessageSpam } from '../useMessageSpam'
 import { useMusic, useSfx } from '@/app/utils/audio'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { ExtrasPortal } from '../components/ExtrasPortal'
 
 const messages = [
   'hey what you up to?',
@@ -209,12 +210,14 @@ export const BombDefusalContent = ({
         </div>
       </div>
       {message && (
-        <div
-          key={message}
-          className="absolute -bottom-3 translate-y-[100%] left-0 w-full px-4 py-2 rounded-lg text-white text-message select-none shadow-lg whitespace-pre-line origin-bottom bg-[#27ad3b]"
-        >
-          {message}
-        </div>
+        <ExtrasPortal>
+          <div
+            key={message}
+            className="w-[var(--tfa-auth-width,100%)] px-4 py-2 rounded-lg text-white text-message select-none shadow-lg whitespace-pre-line bg-[#27ad3b]"
+          >
+            {message}
+          </div>
+        </ExtrasPortal>
       )}
       {isGameOver && (
         <div className="fixed inset-0 z-[9999] bg-red-500/50 pointer-events-none" />

@@ -3,6 +3,7 @@ import { ContentProps, ControlProps } from './types'
 import { makeCode } from '../utils'
 import { useMessageSpam } from '../useMessageSpam'
 import { TextInput } from '../components/TextInput'
+import { ExtrasPortal } from '../components/ExtrasPortal'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const messages = [
@@ -57,12 +58,14 @@ export const MessageSpamContent = ({
         onSubmit={handleLevelAdvance}
       />
       {message && (
-        <div
-          key={message}
-          className="absolute -bottom-12 left-0 w-full px-4 py-2 rounded-lg text-white text-message select-none shadow-lg bg-[#27ad3b]"
-        >
-          {message}
-        </div>
+        <ExtrasPortal>
+          <div
+            key={message}
+            className="w-[var(--tfa-auth-width,100%)] px-4 py-2 rounded-lg text-white text-message select-none shadow-lg bg-[#27ad3b]"
+          >
+            {message}
+          </div>
+        </ExtrasPortal>
       )}
     </>
   )

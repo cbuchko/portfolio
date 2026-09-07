@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { PlayerInformation } from '../player-constants'
 import { TextInput } from '../components/TextInput'
+import { ExtrasPortal } from '../components/ExtrasPortal'
 import { useIsMobile } from '@/app/utils/useIsMobile'
 import { mobileWidthBreakpoint } from '../constants'
 import classNames from 'classnames'
@@ -77,63 +78,64 @@ export const TaxReturnContent = ({
         onChange={handleInputChange}
         onSubmit={handleLevelAdvance}
       />
-      <div
-        className={classNames(
-          'absolute -bottom-12 border  -translate-x-[50%] translate-y-[100%] left-[50%] shadow-xl p-2 bg-gray-100',
-          { 'scale-75 !bottom-0': isMobile }
-        )}
-      >
-        <div className="text-center mb-2">2025 Income Tax Return</div>
-        <div className="border w-max h-max">
-          <div className="flex">
-            <FormCell label="Last name" text={lastName} />
-            <FormCell label="First name and initial(s)" text={firstName} />
-            <FormCell label="Date of Birth (YYYY/MM/DD)" text={dob} />
-          </div>
-          <div className="border-t pb-1">
-            <h3 className="text-sm p-2">Step 3 - Net Income</h3>
-            <FormLineItem label="Employment income" amount={taxItems.income} number={33} />
-            <FormLineItem label="Income tax deducted" amount={taxItems.incomeTax} number={34} />
-            <FormLineItem label="Employee CPP contributions" amount={taxItems.cpp} number={35} />
-            <FormLineItem label="Subtract line 34 and 35 from line 33" number={36} />
-            <FormLineItem
-              label="RRSP deduction (see Schedule 7 and attach receipts)"
-              amount={taxItems.rrsp}
-              number={37}
-            />
-            <FormLineItem
-              label="FHSA deduction (see Schedule 15 and attach receipts)"
-              amount={taxItems.fhsa}
-              number={38}
-            />
-            <FormLineItem
-              label="Clergy residence deduction (complete Form T1223)"
-              amount={taxItems.clergy}
-              number={39}
-            />
-            <FormLineItem
-              label="Number of cats saved from trees"
-              amount={taxItems.cats}
-              number={40}
-            />
-            <FormLineItem
-              label="Number of times donated by rounding up for charity"
-              amount={taxItems.charity}
-              number={41}
-            />
-            <FormLineItem label="Nose picker deduction" amount={taxItems.nosePicker} number={42} />
-            <FormLineItem label="Add line 37 and line 38" number={43} />
-            <FormLineItem label="Multiply line 39 and 41" number={44} />
-            <FormLineItem label="Multiply line 40 by line 43" number={45} />
-            <FormLineItem
-              label="Divide line 44 by line 42 (round down to a whole number)"
-              number={46}
-            />
-            <FormLineItem label="Add line 45 and line 46" number={47} />
-            <FormLineItem label="NET INCOME: Add line 36 and line 47" number={48} />
+      <ExtrasPortal>
+        <div
+          className={classNames('border shadow-xl p-2 bg-gray-100', {
+            '[zoom:0.75]': isMobile,
+          })}
+        >
+          <div className="text-center mb-2">2025 Income Tax Return</div>
+          <div className="border w-max h-max">
+            <div className="flex">
+              <FormCell label="Last name" text={lastName} />
+              <FormCell label="First name and initial(s)" text={firstName} />
+              <FormCell label="Date of Birth (YYYY/MM/DD)" text={dob} />
+            </div>
+            <div className="border-t pb-1">
+              <h3 className="text-sm p-2">Step 3 - Net Income</h3>
+              <FormLineItem label="Employment income" amount={taxItems.income} number={33} />
+              <FormLineItem label="Income tax deducted" amount={taxItems.incomeTax} number={34} />
+              <FormLineItem label="Employee CPP contributions" amount={taxItems.cpp} number={35} />
+              <FormLineItem label="Subtract line 34 and 35 from line 33" number={36} />
+              <FormLineItem
+                label="RRSP deduction (see Schedule 7 and attach receipts)"
+                amount={taxItems.rrsp}
+                number={37}
+              />
+              <FormLineItem
+                label="FHSA deduction (see Schedule 15 and attach receipts)"
+                amount={taxItems.fhsa}
+                number={38}
+              />
+              <FormLineItem
+                label="Clergy residence deduction (complete Form T1223)"
+                amount={taxItems.clergy}
+                number={39}
+              />
+              <FormLineItem
+                label="Number of cats saved from trees"
+                amount={taxItems.cats}
+                number={40}
+              />
+              <FormLineItem
+                label="Number of times donated by rounding up for charity"
+                amount={taxItems.charity}
+                number={41}
+              />
+              <FormLineItem label="Nose picker deduction" amount={taxItems.nosePicker} number={42} />
+              <FormLineItem label="Add line 37 and line 38" number={43} />
+              <FormLineItem label="Multiply line 39 and 41" number={44} />
+              <FormLineItem label="Multiply line 40 by line 43" number={45} />
+              <FormLineItem
+                label="Divide line 44 by line 42 (round down to a whole number)"
+                number={46}
+              />
+              <FormLineItem label="Add line 45 and line 46" number={47} />
+              <FormLineItem label="NET INCOME: Add line 36 and line 47" number={48} />
+            </div>
           </div>
         </div>
-      </div>
+      </ExtrasPortal>
     </>
   )
 }

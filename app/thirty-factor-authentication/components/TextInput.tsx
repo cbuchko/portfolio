@@ -7,6 +7,7 @@ export const TextInput = ({
   onChange,
   onSubmit,
   onClick,
+  onFocus,
 }: {
   value: string
   placeholder: string
@@ -14,6 +15,7 @@ export const TextInput = ({
   onChange: (value: string) => void
   onSubmit: () => void
   onClick?: () => void
+  onFocus?: () => void
 }) => {
   return (
     <input
@@ -22,6 +24,7 @@ export const TextInput = ({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       onClick={onClick}
+      onFocus={onFocus}
       onKeyDown={(e) => {
         if (!value) return
         if (e.key === 'Enter' || e.key === 'enter') onSubmit()

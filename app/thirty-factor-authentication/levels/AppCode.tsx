@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { makeAuthCode, shuffle } from '../utils'
-import { createPortal } from 'react-dom'
-import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 import { PinInput } from '../components/PinInput'
+import { ExtrasPortal } from '../components/ExtrasPortal'
 import classNames from 'classnames'
 
 export const AppCodeContent = ({
@@ -15,7 +14,6 @@ export const AppCodeContent = ({
   const { isCompact } = layout
   const [targetCode, setTargetCode] = useState(makeAuthCode(6))
   const [codeInput, setCodeInput] = useState('')
-  const [portalElement, setPortalElement] = useState<HTMLElement | null>(null)
 
   const handleInputChange = (input: string) => {
     setCodeInput(input)
@@ -34,11 +32,6 @@ export const AppCodeContent = ({
     [cancelAdvance]
   )
 
-  useEffectInitializer(() => {
-    const portalElement = document.getElementById('extras-portal')
-    setPortalElement(portalElement)
-  }, [])
-
   const apps = useMemo(() => {
     return shuffle([...appNames, 'Thirty Factor Auth'])
   }, [])
@@ -49,26 +42,24 @@ export const AppCodeContent = ({
     <>
       <p className="text-lg">Enter the code from your Authenticator App.</p>
       <PinInput value={codeInput} onChange={handleInputChange} onSubmit={handleLevelAdvance} />
-      {portalElement &&
-        createPortal(
-          <div className={classNames('flex flex-wrap justify-center', { 'mt-6': !isCompact })}>
-            {apps.map((app, idx) => {
-              const isTarget = app === 'Thirty Factor Auth'
-              return (
-                <AppCode
-                  key={idx}
-                  title={app}
-                  codeDefault={targetCode}
-                  isTarget={isTarget}
-                  setTargetCode={handleTargetSet}
-                  duration={duration}
-                  isDelayed
-                />
-              )
-            })}
-          </div>,
-          portalElement
-        )}
+      <ExtrasPortal>
+        <div className="flex w-full flex-wrap justify-center">
+          {apps.map((app, idx) => {
+            const isTarget = app === 'Thirty Factor Auth'
+            return (
+              <AppCode
+                key={idx}
+                title={app}
+                codeDefault={targetCode}
+                isTarget={isTarget}
+                setTargetCode={handleTargetSet}
+                duration={duration}
+                isDelayed
+              />
+            )
+          })}
+        </div>
+      </ExtrasPortal>
     </>
   )
 }

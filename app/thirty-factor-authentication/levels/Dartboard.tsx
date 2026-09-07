@@ -85,6 +85,7 @@ export const DartboardContent = ({ handleLevelAdvance }: ContentProps) => {
       <button
         className="w-full mx-auto mt-8 shadow-lg select-none border rounded-lg py-4 cursor-pointer hold-button active:bg-gray-200 disabled:bg-gray-300 disabled:pointer-events-none"
         onClick={handleDartFire}
+        onContextMenu={(e) => e.preventDefault()}
         disabled={!isPlaying}
       >
         THROW

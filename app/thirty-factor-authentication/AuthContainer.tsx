@@ -71,6 +71,20 @@ export const AuthContainer = ({
     if (!requiresLoad) setIsLoading(false)
   }, [level, requiresLoad])
 
+  useEffect(() => {
+    const card = document.getElementById('auth-container')
+    const portal = document.getElementById('extras-portal')
+    if (!card || !portal) return
+
+    const syncWidth = () => {
+      portal.style.setProperty('--tfa-auth-width', `${card.offsetWidth}px`)
+    }
+    syncWidth()
+    const observer = new ResizeObserver(syncWidth)
+    observer.observe(card)
+    return () => observer.disconnect()
+  }, [isCompact, isMobile, level, isPregame])
+
   const validateAdvance = useCallback(() => setIsAdvanceVerified(true), [])
   const cancelAdvance = useCallback(() => setIsAdvanceVerified(false), [])
 
@@ -88,9 +102,9 @@ export const AuthContainer = ({
     <>
       <div
         id="auth-container"
-        className={classNames('relative mt-28 shadow-md', {
+        className={classNames('relative mt-28 mb-4 shadow-md', {
           'opacity-0 pointer-events-none': isLoading && requiresLoad,
-          'mb-4 !mt-24': isCompact,
+          '!mt-24': isCompact,
           'mx-auto': !isMobile,
         })}
       >

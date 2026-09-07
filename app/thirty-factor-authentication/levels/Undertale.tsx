@@ -434,7 +434,11 @@ function BulletHell({
       </div>
       {/** Mobile Movement Buttons */}
       {isMobile && (
-        <div className="flex flex-col justify-center items-center gap-1 my-4">
+        <div
+          className="flex flex-col justify-center items-center gap-1 my-4"
+          onContextMenu={(e) => e.preventDefault()}
+          onPointerDown={(e) => e.preventDefault()}
+        >
           <button
             className="undertale-movement-button w-max"
             onPointerDown={() => handleDirectionClick('up')}

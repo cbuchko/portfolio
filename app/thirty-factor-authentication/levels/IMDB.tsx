@@ -106,6 +106,7 @@ export const IMDBContent = ({ playerId, handleLevelAdvance, layout }: ContentPro
           handleSubmit={handleSubmit}
           searchInput={searchInput}
           setSearchInput={setSearchInput}
+          isMobile={isMobile}
         />
         <button className="auth-button auth-button-primary" onClick={handleSubmit}>
           Submit
@@ -130,14 +131,17 @@ const MovieSearch = ({
   searchInput,
   setSearchInput,
   handleSubmit,
+  isMobile,
 }: {
   searchInput: string
   setSearchInput: (input: string) => void
   handleSubmit: () => void
+  isMobile: boolean
 }) => {
   const [movieResults, setMovieResults] = useState<Array<string>>([])
   const [debouncedInput, setDebouncedInput] = useState(searchInput)
   const [isDropdownVisible, setIsDropdownVisible] = useState(false)
+  const searchRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -147,36 +151,71 @@ const MovieSearch = ({
     return () => clearTimeout(id)
   }, [searchInput])
 
+  useEffect(() => {
+    if (!isDropdownVisible) return
+
+    const dismissIfOutside = (event: PointerEvent) => {
+      if (!searchRef.current?.contains(event.target as Node)) {
+        setIsDropdownVisible(false)
+      }
+    }
+
+    document.addEventListener('pointerdown', dismissIfOutside)
+    return () => document.removeEventListener('pointerdown', dismissIfOutside)
+  }, [isDropdownVisible])
+
   const fetchTMDB = async (query: string) => {
-    if (!query) return
-    const tmdbResult = await fetch(`/api/movies?query=${query}`)
-    const body = await tmdbResult.json()
-    setMovieResults(body)
+    if (!query) {
+      setMovieResults([])
+      return
+    }
+    try {
+      const tmdbResult = await fetch(`/api/movies?query=${encodeURIComponent(query)}`)
+      const body = await tmdbResult.json()
+      const titles = Array.isArray(body) ? body : []
+      setMovieResults(titles)
+    } catch {
+      setMovieResults([])
+    }
   }
 
   useEffectInitializer(() => {
     fetchTMDB(debouncedInput)
   }, [debouncedInput])
 
+  const pickTitle = (title: string) => {
+    setSearchInput(title)
+    setIsDropdownVisible(false)
+  }
+
   return (
-    <div className="relative w-full">
+    <div ref={searchRef} className="relative z-[110] w-full">
       <TextInput
-        onChange={setSearchInput}
+        onChange={(value) => {
+          setSearchInput(value)
+          setIsDropdownVisible(true)
+        }}
         value={searchInput}
         onClick={() => setIsDropdownVisible(true)}
+        onFocus={() => setIsDropdownVisible(true)}
         onSubmit={handleSubmit}
         placeholder="Search for your answer..."
         className=""
       />
       {movieResults.length > 0 && isDropdownVisible && (
-        <ul className="absolute bg-white h-max border w-full rounded-md mt-1 overflow-y-auto max-h-[300px]">
+        <ul
+          className={classNames(
+            'absolute z-[110] bg-white border w-full rounded-md overflow-y-auto max-h-[240px]',
+            isMobile ? 'bottom-full mb-1' : 'top-full mt-1'
+          )}
+        >
           {movieResults.map((title, idx) => (
             <li
               key={idx}
-              className="p-2 py-1 hover:bg-gray-100 cursor-pointer"
-              onClick={() => {
-                setSearchInput(title)
-                setIsDropdownVisible(false)
+              className="p-2 py-3 min-h-11 hover:bg-gray-100 cursor-pointer"
+              onPointerDown={(e) => {
+                e.preventDefault()
+                pickTitle(title)
               }}
             >
               {title}

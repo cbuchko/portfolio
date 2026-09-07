@@ -6,6 +6,7 @@ import './waves.css'
 import { useLevels } from './levels/useLevel'
 import { OneContent, OneControls } from './levels/1'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { PlayerIds, PlayerInformation } from './player-constants'
 import { devMode, forceLevel, maxLevel } from './constants'
 import { DndProvider } from 'react-dnd'
@@ -26,12 +27,14 @@ export default function ThirtyFactorAuthentication() {
   const { isMobile, isCompact, isTouch } = layout
   const [playerId, setPlayerId] = useState<PlayerIds>()
   const [hasStarted, setHasStarted] = useState(forceLevel > 0)
+  const [devHudReady, setDevHudReady] = useState(false)
 
   useEffectInitializer(() => {
     const storedPlayerId = localStorage.getItem('playerId')
     if (storedPlayerId !== null && storedPlayerId in PlayerInformation) {
       setPlayerId(Number(storedPlayerId) as PlayerIds)
     }
+    setDevHudReady(true)
   }, [])
 
   const [isGameOver, setIsGameOver] = useState(false)
@@ -158,7 +161,7 @@ export default function ThirtyFactorAuthentication() {
         )}
         {showLevels && (
           <>
-            <div id="extras-portal" className={classNames({ 'mt-4': isCompact })} />
+            <div id="extras-portal" className="flex w-full flex-col items-center" />
             {!!upsTrackingCode && !!upsTrackingTime && (
               <UPSTracker code={upsTrackingCode} time={upsTrackingTime} isMobile={isMobile} />
             )}
@@ -191,23 +194,27 @@ export default function ThirtyFactorAuthentication() {
             </button>
           </div>
         )}
-        {devMode && hasStarted && (
-          <div className="fixed flex flex-col text-left w-max p-2 gap-3">
-            <h2 className="mb-2">Dev Mode:</h2>
-            <button
-              className="border p-1 cursor-pointer"
-              onClick={() => setLevel((level) => level + 1)}
-            >
-              Next Level
-            </button>
-            <button
-              className="border p-1 cursor-pointer"
-              onClick={() => setLevel((level) => level - 1)}
-            >
-              Previous Level
-            </button>
-          </div>
-        )}
+        {devMode &&
+          hasStarted &&
+          devHudReady &&
+          createPortal(
+            <div className="fixed top-0 left-0 z-[200] flex flex-col text-left w-max p-2 gap-3">
+              <h2 className="mb-2">Dev Mode:</h2>
+              <button
+                className="border p-1 cursor-pointer bg-white"
+                onClick={() => setLevel((level) => level + 1)}
+              >
+                Next Level
+              </button>
+              <button
+                className="border p-1 cursor-pointer bg-white"
+                onClick={() => setLevel((level) => level - 1)}
+              >
+                Previous Level
+              </button>
+            </div>,
+            document.body
+          )}
         {/* <PortfolioHeader /> */}
       </div>
     </>

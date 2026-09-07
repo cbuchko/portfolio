@@ -173,7 +173,12 @@ body.nm-mobile-pan #auth-container {
 body.nm-mobile-pan #tfa-logo {
   position: fixed;
   left: 50%;
+  width: calc(100% - 2rem);
+  max-width: none !important;
+  box-sizing: border-box;
   top: calc((100vh - var(--nm-ui-h)) / 2 - 64px);
+  /* Tailwind v4 translate-x stacks with transform and double-shifts left. */
+  translate: none;
   transform: translate(-50%, -100%) translate(var(--nm-pan-x, 0px), var(--nm-pan-y, 0px));
   z-index: 1;
 }
