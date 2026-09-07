@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { clampPositionsToScreen } from '../utils'
 import Image from 'next/image'
@@ -14,6 +14,7 @@ export const AquariumContent = ({
 }: ContentProps) => {
   const [maxFish, setMaxFish] = useState(generateMaxFish())
   const [fishCount, setFishCount] = useState(0)
+  const [waveId, setWaveId] = useState(0)
   const [numberInput, setNumberInput] = useState('')
 
   const handleInputChange = (input: string) => {
@@ -25,16 +26,25 @@ export const AquariumContent = ({
     }
   }
 
+  useEffect(() => {
+    if (numberInput !== '' && fishCount === parseInt(numberInput)) {
+      validateAdvance()
+    } else {
+      cancelAdvance()
+    }
+  }, [fishCount, numberInput, validateAdvance, cancelAdvance])
+
   return (
     <>
       <p className="text-lg">Oh no! Our aquarium broke and the fish are loose!</p>
       <p className="text-lg">Please count how many fish swim by!</p>
       <div className="w-full flex justify-end">
         <button
-          className="underline text-sm cursor-pointer"
+          className="underline text-sm font-bold cursor-pointer"
           onClick={() => {
             setMaxFish(generateMaxFish())
             setFishCount(0)
+            setWaveId((id) => id + 1)
           }}
         >
           Reset
@@ -47,7 +57,12 @@ export const AquariumContent = ({
         onSubmit={handleLevelAdvance}
       />
       {typeof window !== 'undefined' && (
-        <FishTank maxFish={maxFish} fishCount={fishCount} setFishCount={setFishCount} />
+        <FishTank
+          maxFish={maxFish}
+          fishCount={fishCount}
+          setFishCount={setFishCount}
+          waveId={waveId}
+        />
       )}
       <div className="fixed top-0 left-0 h-screen w-screen bg-blue-500/30 pointer-events-none" />
     </>
@@ -58,34 +73,24 @@ const FishTank = ({
   fishCount,
   setFishCount,
   maxFish,
+  waveId,
 }: {
   fishCount: number
   setFishCount: React.Dispatch<React.SetStateAction<number>>
   maxFish: number
+  waveId: number
 }) => {
-  const intervalRef = useRef<NodeJS.Timeout>(null)
-
-  //resets the game
   useEffect(() => {
-    if (fishCount === 0 && intervalRef.current) clearInterval(intervalRef.current)
-  }, [fishCount])
-
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      const increase = Math.random() < 0.2 ? 2 : 1
-      setFishCount((count) => count + increase)
+    const interval = window.setInterval(() => {
+      setFishCount((count) => {
+        if (count >= maxFish) return count
+        const increase = Math.random() < 0.2 ? 2 : 1
+        return Math.min(maxFish, count + increase)
+      })
     }, 500)
 
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
-    }
-  }, [fishCount, setFishCount])
-
-  useEffect(() => {
-    if (maxFish <= fishCount && intervalRef.current) {
-      clearInterval(intervalRef.current)
-    }
-  }, [fishCount, maxFish])
+    return () => window.clearInterval(interval)
+  }, [waveId, maxFish, setFishCount])
 
   return Array.from({ length: fishCount }).map((_, idx) => <Fish key={idx} />)
 }
