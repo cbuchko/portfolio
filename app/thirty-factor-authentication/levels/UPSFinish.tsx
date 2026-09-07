@@ -1,4 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+} from 'react'
 import { createPortal } from 'react-dom'
 import { ContentProps, ControlProps } from './types'
 import './ups-finish/night-manor.css'
@@ -67,6 +75,14 @@ import {
 const isTrimmerHalf = (id: ItemId | TargetId): id is TrimmerHalfId =>
   id === 'trimmersPartA' || id === 'trimmersPartB'
 
+const getAuthSubmitRects = () =>
+  [...document.querySelectorAll<HTMLElement>('#auth-controls .auth-button')].map((el) =>
+    el.getBoundingClientRect()
+  )
+
+const atSubmit = (cursor: Point, pad: number) =>
+  getAuthSubmitRects().some((rect) => atCursor(cursor, rect, pad))
+
 export const UPSFinishContent = ({
   handleLevelAdvance,
   validateAdvance,
@@ -97,9 +113,8 @@ export const UPSFinishContent = ({
       nightManorDvd: nightManorDvd ?? filmDvd ?? 'Unknown Title',
     }
   }, [playerId])
-  const postItDecoy = useMemo(
-    () => POST_IT_DECOY_CODES[Math.floor(Math.random() * POST_IT_DECOY_CODES.length)],
-    []
+  const [postItDecoy] = useState(
+    () => POST_IT_DECOY_CODES[Math.floor(Math.random() * POST_IT_DECOY_CODES.length)]
   )
   const zodiac = useMemo(() => parsePlayerZodiac(PlayerInformation[playerId].zodiac), [playerId])
 
@@ -108,7 +123,11 @@ export const UPSFinishContent = ({
     [dvdTitles, postItDecoy, zodiac]
   )
 
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  )
   const [pointer, setPointer] = useState<Point>({ x: -200, y: -200 })
   const [cone, setCone] = useState<Point>({ x: -200, y: -200 })
   const [inventory, setInventory] = useState<ItemId[]>([])
@@ -122,7 +141,8 @@ export const UPSFinishContent = ({
   const [worldGone, setWorldGone] = useState<Partial<Record<ItemId, boolean>>>({})
   const [message, setMessage] = useState<string>(INTRO_COPY.body)
   const [showText, setShowText] = useState(true)
-  const [cursorReady, setCursorReady] = useState(false)
+  const [desktopCursorReady, setDesktopCursorReady] = useState(false)
+  const cursorReady = mobile ? mounted : desktopCursorReady
   const [overHotspot, setOverHotspot] = useState(false)
   const [pan, setPan] = useState<Point>({ x: 0, y: 0 })
   const [mobileMetrics, setMobileMetrics] = useState<MobilePanMetrics | null>(null)
@@ -162,12 +182,15 @@ export const UPSFinishContent = ({
   })
   const inventoryRef = useRef(inventory)
   const holdingRef = useRef(holding)
-  inventoryRef.current = inventory
-  holdingRef.current = holding
-  pointerRef.current = pointer
-  coneRef.current = cone
-  panRef.current = pan
-  mobileMetricsRef.current = mobileMetrics
+
+  useEffect(() => {
+    inventoryRef.current = inventory
+    holdingRef.current = holding
+    pointerRef.current = pointer
+    coneRef.current = cone
+    panRef.current = pan
+    mobileMetricsRef.current = mobileMetrics
+  })
 
   const {
     play: playSoundtrack,
@@ -196,6 +219,14 @@ export const UPSFinishContent = ({
     setMessage(text)
     setShowText(true)
   }, [])
+
+  const putAwayHeld = useCallback(() => {
+    const id = holdingRef.current
+    if (!id) return false
+    setHolding(null)
+    say(UI_COPY.putAway, id)
+    return true
+  }, [say])
 
   /** Same object that opened the line: finish typewriter, then dismiss, then replay. */
   const consumePromptClick = (source: string) => {
@@ -227,10 +258,12 @@ export const UPSFinishContent = ({
   }, [typingDone, completeTyping, dismissText, ensureMusic])
 
   useEffect(() => {
-    setMounted(true)
-    setIsLoading(false)
-    setUPSTrackingCode('')
-    setUPSTrackingTime(0)
+    const id = window.requestAnimationFrame(() => {
+      setIsLoading(false)
+      setUPSTrackingCode('')
+      setUPSTrackingTime(0)
+    })
+    return () => window.cancelAnimationFrame(id)
   }, [setIsLoading, setUPSTrackingCode, setUPSTrackingTime])
 
   useEffect(() => {
@@ -241,7 +274,7 @@ export const UPSFinishContent = ({
     }
     window.addEventListener('contextmenu', onContextMenu)
     return () => window.removeEventListener('contextmenu', onContextMenu)
-  }, [mounted])
+  }, [mounted, putAwayHeld])
 
   useEffect(() => {
     prefetchPropImages()
@@ -256,17 +289,13 @@ export const UPSFinishContent = ({
   }, [])
 
   useEffect(() => {
-    if (!mounted) return
-    if (mobile) {
-      setCursorReady(true)
-      return
-    }
+    if (!mounted || mobile) return
     const uiFraction = 0.25
     const syncPointer = (e: PointerEvent) => {
       const next = { x: e.clientX, y: e.clientY }
       pointerRef.current = next
       setPointer(next)
-      setCursorReady(true)
+      setDesktopCursorReady(true)
 
       if (FLASHLIGHT_ENABLED) {
         if (next.y < window.innerHeight * (1 - uiFraction)) {
@@ -402,14 +431,6 @@ export const UPSFinishContent = ({
     say(UI_COPY.holdItem(itemLabel(id)), id)
   }
 
-  const putAwayHeld = () => {
-    const id = holdingRef.current
-    if (!id) return false
-    setHolding(null)
-    say(UI_COPY.putAway, id)
-    return true
-  }
-
   const examineDeco = (id: DecoSpawnId) => {
     if (holding) {
       say(UI_COPY.useless, id)
@@ -474,14 +495,6 @@ export const UPSFinishContent = ({
     validateAdvance()
   }
 
-  const getAuthSubmitRects = () =>
-    [...document.querySelectorAll<HTMLElement>('#auth-controls .auth-button')].map((el) =>
-      el.getBoundingClientRect()
-    )
-
-  const atSubmit = (cursor: Point, pad: number) =>
-    getAuthSubmitRects().some((rect) => atCursor(cursor, rect, pad))
-
   const digDirtMound = () => {
     if (dirtDug) return
     setDirtDug(true)
@@ -539,7 +552,7 @@ export const UPSFinishContent = ({
     say(SCENE_PROP_COPY.hedge.taken, 'hedge')
   }
 
-  const useOn = (target: TargetId) => {
+  const applyHeldTo = (target: TargetId) => {
     if (!holding) return false
 
     const openingPackage =
@@ -613,7 +626,7 @@ export const UPSFinishContent = ({
     opts: { examine: string; takeId?: ItemId; takeLabel?: string }
   ) => {
     if (holding) {
-      useOn(target)
+      applyHeldTo(target)
       return
     }
 
@@ -629,7 +642,7 @@ export const UPSFinishContent = ({
   const onInventoryClick = (id: ItemId) => {
     if (id === 'packingSlip') {
       if (holding && holding !== 'packingSlip') {
-        useOn('packingSlip')
+        applyHeldTo('packingSlip')
         return
       }
       setHolding(null)
@@ -641,7 +654,7 @@ export const UPSFinishContent = ({
         putAwayHeld()
         return
       }
-      useOn(id as TargetId)
+      applyHeldTo(id as TargetId)
       return
     }
     holdItem(id)
@@ -685,9 +698,12 @@ export const UPSFinishContent = ({
 
   useEffect(() => {
     if (!cursorReady) return
-    const cursor = mobile ? getMobileFlashlightCenter() : pointer
-    const next = isOverInteractable(cursor)
-    setOverHotspot((prev) => (prev === next ? prev : next))
+    const id = window.requestAnimationFrame(() => {
+      const cursor = mobile ? getMobileFlashlightCenter() : pointer
+      const next = isOverInteractable(cursor)
+      setOverHotspot((prev) => (prev === next ? prev : next))
+    })
+    return () => window.cancelAnimationFrame(id)
   }, [
     cursorReady,
     mobile,
@@ -731,7 +747,7 @@ export const UPSFinishContent = ({
       const rect = itemRefs.current[pickup.id]?.getBoundingClientRect()
       if (atCursor(cursor, rect, hitPad)) {
         if (!consumePromptClick(pickup.id)) {
-          if (holding) useOn(pickup.id as TargetId)
+          if (holding) applyHeldTo(pickup.id as TargetId)
           else takeItem(pickup.id, itemLabel(pickup.id))
         }
         acted = true
@@ -741,7 +757,7 @@ export const UPSFinishContent = ({
 
     if (!acted && atCursor(cursor, hedgeRef.current?.getBoundingClientRect(), hitPad)) {
       if (!consumePromptClick('hedge')) {
-        if (holding) useOn('hedge')
+        if (holding) applyHeldTo('hedge')
         else if (worldGone.box) say(SCENE_PROP_COPY.hedge.emptied, 'hedge')
         else if (boxFreed) takeBoxFromHedge()
         else say(SCENE_PROP_COPY.hedge.blocked, 'hedge')
@@ -751,7 +767,7 @@ export const UPSFinishContent = ({
 
     if (!acted && atCursor(cursor, matRef.current?.getBoundingClientRect(), hitPad)) {
       if (!consumePromptClick('mat')) {
-        if (holding) useOn('mat')
+        if (holding) applyHeldTo('mat')
         else if (!worldGone.toolboxKey) {
           setInventory((prev) => (prev.includes('toolboxKey') ? prev : [...prev, 'toolboxKey']))
           setWorldGone((prev) => ({ ...prev, toolboxKey: true }))
@@ -766,7 +782,7 @@ export const UPSFinishContent = ({
 
     if (!acted && atCursor(cursor, toolboxRef.current?.getBoundingClientRect(), hitPad)) {
       if (!consumePromptClick('toolbox')) {
-        if (holding) useOn('toolbox')
+        if (holding) applyHeldTo('toolbox')
         else {
           activateTarget('toolbox', {
             examine: toolboxOpen
@@ -780,7 +796,7 @@ export const UPSFinishContent = ({
 
     if (!acted && atCursor(cursor, dirtRef.current?.getBoundingClientRect(), hitPad)) {
       if (!consumePromptClick('dirtMound')) {
-        if (holding) useOn('dirtMound')
+        if (holding) applyHeldTo('dirtMound')
         else {
           activateTarget('dirtMound', {
             examine: dirtDug ? SCENE_PROP_COPY.dirtMound.dug : SCENE_PROP_COPY.dirtMound.buried,
@@ -792,7 +808,7 @@ export const UPSFinishContent = ({
 
     if (!acted && atCursor(cursor, garbageCanRef.current?.getBoundingClientRect(), hitPad)) {
       if (!consumePromptClick('garbageCan')) {
-        if (holding) useOn('garbageCan')
+        if (holding) applyHeldTo('garbageCan')
         else if (!garbageRummaged) rummageGarbageCan()
         else activateTarget('garbageCan', { examine: SCENE_PROP_COPY.garbageCan.rummaged })
       }
@@ -804,7 +820,7 @@ export const UPSFinishContent = ({
       atCursor(cursor, dropzoneRef.current?.getBoundingClientRect(), mobile ? 18 : 10)
     ) {
       if (!consumePromptClick('session')) {
-        if (holding) useOn('session')
+        if (holding) applyHeldTo('session')
         else activateTarget('session', { examine: getSessionExamine(kiosk, packageOpened) })
       }
       acted = true

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { makeAuthCode, shuffle } from '../utils'
 import { PinInput } from '../components/PinInput'
@@ -32,12 +32,12 @@ export const AppCodeContent = ({
     [cancelAdvance]
   )
 
-  const apps = useMemo(() => {
+  const [apps] = useState(() => {
     const decoys = shuffle([...appNames])
     const maxIndex = Math.max(1, Math.floor((decoys.length + 1) * 0.75))
     decoys.splice(Math.floor(Math.random() * maxIndex), 0, TARGET_APP)
     return decoys
-  }, [])
+  })
 
   // Short/narrow screens (phones, landscape Kindles) get more time to hunt.
   const duration = isCompact ? 16 : 8

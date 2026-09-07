@@ -170,7 +170,7 @@ export const measureAuthExclusion = (
   let left = toWorldX(authRect.left) - padX
   let right = toWorldX(authRect.right) + padX
   let top = toWorldY(authRect.top) - padY
-  let bottom = toWorldY(authRect.bottom) + padY
+  const bottom = toWorldY(authRect.bottom) + padY
 
   if (logo) {
     const logoRect = logo.getBoundingClientRect()
@@ -314,7 +314,7 @@ export const generateMobilePropLayout = (metrics: MobilePanMetrics): Record<Prop
   const { spawnBounds: bounds } = metrics
   const order = shuffleOrder(PUZZLE_PROP_ORDER)
   const placed: Partial<Record<PropSpawnId, SpawnPos>> = {}
-  let slots = shuffleOrder(getMobileSpawnSlots(metrics))
+  const slots = shuffleOrder(getMobileSpawnSlots(metrics))
 
   for (const id of order) {
     let found: SpawnPos | null = null

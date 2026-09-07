@@ -40,7 +40,7 @@ export const SecurityQuestionsContent = ({
   return (
     <>
       <p className="text-lg">
-        Let&apos;s start with your Thirty Factor "Ultra Secure" Security Question™.
+        Let&apos;s start with your Thirty Factor &quot;Ultra Secure&quot; Security Question™.
       </p>
       <p className="text-base mt-4 font-medium">{question.prompt}</p>
       <fieldset className="mt-3 border-0 p-0 m-0">

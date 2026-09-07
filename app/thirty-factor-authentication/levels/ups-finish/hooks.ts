@@ -2,10 +2,16 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { TYPEWRITER_MS } from './prop-config'
 
 export const useTypewriter = (text: string, active: boolean) => {
-  const [visible, setVisible] = useState('')
+  const [visible, setVisible] = useState(active ? text.slice(0, 1) : '')
   const [done, setDone] = useState(false)
-  const indexRef = useRef(0)
+  const [run, setRun] = useState({ text, active })
   const intervalRef = useRef<number | null>(null)
+
+  if (run.text !== text || run.active !== active) {
+    setRun({ text, active })
+    setVisible(active ? text.slice(0, 1) : '')
+    setDone(false)
+  }
 
   const stopInterval = () => {
     if (intervalRef.current !== null) {
@@ -16,36 +22,28 @@ export const useTypewriter = (text: string, active: boolean) => {
 
   const complete = useCallback(() => {
     stopInterval()
-    indexRef.current = text.length
     setVisible(text)
     setDone(true)
   }, [text])
 
   useEffect(() => {
     stopInterval()
-    if (!active) {
-      setVisible('')
-      setDone(false)
-      indexRef.current = 0
-      return
-    }
-
-    // Start on the first character immediately — never flash an empty message panel.
-    indexRef.current = 1
-    setVisible(text.slice(0, 1))
-    setDone(false)
+    if (!active || done) return
 
     intervalRef.current = window.setInterval(() => {
-      indexRef.current += 1
-      setVisible(text.slice(0, indexRef.current))
-      if (indexRef.current >= text.length) {
-        stopInterval()
-        setDone(true)
-      }
+      setVisible((prev) => {
+        const nextLen = Math.min(prev.length + 1, text.length)
+        const next = text.slice(0, nextLen)
+        if (nextLen >= text.length) {
+          stopInterval()
+          setDone(true)
+        }
+        return next
+      })
     }, TYPEWRITER_MS)
 
     return stopInterval
-  }, [text, active])
+  }, [text, active, done])
 
-  return { visible, done, complete }
+  return { visible: active ? visible : '', done: active && done, complete }
 }
