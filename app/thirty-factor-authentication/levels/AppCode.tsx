@@ -11,7 +11,7 @@ export const AppCodeContent = ({
   handleLevelAdvance,
   layout,
 }: ContentProps) => {
-  const { isCompact } = layout
+  const { isCompact, isMobile } = layout
   const [targetCode, setTargetCode] = useState(makeAuthCode(6))
   const [codeInput, setCodeInput] = useState('')
 
@@ -33,19 +33,27 @@ export const AppCodeContent = ({
   )
 
   const apps = useMemo(() => {
-    return shuffle([...appNames, 'Thirty Factor Auth'])
+    const decoys = shuffle([...appNames])
+    const maxIndex = Math.max(1, Math.floor((decoys.length + 1) * 0.75))
+    decoys.splice(Math.floor(Math.random() * maxIndex), 0, TARGET_APP)
+    return decoys
   }, [])
 
   // Short/narrow screens (phones, landscape Kindles) get more time to hunt.
-  const duration = isCompact ? 10 : 5
+  const duration = isCompact ? 16 : 8
   return (
     <>
       <p className="text-lg">Enter the code from your Authenticator App.</p>
       <PinInput value={codeInput} onChange={handleInputChange} onSubmit={handleLevelAdvance} />
       <ExtrasPortal>
-        <div className="flex w-full flex-wrap justify-center">
+        <div
+          className={classNames({
+            'grid w-[var(--tfa-auth-width,100%)] grid-cols-4 overflow-hidden': isMobile,
+            'flex w-full flex-wrap justify-center': !isMobile,
+          })}
+        >
           {apps.map((app, idx) => {
-            const isTarget = app === 'Thirty Factor Auth'
+            const isTarget = app === TARGET_APP
             return (
               <AppCode
                 key={idx}
@@ -55,6 +63,7 @@ export const AppCodeContent = ({
                 setTargetCode={handleTargetSet}
                 duration={duration}
                 isDelayed
+                compact={isMobile}
               />
             )
           })}
@@ -71,6 +80,7 @@ type AppCodeProps = {
   setTargetCode?: (code: string) => void
   duration: number
   isDelayed?: boolean
+  compact?: boolean
 }
 
 export const AppCode = ({
@@ -80,6 +90,7 @@ export const AppCode = ({
   setTargetCode,
   duration,
   isDelayed,
+  compact,
 }: AppCodeProps) => {
   const [elapsed, setElapsed] = useState(0)
   const [code, setCode] = useState(isTarget ? codeDefault : makeAuthCode(6))
@@ -111,8 +122,8 @@ export const AppCode = ({
 
   const progress = 0.999999 - elapsed / duration // 1 → 0
 
-  const size = 40
-  const radius = 20
+  const size = compact ? 32 : 40
+  const radius = compact ? 12 : 20
   const cx = size / 2
   const cy = size / 2
   const angle = 360 * progress
@@ -133,20 +144,37 @@ export const AppCode = ({
   `
 
   return (
-    <div className="p-2 border flex justify-between items-center gap-4 select-none">
-      <div>
-        <div className="text-xs">{title}</div>
-        <div className="mono text-3xl" style={{ color }}>
-          {code}
+    <div
+      className={classNames('border select-none', {
+        'w-full min-w-0 px-1 py-0.5 -mb-px -mr-px': compact,
+        'flex items-center justify-between p-2 gap-4': !compact,
+      })}
+    >
+      {compact ? (
+        <div className="min-w-0">
+          <div className="text-xs leading-none break-words mt-2">{title}</div>
+          <div className="flex min-w-0 items-center justify-between gap-0.5">
+            <div className="mono text-lg tabular-nums leading-none" style={{ color }}>
+              {code}
+            </div>
+            <svg width={size} height={size} className="block shrink-0">
+              <path d={pathData} fill={color} />
+            </svg>
+          </div>
         </div>
-      </div>
-      <div>
-        <div>
+      ) : (
+        <>
+          <div>
+            <div className="text-xs">{title}</div>
+            <div className="mono text-3xl tabular-nums" style={{ color }}>
+              {code}
+            </div>
+          </div>
           <svg width={size} height={size}>
             <path d={pathData} fill={color} />
           </svg>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   )
 }
@@ -161,6 +189,8 @@ export const AppCodeControls = ({ handleLevelAdvance }: ControlProps) => {
     </>
   )
 }
+
+const TARGET_APP = 'Thirty Factor Auth'
 
 const appNames: string[] = [
   'Google',

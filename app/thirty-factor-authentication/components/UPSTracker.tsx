@@ -7,11 +7,11 @@ import { useSfx } from '@/app/utils/audio'
 type UPSTrackerProps = { code: string; time: number; isMobile: boolean }
 
 const firstDelay = 1000 * 30
-const secondDelay = 1000 * 60 * 2
-const thirdDelay = 1000 * 60 * 4
-const fourthDelay = 1000 * 60 * 8
-const fifthDelay = 1000 * 60 * 12
-const sixthDelay = 1000 * 60 * 15
+const secondDelay = 1000 * 60
+const thirdDelay = 1000 * 60 * 2
+const fourthDelay = 1000 * 60 * 2
+const fifthDelay = 1000 * 60 * 2
+const sixthDelay = 1000 * 60 * 4
 
 export const UPSTracker = ({ code, time, isMobile }: UPSTrackerProps) => {
   const [timeString, setTimeString] = useState(getFormattedDate(time))

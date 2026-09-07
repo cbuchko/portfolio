@@ -71,7 +71,12 @@ export const QuotesContent = ({ playerId, handleLevelAdvance, layout }: ContentP
   return (
     <>
       <p className="text-lg">Which of these quotes have you said?</p>
-      <div className={classNames('flex gap-5 m-4 mt-8 items-center', { 'flex-col': isMobile })}>
+      <div
+        className={classNames('flex items-center', {
+          'm-2 mt-4 flex-col gap-3': isMobile,
+          'm-4 mt-8 gap-5': !isMobile,
+        })}
+      >
         <QuoteBox
           quote={matchup[0].quote}
           origin={matchup[0].origin}
@@ -81,25 +86,28 @@ export const QuotesContent = ({ playerId, handleLevelAdvance, layout }: ContentP
           isShowingOrigins={isShowingOrigins}
           isMobile={isMobile}
         />
-        <div className="w-[80px] h-[80px] flex items-center justify-center text-4xl border-2 p-4 rounded-full">
+        <div
+          className={classNames(
+            'flex shrink-0 items-center justify-center rounded-full border-2',
+            { 'h-14 w-14 text-xl': isMobile, 'h-20 w-20 text-4xl': !isMobile }
+          )}
+        >
           {!displaySuccess && !displayFailure && <div>OR</div>}
           {displaySuccess && (
             <Image
               src="/thirty-factor-authentication/icons/green-checkmark.svg"
               alt="check"
-              width={36}
-              height={36}
+              width={isMobile ? 24 : 36}
+              height={isMobile ? 24 : 36}
             />
           )}
           {displayFailure && (
-            <div className="text-red-500 h-[36px] w-[36px]">
-              <Image
-                src={'/thirty-factor-authentication/icons/red-x.svg'}
-                width={36}
-                height={36}
-                alt="X"
-              />
-            </div>
+            <Image
+              src={'/thirty-factor-authentication/icons/red-x.svg'}
+              width={isMobile ? 24 : 36}
+              height={isMobile ? 24 : 36}
+              alt="X"
+            />
           )}
         </div>
         <QuoteBox
@@ -112,7 +120,7 @@ export const QuotesContent = ({ playerId, handleLevelAdvance, layout }: ContentP
           isMobile={isMobile}
         />
       </div>
-      <div className="flex gap-4 justify-center mt-8">
+      <div className={classNames('flex justify-center', { 'mt-4 gap-3': isMobile, 'mt-8 gap-4': !isMobile })}>
         <Checkbox isChecked={successCount > 0} />
         <Checkbox isChecked={successCount > 1} />
         <Checkbox isChecked={successCount > 2} />
@@ -144,16 +152,20 @@ const QuoteBox = ({
     <div
       onClick={onClick}
       className={classNames(
-        'w-[400px] h-[400px] flex flex-col items-center justify-center text-center text-2xl border-2 p-4 py-16 cursor-pointer hover:scale-105 transition-transform',
-        { 'border-green-500': displaySuccess, 'border-red-500': displayFailure },
-        { 'w-auto h-auto': isMobile }
+        'flex aspect-square flex-col items-center justify-center text-center border-2 cursor-pointer hover:scale-105 transition-transform',
+        {
+          'w-[min(220px,100%)] p-2.5 text-base': isMobile,
+          'w-[min(400px,calc((100vw-12rem)/2))] p-4 text-2xl': !isMobile,
+          'border-green-500': displaySuccess,
+          'border-red-500': displayFailure,
+        }
       )}
     >
-      <div className="relative">
+      <div className="relative px-1">
         {`"${quote}"`}
         <div
           className={classNames(
-            'absolute -bottom-10 text-center w-full transition-opacity pointer-events-none',
+            'absolute left-0 -bottom-8 w-full text-center text-sm transition-opacity pointer-events-none',
             {
               'opacity-0': !isShowingOrigins,
               'opacity-100': isShowingOrigins,

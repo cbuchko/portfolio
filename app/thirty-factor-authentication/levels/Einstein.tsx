@@ -1,14 +1,33 @@
 import { useEffect, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { DropdownSelector } from '../components/dropdown-selector'
+import { EinsteinPicker } from '../components/EinsteinPicker'
 import classNames from 'classnames'
 
 type CategoryIds = 'color' | 'nationality' | 'drink' | 'cigarette' | 'pet'
 type Answer = Record<number, Record<CategoryIds, string>>
+type PickerTarget = { house: number; category: CategoryIds }
+
+const colors = ['red', 'blue', 'yellow', 'green', 'white']
+const nationalites = ['brit', 'swede', 'dane', 'norwegian', 'german']
+const drinks = ['tea', 'coffee', 'milk', 'beer', 'water']
+const cigarettes = ['pall mall', 'dunhill', 'prince', 'blends', 'blue master']
+const pets = ['dogs', 'birds', 'horses', 'fish', 'cats']
+
+const HOUSES = [1, 2, 3, 4, 5] as const
+const CATEGORIES: { id: CategoryIds; label: string; options: string[] }[] = [
+  { id: 'color', label: 'Color', options: colors },
+  { id: 'nationality', label: 'Nat.', options: nationalites },
+  { id: 'drink', label: 'Drink', options: drinks },
+  { id: 'cigarette', label: 'Smoke', options: cigarettes },
+  { id: 'pet', label: 'Pet', options: pets },
+]
 
 export const EinsteinContent = ({ validateAdvance, cancelAdvance, layout }: ContentProps) => {
   const { isMobile } = layout
   const [activeDropdownId, setActiveDropdownId] = useState<string>()
+  const [cluesOpen, setCluesOpen] = useState(true)
+  const [picker, setPicker] = useState<PickerTarget | null>(null)
 
   const [selectedAnswers, setSelectedAnswers] = useState<Answer>({})
 
@@ -27,83 +46,168 @@ export const EinsteinContent = ({ validateAdvance, cancelAdvance, layout }: Cont
     }
   }, [selectedAnswers, cancelAdvance, validateAdvance])
 
+  const pickerCategory = picker ? CATEGORIES.find((category) => category.id === picker.category) : null
+
   return (
     <>
       <p className="text-lg">
         As you may know, per our platforms terms, you must have an IQ of 130+ to enter.
       </p>
       <p className="text-lg mb-4">Please prove you meet our standards by solving this puzzle.</p>
-      <ul className="grid grid-cols-2 text-sm gap-1 gap-x-12 list-disc ml-4">
-        {rules.map((rule, idx) => (
-          <li key={idx}>{rule}</li>
-        ))}
-      </ul>
+      {isMobile ? (
+        <div className="mb-3 border">
+          <button
+            type="button"
+            className={classNames(
+              'flex min-h-11 w-full items-center justify-between px-3 text-left text-sm font-medium',
+              { 'border-b': cluesOpen }
+            )}
+            onClick={() => setCluesOpen((open) => !open)}
+            aria-expanded={cluesOpen}
+          >
+            <span>Clues · {rules.length}</span>
+            <span aria-hidden>{cluesOpen ? '−' : '+'}</span>
+          </button>
+          {cluesOpen && (
+            <ul className="list-disc space-y-1 px-3 py-3 pl-7 text-sm">
+              {rules.map((rule, idx) => (
+                <li key={idx}>{rule}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ) : (
+        <ul className="grid grid-cols-2 text-sm gap-1 gap-x-12 list-disc ml-4">
+          {rules.map((rule, idx) => (
+            <li key={idx}>{rule}</li>
+          ))}
+        </ul>
+      )}
       <p className="text-lg mt-3">
         Submit only after <span className="font-bold">all</span> dropdowns are correctly filled.
       </p>
-      <div
-        className={classNames(
-          'grid grid-cols-6 gap-4 items-center justify-center  mt-8 select-none',
-          { '!grid-cols-5': isMobile, '-translate-x-4': !isMobile }
-        )}
-      >
-        {!isMobile && <div />}
-        <h5 className="text-center font-medium translate-y-2">House #1</h5>
-        <h5 className="text-center font-medium translate-y-2">House #2</h5>
-        <h5 className="text-center font-medium translate-y-2">House #3</h5>
-        <h5 className="text-center font-medium translate-y-2">House #4</h5>
-        <h5 className="text-center font-medium translate-y-2">House #5</h5>
-        <SelectionContainer
-          id="color"
-          options={colors}
-          activeDropdownId={activeDropdownId}
-          setActiveDropdownId={setActiveDropdownId}
-          handleSelect={(option, houseNumber, categoryId) =>
-            handleAnswerSelect(option, houseNumber, categoryId)
-          }
-          isMobile={isMobile}
+      {isMobile ? (
+        <MobileStreetBoard
+          selectedAnswers={selectedAnswers}
+          onCellClick={(house, category) => setPicker({ house, category })}
         />
-        <SelectionContainer
-          id="nationality"
-          options={nationalites}
-          activeDropdownId={activeDropdownId}
-          setActiveDropdownId={setActiveDropdownId}
-          handleSelect={(option, houseNumber, categoryId) =>
-            handleAnswerSelect(option, houseNumber, categoryId)
-          }
-          isMobile={isMobile}
-        />
-        <SelectionContainer
-          id="drink"
-          options={drinks}
-          activeDropdownId={activeDropdownId}
-          setActiveDropdownId={setActiveDropdownId}
-          handleSelect={(option, houseNumber, categoryId) =>
-            handleAnswerSelect(option, houseNumber, categoryId)
-          }
-          isMobile={isMobile}
-        />
-        <SelectionContainer
-          id="cigarette"
-          options={cigarettes}
-          activeDropdownId={activeDropdownId}
-          setActiveDropdownId={setActiveDropdownId}
-          handleSelect={(option, houseNumber, categoryId) =>
-            handleAnswerSelect(option, houseNumber, categoryId)
-          }
-          isMobile={isMobile}
-        />
-        <SelectionContainer
-          id="pet"
-          options={pets}
-          activeDropdownId={activeDropdownId}
-          setActiveDropdownId={setActiveDropdownId}
-          handleSelect={(option, houseNumber, categoryId) =>
-            handleAnswerSelect(option, houseNumber, categoryId)
-          }
-          isMobile={isMobile}
-        />
+      ) : (
+        <div className="mt-8 grid w-full max-w-[min(56rem,calc(100vw-3rem))] grid-cols-[minmax(5.5rem,auto)_repeat(5,minmax(0,1fr))] items-center gap-2 select-none">
+          <div />
+          <h5 className="text-center text-sm font-medium sm:text-base">House #1</h5>
+          <h5 className="text-center text-sm font-medium sm:text-base">House #2</h5>
+          <h5 className="text-center text-sm font-medium sm:text-base">House #3</h5>
+          <h5 className="text-center text-sm font-medium sm:text-base">House #4</h5>
+          <h5 className="text-center text-sm font-medium sm:text-base">House #5</h5>
+          <SelectionContainer
+            id="color"
+            options={colors}
+            activeDropdownId={activeDropdownId}
+            setActiveDropdownId={setActiveDropdownId}
+            handleSelect={handleAnswerSelect}
+          />
+          <SelectionContainer
+            id="nationality"
+            options={nationalites}
+            activeDropdownId={activeDropdownId}
+            setActiveDropdownId={setActiveDropdownId}
+            handleSelect={handleAnswerSelect}
+          />
+          <SelectionContainer
+            id="drink"
+            options={drinks}
+            activeDropdownId={activeDropdownId}
+            setActiveDropdownId={setActiveDropdownId}
+            handleSelect={handleAnswerSelect}
+          />
+          <SelectionContainer
+            id="cigarette"
+            options={cigarettes}
+            activeDropdownId={activeDropdownId}
+            setActiveDropdownId={setActiveDropdownId}
+            handleSelect={handleAnswerSelect}
+          />
+          <SelectionContainer
+            id="pet"
+            options={pets}
+            activeDropdownId={activeDropdownId}
+            setActiveDropdownId={setActiveDropdownId}
+            handleSelect={handleAnswerSelect}
+          />
+        </div>
+      )}
+      <EinsteinPicker
+        open={!!picker}
+        options={pickerCategory?.options ?? []}
+        selected={picker ? selectedAnswers[picker.house]?.[picker.category] : undefined}
+        onSelect={(option) => {
+          if (!picker) return
+          handleAnswerSelect(option, picker.house, picker.category)
+          setPicker(null)
+        }}
+        onClose={() => setPicker(null)}
+      />
+    </>
+  )
+}
+
+const MobileStreetBoard = ({
+  selectedAnswers,
+  onCellClick,
+}: {
+  selectedAnswers: Answer
+  onCellClick: (house: number, category: CategoryIds) => void
+}) => {
+  return (
+    <div className="mt-4 select-none">
+      <div className="grid grid-cols-[2.4rem_repeat(5,minmax(0,1fr))] gap-1">
+        <div />
+        {HOUSES.map((house) => (
+          <div key={house} className="text-center text-xs font-medium">
+            #{house}
+          </div>
+        ))}
+        {CATEGORIES.map((category) => (
+          <MobileCategoryRow
+            key={category.id}
+            category={category}
+            selectedAnswers={selectedAnswers}
+            onCellClick={onCellClick}
+          />
+        ))}
       </div>
+    </div>
+  )
+}
+
+const MobileCategoryRow = ({
+  category,
+  selectedAnswers,
+  onCellClick,
+}: {
+  category: (typeof CATEGORIES)[number]
+  selectedAnswers: Answer
+  onCellClick: (house: number, category: CategoryIds) => void
+}) => {
+  return (
+    <>
+      <div className="flex items-center text-[10px] font-medium leading-tight">{category.label}</div>
+      {HOUSES.map((house) => {
+        const value = selectedAnswers[house]?.[category.id]
+        return (
+          <button
+            key={`${category.id}-${house}`}
+            type="button"
+            onClick={() => onCellClick(house, category.id)}
+            className={classNames(
+              'min-h-11 w-full truncate border px-0.5 text-[10px] capitalize leading-tight',
+              { 'text-gray-400': !value }
+            )}
+          >
+            {value || '—'}
+          </button>
+        )
+      })}
     </>
   )
 }
@@ -114,7 +218,6 @@ type SelectionContainerProps = {
   options: string[]
   setActiveDropdownId: (id?: string) => void
   handleSelect: (option: string, houseNumber: number, category: CategoryIds) => void
-  isMobile?: boolean
 }
 
 const SelectionContainer = ({
@@ -123,19 +226,17 @@ const SelectionContainer = ({
   activeDropdownId,
   setActiveDropdownId,
   handleSelect,
-  isMobile,
 }: SelectionContainerProps) => {
-  const dropdownWidth = !isMobile ? 150 : 65
   return (
     <>
-      {!isMobile && <h5 className="capitalize text-center translate-x-2">{id}</h5>}
+      <h5 className="min-w-0 capitalize text-center text-sm leading-tight">{id}</h5>
       <DropdownSelector
         id={`${id}-1`}
         activeId={activeDropdownId}
         setActiveId={setActiveDropdownId}
         options={options}
         onOptionSelect={(option) => handleSelect(option, 1, id)}
-        width={dropdownWidth}
+        width="100%"
       />
       <DropdownSelector
         id={`${id}-2`}
@@ -143,7 +244,7 @@ const SelectionContainer = ({
         setActiveId={setActiveDropdownId}
         options={options}
         onOptionSelect={(option) => handleSelect(option, 2, id)}
-        width={dropdownWidth}
+        width="100%"
       />
       <DropdownSelector
         id={`${id}-3`}
@@ -151,7 +252,7 @@ const SelectionContainer = ({
         setActiveId={setActiveDropdownId}
         options={options}
         onOptionSelect={(option) => handleSelect(option, 3, id)}
-        width={dropdownWidth}
+        width="100%"
       />
       <DropdownSelector
         id={`${id}-4`}
@@ -159,7 +260,7 @@ const SelectionContainer = ({
         setActiveId={setActiveDropdownId}
         options={options}
         onOptionSelect={(option) => handleSelect(option, 4, id)}
-        width={dropdownWidth}
+        width="100%"
       />
       <DropdownSelector
         id={`${id}-5`}
@@ -167,7 +268,7 @@ const SelectionContainer = ({
         setActiveId={setActiveDropdownId}
         options={options}
         onOptionSelect={(option) => handleSelect(option, 5, id)}
-        width={dropdownWidth}
+        width="100%"
       />
     </>
   )
@@ -183,12 +284,6 @@ export const EinsteinControls = ({ handleLevelAdvance }: ControlProps) => {
     </>
   )
 }
-
-const colors = ['red', 'blue', 'yellow', 'green', 'white']
-const nationalites = ['brit', 'swede', 'dane', 'norwegian', 'german']
-const drinks = ['tea', 'coffee', 'milk', 'beer', 'water']
-const cigarettes = ['pall mall', 'dunhill', 'prince', 'blends', 'blue master']
-const pets = ['dogs', 'birds', 'horses', 'fish', 'cats']
 
 const rules = [
   'The Brit lives in the Red house.',

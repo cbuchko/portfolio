@@ -256,7 +256,7 @@ export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => 
 
   return (
     <div className="select-none">
-      <p className="text-lg">Take a load off and catch a fish.</p>
+      <p className="text-lg">Halfway there! Take a break and catch a fish.</p>
       {!isMobile && <p className="text-lg">Hold SPACE to raise your lure.</p>}
       <p className="text-lg">Keep the lure on the fish to catch it.</p>
       <div className="mt-8 flex gap-2 justify-center">

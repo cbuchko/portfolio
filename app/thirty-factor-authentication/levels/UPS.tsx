@@ -61,17 +61,19 @@ export const UPSContent = ({
             className="mt-10"
           />
         </div>
-        <div className={classNames('my-6', { 'ml-3': !isMobile })}>
-          <DeliveryNode title="Label Created" isComplete dateString={deliveryStart} />
-          <DeliveryNode
-            title="Dropped off at UPS Access Point"
-            isComplete
-            dateString={deliveryStart}
-          />
-          <DeliveryNode title="On the Way" isInProgress dateString={deliveryStart} />
-          <DeliveryNode title="Out for Delivery" />
-          <DeliveryNode title="Delivery" isLast />
-        </div>
+        {!isMobile && (
+          <div className="my-6 ml-3">
+            <DeliveryNode title="Label Created" isComplete dateString={deliveryStart} />
+            <DeliveryNode
+              title="Dropped off at UPS Access Point"
+              isComplete
+              dateString={deliveryStart}
+            />
+            <DeliveryNode title="On the Way" isInProgress dateString={deliveryStart} />
+            <DeliveryNode title="Out for Delivery" />
+            <DeliveryNode title="Delivery" isLast />
+          </div>
+        )}
       </div>
     </>
   )

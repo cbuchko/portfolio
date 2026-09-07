@@ -43,8 +43,9 @@ export const BirdCallContent = ({
         />
       </div>
       <div
-        className={classNames('grid grid-cols-3 gap-4 mt-4', {
-          '!grid-cols-2 place-items-center': isMobile,
+        className={classNames('grid grid-cols-3 mt-4', {
+          'gap-2': isMobile,
+          'gap-4': !isMobile,
         })}
       >
         {birdsShuffled &&
@@ -87,7 +88,7 @@ const BirdThumbnail = ({
     validateSelect(bird.id)
   }
 
-  const birdSize = isMobile ? 150 : 200
+  const birdSize = isMobile ? 110 : 200
   return (
     <Image
       key={bird.id}
@@ -95,10 +96,11 @@ const BirdThumbnail = ({
       alt={bird.id}
       height={birdSize}
       width={birdSize}
-      className={classNames(' cursor-pointer transition-transform duration-500', {
+      className={classNames('cursor-pointer transition-transform duration-500', {
+        'h-auto w-full aspect-square object-cover': isMobile,
         'outline-6 outline-yellow-300 rounded-md scale-75 shadow-lg': isSelected,
       })}
-      style={{ height: birdSize, width: birdSize }}
+      style={isMobile ? undefined : { height: birdSize, width: birdSize }}
       onClick={handleSelect}
     />
   )

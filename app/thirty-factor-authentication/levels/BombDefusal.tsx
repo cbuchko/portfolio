@@ -91,7 +91,7 @@ export const BombDefusalContent = ({
     setFormattedInstructiosn(formattedInstructions)
   }, [isGameOver])
 
-  const { message, handleResendCode } = useMessageSpam(messages, formattedInstructions, 4000)
+  const { message, handleResendCode } = useMessageSpam(messages, formattedInstructions, 3000)
 
   //countdown
   useEffect(() => {

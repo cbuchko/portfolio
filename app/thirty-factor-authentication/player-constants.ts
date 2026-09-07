@@ -940,7 +940,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       },
     ],
     license: {
-      location: 'Washington D.C.',
+      location: 'Washington DC',
       headshot: 'Samuel-L-Jackson.webp',
       signature: 'samuel.jpg',
       name: 'Samuel Leroy Jackson',
@@ -955,7 +955,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
       location: 'Tennessee',
       headshot: 'lawrence.jpg',
       signature: 'bush.svg',
-      name: 'Samuel Leroy Jacksen',
+      name: 'Samuel Leeroy Jackson',
       dob: '1948-Dec-12',
       height: '1.80 m',
       eyes: 'BLU',

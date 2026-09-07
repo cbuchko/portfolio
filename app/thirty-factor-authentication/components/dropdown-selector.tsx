@@ -9,7 +9,7 @@ type DropdownSelectorProps = {
   defaultOption?: string
   options: string[]
   onOptionSelect: (option: string) => void
-  width: number
+  width: number | string
   label?: string
   includeBlankOption?: boolean
 }
@@ -50,7 +50,11 @@ export const DropdownSelector = ({
   }, [id, setActiveId])
 
   return (
-    <div id={id} className="relative" style={{ width: `${width}px` }}>
+    <div
+      id={id}
+      className="relative min-w-0"
+      style={{ width: typeof width === 'number' ? `${width}px` : width }}
+    >
       <h5>{label}</h5>
       <button
         className={classNames(

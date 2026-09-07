@@ -74,22 +74,27 @@ export function formatExtraLine(id: ExtraId, count: number): string {
   return `${count}× ${label}`
 }
 
-export const PIZZAS_TO_WIN = 10
+export const PIZZAS_TO_WIN = 15
 export const MISTAKES_BEFORE_STRIKE = 3
 export const EJECT_MS = 320
 export const RESULT_FLASH_MS = 550
 
 const BELT_MS_BY_SERVED = [
   9067, // 1st
-  8533, // 2nd
-  8000, // 3rd
-  7200, // 4th
-  6400, // 5th
-  5600, // 6th
-  5067, // 7th
-  4533, // 8th
-  4000, // 9th
-  3467, // 10th
+  8667, // 2nd
+  8267, // 3rd
+  7867, // 4th
+  7467, // 5th
+  7067, // 6th
+  6667, // 7th
+  6267, // 8th
+  5867, // 9th
+  5467, // 10th
+  5067, // 11th
+  4667, // 12th
+  4267, // 13th
+  3867, // 14th
+  3467, // 15th
 ]
 
 export function beltMsForServed(served: number): number {
@@ -109,23 +114,27 @@ const MAX_TOTAL_TOPPINGS = 5
 function recipeBudget(servedCount: number): { types: number; total: number } {
   switch (servedCount) {
     case 0:
-      return { types: 0, total: 0 }
     case 1:
-      return { types: 1, total: 1 }
+      return { types: 0, total: 0 }
     case 2:
-      return { types: 1, total: 2 }
+      return { types: 1, total: 1 }
     case 3:
-      return { types: 1, total: 3 }
+      return { types: 2, total: 2 }
     case 4:
-      return { types: 2, total: 3 }
     case 5:
-      return { types: 2, total: 4 }
+      return { types: 2, total: 3 }
     case 6:
-      return { types: 3, total: 4 }
     case 7:
-      return { types: 2, total: 5 }
+      return { types: 2, total: 3 }
     case 8:
+      return { types: 2, total: 4 }
+    case 9:
+    case 10:
+      return { types: 3, total: 4 }
+    case 11:
       return { types: 3, total: 5 }
+    case 12:
+      return { types: 3, total: 6 }
     default:
       return { types: 3, total: 5 }
   }

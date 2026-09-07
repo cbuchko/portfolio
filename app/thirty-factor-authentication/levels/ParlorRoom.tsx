@@ -26,8 +26,13 @@ export const ParlorRoomContent = ({ handleLevelAdvance, setIsLoading, layout }: 
       <p className="text-lg">
         In front of you sits three boxes. Select the box that contains the prize.
       </p>
-      <div className="text-lg my-8">
-        <p className="mono font-bold mb-4">RULES:</p>
+      <div
+        className={classNames('font-bold', {
+          'my-4 text-sm': isMobile,
+          'my-8 text-lg': !isMobile,
+        })}
+      >
+        <p className={classNames('mono', { 'mb-2': isMobile, 'mb-4': !isMobile })}>RULES:</p>
         <p className="font-bold">
           1. THERE WILL ALWAYS BE AT LEAST ONE BOX WHICH DISPLAYS ONLY TRUE STATEMENTS.
         </p>
@@ -39,25 +44,32 @@ export const ParlorRoomContent = ({ handleLevelAdvance, setIsLoading, layout }: 
         </p>
       </div>
       <div
-        className={classNames('flex justify-between px-4', { 'flex-col items-center': isMobile })}
+        className={classNames({
+          'grid w-full grid-cols-2 gap-2': isMobile,
+          'flex w-full justify-between px-4': !isMobile,
+        })}
       >
         <ParlorBox
           color="bg-blue-300"
           statements={puzzle.blueStatements}
           title={'Select Blue'}
           onClick={() => onCorrectSelect('blue')}
+          isMobile={isMobile}
         />
         <ParlorBox
           color="bg-black"
           statements={puzzle.blackStatements}
           title={'Select Black'}
           onClick={() => onCorrectSelect('black')}
+          isMobile={isMobile}
         />
         <ParlorBox
           color="bg-red-300"
           statements={puzzle.redStatements}
           title={'Select Red'}
           onClick={() => onCorrectSelect('red')}
+          isMobile={isMobile}
+          className={isMobile ? 'col-span-2' : undefined}
         />
       </div>
     </>
@@ -69,27 +81,52 @@ const ParlorBox = ({
   color,
   statements,
   onClick,
+  isMobile,
+  className,
 }: {
   title: string
   color: string
   statements: string[]
   onClick: () => void
+  isMobile?: boolean
+  className?: string
 }) => {
   return (
-    <div className="flex flex-col justify-center">
+    <div
+      className={classNames(
+        'flex flex-col items-stretch',
+        { 'min-w-0 w-full max-w-[150px] justify-self-center': isMobile, 'w-[200px]': !isMobile },
+        className
+      )}
+    >
       <div
-        className={classNames(
-          'h-[200px] w-[200px] flex items-center justify-center border-3 border-[#673400]',
-          color
-        )}
+        className={classNames('flex items-center justify-center border-[#673400]', color, {
+          'aspect-square w-full border-3': isMobile,
+          'h-[200px] w-[200px] border-3': !isMobile,
+        })}
       >
-        <div className="flex flex-col justify-around bg-white h-[150px] w-[175px] border-6 border-[#673400] text-center text-sm uppercase px-1 py-2 select-none">
+        <div
+          className={classNames(
+            'flex flex-col justify-around bg-white border-[#673400] text-center uppercase select-none',
+            {
+              'h-[74%] w-[86%] border-4 px-0.5 py-1 text-xs leading-tight': isMobile,
+              'h-[150px] w-[175px] border-6 px-1 py-2 text-sm': !isMobile,
+            }
+          )}
+        >
           {statements.map((statement, idx) => (
             <p key={idx}>{statement}</p>
           ))}
         </div>
       </div>
-      <button className="my-4 border py-2 cursor-pointer" onClick={onClick}>
+      <button
+        type="button"
+        className={classNames('relative z-10 border cursor-pointer', {
+          'mt-2 min-h-11 w-full py-2 text-xs': isMobile,
+          'my-4 w-full py-2': !isMobile,
+        })}
+        onClick={onClick}
+      >
         {title}
       </button>
     </div>
