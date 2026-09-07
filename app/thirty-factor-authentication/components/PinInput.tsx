@@ -1,5 +1,6 @@
 import { KeyboardEvent, MouseEvent, useEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
+import { useTfaLayout } from '../useTfaLayout'
 
 type PinInputProps = {
   value: string
@@ -21,6 +22,7 @@ const toValue = (slots: string[]) => slots.map((slot) => slot || EMPTY).join('')
 
 export const PinInput = ({ value, onChange, onSubmit, length = 6 }: PinInputProps) => {
   const captureRef = useRef<HTMLInputElement | null>(null)
+  const { isMobile, isTouch, viewportWidth } = useTfaLayout()
   const [focused, setFocused] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const [draft, setDraft] = useState('')
@@ -28,8 +30,10 @@ export const PinInput = ({ value, onChange, onSubmit, length = 6 }: PinInputProp
   const slots = toSlots(value, length)
 
   useEffect(() => {
+    if (!viewportWidth) return
+    if (isTouch || isMobile) return
     captureRef.current?.focus()
-  }, [])
+  }, [isMobile, isTouch, viewportWidth])
 
   const commit = (next: string[]) => onChange(toValue(next))
 

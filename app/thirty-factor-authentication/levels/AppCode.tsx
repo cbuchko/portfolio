@@ -12,7 +12,7 @@ export const AppCodeContent = ({
   handleLevelAdvance,
   layout,
 }: ContentProps) => {
-  const { isMobile, isCompact } = layout
+  const { isCompact } = layout
   const [targetCode, setTargetCode] = useState(makeAuthCode(6))
   const [codeInput, setCodeInput] = useState('')
   const [portalElement, setPortalElement] = useState<HTMLElement | null>(null)
@@ -43,8 +43,8 @@ export const AppCodeContent = ({
     return shuffle([...appNames, 'Thirty Factor Auth'])
   }, [])
 
-  //give them more time on mobile because it's way too hard otherwise
-  const duration = isMobile ? 10 : 5
+  // Short/narrow screens (phones, landscape Kindles) get more time to hunt.
+  const duration = isCompact ? 10 : 5
   return (
     <>
       <p className="text-lg">Enter the code from your Authenticator App.</p>
