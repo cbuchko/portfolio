@@ -1,7 +1,7 @@
-/* Loaded only on the TFA route. :has(.tfa-shell) unscopes if this CSS stays in the document after leaving. */
+/* Loaded only on the TFA route. :has(.tfa-shell) unscopes if this CSS stays in the document after leaving.
+   Keep html/.tfa-shell backgrounds unset so Fishing's z-index:-10 sunset can show. */
 html:has(.tfa-shell) {
   color-scheme: only light;
-  background: #ffffff;
   color: #171717;
   caret-color: #171717;
   scrollbar-color: #c4c4c4 #ffffff;
@@ -23,7 +23,7 @@ html:has(.tfa-shell) ::selection {
 .tfa-shell {
   color-scheme: only light;
   forced-color-adjust: none;
-  background: #ffffff;
+  background: transparent;
   color: #171717;
 }
 
