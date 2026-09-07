@@ -31,7 +31,8 @@ type RoundState = {
 
 type Phase = 'idle' | 'running' | 'ejecting' | 'miss'
 
-export const PizzatronContent = ({ handleLevelAdvance, isMobile }: ContentProps) => {
+export const PizzatronContent = ({ handleLevelAdvance, layout }: ContentProps) => {
+  const { isMobile } = layout
   const [completed, setCompleted] = useState(0)
   const [mistakes, setMistakes] = useState(0)
   const [round, setRound] = useState<RoundState | null>(null)

@@ -7,7 +7,7 @@ import { useLevels } from './levels/useLevel'
 import { OneContent, OneControls } from './levels/1'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { PlayerIds, PlayerInformation } from './player-constants'
-import { devMode, forceLevel, maxLevel, mobileWidthBreakpoint } from './constants'
+import { devMode, forceLevel, maxLevel } from './constants'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { TouchBackend } from 'react-dnd-touch-backend'
@@ -17,12 +17,13 @@ import { VictoryScreen } from './VictoryScreen'
 import { RunStats } from './components/RunStats'
 import { audioEngine, preloadAll, useSfx } from '../utils/audio'
 import { useEffectInitializer } from '../utils/useEffectUnsafe'
-import { useIsMobile } from '../utils/useIsMobile'
+import { useTfaLayout } from './useTfaLayout'
 import classNames from 'classnames'
 import { useTfaAnalytics } from './useTfaAnalytics'
 
 export default function ThirtyFactorAuthentication() {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
+  const layout = useTfaLayout()
+  const { isMobile, isCompact, isTouch } = layout
   const [playerId, setPlayerId] = useState<PlayerIds>()
   const [hasStarted, setHasStarted] = useState(forceLevel > 0)
 
@@ -60,7 +61,7 @@ export default function ThirtyFactorAuthentication() {
     hasStarted,
     isGameOver,
     isCompleted,
-    isMobile,
+    layout,
     level,
     playerId,
     strikesThisLevel,
@@ -102,10 +103,8 @@ export default function ThirtyFactorAuthentication() {
       return HTML5Backend
     }
 
-    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
-
     return isTouch ? TouchBackend : HTML5Backend
-  }, [])
+  }, [isTouch])
 
   const showPregame = !hasStarted && !isGameOver
   const showLevels = hasStarted && !isGameOver && !isCompleted
@@ -121,16 +120,21 @@ export default function ThirtyFactorAuthentication() {
       >
         <div
           id="tfa-logo"
-          className={classNames('absolute flex items-center gap-2 bg-white rounded-md p-2', {
-            'left-[50%] -translate-x-[50%] top-8 ': !isMobile,
-            'top-16': isMobile,
-          })}
+          className={classNames(
+            'absolute left-[50%] -translate-x-[50%] flex items-center bg-white rounded-md !max-w-auto',
+            {
+              'top-8 p-2': !isMobile,
+              'top-8 p-1 w-[calc(100vw-8px)] max-w-[516px]': isMobile,
+            }
+          )}
         >
           <Image
             src="/thirty-factor-authentication/horizontal-logo.png"
             alt="logo"
             height={48}
             width={516}
+            className={classNames('!max-w-none', { 'h-auto w-full': isMobile })}
+            priority
           />
         </div>
         {showAuth && (
@@ -143,21 +147,18 @@ export default function ThirtyFactorAuthentication() {
               playerId={playerId}
               setPlayerId={setPlayerId}
               setIsGameOver={setIsGameOver}
-              Content={
-                showPregame
-                  ? OneContent
-                  : (content as typeof OneContent)
-              }
+              Content={showPregame ? OneContent : (content as typeof OneContent)}
               Controls={showPregame ? OneControls : controls}
               baseProps={showPregame ? pregameBaseProps : runBaseProps}
               playErrorSound={playErrorSound}
               requiresLoad={showPregame ? false : requiresLoad}
+              layout={layout}
             />
           </DndProvider>
         )}
         {showLevels && (
           <>
-            <div id="extras-portal" className={classNames({ '!mt-42': isMobile })} />
+            <div id="extras-portal" className={classNames({ 'mt-4': isCompact })} />
             {!!upsTrackingCode && !!upsTrackingTime && (
               <UPSTracker code={upsTrackingCode} time={upsTrackingTime} isMobile={isMobile} />
             )}

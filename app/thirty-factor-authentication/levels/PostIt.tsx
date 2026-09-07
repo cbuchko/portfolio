@@ -15,8 +15,9 @@ export const PostItContent = ({
   validateAdvance,
   cancelAdvance,
   handleLevelAdvance,
-  isMobile,
+  layout,
 }: ContentProps) => {
+  const { isMobile } = layout
   const [code, setCode] = useState<string>('')
   const [keywordInput, setKeywordInput] = useState('')
 

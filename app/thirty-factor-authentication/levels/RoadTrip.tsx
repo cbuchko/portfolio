@@ -15,8 +15,9 @@ export const RoadTripContent = ({
   playerId,
   handleLevelAdvance,
   setIsLoading,
-  isMobile,
+  layout,
 }: ContentProps) => {
+  const { isMobile } = layout
   const [selectedCity, setSelectedCity] = useState<string>()
   const [startingPoint, setStartingPoint] = useState<number[]>([])
   const [markers, setMarkers] = useState<Marker[]>([])

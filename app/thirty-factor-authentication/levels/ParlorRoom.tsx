@@ -6,7 +6,8 @@ import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 const selectInitialPuzzleIndex = () => {
   return Math.floor(Math.random() * Statements.length)
 }
-export const ParlorRoomContent = ({ handleLevelAdvance, setIsLoading, isMobile }: ContentProps) => {
+export const ParlorRoomContent = ({ handleLevelAdvance, setIsLoading, layout }: ContentProps) => {
+  const { isMobile } = layout
   const [puzzleIndex, setPuzzleIndex] = useState<number | null>(null)
 
   useEffectInitializer(() => {

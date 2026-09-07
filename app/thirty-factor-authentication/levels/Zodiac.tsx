@@ -25,8 +25,9 @@ export const ZodiacContent = ({
   playerId,
   validateAdvance,
   cancelAdvance,
-  isMobile,
+  layout,
 }: ContentProps) => {
+  const { isMobile } = layout
   const [activeDropdownId, setActiveDropdownId] = useState<string>()
 
   const [selectedSun, setSelectedSun] = useState(defaultSign)

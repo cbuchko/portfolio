@@ -223,7 +223,8 @@ const chartEndMsFromCadences = (() => {
   return hitTimeMs + lateGraceMs
 })()
 
-export const SpotifyContent = ({ handleLevelAdvance, isMobile }: ContentProps) => {
+export const SpotifyContent = ({ handleLevelAdvance, layout }: ContentProps) => {
+  const { isMobile } = layout
   const padSize = isMobile ? mobilePadSize : desktopPadSize
   const [chart, setChart] = useState<ChartNote[]>([])
   const noteCount = noteCountFromCadences

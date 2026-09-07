@@ -1,12 +1,12 @@
 import { JSX, useCallback, useEffect, useState } from 'react'
 import { PlayerIds, PlayerInformation } from './player-constants'
 import { ControlProps, IdentitySelectProps } from './levels/types'
-import { devMode, maxLevel, mobileWidthBreakpoint } from './constants'
+import { devMode, maxLevel } from './constants'
 import classNames from 'classnames'
 import { LevelProps } from './levels/useLevel'
 import Image from 'next/image'
 import { useEffectInitializer } from '../utils/useEffectUnsafe'
-import { useIsMobile } from '../utils/useIsMobile'
+import type { TfaLayout } from './useTfaLayout'
 
 const maxStrikes = 3
 
@@ -22,6 +22,7 @@ type AuthContainerProps = {
   requiresLoad?: boolean
   /** Pregame cast pick — same chrome, no step/strikes. Default: run. */
   variant?: 'pregame' | 'run'
+  layout: TfaLayout
 }
 
 export const AuthContainer = ({
@@ -34,8 +35,9 @@ export const AuthContainer = ({
   playErrorSound,
   requiresLoad,
   variant = 'run',
+  layout,
 }: AuthContainerProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
+  const { isMobile, isCompact } = layout
   const isPregame = variant === 'pregame'
 
   const [isLoading, setIsLoading] = useState(false)
@@ -88,7 +90,7 @@ export const AuthContainer = ({
         id="auth-container"
         className={classNames('relative mt-28 shadow-md', {
           'opacity-0 pointer-events-none': isLoading && requiresLoad,
-          'mb-4 !mt-0 top-[20%]': isMobile,
+          'mb-4 !mt-24': isCompact,
           'mx-auto': !isMobile,
         })}
       >
@@ -139,9 +141,7 @@ export const AuthContainer = ({
               </div>
             )}
           </div>
-          {!isPregame && (
-            <h6 className="text-xs">{`Step ${level}/${maxLevel}`}</h6>
-          )}
+          {!isPregame && <h6 className="text-xs">{`Step ${level}/${maxLevel}`}</h6>}
         </div>
         <div id="auth-body" className="group/auth-body border border-t-0 rounded-b-md">
           <div
@@ -161,7 +161,7 @@ export const AuthContainer = ({
               upsTrackingTime={baseProps.upsTrackingTime}
               selectedSSOIds={baseProps.selectedSSOIds}
               setSelectedSSOIds={baseProps.setSelectedSSOIds}
-              isMobile={isMobile}
+              layout={layout}
             />
           </div>
           {Controls && (

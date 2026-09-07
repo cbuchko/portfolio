@@ -6,7 +6,8 @@ import classNames from 'classnames'
 type CategoryIds = 'color' | 'nationality' | 'drink' | 'cigarette' | 'pet'
 type Answer = Record<number, Record<CategoryIds, string>>
 
-export const EinsteinContent = ({ validateAdvance, cancelAdvance, isMobile }: ContentProps) => {
+export const EinsteinContent = ({ validateAdvance, cancelAdvance, layout }: ContentProps) => {
+  const { isMobile } = layout
   const [activeDropdownId, setActiveDropdownId] = useState<string>()
 
   const [selectedAnswers, setSelectedAnswers] = useState<Answer>({})

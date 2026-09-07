@@ -21,7 +21,8 @@ function rangesOverlap(a0: number, a1: number, b0: number, b1: number) {
   return a0 < b1 && a1 > b0
 }
 
-export const FishingContent = ({ handleLevelAdvance, isMobile }: ContentProps) => {
+export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => {
+  const { isMobile } = layout
   const [progressDisplay, setProgressDisplay] = useState(40)
   const [progressColor, setProgressColor] = useState(() =>
     interpolateThreeColors('#FF0000', '#FFFF00', '#00FF00', 0.4)

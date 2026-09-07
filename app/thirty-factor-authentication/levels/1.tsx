@@ -10,8 +10,9 @@ export const OneContent = ({
   setPlayerId,
   validateAdvance,
   cancelAdvance,
-  isMobile,
+  layout,
 }: IdentitySelectProps) => {
+  const { isMobile } = layout
   const characters = useMemo(() => {
     return Object.entries(PlayerInformation).map(([id, info]) => ({
       id: Number(id) as PlayerIds,

@@ -8,7 +8,8 @@ import { useMusic, useMusicEnded, useSfx } from '@/app/utils/audio'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 const maxHealth = 100
-export const UndertaleContent = ({ playerId, handleLevelAdvance, isMobile }: ContentProps) => {
+export const UndertaleContent = ({ playerId, handleLevelAdvance, layout }: ContentProps) => {
+  const { isMobile } = layout
   const characterName = PlayerInformation[playerId].name
   const [health, setHealth] = useState(maxHealth)
   const damageTimestampRef = useRef<number>(0)

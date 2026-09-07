@@ -12,8 +12,9 @@ export const BirdCallContent = ({
   validateAdvance,
   cancelAdvance,
   setIsLoading,
-  isMobile,
+  layout,
 }: ContentProps) => {
+  const { isMobile } = layout
   const [selectedBird, setSelectedBird] = useState<string>()
   const [birdsShuffled, setBirdsShuffled] = useState<{ id: string; url: string }[] | null>(null)
   const [targetBird, setTargetBird] = useState<string>()

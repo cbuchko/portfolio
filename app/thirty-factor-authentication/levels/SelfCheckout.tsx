@@ -81,8 +81,9 @@ const ShoppingItems: ShoppingItem[] = [
 export const SelfCheckoutContent = ({
   handleLevelAdvance,
   cancelAdvance,
-  isMobile,
+  layout,
 }: ContentProps) => {
+  const { isMobile } = layout
   const [items, setItems] = useState(ShoppingItems)
   const scannedIdsRef = useRef<Set<string>>(new Set())
   const [isAgeVerified, setIsAgeVerified] = useState(false)

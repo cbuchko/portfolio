@@ -8,8 +8,9 @@ export const UPSContent = ({
   validateAdvance,
   upsTrackingCode: code,
   setUPSTrackingCode: setCode,
-  isMobile,
+  layout,
 }: ContentProps) => {
+  const { isMobile } = layout
   const [deliveryStart, deliveryEnd] = useMemo(() => {
     const dateNow = new Date()
     const formattedNow = getFormattedDate(dateNow)

@@ -4,13 +4,15 @@ import { makeAuthCode, shuffle } from '../utils'
 import { createPortal } from 'react-dom'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 import { PinInput } from '../components/PinInput'
+import classNames from 'classnames'
 
 export const AppCodeContent = ({
   validateAdvance,
   cancelAdvance,
   handleLevelAdvance,
-  isMobile,
+  layout,
 }: ContentProps) => {
+  const { isMobile, isCompact } = layout
   const [targetCode, setTargetCode] = useState(makeAuthCode(6))
   const [codeInput, setCodeInput] = useState('')
   const [portalElement, setPortalElement] = useState<HTMLElement | null>(null)
@@ -49,7 +51,7 @@ export const AppCodeContent = ({
       <PinInput value={codeInput} onChange={handleInputChange} onSubmit={handleLevelAdvance} />
       {portalElement &&
         createPortal(
-          <div className="flex flex-wrap justify-center mt-6">
+          <div className={classNames('flex flex-wrap justify-center', { 'mt-6': !isCompact })}>
             {apps.map((app, idx) => {
               const isTarget = app === 'Thirty Factor Auth'
               return (

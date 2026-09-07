@@ -46,8 +46,9 @@ export const TaxReturnContent = ({
   validateAdvance,
   cancelAdvance,
   handleLevelAdvance,
-  isMobile,
+  layout,
 }: ContentProps) => {
+  const { isMobile } = layout
   const [incomeInput, setIncomeInput] = useState('')
 
   const taxItems = useMemo(() => {

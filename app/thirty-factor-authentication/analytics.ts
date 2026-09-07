@@ -1,5 +1,6 @@
 import posthog from 'posthog-js'
 import { devMode, forceLevel } from './constants'
+import type { TfaLayout } from './useTfaLayout'
 
 const RUN_INDEX_KEY = 'tfa_run_index'
 const PENDING_END_KEY = 'tfa_pending_run_end'
@@ -35,6 +36,9 @@ export type TfaPendingAbandon = {
   character_id?: number
   character_name?: string
   is_mobile?: boolean
+  is_short?: boolean
+  is_touch?: boolean
+  viewport_h?: number
   level: number
   level_id?: string
   level_title?: string
@@ -47,7 +51,7 @@ export type TfaPendingAbandon = {
 export type TfaSession = {
   characterId?: number
   characterName?: string
-  isMobile?: boolean
+  layout?: TfaLayout
   runIndex?: number
   runStartedAt?: number
   level?: number
@@ -147,7 +151,10 @@ export const captureTfaEvent = (
 export const sessionProps = (): TfaEventProps => ({
   character_id: session.characterId,
   character_name: session.characterName,
-  is_mobile: session.isMobile,
+  is_mobile: session.layout?.isMobile,
+  is_short: session.layout?.isShort,
+  is_touch: session.layout?.isTouch,
+  viewport_h: session.layout?.viewportHeight,
   run_index: session.runIndex,
 })
 
@@ -213,6 +220,9 @@ const abandonEventProps = (
   character_id: pending.character_id,
   character_name: pending.character_name,
   is_mobile: pending.is_mobile,
+  is_short: pending.is_short,
+  is_touch: pending.is_touch,
+  viewport_h: pending.viewport_h,
   run_index: pending.run_index,
   level: pending.level,
   level_id: pending.level_id,

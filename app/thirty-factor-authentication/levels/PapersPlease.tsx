@@ -43,7 +43,8 @@ const getAllPlayerIds = (): PlayerIds[] =>
 const getUnselectedPlayerIds = (currentPlayerId: PlayerIds): PlayerIds[] =>
   getAllPlayerIds().filter((id) => id !== currentPlayerId)
 
-export const PapersPleaseContent = ({ playerId, handleLevelAdvance, isMobile }: ContentProps) => {
+export const PapersPleaseContent = ({ playerId, handleLevelAdvance, layout }: ContentProps) => {
+  const { isMobile } = layout
   const remainingSubjectsRef = useRef<PlayerIds[]>([])
   const [subjectId, setSubjectId] = useState<PlayerIds | null>(null)
   const [isShowingCitation, setIsShowingCitation] = useState(false)

@@ -5,12 +5,15 @@ import { createPortal } from 'react-dom'
 import { AppCode } from './AppCode'
 import { PinInput } from '../components/PinInput'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import classNames from 'classnames'
 
 export const BasicAppCodeContent = ({
   validateAdvance,
   cancelAdvance,
   handleLevelAdvance,
+  layout,
 }: ContentProps) => {
+  const { isCompact } = layout
   const [targetCode, setTargetCode] = useState(makeAuthCode(6))
   const [codeInput, setCodeInput] = useState('')
   const [portalElement, setPortalElement] = useState<HTMLElement | null>(null)
@@ -43,7 +46,7 @@ export const BasicAppCodeContent = ({
       <PinInput value={codeInput} onChange={handleInputChange} onSubmit={handleLevelAdvance} />
       {portalElement &&
         createPortal(
-          <div className="flex flex-wrap justify-center mt-6">
+          <div className={classNames('flex flex-wrap justify-center', { 'mt-6': !isCompact })}>
             <AppCode
               title={'Thirty Factor Auth'}
               codeDefault={targetCode}

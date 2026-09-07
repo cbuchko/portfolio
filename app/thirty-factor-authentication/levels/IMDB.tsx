@@ -11,7 +11,8 @@ const selectInitialPuzzleIndex = () => {
 }
 
 const maxTimeInSeconds = 59
-export const IMDBContent = ({ playerId, handleLevelAdvance, isMobile }: ContentProps) => {
+export const IMDBContent = ({ playerId, handleLevelAdvance, layout }: ContentProps) => {
+  const { isMobile } = layout
   const [timer, setTimer] = useState(maxTimeInSeconds)
   const [searchInput, setSearchInput] = useState('')
   const [questionIndex, setQuestionIndex] = useState<number | null>(null)

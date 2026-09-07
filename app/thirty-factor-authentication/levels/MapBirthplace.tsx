@@ -9,12 +9,8 @@ const Map = dynamic<MapProps>(() => import('./Map').then((mod) => mod.default), 
   ssr: false,
 })
 
-export const MapContent = ({
-  playerId,
-  validateAdvance,
-  cancelAdvance,
-  isMobile,
-}: ContentProps) => {
+export const MapContent = ({ playerId, validateAdvance, cancelAdvance, layout }: ContentProps) => {
+  const { isMobile } = layout
   const [selectedCity, setSelectedCity] = useState<string>()
 
   const handleCitySelect = (city?: string) => {

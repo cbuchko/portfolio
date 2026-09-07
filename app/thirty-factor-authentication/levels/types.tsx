@@ -1,6 +1,7 @@
 import { SetStateAction } from 'react'
 import { PlayerIds } from '../player-constants'
 import { SSOIds } from './SSO'
+import type { TfaLayout } from '../useTfaLayout'
 
 export type ControlProps = {
   handleLevelAdvance: (skipVerify?: boolean) => void
@@ -22,7 +23,7 @@ type ContentPropsBase = {
   setUPSTrackingTime: (time: number) => void
   selectedSSOIds: Set<SSOIds>
   setSelectedSSOIds: React.Dispatch<React.SetStateAction<Set<SSOIds>>>
-  isMobile?: boolean
+  layout: TfaLayout
 }
 
 /** Pre-game Account Select — player may not be chosen yet */

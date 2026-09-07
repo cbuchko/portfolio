@@ -9,7 +9,8 @@ import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 type Quote = { quote: string; isValid: boolean; origin: string }
 type QuoteMatchup = [Quote, Quote]
 
-export const QuotesContent = ({ playerId, handleLevelAdvance, isMobile }: ContentProps) => {
+export const QuotesContent = ({ playerId, handleLevelAdvance, layout }: ContentProps) => {
+  const { isMobile } = layout
   const [quotes, setQuotes] = useState<QuoteMatchup[]>([])
   const [matchupIndex, setMatchupIndex] = useState(0)
   const [successCount, setSuccessCount] = useState(0)

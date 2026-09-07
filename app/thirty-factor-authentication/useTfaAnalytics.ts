@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from 'react'
 import { maxLevel } from './constants'
 import { PlayerIds, PlayerInformation } from './player-constants'
 import { getLevelMeta, LevelTiming } from './levels/useLevel'
+import type { TfaLayout } from './useTfaLayout'
 import {
   TFA_ABANDON_STASH_MS,
   TFA_AFK_MS,
@@ -32,7 +33,7 @@ type UseTfaAnalyticsArgs = {
   hasStarted: boolean
   isGameOver: boolean
   isCompleted: boolean
-  isMobile: boolean
+  layout: TfaLayout
   level: number
   playerId?: PlayerIds
   strikesThisLevel: number
@@ -43,7 +44,7 @@ export const useTfaAnalytics = ({
   hasStarted,
   isGameOver,
   isCompleted,
-  isMobile,
+  layout,
   level,
   playerId,
   strikesThisLevel,
@@ -82,7 +83,13 @@ export const useTfaAnalytics = ({
   useEffect(() => {
     snapshotRef.current = () => {
       if (!inProgress || endedRef.current || abandonedRef.current) return null
-      const { levelEnteredAt, runStartedAt, runIndex, characterId, characterName: name } = getTfaSession()
+      const {
+        levelEnteredAt,
+        runStartedAt,
+        runIndex,
+        characterId,
+        characterName: name,
+      } = getTfaSession()
       const meta = getLevelMeta(level)
       return {
         abandon_id: abandonIdRef.current,
@@ -90,7 +97,10 @@ export const useTfaAnalytics = ({
         run_index: runIndex,
         character_id: characterId,
         character_name: name,
-        is_mobile: isMobile,
+        is_mobile: layout.isMobile,
+        is_short: layout.isShort,
+        is_touch: layout.isTouch,
+        viewport_h: layout.viewportHeight,
         level,
         level_id: meta.id,
         level_title: meta.title,
@@ -100,28 +110,32 @@ export const useTfaAnalytics = ({
         hiddenAt: Date.now(),
       }
     }
-  }, [inProgress, isMobile, level, strikesThisLevel])
+  }, [inProgress, layout, level, strikesThisLevel])
 
   useEffect(() => {
     setTfaSession({
       characterId: playerId,
       characterName,
-      isMobile,
+      layout,
       level,
       levelId: level >= 1 && level <= maxLevel ? getLevelMeta(level).id : undefined,
       levelTitle: level >= 1 && level <= maxLevel ? getLevelMeta(level).title : undefined,
       strikesThisLevel,
     })
-  }, [playerId, characterName, isMobile, level, strikesThisLevel])
+  }, [playerId, characterName, layout, level, strikesThisLevel])
 
   useEffect(() => {
     if (!isTfaAnalyticsReady() || openedRef.current) return
+    if (layout.viewportHeight <= 0) return
     openedRef.current = true
     captureTfaEvent('tfa_game_opened', {
-      is_mobile: isMobile,
+      is_mobile: layout.isMobile,
+      is_short: layout.isShort,
+      is_touch: layout.isTouch,
+      viewport_h: layout.viewportHeight,
       referrer: document.referrer || undefined,
     })
-  }, [isMobile])
+  }, [layout])
 
   const markRunEnded = useCallback(
     (outcome: 'won' | 'lost', timings = levelTimings) => {
@@ -260,6 +274,9 @@ export const useTfaAnalytics = ({
         character_id: pending.character_id,
         character_name: pending.character_name,
         is_mobile: pending.is_mobile,
+        is_short: pending.is_short,
+        is_touch: pending.is_touch,
+        viewport_h: pending.viewport_h,
         run_index: pending.run_index,
         level: pending.level,
         level_id: pending.level_id,

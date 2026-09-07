@@ -73,9 +73,10 @@ export const UPSFinishContent = ({
   setIsLoading,
   setUPSTrackingCode,
   setUPSTrackingTime,
-  isMobile,
   playerId,
+  layout,
 }: ContentProps) => {
+  const { isMobile } = layout
   const mobile = !!isMobile
   const coneRadius = mobile ? CONE_MOBILE : CONE_DESKTOP
   const kiosk = useKioskState()

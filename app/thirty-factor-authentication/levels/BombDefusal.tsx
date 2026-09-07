@@ -51,8 +51,9 @@ const maxTimeInSeconds = 30
 export const BombDefusalContent = ({
   validateAdvance,
   handleLevelAdvance,
-  isMobile,
+  layout,
 }: ContentProps) => {
+  const { isMobile } = layout
   const [wires, setWires] = useState(Wires)
   const [code, setCode] = useState('')
 
@@ -217,7 +218,8 @@ export const BombDefusalContent = ({
       )}
       {isGameOver && (
         <div className="fixed inset-0 z-[9999] bg-red-500/50 pointer-events-none" />
-      )}    </>
+      )}{' '}
+    </>
   )
 }
 

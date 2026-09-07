@@ -4,7 +4,8 @@ import Image from 'next/image'
 import { useMusic } from '@/app/utils/audio'
 
 const levelDuration = 1000 * 30
-export const MaintenanceContent = ({ handleLevelAdvance, isMobile }: ContentProps) => {
+export const MaintenanceContent = ({ handleLevelAdvance, layout }: ContentProps) => {
+  const { isMobile } = layout
   const timeoutRef = useRef<NodeJS.Timeout>(null)
   const jazz = useMusic('jazz')
   const [timeElapsed, setTimeElapsed] = useState(0)
