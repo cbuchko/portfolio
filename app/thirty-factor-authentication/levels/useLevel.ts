@@ -130,13 +130,7 @@ export const LEVELS: LevelDefinition[] = [
     title: 'Authenticator App',
   },
   { id: 'fishing', content: FishingContent, controls: FishingControls, title: 'Fishing' },
-  {
-    id: 'bird-calls',
-    content: BirdCallContent,
-    controls: BirdCallControls,
-    requiresLoad: true,
-    title: 'Bird Calls',
-  },
+
   { id: 'quotes', content: QuotesContent, title: 'Quotes' },
   {
     id: 'password-confirm',
@@ -145,8 +139,8 @@ export const LEVELS: LevelDefinition[] = [
     title: 'Password Confirm',
   },
   { id: 'parlor-room', content: ParlorRoomContent, requiresLoad: true, title: 'Parlor Room' },
-  { id: 'pizzatron', content: PizzatronContent, title: 'Pizzatron' },
   { id: 'dartboard', content: DartboardContent, title: 'Dartboard' },
+  { id: 'pizzatron', content: PizzatronContent, title: 'Pizzatron' },
   { id: 'road-trip', content: RoadTripContent, requiresLoad: true, title: 'Road Trip' },
   {
     id: 'bomb-defusal',
@@ -154,8 +148,14 @@ export const LEVELS: LevelDefinition[] = [
     controls: BombDefusalControls,
     title: 'Bomb Defusal',
   },
+  {
+    id: 'bird-calls',
+    content: BirdCallContent,
+    controls: BirdCallControls,
+    requiresLoad: true,
+    title: 'Bird Calls',
+  },
   { id: 'tax-return', content: TaxReturnContent, controls: TaxReturnControls, title: 'Tax Return' },
-  { id: 'mastermind', content: MastermindContent, title: 'Mastermind' },
   {
     id: 'package-arrival',
     content: UPSFinishContent,
@@ -163,6 +163,7 @@ export const LEVELS: LevelDefinition[] = [
     requiresLoad: true,
     title: 'Package Arrival',
   },
+  { id: 'mastermind', content: MastermindContent, title: 'Mastermind' },
   { id: 'rhythm-challenge', content: SpotifyContent, title: 'Rhythm Challenge' },
   { id: 'papers-please', content: PapersPleaseContent, title: 'Papers Please' },
   {
