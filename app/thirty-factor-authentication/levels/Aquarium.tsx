@@ -237,6 +237,7 @@ const Fish = ({ isMobile, yBounds }: { isMobile: boolean; yBounds: YBounds }) =>
   )
   const [painted, setPainted] = useState(false)
   const imgRef = useRef<HTMLImageElement>(null)
+  const yDirRef = useRef<1 | -1>(Math.random() < 0.5 ? 1 : -1)
 
   useEffect(() => {
     if (imgRef.current?.complete) setPainted(true)
@@ -245,11 +246,19 @@ const Fish = ({ isMobile, yBounds }: { isMobile: boolean; yBounds: YBounds }) =>
   useEffect(() => {
     if (!painted || isLeft === undefined) return
     const { moveMs, minJump, maxJump } = motion
+    const yRange = yBounds.maxY - yBounds.minY
     const interval = setInterval(() => {
       const { x: oldX, y: oldY } = positionRef.current
       const moveMagnitude = Math.random() * (maxJump - minJump) + minJump
       const newX = isLeft ? oldX + moveMagnitude : oldX - moveMagnitude
-      const newY = Math.random() < 0.5 ? oldY - moveMagnitude : oldY + moveMagnitude
+      // Phone height is only a couple of hops tall; using the full X jump for Y
+      // slams the clamp every tick and they vibrate top-to-bottom.
+      const yStep = isMobile ? Math.min(64, Math.max(28, yRange * 0.16)) : moveMagnitude
+      let newY = oldY + yDirRef.current * yStep
+      if (newY <= yBounds.minY || newY >= yBounds.maxY) {
+        yDirRef.current = yDirRef.current === 1 ? -1 : 1
+        newY = oldY + yDirRef.current * yStep
+      }
       const next = { x: newX, y: clampFishY(newY, yBounds) }
       positionRef.current = next
       setPosition(next)
@@ -258,7 +267,7 @@ const Fish = ({ isMobile, yBounds }: { isMobile: boolean; yBounds: YBounds }) =>
     return () => {
       clearInterval(interval)
     }
-  }, [painted, isLeft, motion, yBounds])
+  }, [painted, isLeft, isMobile, motion, yBounds])
 
   return (
     <img
