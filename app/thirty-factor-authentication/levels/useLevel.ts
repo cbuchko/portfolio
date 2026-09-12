@@ -84,7 +84,6 @@ export type LevelProps = {
 
 // True 30 factors — Account Select is pre-game, not in this list.
 export const LEVELS: LevelDefinition[] = [
-  { id: 'aquarium', content: AquariumContent, controls: AquariumControls, title: 'Aquarium' },
   {
     id: 'identity-lock',
     content: IdentityLockContent,
@@ -127,6 +126,7 @@ export const LEVELS: LevelDefinition[] = [
     controls: AppCodeControls,
     title: 'Authenticator App',
   },
+  { id: 'aquarium', content: AquariumContent, controls: AquariumControls, title: 'Aquarium' },
   {
     id: 'password-confirm',
     content: FallbackTwoContent,
