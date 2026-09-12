@@ -924,3 +924,24 @@ small {
   }
 }
 
+@keyframes aquarium-fish-bob {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, var(--aquarium-bob, -10px), 0);
+  }
+}
+
+.aquarium-fish-bob {
+  animation: aquarium-fish-bob var(--aquarium-bob-ms, 900ms) ease-in-out infinite;
+  animation-delay: var(--aquarium-bob-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aquarium-fish-bob {
+    animation: none;
+  }
+}
+

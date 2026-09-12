@@ -238,9 +238,18 @@ const Fish = ({ isMobile, yBounds }: { isMobile: boolean; yBounds: YBounds }) =>
   const [painted, setPainted] = useState(false)
   const imgRef = useRef<HTMLImageElement>(null)
   const yDirRef = useRef<1 | -1>(Math.random() < 0.5 ? 1 : -1)
+  const hopMs = useRef(motion.moveMs + Math.floor(Math.random() * 40) - 16).current
+  const swim = useMemo(
+    () => ({
+      bobPx: -(6 + Math.random() * 8),
+      bobMs: 620 + Math.random() * 520,
+      bobDelay: -(Math.random() * 900),
+    }),
+    []
+  )
   // Phone: finish each hop before the next. A 1500ms ease cut every 150ms
   // on a 390px screen is the vibrate.
-  const tweenMs = isMobile ? motion.moveMs : motion.glideMs
+  const tweenMs = isMobile ? hopMs : motion.glideMs
 
   useEffect(() => {
     if (imgRef.current?.complete) setPainted(true)
@@ -250,35 +259,41 @@ const Fish = ({ isMobile, yBounds }: { isMobile: boolean; yBounds: YBounds }) =>
     const node = nodeRef.current
     if (!node) return
     node.style.transform = `translate3d(${initialPosition.x}px, ${initialPosition.y}px, 0)`
-    node.style.transition = painted ? `transform ${tweenMs}ms linear` : 'none'
-  }, [initialPosition, painted, tweenMs])
+    node.style.transition = painted
+      ? `transform ${tweenMs}ms ${isMobile ? 'ease-in-out' : 'linear'}`
+      : 'none'
+  }, [initialPosition, painted, tweenMs, isMobile])
 
   useEffect(() => {
     if (!painted || isLeft === undefined) return
-    const { moveMs, minJump, maxJump } = motion
-    const yRange = yBounds.maxY - yBounds.minY
+    const { minJump, maxJump } = motion
     const vw = window.visualViewport?.width ?? window.innerWidth
     const interval = setInterval(() => {
       const { x: oldX, y: oldY } = positionRef.current
       const moveMagnitude = Math.random() * (maxJump - minJump) + minJump
       const xStep = isMobile ? Math.min(moveMagnitude, Math.max(56, vw * 0.2)) : moveMagnitude
       const newX = isLeft ? oldX + xStep : oldX - xStep
-      const yStep = isMobile ? Math.min(64, Math.max(28, yRange * 0.16)) : moveMagnitude
-      let newY = oldY + yDirRef.current * yStep
+      // Phone: small random weave each hop (not a locked diagonal).
+      // Desktop keeps the bigger committed dart.
+      let yStep = isMobile
+        ? (Math.random() < 0.5 ? 1 : -1) * (12 + Math.random() * 26)
+        : yDirRef.current * moveMagnitude
+      let newY = oldY + yStep
       if (newY <= yBounds.minY || newY >= yBounds.maxY) {
         yDirRef.current = yDirRef.current === 1 ? -1 : 1
-        newY = oldY + yDirRef.current * yStep
+        yStep = isMobile ? -yStep : yDirRef.current * Math.abs(yStep)
+        newY = oldY + yStep
       }
       const next = { x: newX, y: clampFishY(newY, yBounds) }
       positionRef.current = next
       const node = nodeRef.current
       if (node) node.style.transform = `translate3d(${next.x}px, ${next.y}px, 0)`
-    }, moveMs)
+    }, hopMs)
 
     return () => {
       clearInterval(interval)
     }
-  }, [painted, isLeft, isMobile, motion, yBounds])
+  }, [painted, isLeft, isMobile, motion, yBounds, hopMs])
 
   return (
     <div
@@ -289,16 +304,27 @@ const Fish = ({ isMobile, yBounds }: { isMobile: boolean; yBounds: YBounds }) =>
         transform: `translate3d(${initialPosition.x}px, ${initialPosition.y}px, 0)`,
       }}
     >
-      <img
-        ref={imgRef}
-        src={fishSrc(fishType)}
-        alt=""
-        height={FISH_SIZE}
-        width={FISH_SIZE}
-        draggable={false}
-        className={isLeft ? undefined : 'rotate-y-180'}
-        onLoad={() => setPainted(true)}
-      />
+      <div
+        className="aquarium-fish-bob"
+        style={
+          {
+            '--aquarium-bob': `${swim.bobPx}px`,
+            '--aquarium-bob-ms': `${swim.bobMs}ms`,
+            '--aquarium-bob-delay': `${swim.bobDelay}ms`,
+          } as React.CSSProperties
+        }
+      >
+        <img
+          ref={imgRef}
+          src={fishSrc(fishType)}
+          alt=""
+          height={FISH_SIZE}
+          width={FISH_SIZE}
+          draggable={false}
+          className={isLeft ? undefined : 'rotate-y-180'}
+          onLoad={() => setPainted(true)}
+        />
+      </div>
     </div>
   )
 }
