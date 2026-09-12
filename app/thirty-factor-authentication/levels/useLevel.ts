@@ -23,7 +23,7 @@ import { EinsteinContent, EinsteinControls } from './Einstein'
 import { UPSContent, UPSControls } from './UPS'
 import { UPSFinishContent, UPSFinishControls } from './UPSFinish'
 import { SSOIds } from './SSO'
-import { FishingContent, FishingControls } from './Fishing'
+import { FishingContent } from './Fishing'
 import { BirdCallContent, BirdCallControls } from './BirdCalls'
 import { RoadTripContent } from './RoadTrip'
 import { useSfx } from '@/app/utils/audio'
@@ -134,7 +134,7 @@ export const LEVELS: LevelDefinition[] = [
     title: 'Password Confirm',
   },
   { id: 'zodiac', content: ZodiacContent, controls: ZodiacControls, title: 'Zodiac' },
-  { id: 'fishing', content: FishingContent, controls: FishingControls, title: 'Fishing' },
+  { id: 'fishing', content: FishingContent, title: 'Fishing' },
   { id: 'filmography', content: IMDBContent, title: 'Filmography' },
   { id: 'parlor-room', content: ParlorRoomContent, requiresLoad: true, title: 'Parlor Room' },
   { id: 'dartboard', content: DartboardContent, title: 'Dartboard' },

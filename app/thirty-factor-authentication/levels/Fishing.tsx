@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ContentProps, ControlProps } from './types'
+import { ContentProps } from './types'
 import Image from 'next/image'
 import { useMusic } from '@/app/utils/audio'
 import { interpolateThreeColors } from '../utils'
@@ -23,6 +23,9 @@ function rangesOverlap(a0: number, a1: number, b0: number, b1: number) {
 
 export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => {
   const { isMobile } = layout
+  const [phase, setPhase] = useState<'idle' | 'running' | 'failed'>('idle')
+  const phaseRef = useRef(phase)
+  phaseRef.current = phase
   const [progressDisplay, setProgressDisplay] = useState(40)
   const [progressColor, setProgressColor] = useState(() =>
     interpolateThreeColors('#FF0000', '#FFFF00', '#00FF00', 0.4)
@@ -98,11 +101,10 @@ export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => 
         return
       }
 
-      // Strike, then hard-reset the minigame so the round starts fresh
       handleLevelAdvance()
-      resetRound()
+      setPhase('failed')
     },
-    [handleLevelAdvance, resetRound]
+    [handleLevelAdvance]
   )
 
   useEffect(() => {
@@ -114,7 +116,8 @@ export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => 
   // Single simulation + render loop
   useEffect(() => {
     const tick = (ts: number) => {
-      if (finishedRef.current) {
+      if (phaseRef.current !== 'running' || finishedRef.current) {
+        lastTsRef.current = null
         rafRef.current = requestAnimationFrame(tick)
         return
       }
@@ -224,7 +227,15 @@ export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => 
     }
   }, [isReelPlaying, paint])
 
+  const startRound = useCallback(() => {
+    resetRound()
+    lastTsRef.current = null
+    setPhase('running')
+    if (!isSoundtrackPlaying()) playSoundtrack()
+  }, [resetRound, isSoundtrackPlaying, playSoundtrack])
+
   const startHold = useCallback(() => {
+    if (phaseRef.current !== 'running') return
     if (!isSoundtrackPlaying()) playSoundtrack()
     if (isHoldingSpaceRef.current) return
     isHoldingSpaceRef.current = true
@@ -294,10 +305,12 @@ export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => 
       {isMobile && (
         <button
           type="button"
+          disabled={phase !== 'running'}
           className={`w-full mx-auto mt-8 shadow-lg select-none border rounded-lg py-4 pointer-cursor hold-button ${
             isHoldingVisual ? 'bg-gray-200' : ''
-          }`}
+          } ${phase !== 'running' ? 'opacity-50' : ''}`}
           onPointerDown={(e) => {
+            if (phase !== 'running') return
             e.preventDefault()
             e.currentTarget.setPointerCapture(e.pointerId)
             startHold()
@@ -309,6 +322,17 @@ export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => 
         >
           REEL
         </button>
+      )}
+      {phase !== 'running' && (
+        <div className="mt-8 mx-auto w-44">
+          <button
+            type="button"
+            className="min-h-11 w-full px-6 py-2 border-2 border-black rounded-md cursor-pointer bg-white"
+            onClick={startRound}
+          >
+            {phase === 'failed' ? 'Retry' : 'Start'}
+          </button>
+        </div>
       )}
       {!isMobile && (
         <>
@@ -338,17 +362,6 @@ export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => 
         </>
       )}
     </div>
-  )
-}
-
-export const FishingControls = ({ handleLevelAdvance }: ControlProps) => {
-  return (
-    <>
-      <div className="grow" />
-      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
-        Submit
-      </button>
-    </>
   )
 }
 

@@ -1,4 +1,4 @@
-import { JSX, useCallback, useEffect, useState } from 'react'
+import { JSX, useCallback, useEffect, useRef, useState } from 'react'
 import { PlayerIds, PlayerInformation } from './player-constants'
 import { ControlProps, IdentitySelectProps } from './levels/types'
 import { devMode, maxLevel } from './constants'
@@ -9,6 +9,7 @@ import { useEffectInitializer } from '../utils/useEffectUnsafe'
 import type { TfaLayout } from './useTfaLayout'
 
 const maxStrikes = 3
+const STRIKE_LOCKOUT_MS = 2000
 
 type AuthContainerProps = {
   playerId: PlayerIds | undefined
@@ -42,24 +43,39 @@ export const AuthContainer = ({
 
   const [isLoading, setIsLoading] = useState(false)
   const [isAdvanceVerified, setIsAdvanceVerified] = useState(false)
-  const [strikeFeedback, setStrikeFeedback] = useState(false)
+  const [strikeLocked, setStrikeLocked] = useState(false)
+  const strikeLockedRef = useRef(false)
+  const lockoutTimeoutRef = useRef<number | null>(null)
   const { handleLevelAdvance, level, strikesThisLevel, registerStrike } = baseProps
 
   useEffect(() => {
-    if (!strikeFeedback) return
-    const timeout = setTimeout(() => setStrikeFeedback(false), 450)
-    return () => clearTimeout(timeout)
-  }, [strikeFeedback])
+    return () => {
+      if (lockoutTimeoutRef.current != null) {
+        window.clearTimeout(lockoutTimeoutRef.current)
+      }
+    }
+  }, [])
 
   const onAdvance = (skipVerify?: boolean) => {
+    if (strikeLockedRef.current) return
     if (!isAdvanceVerified && !devMode && !skipVerify) {
       if (isPregame) return
       playErrorSound()
-      setStrikeFeedback(true)
       const next = registerStrike()
       if (next >= maxStrikes) {
         setIsGameOver(true)
+        return
       }
+      strikeLockedRef.current = true
+      setStrikeLocked(true)
+      if (lockoutTimeoutRef.current != null) {
+        window.clearTimeout(lockoutTimeoutRef.current)
+      }
+      lockoutTimeoutRef.current = window.setTimeout(() => {
+        lockoutTimeoutRef.current = null
+        strikeLockedRef.current = false
+        setStrikeLocked(false)
+      }, STRIKE_LOCKOUT_MS)
       return
     }
     setIsAdvanceVerified(false)
@@ -107,7 +123,13 @@ export const AuthContainer = ({
           '!mt-24': isCompact,
           'mx-auto': !isMobile,
           'w-full': isMobile,
+          'auth-strike-locked': strikeLocked,
         })}
+        style={
+          strikeLocked
+            ? ({ '--auth-strike-ms': `${STRIKE_LOCKOUT_MS}ms` } as React.CSSProperties)
+            : undefined
+        }
       >
         <div
           id="auth-header"
@@ -118,7 +140,7 @@ export const AuthContainer = ({
               'w-full': isMobile,
               'bg-red-400': headerThreatened,
               'bg-blue-300': !headerThreatened,
-              'auth-header-strike-flash': strikeFeedback,
+              'auth-header-strike-flash': strikeLocked,
             }
           )}
         >
@@ -158,7 +180,22 @@ export const AuthContainer = ({
           </div>
           {!isPregame && <h6 className="text-xs">{`Step ${level}/${maxLevel}`}</h6>}
         </div>
-        <div id="auth-body" className="group/auth-body border border-t-0 rounded-b-md">
+        <div id="auth-body" className="group/auth-body relative border border-t-0 rounded-b-md">
+          {strikeLocked && (
+            <div className="auth-strike-overlay" role="alert">
+              <Image
+                src="/thirty-factor-authentication/icons/x.svg"
+                alt=""
+                width={isMobile ? 56 : 64}
+                height={isMobile ? 56 : 64}
+                className="auth-strike-overlay-x"
+              />
+              <p className="auth-strike-overlay-title">Incorrect</p>
+              <p className="auth-strike-overlay-count">
+                {strikesThisLevel} of {maxStrikes}
+              </p>
+            </div>
+          )}
           <div
             id="auth-content"
             className="px-4 py-8 bg-white rounded-b-md group-has-[#auth-controls:not(:empty)]/auth-body:rounded-b-none"

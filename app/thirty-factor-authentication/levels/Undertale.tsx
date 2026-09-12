@@ -139,8 +139,9 @@ function BulletHell({
     setHealth(maxHealth)
     setGameStarted(false)
     setBulletTypes({ standard: false, spear: false, laser: false })
+    music.stop()
     handleLevelAdvance()
-  }, [handleLevelAdvance, height, setHealth, width])
+  }, [handleLevelAdvance, height, music, setHealth, width])
 
   useEffectInitializer(() => {
     if (health <= 0) resetGame()
