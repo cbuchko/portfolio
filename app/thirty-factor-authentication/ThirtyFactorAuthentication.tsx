@@ -115,10 +115,9 @@ export default function ThirtyFactorAuthentication() {
 
   return (
     <div
-      className={classNames('relative w-screen h-screen flex flex-col overflow-y-auto tfa-shell', {
+      className={classNames('relative w-full h-screen flex flex-col overflow-y-auto tfa-shell', {
         'select-none': isMobile,
       })}
-      style={{ scrollbarGutter: 'stable' }}
     >
         <div
           id="tfa-logo"

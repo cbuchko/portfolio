@@ -106,6 +106,7 @@ export const AuthContainer = ({
           'opacity-0 pointer-events-none': isLoading && requiresLoad,
           '!mt-24': isCompact,
           'mx-auto': !isMobile,
+          'w-full': isMobile,
         })}
       >
         <div
