@@ -29,20 +29,18 @@ const swimOffMs = (isMobile: boolean) => {
 
 const FISH_SIZE = 48
 
-const visibleYBounds = (isMobile: boolean) => {
-  const vv = window.visualViewport
-  const top = vv?.offsetTop ?? 0
-  const bottom = top + (vv?.height ?? window.innerHeight)
+type YBounds = { minY: number; maxY: number }
+
+const snapshotYBounds = (isMobile: boolean): YBounds => {
+  const visual = window.visualViewport?.height ?? window.innerHeight
+  const height = Math.min(window.innerHeight, visual)
   const pad = isMobile ? 12 : 0
-  const minY = top + pad
-  const maxY = bottom - FISH_SIZE - pad
-  return { minY, maxY: Math.max(minY, maxY) }
+  const minY = pad
+  return { minY, maxY: Math.max(minY, height - FISH_SIZE - pad) }
 }
 
-const clampFishY = (y: number, isMobile: boolean) => {
-  const { minY, maxY } = visibleYBounds(isMobile)
-  return Math.min(maxY, Math.max(minY, y))
-}
+const clampFishY = (y: number, bounds: YBounds) =>
+  Math.min(bounds.maxY, Math.max(bounds.minY, y))
 
 const FishOptions = [
   'Anchovy',
@@ -207,6 +205,7 @@ const FishTank = ({
   isMobile: boolean
 }) => {
   const spawnMs = isMobile ? aquariumMotion.mobile.spawnMs : aquariumMotion.desktop.spawnMs
+  const yBounds = useMemo(() => snapshotYBounds(isMobile), [waveId, isMobile])
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -221,13 +220,16 @@ const FishTank = ({
   }, [waveId, maxFish, spawnMs, setFishCount])
 
   return Array.from({ length: fishCount }).map((_, idx) => (
-    <Fish key={`${waveId}-${idx}`} isMobile={isMobile} />
+    <Fish key={`${waveId}-${idx}`} isMobile={isMobile} yBounds={yBounds} />
   ))
 }
 
-const Fish = ({ isMobile }: { isMobile: boolean }) => {
+const Fish = ({ isMobile, yBounds }: { isMobile: boolean; yBounds: YBounds }) => {
   const motion = isMobile ? aquariumMotion.mobile : aquariumMotion.desktop
-  const { initialPosition, isLeft } = useMemo(() => getInitialPosition(isMobile), [isMobile])
+  const { initialPosition, isLeft } = useMemo(
+    () => getInitialPosition(yBounds),
+    [yBounds]
+  )
   const [position, setPosition] = useState(initialPosition)
   const positionRef = useRef(initialPosition)
   const [fishType] = useState(
@@ -248,7 +250,7 @@ const Fish = ({ isMobile }: { isMobile: boolean }) => {
       const moveMagnitude = Math.random() * (maxJump - minJump) + minJump
       const newX = isLeft ? oldX + moveMagnitude : oldX - moveMagnitude
       const newY = Math.random() < 0.5 ? oldY - moveMagnitude : oldY + moveMagnitude
-      const next = { x: newX, y: clampFishY(newY, isMobile) }
+      const next = { x: newX, y: clampFishY(newY, yBounds) }
       positionRef.current = next
       setPosition(next)
     }, moveMs)
@@ -256,24 +258,7 @@ const Fish = ({ isMobile }: { isMobile: boolean }) => {
     return () => {
       clearInterval(interval)
     }
-  }, [painted, isLeft, isMobile, motion])
-
-  useEffect(() => {
-    const keepOnScreen = () => {
-      const y = clampFishY(positionRef.current.y, isMobile)
-      if (y === positionRef.current.y) return
-      const next = { x: positionRef.current.x, y }
-      positionRef.current = next
-      setPosition(next)
-    }
-    const viewport = window.visualViewport
-    viewport?.addEventListener('resize', keepOnScreen)
-    viewport?.addEventListener('scroll', keepOnScreen)
-    return () => {
-      viewport?.removeEventListener('resize', keepOnScreen)
-      viewport?.removeEventListener('scroll', keepOnScreen)
-    }
-  }, [isMobile])
+  }, [painted, isLeft, motion, yBounds])
 
   return (
     <img
@@ -294,7 +279,7 @@ const Fish = ({ isMobile }: { isMobile: boolean }) => {
   )
 }
 
-const getInitialPosition = (isMobile: boolean) => {
+const getInitialPosition = (yBounds: YBounds) => {
   let x: number
   const isLeft = Math.random() > 0.5
   if (isLeft) {
@@ -302,7 +287,7 @@ const getInitialPosition = (isMobile: boolean) => {
   } else {
     x = window.innerWidth
   }
-  const { minY, maxY } = visibleYBounds(isMobile)
+  const { minY, maxY } = yBounds
   const y = minY + Math.random() * Math.max(0, maxY - minY)
   return { initialPosition: { x, y }, isLeft }
 }
