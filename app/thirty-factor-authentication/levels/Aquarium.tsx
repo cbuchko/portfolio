@@ -230,29 +230,39 @@ const Fish = ({ isMobile, yBounds }: { isMobile: boolean; yBounds: YBounds }) =>
     () => getInitialPosition(yBounds),
     [yBounds]
   )
-  const [position, setPosition] = useState(initialPosition)
   const positionRef = useRef(initialPosition)
+  const nodeRef = useRef<HTMLDivElement>(null)
   const [fishType] = useState(
     () => FishOptions[Math.floor(Math.random() * FishOptions.length)]
   )
   const [painted, setPainted] = useState(false)
   const imgRef = useRef<HTMLImageElement>(null)
   const yDirRef = useRef<1 | -1>(Math.random() < 0.5 ? 1 : -1)
+  // Phone: finish each hop before the next. A 1500ms ease cut every 150ms
+  // on a 390px screen is the vibrate.
+  const tweenMs = isMobile ? motion.moveMs : motion.glideMs
 
   useEffect(() => {
     if (imgRef.current?.complete) setPainted(true)
   }, [fishType])
 
   useEffect(() => {
+    const node = nodeRef.current
+    if (!node) return
+    node.style.transform = `translate3d(${initialPosition.x}px, ${initialPosition.y}px, 0)`
+    node.style.transition = painted ? `transform ${tweenMs}ms linear` : 'none'
+  }, [initialPosition, painted, tweenMs])
+
+  useEffect(() => {
     if (!painted || isLeft === undefined) return
     const { moveMs, minJump, maxJump } = motion
     const yRange = yBounds.maxY - yBounds.minY
+    const vw = window.visualViewport?.width ?? window.innerWidth
     const interval = setInterval(() => {
       const { x: oldX, y: oldY } = positionRef.current
       const moveMagnitude = Math.random() * (maxJump - minJump) + minJump
-      const newX = isLeft ? oldX + moveMagnitude : oldX - moveMagnitude
-      // Phone height is only a couple of hops tall; using the full X jump for Y
-      // slams the clamp every tick and they vibrate top-to-bottom.
+      const xStep = isMobile ? Math.min(moveMagnitude, Math.max(56, vw * 0.2)) : moveMagnitude
+      const newX = isLeft ? oldX + xStep : oldX - xStep
       const yStep = isMobile ? Math.min(64, Math.max(28, yRange * 0.16)) : moveMagnitude
       let newY = oldY + yDirRef.current * yStep
       if (newY <= yBounds.minY || newY >= yBounds.maxY) {
@@ -261,7 +271,8 @@ const Fish = ({ isMobile, yBounds }: { isMobile: boolean; yBounds: YBounds }) =>
       }
       const next = { x: newX, y: clampFishY(newY, yBounds) }
       positionRef.current = next
-      setPosition(next)
+      const node = nodeRef.current
+      if (node) node.style.transform = `translate3d(${next.x}px, ${next.y}px, 0)`
     }, moveMs)
 
     return () => {
@@ -270,21 +281,25 @@ const Fish = ({ isMobile, yBounds }: { isMobile: boolean; yBounds: YBounds }) =>
   }, [painted, isLeft, isMobile, motion, yBounds])
 
   return (
-    <img
-      ref={imgRef}
-      src={fishSrc(fishType)}
-      alt=""
-      height={FISH_SIZE}
-      width={FISH_SIZE}
-      draggable={false}
-      className="fixed top-0 left-0 pointer-events-none"
+    <div
+      ref={nodeRef}
+      className="fixed top-0 left-0 pointer-events-none will-change-transform"
       style={{
         opacity: painted ? 1 : 0,
-        transform: `translate3d(${position.x}px, ${position.y}px, 0)${isLeft ? '' : ' rotateY(180deg)'}`,
-        transition: painted ? `transform ${motion.glideMs}ms` : 'none',
+        transform: `translate3d(${initialPosition.x}px, ${initialPosition.y}px, 0)`,
       }}
-      onLoad={() => setPainted(true)}
-    />
+    >
+      <img
+        ref={imgRef}
+        src={fishSrc(fishType)}
+        alt=""
+        height={FISH_SIZE}
+        width={FISH_SIZE}
+        draggable={false}
+        className={isLeft ? undefined : 'rotate-y-180'}
+        onLoad={() => setPainted(true)}
+      />
+    </div>
   )
 }
 
