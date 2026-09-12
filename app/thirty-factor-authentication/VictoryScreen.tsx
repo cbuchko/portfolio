@@ -52,9 +52,11 @@ export const VictoryScreen = ({
         </p>
         <p className="mt-4">Soundtrack:</p>
         <ul className="list-disc ml-4">
-          <li>{`"Open the Skies" by Kxdama`}</li>
+          <li>{`"Counting Fish" by Gabe Korth`}</li>
           <li>{`"Fishing Song" by Kai Mikkelsen`}</li>
+          <li>{`"Crazy Fast Accordion" by Iskander Ramazanov`}</li>
           <li>{`"Night Manor - Interior" by Eirik Suhrke from UFO 50`}</li>
+          <li>{`"Open the Skies" by Kxdama`}</li>
           <li>{`"Death by Glamour" by Toby Fox from Undertale`}</li>
         </ul>
       </div>

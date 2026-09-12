@@ -47,6 +47,7 @@ export const SOUND_REGISTRY = {
   nightManor: { src: `${SOUNDS}/night-manor-interior-128.mp3`, kind: 'music', volume: 0.15, loop: true },
   pizzaSong: { src: `${SOUNDS}/pizzasong-128.mp3`, kind: 'music', volume: 0.1, loop: true },
   stardew: { src: `${SOUNDS}/stardew-128.mp3`, kind: 'music', volume: 0.25, loop: true },
+  aquariumTheme: { src: `${SOUNDS}/aquarium.wav`, kind: 'music', volume: 0.25, loop: true },
   reel: { src: `${SOUNDS}/reel.mp3`, kind: 'music', volume: 0.05, loop: false },
   heartbeat: { src: `${SOUNDS}/heartbeat.mp3`, kind: 'music', volume: 1, loop: true },
   bombTicking: { src: `${SOUNDS}/bomb-defusal.m4a`, kind: 'music', volume: 1, loop: true },

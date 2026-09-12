@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMusic } from '@/app/utils/audio'
 import { ContentProps, ControlProps } from './types'
 
 const aquariumMotion = {
@@ -73,6 +74,7 @@ export const AquariumContent = ({
   const [fishCount, setFishCount] = useState(0)
   const [waveId, setWaveId] = useState(0)
   const [numberInput, setNumberInput] = useState('')
+  const { play: playSoundtrack, isPlaying: isSoundtrackPlaying } = useMusic('aquariumTheme')
 
   const startWave = () => {
     cancelAdvance()
@@ -82,6 +84,7 @@ export const AquariumContent = ({
     setFishCount(0)
     setWaveId((id) => id + 1)
     setPhase('running')
+    if (!isSoundtrackPlaying()) playSoundtrack()
   }
 
   const setCountValue = (next: string) => {

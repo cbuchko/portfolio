@@ -794,7 +794,7 @@ export const PlayerInformation: Record<PlayerIds, Player> = {
     fullName: 'Samuel Leroy Jackson',
     fullNameAliases: ['Samuel Leroy Jackson'],
     birthCity: 'washington',
-    zodiac: 'sagittarius-virgo-unknown',
+    zodiac: 'sagittarius-virgo-pisces',
     email: 'jedi.master@thirtyfactor.gov',
     easyTrivia: [
       {
