@@ -5,6 +5,8 @@ import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 import classNames from 'classnames'
 import { PlayerInformation } from '../player-constants'
 
+const foldTitle = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+
 const selectInitialPuzzleIndex = () => {
   //currently assuming every player will have three options
   return Math.floor(Math.random() * 3)
@@ -42,7 +44,7 @@ export const IMDBContent = ({ playerId, handleLevelAdvance, layout }: ContentPro
   }, [timer])
 
   const handleSubmit = () => {
-    if (searchInput.toLowerCase() === question.answer.toLowerCase()) {
+    if (foldTitle(searchInput) === foldTitle(question.answer)) {
       handleLevelAdvance(true)
     } else {
       setIsShowingError(true)
@@ -189,7 +191,7 @@ const MovieSearch = ({
   }
 
   return (
-    <div ref={searchRef} className="relative z-[110] w-full">
+    <div ref={searchRef} className="relative w-full">
       <TextInput
         onChange={(value) => {
           setSearchInput(value)
@@ -205,7 +207,7 @@ const MovieSearch = ({
       {movieResults.length > 0 && isDropdownVisible && (
         <ul
           className={classNames(
-            'absolute z-[110] bg-white border w-full rounded-md overflow-y-auto max-h-[240px]',
+            'absolute z-10 bg-white border w-full rounded-md overflow-y-auto max-h-[240px]',
             isMobile ? 'bottom-full mb-1' : 'top-full mt-1'
           )}
         >
@@ -253,7 +255,7 @@ const HintCard = ({
   return (
     <div
       className={classNames(
-        'h-[150px] w-[150px] border rounded-md flex flex-col items-center justify-center shadow-md p-1',
+        'relative h-[150px] w-[150px] border rounded-md flex flex-col items-center justify-center shadow-md p-1 overflow-hidden',
         className
       )}
     >
@@ -263,7 +265,7 @@ const HintCard = ({
       </>
       <div
         className={classNames(
-          'absolute h-[148px] w-[148px] backdrop-blur-xs z-100 rounded-md transition-opacity duration-1000',
+          'absolute inset-0 backdrop-blur-xs rounded-md transition-opacity duration-1000',
           {
             'opacity-0': isRevealed,
           }

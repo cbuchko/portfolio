@@ -64,17 +64,16 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance, layout }: Co
   }, [playerId])
 
   const handleApprove = () => {
-    if (!gameInfo) return
-    setIsShowingCitation(true)
+    if (!gameInfo || isShowingCitation) return
     if (discrepancyKeys.size === 0 && selectedDiscrepancyIds.size === 0) {
       handleLevelAdvance(true)
       return
     }
-    handleLevelAdvance()
+    setIsShowingCitation(true)
   }
 
   const handleDecline = () => {
-    if (!gameInfo) return
+    if (!gameInfo || isShowingCitation) return
     if (
       discrepancyKeys.size !== 0 &&
       discrepancyKeys.size === selectedDiscrepancyIds.size &&
@@ -84,7 +83,6 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance, layout }: Co
       return
     }
     setIsShowingCitation(true)
-    handleLevelAdvance()
   }
 
   const handleDiscrepancySelect = (id: string) => {
@@ -110,6 +108,7 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance, layout }: Co
 
   const handleReset = () => {
     if (subjectId === null) return
+    handleLevelAdvance()
     // Next unused unselected character — 3 lives ≈ 3 different people
     let nextSubject = remainingSubjectsRef.current[0]
     if (nextSubject !== undefined) {
@@ -143,7 +142,7 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance, layout }: Co
           <p className="text-lg max-w-[400px]">
             Identify all information on each document that is incorrect or otherwise invalid.
           </p>
-          <p className="mb-2 text-sm italic">eg. incorrect hair color or expired identification</p>
+          <p className="mb-2 text-sm italic">eg. incorrect eye color or expired identification</p>
           <p className="text-lg mt-4">After selecting everything you believe to be an error:</p>
           <ol className="list-disc ml-4 text-lg">
             <li>Click DENIED if you identified any errors</li>
@@ -621,12 +620,14 @@ const generateDiscrepancies = (
 
   //between 2-4 (N) discrepencies
   const numberOfDiscrepencies = Math.ceil(Math.random() * (4 - 2) + 2)
-  const discrepancyKeys = shuffle(Object.keys(DiscrepancyBase))
+  const discrepancyKeys = shuffle(
+    Object.keys(DiscrepancyBase).filter((key) => key !== 'hair' && key !== 'issued')
+  )
 
   //the first N indexes get turned into Errors
   for (let i = 0; i < numberOfDiscrepencies; i++) {
     const key = discrepancyKeys[i]
-    if (key !== 'issued') discrepancyIds.add(key)
+    discrepancyIds.add(key)
     const falseInfo = Object.entries(PlayerInformation[playerId].fakeLicense).find(
       ([fk]) => fk === key
     )
