@@ -17,20 +17,19 @@ export const AppCodeContent = ({
 
   const handleInputChange = (input: string) => {
     setCodeInput(input)
-    if (targetCode.toLocaleLowerCase() === input.toLocaleLowerCase()) {
+  }
+
+  useEffect(() => {
+    if (targetCode.toLocaleLowerCase() === codeInput.toLocaleLowerCase()) {
       validateAdvance()
     } else {
       cancelAdvance()
     }
-  }
+  }, [targetCode, codeInput, validateAdvance, cancelAdvance])
 
-  const handleTargetSet = useCallback(
-    (code: string) => {
-      setTargetCode(code)
-      cancelAdvance()
-    },
-    [cancelAdvance]
-  )
+  const handleTargetSet = useCallback((code: string) => {
+    setTargetCode(code)
+  }, [])
 
   const [apps] = useState(() => {
     const decoys = shuffle([...appNames])
@@ -96,15 +95,19 @@ export const AppCode = ({
   const [code, setCode] = useState(isTarget ? codeDefault : makeAuthCode(6))
   const intervalRef = useRef<NodeJS.Timeout>(null)
   const timeoutRef = useRef<NodeJS.Timeout>(null)
+  const periodRef = useRef(0)
 
   useEffect(() => {
     const startDelay = isDelayed ? Math.random() * 5000 : 0
 
     timeoutRef.current = setTimeout(() => {
       const start = Date.now()
+      periodRef.current = 0
       intervalRef.current = setInterval(() => {
         const diff = (Date.now() - start) / 1000
-        if (diff % duration <= 0.1) {
+        const period = Math.floor(diff / duration)
+        if (period > periodRef.current) {
+          periodRef.current = period
           const newCode = makeAuthCode(6)
           setCode(newCode)
           if (isTarget) setTargetCode?.(newCode)

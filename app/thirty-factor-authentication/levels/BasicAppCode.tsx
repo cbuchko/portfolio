@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { makeAuthCode } from '../utils'
 import { AppCode } from './AppCode'
@@ -15,20 +15,19 @@ export const BasicAppCodeContent = ({
 
   const handleInputChange = (input: string) => {
     setCodeInput(input)
-    if (targetCode.toLocaleLowerCase() === input.toLocaleLowerCase()) {
+  }
+
+  useEffect(() => {
+    if (targetCode.toLocaleLowerCase() === codeInput.toLocaleLowerCase()) {
       validateAdvance()
     } else {
       cancelAdvance()
     }
-  }
+  }, [targetCode, codeInput, validateAdvance, cancelAdvance])
 
-  const handleTargetSet = useCallback(
-    (code: string) => {
-      setTargetCode(code)
-      cancelAdvance()
-    },
-    [cancelAdvance]
-  )
+  const handleTargetSet = useCallback((code: string) => {
+    setTargetCode(code)
+  }, [])
 
   return (
     <>
