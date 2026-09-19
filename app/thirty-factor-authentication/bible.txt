@@ -23,19 +23,9 @@ August 16th revisit notes:
 
 
 September 11th Notes:
-* iPhone 12, and other sessions, where the responsivenss fails. AppCode, IMDB
-* Full name make it more clear what a full name is? - FOR NOW im leaving this until more evidence
-
-* Seeing weirdly a large amount of short viewports. We need accomodation for non-mobile short viewports
-* identity lock checkbox alignment
 
 * I think there's an opportunity for there to generally be more sounds. Lots of button press that don't feel good.
-* UPS still not compact enough
 
 
 September 19th:
-Message spam is a huge quitting point? Too hard? Too early?
-Legal name does need to be more clear. Make it clear
-Responsiveness completion
-Trim gabes song
 Audit character stuff liek Quotes
