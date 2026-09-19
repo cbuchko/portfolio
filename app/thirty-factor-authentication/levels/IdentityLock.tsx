@@ -65,13 +65,15 @@ export const IdentityLockContent = ({
               { 'identity-lock-ack': index > 0 }
             )}
           >
-            <input
-              type="checkbox"
-              checked={checked[index]}
-              onChange={(e) => handleCheck(index, e.target.checked)}
-              className="mt-1 h-4 w-4 shrink-0 cursor-pointer"
-            />
-            <span className="text-base">{label}</span>
+            <span className="flex h-6 w-4 shrink-0 items-center justify-center">
+              <input
+                type="checkbox"
+                checked={checked[index]}
+                onChange={(e) => handleCheck(index, e.target.checked)}
+                className="h-4 w-4 cursor-pointer"
+              />
+            </span>
+            <span className="text-base leading-6">{label}</span>
           </label>
         ))}
       </div>
