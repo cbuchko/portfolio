@@ -5,7 +5,7 @@ import { useEffectInitializer } from '../utils/useEffectUnsafe'
 export const useMessageSpam = (
   spamMessages: string[],
   realMessage?: string,
-  delayInMs = 7000,
+  delayInMs = 8000,
   enabled = true
 ) => {
   const [message, setMessage] = useState<string | undefined>(realMessage)

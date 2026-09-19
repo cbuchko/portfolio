@@ -25,13 +25,11 @@ export const MessageSpamContent = ({
   const [code, setCode] = useState('')
 
   useEffectInitializer(() => {
-    setCode(makeCode(12))
+    setCode(makeCode(10))
   }, [])
 
-  const { message, handleResendCode } = useMessageSpam(
-    messages,
-    code ? `Your authentication code is: ${code}` : undefined
-  )
+  const authMessage = code ? `Your authentication code is: ${code}` : undefined
+  const { message, handleResendCode } = useMessageSpam(messages, authMessage)
 
   const handleInputChange = (input: string) => {
     setCodeInput(input)
@@ -63,7 +61,16 @@ export const MessageSpamContent = ({
             key={message}
             className="w-[var(--tfa-auth-width,100%)] px-4 py-2 rounded-lg text-white text-message select-none shadow-lg bg-[#27ad3b]"
           >
-            {message}
+            {code && message === authMessage ? (
+              <>
+                {'Your authentication code is: '}
+                <span className="mono inline-block rounded px-1.5 font-semibold tracking-[0.16em]">
+                  {code}
+                </span>
+              </>
+            ) : (
+              message
+            )}
           </div>
         </ExtrasPortal>
       )}

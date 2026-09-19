@@ -97,13 +97,13 @@ export const LEVELS: LevelDefinition[] = [
     title: 'Security Questions',
   },
   { id: 'app-code', content: BasicAppCodeContent, controls: BasicAppCodeControls, title: 'App Code' },
+  { id: 'legal-name', content: LegalNameContent, controls: LegalNameControls, title: 'Legal Name' },
   {
     id: 'message-spam',
     content: MessageSpamContent,
     controls: MessageSpamControls,
     title: 'Message Spam',
   },
-  { id: 'legal-name', content: LegalNameContent, controls: LegalNameControls, title: 'Legal Name' },
   { id: 'biometrics', content: BiometricContent, controls: BiometricControls, title: 'Biometrics' },
   {
     id: 'password-reset',
