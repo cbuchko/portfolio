@@ -47,7 +47,7 @@ export const LegalNameContent = ({
 
   return (
     <>
-      <p className="text-lg">We have lost your name in our recoreds. Please re-confirm your full legal name.</p>
+      <p className="text-lg">We have lost your name in our records. Please re-confirm your full legal name.</p>
       <div className="mt-3 flex items-center gap-3 border border-gray-300 bg-gray-50 px-3 py-2 mb-2">
         <Image
           src={`/thirty-factor-authentication/portraits/${player.license.headshot}`}
