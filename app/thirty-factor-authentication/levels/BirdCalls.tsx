@@ -14,7 +14,9 @@ export const BirdCallContent = ({
   setIsLoading,
   layout,
 }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow, fit } = layout
+  // Desktop thumbs hug a 3×3 grid instead of stretching across the card.
+  const birdSize = Math.round(Math.max(100, 140 * fit))
   const [selectedBird, setSelectedBird] = useState<string>()
   const [birdsShuffled, setBirdsShuffled] = useState<{ id: string; url: string }[] | null>(null)
   const [targetBird, setTargetBird] = useState<string>()
@@ -34,7 +36,7 @@ export const BirdCallContent = ({
 
   return (
     <>
-      <div className={classNames('flex items-center justify-between', { 'flex-col': isMobile })}>
+      <div className={classNames('flex items-center justify-between', { 'flex-col': isNarrow })}>
         <p className="text-lg w-max mr-2">Identify the Bird Call</p>
         <audio
           controls
@@ -43,9 +45,9 @@ export const BirdCallContent = ({
         />
       </div>
       <div
-        className={classNames('grid grid-cols-3 mt-4', {
-          'gap-2': isMobile,
-          'gap-4': !isMobile,
+        className={classNames('grid grid-cols-3', {
+          'mt-2 w-full gap-2': isNarrow,
+          'mx-auto mt-3 w-max max-w-full gap-3': !isNarrow,
         })}
       >
         {birdsShuffled &&
@@ -56,7 +58,8 @@ export const BirdCallContent = ({
               selectedBird={selectedBird}
               setSelectedBird={setSelectedBird}
               validateSelect={validateSelect}
-              isMobile={isMobile}
+              isNarrow={isNarrow}
+              birdSize={birdSize}
             />
           ))}
       </div>
@@ -69,13 +72,15 @@ const BirdThumbnail = ({
   selectedBird,
   setSelectedBird,
   validateSelect,
-  isMobile,
+  isNarrow,
+  birdSize,
 }: {
   bird: { id: string; url: string }
   selectedBird?: string
   setSelectedBird: React.Dispatch<React.SetStateAction<string | undefined>>
   validateSelect: (id?: string) => void
-  isMobile?: boolean
+  isNarrow: boolean
+  birdSize: number
 }) => {
   const isSelected = selectedBird === bird.id
 
@@ -88,19 +93,21 @@ const BirdThumbnail = ({
     validateSelect(bird.id)
   }
 
-  const birdSize = isMobile ? 110 : 200
   return (
     <Image
       key={bird.id}
       src={bird.url}
       alt={bird.id}
-      height={birdSize}
-      width={birdSize}
-      className={classNames('cursor-pointer transition-transform duration-500', {
-        'h-auto w-full aspect-square object-cover': isMobile,
-        'outline-6 outline-yellow-300 rounded-md scale-75 shadow-lg': isSelected,
-      })}
-      style={isMobile ? undefined : { height: birdSize, width: birdSize }}
+      height={200}
+      width={200}
+      className={classNames(
+        'aspect-square cursor-pointer object-cover transition-transform duration-500',
+        {
+          'h-auto w-full': isNarrow,
+          'outline-6 outline-yellow-300 rounded-md scale-75 shadow-lg': isSelected,
+        }
+      )}
+      style={isNarrow ? undefined : { height: birdSize, width: birdSize }}
       onClick={handleSelect}
     />
   )

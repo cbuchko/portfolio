@@ -10,7 +10,7 @@ const Map = dynamic<MapProps>(() => import('./Map').then((mod) => mod.default), 
 })
 
 export const MapContent = ({ playerId, validateAdvance, cancelAdvance, layout }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow } = layout
   const [selectedCity, setSelectedCity] = useState<string>()
 
   const handleCitySelect = (city?: string) => {
@@ -26,7 +26,7 @@ export const MapContent = ({ playerId, validateAdvance, cancelAdvance, layout }:
   return (
     <>
       <p className="text-lg">Please confirm your city of birth.</p>{' '}
-      <div style={{ width: !isMobile ? '500px' : 'calc(100vw - 50px)' }}>
+      <div style={{ width: !isNarrow ? '500px' : 'calc(100vw - 50px)' }}>
         <Map
           handleCitySelect={handleCitySelect}
           selectedCity={selectedCity}

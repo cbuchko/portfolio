@@ -99,12 +99,19 @@ export const propFrameStyle = (
 export const propFrameClassName = (context: PropDisplayContext) =>
   `nm-prop-frame nm-prop-frame--${context}`
 
-/** Outer nm-prop-visual wrapper for world-spawned items. */
-export const worldPropOuterStyle = (config: PropDisplayConfig, mobile = false): CSSProperties => {
+/**
+ * Outer nm-prop-visual wrapper for world-spawned items.
+ * `scale` shrinks desktop props on short viewports (layout `fit`); mobile has its own sizes.
+ */
+export const worldPropOuterStyle = (
+  config: PropDisplayConfig,
+  mobile = false,
+  scale = 1
+): CSSProperties => {
   const spec = resolveWorldDisplay(config, mobile)
   return {
-    width: spec.width,
-    height: spec.height,
+    width: Math.round(spec.width * scale),
+    height: Math.round(spec.height * scale),
     transform: spec.rotate
       ? `translate(-50%, -50%) rotate(${spec.rotate}deg)`
       : 'translate(-50%, -50%)',

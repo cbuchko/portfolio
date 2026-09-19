@@ -5,7 +5,7 @@ import { useMusic } from '@/app/utils/audio'
 
 const levelDuration = 1000 * 30
 export const MaintenanceContent = ({ handleLevelAdvance, layout }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow, fit } = layout
   const timeoutRef = useRef<NodeJS.Timeout>(null)
   const jazz = useMusic('jazz')
   const [timeElapsed, setTimeElapsed] = useState(0)
@@ -44,14 +44,14 @@ export const MaintenanceContent = ({ handleLevelAdvance, layout }: ContentProps)
     }
   }, [handleLevelAdvance])
 
-  const imageSizes = !isMobile ? 150 : 100
+  const imageSizes = isNarrow ? 100 : Math.round(150 * fit)
   return (
     <>
       <p className="text-lg">{`Sorry, the Authentication service is currently under maintenance.`}</p>
       <p className="text-lg">
         {`Please don't do`} <span className="italic">anything</span> while we resolve the problem.
       </p>
-      <div className="flex items-center justify-between mt-8">
+      <div className="flex items-center justify-between tfa-gap">
         <Image
           src="/thirty-factor-authentication/maintenance.webp"
           alt="maintenance"
@@ -72,7 +72,7 @@ export const MaintenanceContent = ({ handleLevelAdvance, layout }: ContentProps)
         />
       </div>
       {timeElapsed > 60 * 3 && (
-        <p className="mt-8 max-w-[500px]">
+        <p className="tfa-gap max-w-[500px]">
           {`I really didn't think I'd have to say this, but it's been three minutes. When I told you
           to not do`}{' '}
           <span className="font-bold">ANYTHING</span>

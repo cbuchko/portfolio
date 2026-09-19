@@ -17,7 +17,7 @@ export const RoadTripContent = ({
   setIsLoading,
   layout,
 }: ContentProps) => {
-  const { isMobile } = layout
+  const { isCompact } = layout
   const [selectedCity, setSelectedCity] = useState<string>()
   const [startingPoint, setStartingPoint] = useState<number[]>([])
   const [markers, setMarkers] = useState<Marker[]>([])
@@ -48,14 +48,11 @@ export const RoadTripContent = ({
 
   return (
     <>
-      <div
-        className={classNames('fixed top-0 left-0 h-screen w-screen bg-gray-100')}
-        key={resetIndex}
-      >
+      <div className={classNames('fixed top-0 left-0 h-dvh w-screen bg-gray-100')} key={resetIndex}>
         <Map
           handleCitySelect={handleCitySelect}
           selectedCity={selectedCity}
-          minZoom={isMobile ? 8 : 9} //make mobile a little easier
+          minZoom={isCompact ? 8 : 9} //small viewports see less map; let them zoom out further
           markers={markers}
           initialCoordinate={startingPoint as [number, number]}
           className="map-full"
@@ -64,7 +61,8 @@ export const RoadTripContent = ({
         />
       </div>
       <button
-        className="fixed bottom-4 auth-button left-[50%] -translate-x-[50%] text-4xl !h-max !max-h-none"
+        className="fixed auth-button left-[50%] -translate-x-[50%] text-4xl !h-max !max-h-none"
+        style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
         onClick={() => setResetIndex((index) => index + 1)}
       >
         RESET

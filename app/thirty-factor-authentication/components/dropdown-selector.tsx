@@ -12,6 +12,7 @@ type DropdownSelectorProps = {
   width: number | string
   label?: string
   includeBlankOption?: boolean
+  compact?: boolean
 }
 
 export const DropdownSelector = ({
@@ -24,6 +25,7 @@ export const DropdownSelector = ({
   label,
   onOptionSelect,
   includeBlankOption = true,
+  compact,
 }: DropdownSelectorProps) => {
   const [selectedOption, setSelectedOption] = useState(defaultOption)
   const isOpen = id === activeId
@@ -74,12 +76,20 @@ export const DropdownSelector = ({
         </div>
       </button>
       {isOpen && (
-        <div className="absolute mt-0.5 bg-white w-full border rounded-md z-100 overflow-hidden">
+        <div
+          className={classNames(
+            'absolute mt-0.5 bg-white w-full border rounded-md z-100 overflow-y-auto',
+            compact ? 'max-h-[min(12.5rem,40dvh)]' : 'max-h-[min(16rem,45dvh)]'
+          )}
+        >
           {(includeBlankOption ? ['', ...options] : [...options]).map((sign, idx) => (
             <div
               key={idx}
               onClick={() => handleOptionSelect(sign)}
-              className="py-2 px-2 cursor-pointer hover:bg-gray-100 capitalize min-h-[40px] overflow-hidden whitespace-nowrap"
+              className={classNames(
+                'px-2 cursor-pointer hover:bg-gray-100 capitalize overflow-hidden whitespace-nowrap',
+                compact ? 'py-1 min-h-8 text-sm' : 'py-2 min-h-[40px]'
+              )}
             >
               {sign}
             </div>

@@ -5,7 +5,11 @@ import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 import classNames from 'classnames'
 import { PlayerInformation } from '../player-constants'
 
-const foldTitle = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+const foldTitle = (title: string) =>
+  title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
 
 const selectInitialPuzzleIndex = () => {
   //currently assuming every player will have three options
@@ -14,7 +18,9 @@ const selectInitialPuzzleIndex = () => {
 
 const maxTimeInSeconds = 59
 export const IMDBContent = ({ playerId, handleLevelAdvance, layout }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow, isShort, fit } = layout
+  // Cards keep their 150px width (synopses were abridged for it); only height gives.
+  const cardHeight = Math.max(120, Math.round(150 * fit))
   const [timer, setTimer] = useState(maxTimeInSeconds)
   const [searchInput, setSearchInput] = useState('')
   const [questionIndex, setQuestionIndex] = useState<number | null>(null)
@@ -60,47 +66,65 @@ export const IMDBContent = ({ playerId, handleLevelAdvance, layout }: ContentPro
     <>
       <p className="text-lg">{`Confirm the title of this piece of media you've appeared in.`}</p>
       <p className="text-lg">You have unlimited attempts until the time runs out.</p>
-      <div className="bg-black text-red-500 mono text-4xl my-4 p-1 text-center">
+      <div
+        className={classNames('bg-black text-red-500 mono p-1 text-center', {
+          'text-4xl my-4': !isShort,
+          'text-2xl my-2': isShort,
+        })}
+      >
         {timer < 0
           ? '0:00'
           : '0:' + (timer.toString().length === 1 ? '0' + timer : timer.toString())}
       </div>
       <div
-        className={classNames('grid grid-cols-3 gap-5 my-8', {
-          '!grid-cols-2 place-items-center': isMobile,
+        className={classNames('grid grid-cols-3 tfa-gap-y', {
+          '!grid-cols-2 place-items-center': isNarrow,
+          'gap-5': !isShort,
+          'gap-3': isShort,
         })}
         key={question.answer}
       >
-        <HintCard title="type" hint={question.type} revealTimeoutInMs={0} className="bg-blue-100" />
+        <HintCard
+          title="type"
+          hint={question.type}
+          revealTimeoutInMs={0}
+          className="bg-blue-100"
+          height={cardHeight}
+        />
         <HintCard
           title="release year"
           hint={question.date}
           revealTimeoutInMs={5000}
           className="bg-orange-100"
+          height={cardHeight}
         />
         <HintCard
           title="genre"
           hint={question.genre}
           revealTimeoutInMs={15000}
           className="bg-green-100"
+          height={cardHeight}
         />
         <HintCard
           title="creator"
           hint={question.creator}
           revealTimeoutInMs={25000}
           className="bg-red-100"
+          height={cardHeight}
         />
         <HintCard
           title="starring"
           hint={question.starring}
           revealTimeoutInMs={40000}
           className="bg-yellow-100"
+          height={cardHeight}
         />
         <HintCard
           title="synopsis"
           hint={question.synopsis}
           revealTimeoutInMs={50000}
           className="bg-purple-100"
+          height={cardHeight}
         />
       </div>
       <div className="flex gap-2">
@@ -108,7 +132,6 @@ export const IMDBContent = ({ playerId, handleLevelAdvance, layout }: ContentPro
           handleSubmit={handleSubmit}
           searchInput={searchInput}
           setSearchInput={setSearchInput}
-          isMobile={isMobile}
         />
         <button className="auth-button auth-button-primary" onClick={handleSubmit}>
           Submit
@@ -133,12 +156,10 @@ const MovieSearch = ({
   searchInput,
   setSearchInput,
   handleSubmit,
-  isMobile,
 }: {
   searchInput: string
   setSearchInput: (input: string) => void
   handleSubmit: () => void
-  isMobile: boolean
 }) => {
   const [movieResults, setMovieResults] = useState<Array<string>>([])
   const [debouncedInput, setDebouncedInput] = useState(searchInput)
@@ -206,10 +227,7 @@ const MovieSearch = ({
       />
       {movieResults.length > 0 && isDropdownVisible && (
         <ul
-          className={classNames(
-            'absolute z-10 bg-white border w-full rounded-md overflow-y-auto max-h-[240px]',
-            isMobile ? 'bottom-full mb-1' : 'top-full mt-1'
-          )}
+          className="absolute bottom-full z-10 mb-1 max-h-[240px] w-full overflow-y-auto rounded-md border bg-white"
         >
           {movieResults.map((title, idx) => (
             <li
@@ -234,11 +252,13 @@ const HintCard = ({
   hint,
   revealTimeoutInMs = 5000,
   className,
+  height,
 }: {
   title: string
   hint: string
   revealTimeoutInMs?: number
   className?: string
+  height: number
 }) => {
   const [isRevealed, setIsRevealed] = useState(false)
 
@@ -255,13 +275,21 @@ const HintCard = ({
   return (
     <div
       className={classNames(
-        'relative h-[150px] w-[150px] border rounded-md flex flex-col items-center justify-center shadow-md p-1 overflow-hidden',
+        'relative w-[150px] border rounded-md flex flex-col items-center justify-center shadow-md p-1 overflow-hidden',
         className
       )}
+      style={{ height }}
     >
       <>
         <p className="uppercase font-bold">{title}</p>
-        <p className="text-center text-sm">{hint}</p>
+        <p
+          className={classNames('text-center', {
+            'text-sm': height >= 150,
+            'text-xs': height < 150,
+          })}
+        >
+          {hint}
+        </p>
       </>
       <div
         className={classNames(

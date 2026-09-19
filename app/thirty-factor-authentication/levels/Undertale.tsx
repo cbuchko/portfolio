@@ -6,10 +6,11 @@ import { PlayerInformation } from '../player-constants'
 import Image from 'next/image'
 import { useMusic, useMusicEnded, useSfx } from '@/app/utils/audio'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import classNames from 'classnames'
 
 const maxHealth = 100
 export const UndertaleContent = ({ playerId, handleLevelAdvance, layout }: ContentProps) => {
-  const { isMobile } = layout
+  const { isTouch, isShort } = layout
   const characterName = PlayerInformation[playerId].name
   const [health, setHealth] = useState(maxHealth)
   const damageTimestampRef = useRef<number>(0)
@@ -29,10 +30,10 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance, layout }: Conte
       <p className="text-lg">{`Hold on... you aren't ${characterName}. You lied. You've been lying this whole time.`}</p>
       <p className="text-lg">{`You came so close, but this level will be your last.`}</p>
       <p className="text-lg">{`GUARDS!`}</p>
-      <p className="italic text-sm mt-4">
+      <p className={classNames('italic text-sm', { 'mt-4': !isShort, 'mt-2': isShort })}>
         Knowing you are so close to finishing... it fills you with determination.
       </p>
-      <div className="relative w-full flex items-center justify-center mt-8">
+      <div className="relative w-full flex items-center justify-center tfa-gap">
         <div>
           <BulletHell
             width={200}
@@ -41,7 +42,7 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance, layout }: Conte
             setHealth={setHealth}
             onPlayerHit={handleHit}
             handleLevelAdvance={handleLevelAdvance}
-            isMobile={isMobile}
+            showTouchControls={isTouch}
           />
           <div className="flex items-center gap-2 mt-2">
             <h5>HP</h5>
@@ -54,7 +55,7 @@ export const UndertaleContent = ({ playerId, handleLevelAdvance, layout }: Conte
             <h5 className="mono min-w-[50px]">{`${Math.max(0, health)}/${maxHealth}`}</h5>
           </div>
         </div>
-        {!isMobile && (
+        {!isTouch && (
           <div className="absolute right-[2%] top-[50%] -translate-y-[50%]">
             <Image
               src="/thirty-factor-authentication/wasd.png"
@@ -98,7 +99,7 @@ interface BulletHellProps {
   setHealth: (health: number) => void
   onPlayerHit?: () => void
   handleLevelAdvance: (skipVerify?: boolean) => void
-  isMobile?: boolean
+  showTouchControls?: boolean
 }
 
 //game duration is timed based on death by glamors song duration (2:14)
@@ -110,7 +111,7 @@ function BulletHell({
   setHealth,
   onPlayerHit,
   handleLevelAdvance,
-  isMobile,
+  showTouchControls,
 }: BulletHellProps) {
   const [gameStarted, setGameStarted] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -433,8 +434,8 @@ function BulletHell({
           </button>
         )}
       </div>
-      {/** Mobile Movement Buttons */}
-      {isMobile && (
+      {/** Touch Movement Buttons */}
+      {showTouchControls && (
         <div
           className="flex flex-col justify-center items-center gap-1 my-4"
           onContextMenu={(e) => e.preventDefault()}

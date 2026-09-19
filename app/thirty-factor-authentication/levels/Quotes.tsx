@@ -10,7 +10,7 @@ type Quote = { quote: string; isValid: boolean; origin: string }
 type QuoteMatchup = [Quote, Quote]
 
 export const QuotesContent = ({ playerId, handleLevelAdvance, layout }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow, isShort, isCompact, fit } = layout
   const [quotes, setQuotes] = useState<QuoteMatchup[]>([])
   const [matchupIndex, setMatchupIndex] = useState(0)
   const [successCount, setSuccessCount] = useState(0)
@@ -73,8 +73,8 @@ export const QuotesContent = ({ playerId, handleLevelAdvance, layout }: ContentP
       <p className="text-lg">Which of these quotes have you said?</p>
       <div
         className={classNames('flex items-center', {
-          'm-2 mt-4 flex-col gap-3': isMobile,
-          'm-4 mt-8 gap-5': !isMobile,
+          'm-2 mt-4 flex-col gap-3': isNarrow,
+          'm-4 tfa-gap gap-5': !isNarrow,
         })}
       >
         <QuoteBox
@@ -84,28 +84,30 @@ export const QuotesContent = ({ playerId, handleLevelAdvance, layout }: ContentP
           displayFailure={displayFailure && !matchup[0].isValid}
           displaySuccess={displaySuccess && matchup[0].isValid}
           isShowingOrigins={isShowingOrigins}
-          isMobile={isMobile}
+          isNarrow={isNarrow}
+          isShort={isShort}
+          fit={fit}
         />
         <div
-          className={classNames(
-            'flex shrink-0 items-center justify-center rounded-full border-2',
-            { 'h-14 w-14 text-xl': isMobile, 'h-20 w-20 text-4xl': !isMobile }
-          )}
+          className={classNames('flex shrink-0 items-center justify-center rounded-full border-2', {
+            'h-14 w-14 text-xl': isCompact,
+            'h-20 w-20 text-4xl': !isCompact,
+          })}
         >
           {!displaySuccess && !displayFailure && <div>OR</div>}
           {displaySuccess && (
             <Image
               src="/thirty-factor-authentication/icons/green-checkmark.svg"
               alt="check"
-              width={isMobile ? 24 : 36}
-              height={isMobile ? 24 : 36}
+              width={isCompact ? 24 : 36}
+              height={isCompact ? 24 : 36}
             />
           )}
           {displayFailure && (
             <Image
               src={'/thirty-factor-authentication/icons/red-x.svg'}
-              width={isMobile ? 24 : 36}
-              height={isMobile ? 24 : 36}
+              width={isCompact ? 24 : 36}
+              height={isCompact ? 24 : 36}
               alt="X"
             />
           )}
@@ -117,10 +119,17 @@ export const QuotesContent = ({ playerId, handleLevelAdvance, layout }: ContentP
           displayFailure={displayFailure && !matchup[1].isValid}
           displaySuccess={displaySuccess && matchup[1].isValid}
           isShowingOrigins={isShowingOrigins}
-          isMobile={isMobile}
+          isNarrow={isNarrow}
+          isShort={isShort}
+          fit={fit}
         />
       </div>
-      <div className={classNames('flex justify-center', { 'mt-4 gap-3': isMobile, 'mt-8 gap-4': !isMobile })}>
+      <div
+        className={classNames('flex justify-center', {
+          'mt-4 gap-3': isNarrow,
+          'tfa-gap gap-4': !isNarrow,
+        })}
+      >
         <Checkbox isChecked={successCount > 0} />
         <Checkbox isChecked={successCount > 1} />
         <Checkbox isChecked={successCount > 2} />
@@ -138,7 +147,9 @@ const QuoteBox = ({
   displaySuccess,
   onClick,
   isShowingOrigins,
-  isMobile,
+  isNarrow,
+  isShort,
+  fit,
 }: {
   quote: string
   origin: string
@@ -146,20 +157,27 @@ const QuoteBox = ({
   displayFailure: boolean
   onClick: () => void
   isShowingOrigins: boolean
-  isMobile?: boolean
+  isNarrow: boolean
+  isShort: boolean
+  fit: number
 }) => {
+  const desktopMax = Math.round(400 * fit)
   return (
     <div
       onClick={onClick}
       className={classNames(
         'flex aspect-square flex-col items-center justify-center text-center border-2 cursor-pointer hover:scale-105 transition-transform',
         {
-          'w-[min(220px,100%)] p-2.5 text-base': isMobile,
-          'w-[min(400px,calc((100vw-12rem)/2))] p-4 text-2xl': !isMobile,
+          'w-[min(220px,100%)] p-2.5 text-base': isNarrow && !isShort,
+          'w-[min(190px,100%)] p-2 text-sm': isNarrow && isShort,
+          'p-4': !isNarrow,
+          'text-2xl': !isNarrow && !isShort,
+          'text-xl': !isNarrow && isShort,
           'border-green-500': displaySuccess,
           'border-red-500': displayFailure,
         }
       )}
+      style={isNarrow ? undefined : { width: `min(${desktopMax}px, calc((100vw - 12rem) / 2))` }}
     >
       <div className="relative px-1">
         {`"${quote}"`}

@@ -1,10 +1,9 @@
 import { useMemo, useState } from 'react'
 import { ContentProps, ControlProps } from './types'
 import { PlayerInformation } from '../player-constants'
+import { minFit } from '../constants'
 import { TextInput } from '../components/TextInput'
 import { ExtrasPortal } from '../components/ExtrasPortal'
-import { useIsMobile } from '@/app/utils/useIsMobile'
-import { mobileWidthBreakpoint } from '../constants'
 import classNames from 'classnames'
 
 type TaxReturn = {
@@ -49,7 +48,7 @@ export const TaxReturnContent = ({
   handleLevelAdvance,
   layout,
 }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow, isCompact, fit, viewportWidth } = layout
   const [incomeInput, setIncomeInput] = useState('')
 
   const taxItems = useMemo(() => {
@@ -58,6 +57,11 @@ export const TaxReturnContent = ({
 
   const inputTarget = taxItems.total
   const { firstName, lastName, dob } = PlayerInformation[playerId].taxReturn
+  const widthFit =
+    isNarrow && viewportWidth > 0
+      ? Math.round(Math.min(1, Math.max(minFit, (viewportWidth - 8) / 430)) * 100) / 100
+      : 1
+  const sheetZoom = Math.min(isCompact ? fit : 1, widthFit)
 
   const handleInputChange = (input: string) => {
     setIncomeInput(input)
@@ -80,9 +84,8 @@ export const TaxReturnContent = ({
       />
       <ExtrasPortal>
         <div
-          className={classNames('border shadow-xl p-2 bg-gray-100', {
-            '[zoom:0.75]': isMobile,
-          })}
+          className="border shadow-xl p-2 bg-gray-100"
+          style={sheetZoom < 1 ? { zoom: sheetZoom } : undefined}
         >
           <div className="text-center mb-2">2025 Income Tax Return</div>
           <div className="border w-max h-max">
@@ -93,45 +96,79 @@ export const TaxReturnContent = ({
             </div>
             <div className="border-t pb-1">
               <h3 className="text-sm p-2">Step 3 - Net Income</h3>
-              <FormLineItem label="Employment income" amount={taxItems.income} number={33} />
-              <FormLineItem label="Income tax deducted" amount={taxItems.incomeTax} number={34} />
-              <FormLineItem label="Employee CPP contributions" amount={taxItems.cpp} number={35} />
-              <FormLineItem label="Subtract line 34 and 35 from line 33" number={36} />
+              <FormLineItem
+                label="Employment income"
+                amount={taxItems.income}
+                number={33}
+                narrow={isNarrow}
+              />
+              <FormLineItem
+                label="Income tax deducted"
+                amount={taxItems.incomeTax}
+                number={34}
+                narrow={isNarrow}
+              />
+              <FormLineItem
+                label="Employee CPP contributions"
+                amount={taxItems.cpp}
+                number={35}
+                narrow={isNarrow}
+              />
+              <FormLineItem
+                label="Subtract line 34 and 35 from line 33"
+                number={36}
+                narrow={isNarrow}
+              />
               <FormLineItem
                 label="RRSP deduction (see Schedule 7 and attach receipts)"
                 amount={taxItems.rrsp}
                 number={37}
+                narrow={isNarrow}
               />
               <FormLineItem
                 label="FHSA deduction (see Schedule 15 and attach receipts)"
                 amount={taxItems.fhsa}
                 number={38}
+                narrow={isNarrow}
               />
               <FormLineItem
                 label="Clergy residence deduction (complete Form T1223)"
                 amount={taxItems.clergy}
                 number={39}
+                narrow={isNarrow}
               />
               <FormLineItem
                 label="Number of cats saved from trees"
                 amount={taxItems.cats}
                 number={40}
+                narrow={isNarrow}
               />
               <FormLineItem
                 label="Number of times donated by rounding up for charity"
                 amount={taxItems.charity}
                 number={41}
+                narrow={isNarrow}
               />
-              <FormLineItem label="Nose picker deduction" amount={taxItems.nosePicker} number={42} />
-              <FormLineItem label="Add line 37 and line 38" number={43} />
-              <FormLineItem label="Multiply line 39 and 41" number={44} />
-              <FormLineItem label="Multiply line 40 by line 43" number={45} />
+              <FormLineItem
+                label="Nose picker deduction"
+                amount={taxItems.nosePicker}
+                number={42}
+                narrow={isNarrow}
+              />
+              <FormLineItem label="Add line 37 and line 38" number={43} narrow={isNarrow} />
+              <FormLineItem label="Multiply line 39 and 41" number={44} narrow={isNarrow} />
+              <FormLineItem label="Multiply line 40 by line 43" number={45} narrow={isNarrow} />
               <FormLineItem
                 label="Divide line 44 by line 42 (round down to a whole number)"
                 number={46}
+                narrow={isNarrow}
               />
-              <FormLineItem label="Add line 45 and line 46" number={47} />
-              <FormLineItem label="NET INCOME: Add line 36 and line 47" number={48} />
+              <FormLineItem label="Add line 45 and line 46" number={47} narrow={isNarrow} />
+              <FormLineItem
+                label="NET INCOME: Add line 36 and line 47"
+                number={48}
+                narrow={isNarrow}
+              />
             </div>
           </div>
         </div>
@@ -157,15 +194,15 @@ type LineItemProps = {
   label: string
   amount?: number
   number: number
+  narrow: boolean
 }
-const FormLineItem = ({ label, amount, number }: LineItemProps) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
+const FormLineItem = ({ label, amount, number, narrow }: LineItemProps) => {
   return (
     <div className="text-xs pl-2 pt-1 pr-4 mx-2 border-b flex justify-between items-end">
       <div>{label}</div>
       <div className="flex">
         <input
-          className={classNames('bg-white px-2 field-sizing-content', { 'w-[60px]': isMobile })}
+          className={classNames('bg-white px-2 field-sizing-content', { 'w-[60px]': narrow })}
           value={amount?.toLocaleString('en-us')}
           onChange={() => {}}
         />

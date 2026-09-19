@@ -159,12 +159,33 @@ small {
   animation: text-float-in 2s ease;
 }
 
+/* --- Responsive layout tokens (set by the shell from useTfaLayout) --- */
+
+.tfa-shell {
+  /* Continuous scale for fixed-size play areas; overridden inline by the shell. */
+  --tfa-fit: 1;
+  /* Vertical breathing room between the level copy and its play area. */
+  --tfa-gap: 2rem;
+}
+
+.tfa-shell--short {
+  --tfa-gap: 1rem;
+}
+
+.tfa-gap {
+  margin-top: var(--tfa-gap);
+}
+
+.tfa-gap-y {
+  margin-block: var(--tfa-gap);
+}
+
 .map {
-  height: 300px;
+  height: max(200px, calc(300px * var(--tfa-fit)));
 }
 
 .map-full {
-  height: 100vh;
+  height: 100dvh;
 }
 
 @keyframes error-flash {
@@ -441,7 +462,6 @@ small {
   }
 }
 
-
 .liebe-heide {
   font-family: var(--liebe-heide);
 }
@@ -689,6 +709,21 @@ small {
   min-width: 0;
 }
 
+/* Short viewports: trim the scoreboard and stage so the shift fits on one screen. */
+.tfa-shell--short .pizzatron-score {
+  padding: 4px 8px;
+}
+
+.tfa-shell--short .pizzatron-score-value {
+  font-size: 22px;
+}
+
+.tfa-shell--short .pizzatron-belt,
+.tfa-shell--short .pizzatron-ticket {
+  height: auto;
+  min-height: 120px;
+}
+
 .pizzatron-belt--idle {
   display: flex;
   align-items: center;
@@ -769,7 +804,9 @@ small {
   min-height: 120px;
   display: flex;
   flex-direction: column;
-  transition: background-color 0.15s ease-out, border-color 0.15s ease-out;
+  transition:
+    background-color 0.15s ease-out,
+    border-color 0.15s ease-out;
 }
 
 .pizzatron-ticket--ok {
@@ -1022,4 +1059,3 @@ small {
     animation: none;
   }
 }
-

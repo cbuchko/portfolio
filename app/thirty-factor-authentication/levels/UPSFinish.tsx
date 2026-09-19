@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -30,12 +31,14 @@ import { useTypewriter } from './ups-finish/hooks'
 import {
   atCursor,
   clampMobilePan,
+  desktopUiBandHeight,
   generateDecoLayout,
   generateMobilePropLayout,
   generatePropLayout,
   getMobilePanMetrics,
   layoutOverlapsAuth,
   layoutPropsTooDense,
+  measureDesktopAuthExclusion,
   measureAuthExclusion,
   spawnPosStyle,
 } from './ups-finish/spawn-layout'
@@ -92,8 +95,11 @@ export const UPSFinishContent = ({
   playerId,
   layout,
 }: ContentProps) => {
-  const { isMobile } = layout
-  const mobile = !!isMobile
+  const { isNarrow, fit } = layout
+  // The pan-world / tap-flashlight path is a narrow-screen design.
+  const mobile = isNarrow
+  // Desktop props shrink with the vertical budget; mobile has its own pixel sizes.
+  const propScale = mobile ? 1 : fit
   const coneRadius = mobile ? CONE_MOBILE : CONE_DESKTOP
   const kiosk = useKioskState()
   const flashlightOn = FLASHLIGHT_ENABLED && kiosk !== 'cut'
@@ -153,6 +159,25 @@ export const UPSFinishContent = ({
     () => desktopLayouts?.deco ?? null
   )
 
+  // Desktop: once the card has painted with this level's content, re-place props
+  // around its real footprint (the static exclusion assumes a tall viewport).
+  useLayoutEffect(() => {
+    if (mobile) return
+    let cancelled = false
+    // Microtask still lands before the browser paints, so props never flash at
+    // their provisional spots.
+    queueMicrotask(() => {
+      if (cancelled) return
+      const exclusion = measureDesktopAuthExclusion()
+      const puzzle = generatePropLayout(exclusion)
+      setPropLayout(puzzle)
+      setDecoLayout(generateDecoLayout(puzzle, false, undefined, exclusion))
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [mobile])
+
   const sceneRef = useRef<HTMLDivElement>(null)
   const matRef = useRef<HTMLDivElement>(null)
   const toolboxRef = useRef<HTMLDivElement>(null)
@@ -209,10 +234,11 @@ export const UPSFinishContent = ({
     setShowText(false)
   }, [])
 
-  const { visible: typedMessage, done: typingDone, complete: completeTyping } = useTypewriter(
-    message,
-    showText
-  )
+  const {
+    visible: typedMessage,
+    done: typingDone,
+    complete: completeTyping,
+  } = useTypewriter(message, showText)
 
   const say = useCallback((text: string, source?: string) => {
     messageSourceRef.current = source ?? null
@@ -290,7 +316,6 @@ export const UPSFinishContent = ({
 
   useEffect(() => {
     if (!mounted || mobile) return
-    const uiFraction = 0.25
     const syncPointer = (e: PointerEvent) => {
       const next = { x: e.clientX, y: e.clientY }
       pointerRef.current = next
@@ -298,7 +323,8 @@ export const UPSFinishContent = ({
       setDesktopCursorReady(true)
 
       if (FLASHLIGHT_ENABLED) {
-        if (next.y < window.innerHeight * (1 - uiFraction)) {
+        const vh = window.visualViewport?.height ?? window.innerHeight
+        if (next.y < vh - desktopUiBandHeight(vh)) {
           coneRef.current = next
           setCone(next)
         }
@@ -498,9 +524,7 @@ export const UPSFinishContent = ({
   const digDirtMound = () => {
     if (dirtDug) return
     setDirtDug(true)
-    setInventory((prev) =>
-      prev.includes('trimmersPartA') ? prev : [...prev, 'trimmersPartA']
-    )
+    setInventory((prev) => (prev.includes('trimmersPartA') ? prev : [...prev, 'trimmersPartA']))
     setHolding(null)
     playSfx(SFX.use, { volume: 0.35 })
     say(SCENE_PROP_COPY.dirtMound.dugOutcome, 'dirtMound')
@@ -785,9 +809,7 @@ export const UPSFinishContent = ({
         if (holding) applyHeldTo('toolbox')
         else {
           activateTarget('toolbox', {
-            examine: toolboxOpen
-              ? SCENE_PROP_COPY.toolbox.open
-              : SCENE_PROP_COPY.toolbox.locked,
+            examine: toolboxOpen ? SCENE_PROP_COPY.toolbox.open : SCENE_PROP_COPY.toolbox.locked,
           })
         }
       }
@@ -981,7 +1003,7 @@ export const UPSFinishContent = ({
                           className="nm-prop-visual nm-prop nm-prop--shovel"
                           style={{
                             ...posStyle(pickup.spawnId),
-                            ...worldPropOuterStyle(getAssetDisplay('shovel'), mobile),
+                            ...worldPropOuterStyle(getAssetDisplay('shovel'), mobile, propScale),
                           }}
                           aria-hidden
                         >
@@ -999,7 +1021,11 @@ export const UPSFinishContent = ({
                         className="nm-prop-visual nm-prop nm-prop--trimmers"
                         style={{
                           ...posStyle(pickup.spawnId),
-                          ...worldPropOuterStyle(getAssetDisplay('trimmersPartB'), mobile),
+                          ...worldPropOuterStyle(
+                            getAssetDisplay('trimmersPartB'),
+                            mobile,
+                            propScale
+                          ),
                         }}
                         aria-hidden
                       >
@@ -1026,16 +1052,13 @@ export const UPSFinishContent = ({
                         ...posStyle('hedge'),
                         ...worldPropOuterStyle(
                           getAssetDisplay(getBushAssetId(boxFreed, !!worldGone.box)),
-                          mobile
+                          mobile,
+                          propScale
                         ),
                       }}
                       aria-hidden
                     >
-                      <BushVisual
-                        boxFreed={boxFreed}
-                        boxTaken={!!worldGone.box}
-                        mobile={mobile}
-                      />
+                      <BushVisual boxFreed={boxFreed} boxTaken={!!worldGone.box} mobile={mobile} />
                     </div>
 
                     <div ref={matRef} className="nm-prop-visual nm-mat" style={posStyle('mat')}>
@@ -1053,7 +1076,7 @@ export const UPSFinishContent = ({
                       })}
                       style={{
                         ...posStyle('toolbox'),
-                        ...worldPropOuterStyle(getAssetDisplay('toolbox'), mobile),
+                        ...worldPropOuterStyle(getAssetDisplay('toolbox'), mobile, propScale),
                       }}
                       aria-hidden
                     >
@@ -1067,7 +1090,7 @@ export const UPSFinishContent = ({
                       })}
                       style={{
                         ...posStyle('garbageCan'),
-                        ...worldPropOuterStyle(getAssetDisplay('garbageCan'), mobile),
+                        ...worldPropOuterStyle(getAssetDisplay('garbageCan'), mobile, propScale),
                       }}
                       aria-hidden
                     >
@@ -1082,6 +1105,7 @@ export const UPSFinishContent = ({
                           style={decoStyle(decoId)}
                           ctx={decoCopyContext}
                           mobile={mobile}
+                          scale={propScale}
                           ref={(el) => {
                             decoRefs.current[decoId] = el
                           }}
@@ -1159,7 +1183,11 @@ export const UPSFinishContent = ({
                         aria-pressed={holding === id}
                         onClick={() => onInventoryClick(id)}
                       >
-                        <InventoryItemIcon id={id} tapedTrimmerHalf={tapedTrimmerHalf} mobile={mobile} />
+                        <InventoryItemIcon
+                          id={id}
+                          tapedTrimmerHalf={tapedTrimmerHalf}
+                          mobile={mobile}
+                        />
                       </button>
                     ))}
                   </div>

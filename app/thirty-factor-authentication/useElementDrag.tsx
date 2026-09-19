@@ -1,16 +1,20 @@
 import { RefObject, useState } from 'react'
 import { clampPositionsToScreen } from './utils'
-import { useIsMobile } from '../utils/useIsMobile'
-import { mobileWidthBreakpoint } from './constants'
 
 const DRAG_THRESHOLD = 6
+
+type ElementDragOptions = {
+  /** Visual transform scale applied to the element, so clamping uses the rendered size. */
+  scale?: number
+  /** Let the element hang partially off screen (narrow viewports). */
+  allowPartialOffscreen?: boolean
+}
 
 export const useElementDrag = (
   ref: RefObject<HTMLDivElement | null>,
   initialPosition?: { x: number; y: number },
-  scale?: number
+  { scale, allowPartialOffscreen }: ElementDragOptions = {}
 ) => {
-  const isMobile = useIsMobile(mobileWidthBreakpoint)
   const [isDragging, setIsDragging] = useState(false)
   const [position, setPosition] = useState<{ x: number; y: number } | undefined>(initialPosition)
 
@@ -47,7 +51,7 @@ export const useElementDrag = (
         element.clientWidth,
         element.clientHeight,
         scale,
-        isMobile
+        allowPartialOffscreen
       )
 
       setPosition({ x: clamped.newX, y: clamped.newY })

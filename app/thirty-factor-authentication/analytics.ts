@@ -36,9 +36,12 @@ export type TfaPendingAbandon = {
   character_id?: number
   character_name?: string
   is_mobile?: boolean
+  is_narrow?: boolean
   is_short?: boolean
   is_touch?: boolean
   viewport_h?: number
+  viewport_w?: number
+  fit?: number
   level: number
   level_id?: string
   level_title?: string
@@ -151,11 +154,19 @@ export const captureTfaEvent = (
 export const sessionProps = (): TfaEventProps => ({
   character_id: session.characterId,
   character_name: session.characterName,
-  is_mobile: session.layout?.isMobile,
-  is_short: session.layout?.isShort,
-  is_touch: session.layout?.isTouch,
-  viewport_h: session.layout?.viewportHeight,
+  ...layoutProps(session.layout),
   run_index: session.runIndex,
+})
+
+/** Layout facts attached to every tfa event (is_mobile kept for continuity; it is isNarrow). */
+export const layoutProps = (layout?: TfaSession['layout']): TfaEventProps => ({
+  is_mobile: layout?.isMobile,
+  is_narrow: layout?.isNarrow,
+  is_short: layout?.isShort,
+  is_touch: layout?.isTouch,
+  viewport_h: layout?.viewportHeight,
+  viewport_w: layout?.viewportWidth,
+  fit: layout?.fit,
 })
 
 export const incrementRunIndex = () => {
@@ -220,9 +231,12 @@ const abandonEventProps = (
   character_id: pending.character_id,
   character_name: pending.character_name,
   is_mobile: pending.is_mobile,
+  is_narrow: pending.is_narrow,
   is_short: pending.is_short,
   is_touch: pending.is_touch,
   viewport_h: pending.viewport_h,
+  viewport_w: pending.viewport_w,
+  fit: pending.fit,
   run_index: pending.run_index,
   level: pending.level,
   level_id: pending.level_id,

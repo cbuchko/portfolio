@@ -11,7 +11,7 @@ export const AppCodeContent = ({
   handleLevelAdvance,
   layout,
 }: ContentProps) => {
-  const { isCompact, isMobile } = layout
+  const { isCompact, isNarrow, viewportWidth } = layout
   const [targetCode, setTargetCode] = useState(makeAuthCode(6))
   const [codeInput, setCodeInput] = useState('')
 
@@ -38,8 +38,11 @@ export const AppCodeContent = ({
     return decoys
   })
 
-  // Short/narrow screens (phones, landscape Kindles) get more time to hunt.
-  const duration = isCompact ? 16 : 8
+  // Extra hunt time is phone-only; short desktops keep the 8s cadence.
+  const duration = isNarrow ? 16 : 8
+  // 4 columns on a 360–390 phone makes 6-digit codes collide with the timer.
+  const phoneCols = viewportWidth > 0 && viewportWidth < 420 ? 3 : 4
+  const dense = isNarrow && phoneCols === 3
   return (
     <>
       <p className="text-lg">Enter the code from your Authenticator App.</p>
@@ -47,8 +50,10 @@ export const AppCodeContent = ({
       <ExtrasPortal>
         <div
           className={classNames({
-            'grid w-[var(--tfa-auth-width,100%)] grid-cols-4 overflow-hidden': isMobile,
-            'flex w-full flex-wrap justify-center': !isMobile,
+            'grid w-[var(--tfa-auth-width,100%)]': isNarrow,
+            'grid-cols-3': isNarrow && phoneCols === 3,
+            'grid-cols-4': isNarrow && phoneCols === 4,
+            'flex w-full flex-wrap justify-center': !isNarrow,
           })}
         >
           {apps.map((app, idx) => {
@@ -62,7 +67,9 @@ export const AppCodeContent = ({
                 setTargetCode={handleTargetSet}
                 duration={duration}
                 isDelayed
-                compact={isMobile}
+                compact={isCompact}
+                fill={isNarrow}
+                dense={dense}
               />
             )
           })}
@@ -80,6 +87,10 @@ type AppCodeProps = {
   duration: number
   isDelayed?: boolean
   compact?: boolean
+  /** Stretch to the grid cell (phone columns). Desktop tiles hug their content. */
+  fill?: boolean
+  /** Fewer columns on a small phone — slightly smaller type so the code still fits. */
+  dense?: boolean
 }
 
 export const AppCode = ({
@@ -90,6 +101,8 @@ export const AppCode = ({
   duration,
   isDelayed,
   compact,
+  fill,
+  dense,
 }: AppCodeProps) => {
   const [elapsed, setElapsed] = useState(0)
   const [code, setCode] = useState(isTarget ? codeDefault : makeAuthCode(6))
@@ -125,8 +138,8 @@ export const AppCode = ({
 
   const progress = 0.999999 - elapsed / duration // 1 → 0
 
-  const size = compact ? 32 : 40
-  const radius = compact ? 12 : 20
+  const size = dense ? 20 : compact ? 24 : 40
+  const radius = dense ? 7 : compact ? 9 : 20
   const cx = size / 2
   const cy = size / 2
   const angle = 360 * progress
@@ -149,22 +162,29 @@ export const AppCode = ({
   return (
     <div
       className={classNames('border select-none', {
-        'w-full min-w-0 px-1 py-0.5 -mb-px -mr-px': compact,
+        'flex flex-col justify-center px-1.5 py-1.5': compact,
+        'h-full w-full min-w-0': compact && fill,
+        'w-max': compact && !fill,
         'flex items-center justify-between p-2 gap-4': !compact,
       })}
     >
       {compact ? (
-        <div className="min-w-0">
-          <div className="text-xs leading-none break-words mt-2">{title}</div>
-          <div className="flex min-w-0 items-center justify-between gap-0.5">
-            <div className="mono text-lg tabular-nums leading-none" style={{ color }}>
+        <>
+          <div className={classNames('truncate leading-none', dense ? 'text-[10px]' : 'text-xs')}>
+            {title}
+          </div>
+          <div className="flex min-w-0 items-center justify-between gap-1">
+            <div
+              className={classNames('mono tabular-nums leading-none', dense ? 'text-sm' : 'text-lg')}
+              style={{ color }}
+            >
               {code}
             </div>
             <svg width={size} height={size} className="block shrink-0">
               <path d={pathData} fill={color} />
             </svg>
           </div>
-        </div>
+        </>
       ) : (
         <>
           <div>

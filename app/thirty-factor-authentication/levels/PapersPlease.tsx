@@ -5,6 +5,7 @@ import Image from 'next/image'
 import classNames from 'classnames'
 import { makeAuthCode, shuffle } from '../utils'
 import { useElementDrag } from '../useElementDrag'
+import { readViewportSize } from '../useTfaLayout'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 
 type Discrepancy = {
@@ -44,7 +45,10 @@ const getUnselectedPlayerIds = (currentPlayerId: PlayerIds): PlayerIds[] =>
   getAllPlayerIds().filter((id) => id !== currentPlayerId)
 
 export const PapersPleaseContent = ({ playerId, handleLevelAdvance, layout }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow, isShort, isTouch, fit } = layout
+  // Phones are width-bound (license is 400px wide) so they keep the 0.6 look;
+  // everything else shrinks with the vertical budget.
+  const docScale = isNarrow ? Math.min(0.6, fit) : fit
   const remainingSubjectsRef = useRef<PlayerIds[]>([])
   const [subjectId, setSubjectId] = useState<PlayerIds | null>(null)
   const [isShowingCitation, setIsShowingCitation] = useState(false)
@@ -137,7 +141,7 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance, layout }: Co
       <p className="mb-4 text-lg">
         Our authenticators are at their limit. Please manually authenticate this user for us.
       </p>
-      <div className={classNames('flex justify-between gap-8', { 'flex-col': isMobile })}>
+      <div className={classNames('flex justify-between gap-8', { 'flex-col': isNarrow })}>
         <div>
           <p className="text-lg max-w-[400px]">
             Identify all information on each document that is incorrect or otherwise invalid.
@@ -150,10 +154,11 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance, layout }: Co
           </ol>
         </div>
         <div
-          className={classNames(
-            'border w-[300px] min-h-[200px] text-sm p-2 rounded-sm italic mono',
-            { 'w-full': isMobile }
-          )}
+          className={classNames('border w-[300px] text-sm p-2 rounded-sm italic mono', {
+            'w-full': isNarrow,
+            'min-h-[200px]': !isShort,
+            'min-h-[120px]': isShort,
+          })}
         >
           <div className="font-bold">Errors Identified:</div>
           <div className="flex flex-wrap gap-4 mt-2">
@@ -166,7 +171,7 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance, layout }: Co
                     src="/thirty-factor-authentication/icons/close.svg"
                     alt="x"
                     className={classNames('group-hover:opacity-100 opacity-0 cursor-pointer', {
-                      '!opacity-100': isMobile,
+                      '!opacity-100': isTouch,
                     })}
                     width={16}
                     height={16}
@@ -185,20 +190,22 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance, layout }: Co
             playerId={subjectId}
             gameInfo={gameInfo}
             addDiscrepancy={handleDiscrepancySelect}
-            isMobile={isMobile}
+            scale={docScale}
+            isNarrow={isNarrow}
           />
           <EntryPermit
             key={`permit-${subjectId}`}
             gameInfo={gameInfo}
             addDiscrepancy={handleDiscrepancySelect}
-            isMobile={isMobile}
+            scale={docScale}
+            isNarrow={isNarrow}
           />
         </>
       )}
       {isShowingCitation && (
-        <Citation discrepancyKeys={discrepancyKeys} onReset={handleReset} isMobile={isMobile} />
+        <Citation discrepancyKeys={discrepancyKeys} onReset={handleReset} scale={docScale} />
       )}
-      <div className={classNames('flex justify-end mt-4 gap-8', { '!justify-center': isMobile })}>
+      <div className={classNames('flex justify-end mt-4 gap-8', { '!justify-center': isNarrow })}>
         <button
           className="button-stamp bg-red-400 font-extrabold tracking-widest disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
           onClick={handleDecline}
@@ -220,27 +227,37 @@ export const PapersPleaseContent = ({ playerId, handleLevelAdvance, layout }: Co
 
 const width = 400
 const height = 100
+const permitWidth = 350
+const permitHeight = 470
+
+/** Center a scaled, top-left-anchored document in the visual viewport. */
+const centeredDocPosition = (docWidth: number, docHeight: number, scale: number) => {
+  const { width: vw, height: vh } = readViewportSize()
+  return {
+    x: vw / 2 - (docWidth * scale) / 2,
+    y: Math.max(8, vh / 2 - (docHeight * scale) / 2),
+  }
+}
 
 const DriversLicense = ({
   playerId,
   gameInfo,
   addDiscrepancy,
-  isMobile,
+  scale,
+  isNarrow,
 }: {
   playerId: PlayerIds
   gameInfo: GameInfo
   addDiscrepancy: (id: string) => void
-  isMobile?: boolean
+  scale: number
+  isNarrow: boolean
 }) => {
   const licenseRef = useRef<HTMLDivElement>(null)
 
   const { position, handlePointerDown, isDragging } = useElementDrag(
     licenseRef,
-    {
-      x: window.innerWidth / 2 - width / 2,
-      y: window.innerHeight / 2 - height / 2,
-    },
-    0.6
+    centeredDocPosition(width, height, scale),
+    { scale, allowPartialOffscreen: isNarrow }
   )
 
   const handleDiscrepancySelect = (id: string) => {
@@ -257,11 +274,10 @@ const DriversLicense = ({
         left: position.x,
         top: position.y,
         touchAction: 'none',
+        scale,
+        transformOrigin: 'top left',
       }}
-      className={classNames(
-        'border w-[400px] p-3 rounded-sm license-background depth-container select-none cursor-grab z-100',
-        { 'scale-60': isMobile }
-      )}
+      className="border w-[400px] p-3 rounded-sm license-background depth-container select-none cursor-grab z-100"
       onPointerDown={handlePointerDown}
     >
       <div className="tracking-widest text-center mb-4 flex justify-between gap-2">
@@ -453,21 +469,20 @@ const IDDetail = ({
 const EntryPermit = ({
   gameInfo,
   addDiscrepancy,
-  isMobile,
+  scale,
+  isNarrow,
 }: {
   gameInfo: GameInfo
   addDiscrepancy: (id: string) => void
-  isMobile?: boolean
+  scale: number
+  isNarrow: boolean
 }) => {
   const permitRef = useRef<HTMLDivElement>(null)
 
   const { position, handlePointerDown, isDragging } = useElementDrag(
     permitRef,
-    {
-      x: window.innerWidth / 2 - 350 / 2,
-      y: window.innerHeight / 2 - 200 / 2,
-    },
-    0.6
+    centeredDocPosition(permitWidth, permitHeight, scale),
+    { scale, allowPartialOffscreen: isNarrow }
   )
 
   const handleDiscrepancySelect = (id: string) => {
@@ -484,11 +499,10 @@ const EntryPermit = ({
         left: position.x,
         top: position.y,
         touchAction: 'none',
+        scale,
+        transformOrigin: 'top left',
       }}
-      className={classNames(
-        'outline-2 -outline-offset-16 outline-amber-800 w-[350px] h-[470px] shadow-xl py-2 px-8 bg-yellow-50 cursor-grab select-none flex flex-col items-center z-50',
-        { 'scale-60': isMobile }
-      )}
+      className="outline-2 -outline-offset-16 outline-amber-800 w-[350px] h-[470px] shadow-xl py-2 px-8 bg-yellow-50 cursor-grab select-none flex flex-col items-center z-50"
       onPointerDown={handlePointerDown}
     >
       <h2 className="absolute top-0 text-2xl text-center !bg-yellow-50">THIRTY FACTOR</h2>
@@ -575,19 +589,17 @@ const PermitDetail = ({
 const Citation = ({
   discrepancyKeys,
   onReset,
-  isMobile,
+  scale,
 }: {
   discrepancyKeys: Set<string>
   onReset: () => void
-  isMobile?: boolean
+  scale: number
 }) => {
   return (
     <>
       <div
-        className={classNames(
-          'fixed w-[600px]  bg-pink-100 z-200 top-[50%] -translate-y-[50%] left-[50%] -translate-x-[50%] mono px-8 py-3 border-1 border-dotted',
-          { 'scale-60': isMobile }
-        )}
+        className="fixed w-[600px] bg-pink-100 z-200 top-[50%] -translate-y-[50%] left-[50%] -translate-x-[50%] mono px-8 py-3 border-1 border-dotted"
+        style={{ scale }}
       >
         <div className="text-xl mb-4">CITATION</div>
         <div className="border-b-3 border-dotted" />
@@ -606,7 +618,7 @@ const Citation = ({
           Reset
         </button>
       </div>
-      <div className="fixed w-screen h-screen bg-black/20 top-0 left-0" />
+      <div className="fixed w-screen h-dvh bg-black/20 top-0 left-0" />
     </>
   )
 }

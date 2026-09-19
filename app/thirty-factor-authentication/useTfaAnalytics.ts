@@ -21,6 +21,7 @@ import {
   initTfaAnalytics,
   isFreshPendingAbandon,
   isTfaAnalyticsReady,
+  layoutProps,
   readPendingAbandon,
   readPendingEnd,
   sessionProps,
@@ -97,10 +98,7 @@ export const useTfaAnalytics = ({
         run_index: runIndex,
         character_id: characterId,
         character_name: name,
-        is_mobile: layout.isMobile,
-        is_short: layout.isShort,
-        is_touch: layout.isTouch,
-        viewport_h: layout.viewportHeight,
+        ...layoutProps(layout),
         level,
         level_id: meta.id,
         level_title: meta.title,
@@ -129,10 +127,7 @@ export const useTfaAnalytics = ({
     if (layout.viewportHeight <= 0) return
     openedRef.current = true
     captureTfaEvent('tfa_game_opened', {
-      is_mobile: layout.isMobile,
-      is_short: layout.isShort,
-      is_touch: layout.isTouch,
-      viewport_h: layout.viewportHeight,
+      ...layoutProps(layout),
       referrer: document.referrer || undefined,
     })
   }, [layout])
@@ -274,9 +269,12 @@ export const useTfaAnalytics = ({
         character_id: pending.character_id,
         character_name: pending.character_name,
         is_mobile: pending.is_mobile,
+        is_narrow: pending.is_narrow,
         is_short: pending.is_short,
         is_touch: pending.is_touch,
         viewport_h: pending.viewport_h,
+        viewport_w: pending.viewport_w,
+        fit: pending.fit,
         run_index: pending.run_index,
         level: pending.level,
         level_id: pending.level_id,

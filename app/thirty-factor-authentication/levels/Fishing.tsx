@@ -22,7 +22,7 @@ function rangesOverlap(a0: number, a1: number, b0: number, b1: number) {
 }
 
 export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow, isTouch, fit } = layout
   const [phase, setPhase] = useState<'idle' | 'running' | 'failed'>('idle')
   const phaseRef = useRef(phase)
   phaseRef.current = phase
@@ -268,45 +268,51 @@ export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => 
   return (
     <div className="select-none">
       <p className="text-lg">Halfway there! Take a break and catch a fish.</p>
-      {!isMobile && <p className="text-lg">Hold SPACE to raise your lure.</p>}
+      {!isTouch && <p className="text-lg">Hold SPACE to raise your lure.</p>}
       <p className="text-lg">Keep the lure on the fish to catch it.</p>
-      <div className="mt-8 flex gap-2 justify-center">
+      {/* Simulation runs in reference px; the play area is visually scaled to fit short viewports. */}
+      <div className="tfa-gap" style={{ height: Math.round(playAreaHeight * fit) }}>
         <div
-          className="relative w-8 outline-6 outline-amber-800 rounded-md bg-blue-300"
-          style={{ height: playAreaHeight }}
+          className="flex gap-2 justify-center origin-top"
+          style={{ transform: `scale(${fit})` }}
         >
           <div
-            ref={rodElRef}
-            className="absolute bottom-0 bg-green-500 w-full rounded-md will-change-transform"
-            style={{ height: rodHeight }}
-          />
-          <Image
-            ref={fishElRef}
-            src={`/thirty-factor-authentication/fish/Anchovy.png`}
-            alt="fish"
-            height={fishHeight}
-            width={fishWidth}
-            className="absolute bottom-[100px] rotate-y-180 -rotate-z-45 will-change-[bottom] pointer-events-none"
-            draggable={false}
-            priority
-          />
-        </div>
-        <div className="relative w-3 border-2 rounded-lg" style={{ height: playAreaHeight }}>
-          <div
-            ref={progressElRef}
-            className="absolute bottom-0 w-full rounded-lg origin-bottom will-change-[height]"
-            style={{
-              height: `${Math.min(100, progressDisplay)}%`,
-              backgroundColor: progressColor,
-            }}
-          />
+            className="relative w-8 outline-6 outline-amber-800 rounded-md bg-blue-300"
+            style={{ height: playAreaHeight }}
+          >
+            <div
+              ref={rodElRef}
+              className="absolute bottom-0 bg-green-500 w-full rounded-md will-change-transform"
+              style={{ height: rodHeight }}
+            />
+            <Image
+              ref={fishElRef}
+              src={`/thirty-factor-authentication/fish/Anchovy.png`}
+              alt="fish"
+              height={fishHeight}
+              width={fishWidth}
+              className="absolute bottom-[100px] rotate-y-180 -rotate-z-45 will-change-[bottom] pointer-events-none"
+              draggable={false}
+              priority
+            />
+          </div>
+          <div className="relative w-3 border-2 rounded-lg" style={{ height: playAreaHeight }}>
+            <div
+              ref={progressElRef}
+              className="absolute bottom-0 w-full rounded-lg origin-bottom will-change-[height]"
+              style={{
+                height: `${Math.min(100, progressDisplay)}%`,
+                backgroundColor: progressColor,
+              }}
+            />
+          </div>
         </div>
       </div>
-      {isMobile && (
+      {isTouch && (
         <button
           type="button"
           disabled={phase !== 'running'}
-          className={`w-full mx-auto mt-8 shadow-lg select-none border rounded-lg py-4 pointer-cursor hold-button ${
+          className={`w-full mx-auto tfa-gap shadow-lg select-none border rounded-lg py-4 pointer-cursor hold-button ${
             isHoldingVisual ? 'bg-gray-200' : ''
           } ${phase !== 'running' ? 'opacity-50' : ''}`}
           onPointerDown={(e) => {
@@ -324,7 +330,7 @@ export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => 
         </button>
       )}
       {phase !== 'running' && (
-        <div className="mt-8 mx-auto w-44">
+        <div className="tfa-gap mx-auto w-44">
           <button
             type="button"
             className="min-h-11 w-full px-6 py-2 border-2 border-black rounded-md cursor-pointer bg-white"
@@ -334,7 +340,7 @@ export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => 
           </button>
         </div>
       )}
-      {!isMobile && (
+      {!isNarrow && (
         <>
           <Image
             className="leaf leaf-1 select-none"
@@ -357,7 +363,7 @@ export const FishingContent = ({ handleLevelAdvance, layout }: ContentProps) => 
             width={32}
             height={32}
           />
-          <div className="fixed left-0 top-0 w-screen h-screen sunset-gradient -z-10" />
+          <div className="fixed left-0 top-0 w-screen h-dvh sunset-gradient -z-10" />
           <SeaSvg className="fixed left-0 -bottom-10 -z-1" />
         </>
       )}

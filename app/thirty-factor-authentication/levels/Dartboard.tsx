@@ -2,11 +2,13 @@ import { RefObject, useEffect, useRef, useState } from 'react'
 import { ContentProps } from './types'
 import Image from 'next/image'
 import { useSfx } from '@/app/utils/audio'
+import classNames from 'classnames'
 
 const defaultReticlePos = { x: 150, y: 20 }
 const bullseyeSize = 32
 type Position = { x: number; y: number }
-export const DartboardContent = ({ handleLevelAdvance }: ContentProps) => {
+export const DartboardContent = ({ handleLevelAdvance, layout }: ContentProps) => {
+  const { isShort, fit } = layout
   const [dartPosition, setDartPosition] = useState<Position>()
   const [reticlePosition, setReticlePosition] = useState<{ x: number; y: number }>(
     defaultReticlePos
@@ -68,10 +70,13 @@ export const DartboardContent = ({ handleLevelAdvance }: ContentProps) => {
     <>
       <p className="text-lg">Get a Bullseye.</p>
       <div
-        className="relative flex justify-center items-center bg-amber-900 py-8 mt-8"
+        className={classNames('relative flex justify-center items-center bg-amber-900 tfa-gap', {
+          'py-8': !isShort,
+          'py-4': isShort,
+        })}
         ref={boardRef}
       >
-        <Board />
+        <Board fit={fit} />
         {isPlaying && (
           <Retical
             position={reticlePosition}
@@ -83,7 +88,7 @@ export const DartboardContent = ({ handleLevelAdvance }: ContentProps) => {
         {dartPosition && <Dart dartPosition={dartPosition} />}
       </div>
       <button
-        className="w-full mx-auto mt-8 shadow-lg select-none border rounded-lg py-4 cursor-pointer hold-button active:bg-gray-200 disabled:bg-gray-300 disabled:pointer-events-none"
+        className="w-full mx-auto tfa-gap shadow-lg select-none border rounded-lg py-4 cursor-pointer hold-button active:bg-gray-200 disabled:bg-gray-300 disabled:pointer-events-none"
         onClick={handleDartFire}
         onContextMenu={(e) => e.preventDefault()}
         disabled={!isPlaying}
@@ -95,15 +100,20 @@ export const DartboardContent = ({ handleLevelAdvance }: ContentProps) => {
 }
 
 /** Credit for the dartboard HTML/CSS goes to Mucahit on this codepen https://codepen.io/kenyoste/pen/eYLxZva */
-const Board = () => {
+const boardSize = 321
+const Board = ({ fit }: { fit: number }) => {
+  // The ring stack is fixed-px CSS; scale the whole board and reserve its footprint.
+  const size = Math.round(boardSize * fit)
   return (
-    <div className="big-black">
-      <div className="dart">
-        <div className="black">
-          <div className="green-red">
-            <div className="bw"></div>
-            <div className="green">
-              <div className="red"></div>
+    <div style={{ width: size, height: size }}>
+      <div className="big-black origin-top-left" style={{ transform: `scale(${fit})` }}>
+        <div className="dart">
+          <div className="black">
+            <div className="green-red">
+              <div className="bw"></div>
+              <div className="green">
+                <div className="red"></div>
+              </div>
             </div>
           </div>
         </div>

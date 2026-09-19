@@ -232,11 +232,7 @@ export const layoutPropsTooDense = (
   return false
 }
 
-const propBoundsPct = (
-  left: number,
-  top: number,
-  footprint: { w: number; h: number }
-) => ({
+const propBoundsPct = (left: number, top: number, footprint: { w: number; h: number }) => ({
   l: left - footprint.w / 2,
   r: left + footprint.w / 2,
   t: top - footprint.h / 2,
@@ -259,9 +255,53 @@ const desktopPropRectsOverlap = (
   })
 }
 
-export const generatePropLayout = (): Record<PropSpawnId, SpawnPos> => {
+type Exclusion = { left: number; top: number; right: number; bottom: number }
+
+/** Mirrors `--nm-ui-h: max(25dvh, 150px)` on `.nm-dark` for desktop. */
+export const desktopUiBandHeight = (vh: number) => Math.max(vh * 0.25, 150)
+
+/**
+ * Desktop exclusion measured from the live auth card + logo, in scene percent.
+ * The fixed AUTH_EXCLUSION.desktop assumes a tall viewport; on short screens the
+ * card covers a much larger share of the 75vh scene, so measure it instead.
+ */
+export const measureDesktopAuthExclusion = (): Exclusion => {
+  if (typeof window === 'undefined') return AUTH_EXCLUSION.desktop
+  const auth = document.getElementById('auth-container')
+  if (!auth) return AUTH_EXCLUSION.desktop
+
+  const vw = window.visualViewport?.width ?? window.innerWidth
+  const vh = window.visualViewport?.height ?? window.innerHeight
+  const sceneH = vh - desktopUiBandHeight(vh)
+  const pad = 3
+
+  const authRect = auth.getBoundingClientRect()
+  let left = (authRect.left / vw) * 100 - pad
+  let right = (authRect.right / vw) * 100 + pad
+  let top = (authRect.top / sceneH) * 100 - pad
+  const bottom = (authRect.bottom / sceneH) * 100 + pad
+
+  const logo = document.getElementById('tfa-logo')
+  if (logo) {
+    const logoRect = logo.getBoundingClientRect()
+    left = Math.min(left, (logoRect.left / vw) * 100 - pad)
+    right = Math.max(right, (logoRect.right / vw) * 100 + pad)
+    top = Math.min(top, (logoRect.top / sceneH) * 100 - pad)
+  }
+
+  const fallback = AUTH_EXCLUSION.desktop
+  return {
+    left: Math.min(left, fallback.left),
+    top: Math.min(top, fallback.top),
+    right: Math.max(right, fallback.right),
+    bottom: Math.max(bottom, fallback.bottom),
+  }
+}
+
+export const generatePropLayout = (
+  exclusion: Exclusion = AUTH_EXCLUSION.desktop
+): Record<PropSpawnId, SpawnPos> => {
   const margin = 10
-  const exclusion = AUTH_EXCLUSION.desktop
   const order = shuffleOrder(PUZZLE_PROP_ORDER)
   const placed: Partial<Record<PropSpawnId, SpawnPos>> = {}
 
@@ -310,7 +350,9 @@ export const generatePropLayout = (): Record<PropSpawnId, SpawnPos> => {
   return placed as Record<PropSpawnId, SpawnPos>
 }
 
-export const generateMobilePropLayout = (metrics: MobilePanMetrics): Record<PropSpawnId, SpawnPos> => {
+export const generateMobilePropLayout = (
+  metrics: MobilePanMetrics
+): Record<PropSpawnId, SpawnPos> => {
   const { spawnBounds: bounds } = metrics
   const order = shuffleOrder(PUZZLE_PROP_ORDER)
   const placed: Partial<Record<PropSpawnId, SpawnPos>> = {}
@@ -412,14 +454,13 @@ const canPlaceDeco = (
   puzzleLayout: Record<PropSpawnId, SpawnPos>,
   decoPlaced: Partial<Record<DecoSpawnId, SpawnPos>>,
   mobile: boolean,
-  metrics?: MobilePanMetrics
+  metrics?: MobilePanMetrics,
+  desktopExclusion: Exclusion = AUTH_EXCLUSION.desktop
 ) => {
   const footprint = mobile && metrics ? decoFootprintPct(id, metrics) : DECO_FOOTPRINTS[id]
-  const exclusion = mobile && metrics ? metrics.authExclusion : AUTH_EXCLUSION.desktop
+  const exclusion = mobile && metrics ? metrics.authExclusion : desktopExclusion
   const bounds =
-    mobile && metrics
-      ? metrics.spawnBounds
-      : { leftMin: 8, leftMax: 92, topMin: 8, topMax: 92 }
+    mobile && metrics ? metrics.spawnBounds : { leftMin: 8, leftMax: 92, topMin: 8, topMax: 92 }
 
   if (!propFitsMobile(left, top, footprint, bounds, exclusion)) return false
 
@@ -450,14 +491,13 @@ const canPlaceDeco = (
 export const generateDecoLayout = (
   puzzleLayout: Record<PropSpawnId, SpawnPos>,
   mobile: boolean,
-  metrics?: MobilePanMetrics
+  metrics?: MobilePanMetrics,
+  desktopExclusion: Exclusion = AUTH_EXCLUSION.desktop
 ): Record<DecoSpawnId, SpawnPos> => {
   const order = shuffleOrder(DECO_PROP_ORDER)
   const placed: Partial<Record<DecoSpawnId, SpawnPos>> = {}
   const bounds =
-    mobile && metrics
-      ? metrics.spawnBounds
-      : { leftMin: 8, leftMax: 92, topMin: 8, topMax: 92 }
+    mobile && metrics ? metrics.spawnBounds : { leftMin: 8, leftMax: 92, topMin: 8, topMax: 92 }
   const fallback = mobile ? DECO_MOBILE_FALLBACK : DECO_FALLBACK_LAYOUT
 
   for (const id of order) {
@@ -466,14 +506,25 @@ export const generateDecoLayout = (
     for (let attempt = 0; attempt < 120; attempt += 1) {
       const left = bounds.leftMin + Math.random() * (bounds.leftMax - bounds.leftMin)
       const top = bounds.topMin + Math.random() * (bounds.topMax - bounds.topMin)
-      if (!canPlaceDeco(left, top, id, puzzleLayout, placed, mobile, metrics)) continue
+      if (!canPlaceDeco(left, top, id, puzzleLayout, placed, mobile, metrics, desktopExclusion)) {
+        continue
+      }
       found = { left, top }
       break
     }
 
     if (
       !found &&
-      canPlaceDeco(fallback[id].left, fallback[id].top, id, puzzleLayout, placed, mobile, metrics)
+      canPlaceDeco(
+        fallback[id].left,
+        fallback[id].top,
+        id,
+        puzzleLayout,
+        placed,
+        mobile,
+        metrics,
+        desktopExclusion
+      )
     ) {
       found = fallback[id]
     }

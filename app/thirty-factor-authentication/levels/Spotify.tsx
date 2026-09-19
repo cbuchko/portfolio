@@ -78,10 +78,23 @@ const cadences = [
   { count: 7, delay: halfTimeQuarter, color: colorHexArray[2] },
 ]
 
+/**
+ * Pads live below the auth card. Anchor to the card's live bottom edge so short
+ * viewports don't spawn pads over the Spotify chrome, but never push the field so
+ * low that there is no room left to play in.
+ */
+const getPlayfieldTop = (padSize: number, vh: number, isMobile: boolean) => {
+  const card = document.getElementById('auth-container')?.getBoundingClientRect()
+  const preferred = card ? card.bottom + 8 : vh * 0.52
+  const minTop = vh * 0.35
+  const maxTop = vh - padSize * 1.6 - (isMobile ? 16 : 28)
+  return Math.max(minTop, Math.min(preferred, maxTop))
+}
+
 const getPlayfieldBounds = (padSize: number, isMobile: boolean) => {
   const vw = window.visualViewport?.width ?? window.innerWidth
   const vh = window.visualViewport?.height ?? window.innerHeight
-  const top = vh * 0.52
+  const top = getPlayfieldTop(padSize, vh, isMobile)
   const bottom = Math.max(top + padSize, vh - padSize - (isMobile ? 16 : 28))
   const marginX = isMobile ? 10 : Math.max(24, (vw - 520) / 2)
   const left = marginX
@@ -155,8 +168,7 @@ const getRelativePosition = (
   }
 
   const notDoubleBack = candidates.find(
-    (c) =>
-      !secondaryPrevious || c.x !== secondaryPrevious.x || c.y !== secondaryPrevious.y
+    (c) => !secondaryPrevious || c.x !== secondaryPrevious.x || c.y !== secondaryPrevious.y
   )
   return notDoubleBack ?? candidates[0]
 }
@@ -224,8 +236,11 @@ const chartEndMsFromCadences = (() => {
 })()
 
 export const SpotifyContent = ({ handleLevelAdvance, layout }: ContentProps) => {
-  const { isMobile } = layout
-  const padSize = isMobile ? mobilePadSize : desktopPadSize
+  const { isNarrow, isTouch, fit } = layout
+  // Phones keep the finger-sized pad; short desktops shrink with the height budget
+  // but never below a comfortable click target.
+  const isMobile = isNarrow
+  const padSize = isNarrow ? mobilePadSize : Math.max(64, Math.round(desktopPadSize * fit))
   const [chart, setChart] = useState<ChartNote[]>([])
   const noteCount = noteCountFromCadences
 
@@ -265,18 +280,21 @@ export const SpotifyContent = ({ handleLevelAdvance, layout }: ContentProps) => 
   const chartRef = useRef(chart)
   chartRef.current = chart
 
-  const pushJudgment = useCallback((note: ChartNote, judgment: Judgment) => {
-    setJudgments((prev) => [
-      ...prev,
-      {
-        id: note.id,
-        judgment,
-        x: note.x + padSize / 2,
-        y: note.y + padSize / 2,
-        createdAt: performance.now(),
-      },
-    ])
-  }, [padSize])
+  const pushJudgment = useCallback(
+    (note: ChartNote, judgment: Judgment) => {
+      setJudgments((prev) => [
+        ...prev,
+        {
+          id: note.id,
+          judgment,
+          x: note.x + padSize / 2,
+          y: note.y + padSize / 2,
+          createdAt: performance.now(),
+        },
+      ])
+    },
+    [padSize]
+  )
 
   const registerJudgment = useCallback((judgment: Judgment) => {
     if (judgment === Judgment.miss) {
@@ -372,7 +390,7 @@ export const SpotifyContent = ({ handleLevelAdvance, layout }: ContentProps) => 
 
   // Desktop cursor trail — listen on window so it works across the full playfield
   useEffect(() => {
-    if (isMobile || !isStarted) return
+    if (isTouch || !isStarted) return
     const onMove = (e: PointerEvent) => {
       setTrailPoints((prev) => {
         const next = [...prev, { x: e.clientX, y: e.clientY }]
@@ -381,7 +399,7 @@ export const SpotifyContent = ({ handleLevelAdvance, layout }: ContentProps) => 
     }
     window.addEventListener('pointermove', onMove, { passive: true })
     return () => window.removeEventListener('pointermove', onMove)
-  }, [isMobile, isStarted])
+  }, [isTouch, isStarted])
 
   // Main audio-clock game loop
   useEffect(() => {
@@ -514,10 +532,7 @@ export const SpotifyContent = ({ handleLevelAdvance, layout }: ContentProps) => 
                 {formatTrackTime(elapsedMs)}
               </span>
               <div className="h-1 min-w-0 grow rounded-full bg-[#404040] overflow-hidden">
-                <div
-                  className="h-full bg-white"
-                  style={{ width: `${progress * 100}%` }}
-                />
+                <div className="h-full bg-white" style={{ width: `${progress * 100}%` }} />
               </div>
               <span className="shrink-0 text-[11px] tabular-nums text-[#b3b3b3]">
                 {formatTrackTime(chartEndMs)}
@@ -552,11 +567,9 @@ export const SpotifyContent = ({ handleLevelAdvance, layout }: ContentProps) => 
         </div>
       </div>
 
-      {failMessage && (
-        <p className="mt-2 text-sm text-red-600 font-medium">{failMessage}</p>
-      )}
+      {failMessage && <p className="mt-2 text-sm text-red-600 font-medium">{failMessage}</p>}
 
-      {!isMobile &&
+      {!isTouch &&
         trailPoints.map((point, idx) => (
           <div
             key={`trail-${idx}`}

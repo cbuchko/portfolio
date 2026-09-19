@@ -162,7 +162,7 @@ body.nm-mobile-pan {
 body.nm-mobile-pan #auth-container {
   position: fixed;
   left: 50%;
-  top: calc((100vh - var(--nm-ui-h)) / 2);
+  top: calc((100dvh - var(--nm-ui-h)) / 2);
   width: calc(100% - 2rem);
   max-width: 100%;
   margin: 0 !important;
@@ -176,7 +176,7 @@ body.nm-mobile-pan #tfa-logo {
   width: calc(100% - 2rem);
   max-width: none !important;
   box-sizing: border-box;
-  top: calc((100vh - var(--nm-ui-h)) / 2 - 64px);
+  top: calc((100dvh - var(--nm-ui-h)) / 2 - 64px);
   /* Tailwind v4 translate-x stacks with transform and double-shifts left. */
   translate: none;
   transform: translate(-50%, -100%) translate(var(--nm-pan-x, 0px), var(--nm-pan-y, 0px));
@@ -192,7 +192,8 @@ body.nm-mobile-pan #tfa-logo {
   touch-action: none;
   user-select: none;
   background: transparent;
-  --nm-ui-h: 25vh;
+  /* Bottom UI band: a quarter of the viewport, but never so thin the inventory row clips. */
+  --nm-ui-h: max(25dvh, 150px);
 }
 
 .nm-scene {
@@ -261,7 +262,9 @@ body.nm-mobile-pan #tfa-logo {
   width: 2px;
   transform: translateX(-50%);
   background: #f5f0e6;
-  box-shadow: 0 0 3px #000, 0 0 1px #000;
+  box-shadow:
+    0 0 3px #000,
+    0 0 1px #000;
 }
 
 .nm-cursor::after {
@@ -273,7 +276,9 @@ body.nm-mobile-pan #tfa-logo {
   height: 2px;
   transform: translateY(-50%);
   background: #f5f0e6;
-  box-shadow: 0 0 3px #000, 0 0 1px #000;
+  box-shadow:
+    0 0 3px #000,
+    0 0 1px #000;
 }
 
 .nm-cursor--holding::before,

@@ -45,7 +45,7 @@ type Instruction = {
 
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-//five wires and four numpad inputs
+const INSTRUCTION_HEADING = 'Carefully follow these instructions to defuse the bomb:'
 const instructionCount = 9
 
 const maxTimeInSeconds = 30
@@ -54,7 +54,7 @@ export const BombDefusalContent = ({
   handleLevelAdvance,
   layout,
 }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow, isShort, fit } = layout
   const [wires, setWires] = useState(Wires)
   const [code, setCode] = useState('')
 
@@ -80,8 +80,10 @@ export const BombDefusalContent = ({
     ticking.play()
   }, [ticking])
 
-  const [instructions, setInstructions] = useState<Instruction[]>()
-  const [formattedInstructions, setFormattedInstructiosn] = useState<string>()
+  const [instructions, setInstructions] = useState(generateInstructions)
+  const [formattedInstructions, setFormattedInstructiosn] = useState(() =>
+    formatInstructions(instructions)
+  )
   const [instructionStepIndex, setInstructionStepIndex] = useState(0)
 
   useEffectInitializer(() => {
@@ -168,62 +170,113 @@ export const BombDefusalContent = ({
 
   const codeDisplay = code.padStart(4, '0')
 
-  const bombWidth = isMobile ? 'auto' : 500
+  // The bomb's internals need the full 300px; render at reference size and scale
+  // the whole casing down to fit short viewports. On narrow screens the casing
+  // pre-widens so it still spans the card after scaling.
+  const bombHeight = 300
+  // The instruction "text" renders under the card, so on short screens the bomb
+  // gives up a little extra height to keep both on one screen.
+  const bombScale = isShort ? fit * 0.85 : fit
+  const bombWidth = isNarrow ? `${100 / bombScale}%` : 500
   return (
     <>
-      <p className="text-lg">{`We've sent instructions to defuse this bomb to your mobile device.`}</p>
-      <div className="flex justify-between mt-2">
+      <p className={isShort ? 'text-base' : 'text-lg'}>
+        {`We've sent instructions to defuse this bomb to your mobile device.`}
+      </p>
+      <div className={classNames('flex justify-between', { 'mt-2': !isShort, 'mt-1': isShort })}>
         <small>{`Don't tell the instructions to anyone.`}</small>
         <button className="text-xs underline cursor-pointer" onClick={handleResendCode}>
           Resend Instructions
         </button>
       </div>
-      <div className="flex justify-center w-full mt-4">
+      <div
+        className={classNames('w-full', { 'mt-4': !isShort, 'mt-2': isShort })}
+        style={{ height: Math.round(bombHeight * bombScale) }}
+      >
         <div
-          className="flex justify-between border rounded-md bg-gray-500 h-[300px] shadow-[inset_0px_0px_80px_rgba(0,0,0,1),_inset_-5px_-5px_5px_rgba(255,255,255,0.7)]"
-          style={{ width: bombWidth }}
+          className="flex justify-center w-full origin-top"
+          style={{ transform: `scale(${bombScale})` }}
         >
-          <div className={classNames('h-full ml-16 flex gap-6', { '!ml-1 mr-1': isMobile })}>
-            {Object.entries(wires).map(([id, wire]) => (
-              <Wire key={id} id={id as WireIds} wire={wire} cutWire={cutWire} />
-            ))}
-          </div>
-          <div className="h-full w-max flex flex-col justify-between">
-            <div className="w-max h-max bg-gray-200 rounded-tr-md rounded-bl-md">
-              <div className="grid grid-cols-3 w-max m-4 gap-2">
-                {numbers.map((number) => (
-                  <NumPadButton key={number} number={number} inputCode={inputCode} />
-                ))}
-              </div>
-              <div className="bg-black text-green-500 mono text-2xl m-4 text-center">
-                {codeDisplay}
-              </div>
+          <div
+            className="flex shrink-0 justify-between border rounded-md bg-gray-500 shadow-[inset_0px_0px_80px_rgba(0,0,0,1),_inset_-5px_-5px_5px_rgba(255,255,255,0.7)]"
+            style={{ width: bombWidth, height: bombHeight }}
+          >
+            <div className={classNames('h-full ml-16 flex gap-6', { '!ml-1 mr-1': isNarrow })}>
+              {Object.entries(wires).map(([id, wire]) => (
+                <Wire key={id} id={id as WireIds} wire={wire} cutWire={cutWire} />
+              ))}
             </div>
-            <div className="w-full h-max bg-gray-200 rounded-br-md rounded-tl-md">
-              <div className="bg-black text-red-500 mono text-4xl m-4 p-1 text-center">
-                {timer < 0
-                  ? '0:00'
-                  : '0:' + (timer.toString().length === 1 ? '0' + timer : timer.toString())}
+            <div className="h-full w-max flex flex-col justify-between">
+              <div className="w-max h-max bg-gray-200 rounded-tr-md rounded-bl-md">
+                <div className="grid grid-cols-3 w-max m-4 gap-2">
+                  {numbers.map((number) => (
+                    <NumPadButton key={number} number={number} inputCode={inputCode} />
+                  ))}
+                </div>
+                <div className="bg-black text-green-500 mono text-2xl m-4 text-center">
+                  {codeDisplay}
+                </div>
+              </div>
+              <div className="w-full h-max bg-gray-200 rounded-br-md rounded-tl-md">
+                <div className="bg-black text-red-500 mono text-4xl m-4 p-1 text-center">
+                  {timer < 0
+                    ? '0:00'
+                    : '0:' + (timer.toString().length === 1 ? '0' + timer : timer.toString())}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {message && (
-        <ExtrasPortal>
+      <ExtrasPortal>
+        <div className="relative w-[var(--tfa-auth-width,100%)] pb-[100px]">
           <div
-            key={message}
-            className="w-[var(--tfa-auth-width,100%)] px-4 py-2 rounded-lg text-white text-message select-none shadow-lg whitespace-pre-line bg-[#27ad3b]"
+            className={classNames('invisible pointer-events-none select-none', {
+              'px-4 py-2': !isShort,
+              'px-3 py-1.5 text-sm leading-snug': isShort,
+            })}
+            aria-hidden
           >
-            {message}
+            <InstructionBody text={formattedInstructions} />
           </div>
-        </ExtrasPortal>
-      )}
-      {isGameOver && (
-        <div className="fixed inset-0 z-[9999] bg-red-500/50 pointer-events-none" />
-      )}{' '}
+          {message && (
+            <div
+              key={message}
+              className={classNames(
+                'absolute top-0 right-0 left-0 rounded-lg text-white select-none shadow-lg bg-[#27ad3b] text-message',
+                {
+                  'px-4 py-2': !isShort,
+                  'px-3 py-1.5 text-sm leading-snug': isShort,
+                }
+              )}
+            >
+              <InstructionBody text={message} />
+            </div>
+          )}
+        </div>
+      </ExtrasPortal>
+      {isGameOver && <div className="fixed inset-0 z-[9999] bg-red-500/50 pointer-events-none" />}
     </>
   )
+}
+
+const InstructionBody = ({ text }: { text: string }) => {
+  if (text.startsWith(INSTRUCTION_HEADING)) {
+    return (
+      <div className="[column-count:2] [column-gap:1.5rem]">
+        <p className="[column-span:all] mb-2 whitespace-normal">{INSTRUCTION_HEADING}</p>
+        {text
+          .slice(INSTRUCTION_HEADING.length)
+          .trim()
+          .split('\n')
+          .filter(Boolean)
+          .map((line, idx) => (
+            <p key={idx}>{line}</p>
+          ))}
+      </div>
+    )
+  }
+  return <div className="whitespace-pre-line">{text}</div>
 }
 
 const Wire = ({
@@ -320,17 +373,17 @@ const generateInstructions = (): Instruction[] => {
 
 //turn the instructions into a string
 const formatInstructions = (instructions: Instruction[]): string => {
-  let instructionsFormatted = 'Carefully follow these instructions to defuse the bomb: \n\n'
+  let steps = ''
 
   let instructionNumber = 1
   for (const instruction of instructions) {
     if (instruction.wireId) {
-      instructionsFormatted += `${instructionNumber}. Cut the ${instruction.wireId} wire\n`
+      steps += `${instructionNumber}. Cut the ${instruction.wireId} wire\n`
     }
     if (instruction.number) {
-      instructionsFormatted += `${instructionNumber}. Enter the number ${instruction.number}\n`
+      steps += `${instructionNumber}. Enter the number ${instruction.number}\n`
     }
     instructionNumber++
   }
-  return instructionsFormatted
+  return `${INSTRUCTION_HEADING}\n\n${steps}`
 }

@@ -12,7 +12,8 @@ export const OneContent = ({
   cancelAdvance,
   layout,
 }: IdentitySelectProps) => {
-  const { isMobile } = layout
+  // Pure density tweaks: apply whenever the viewport is tight on either axis.
+  const { isCompact: isMobile } = layout
   const characters = useMemo(() => {
     return Object.entries(PlayerInformation).map(([id, info]) => ({
       id: Number(id) as PlayerIds,
@@ -52,10 +53,13 @@ export const OneContent = ({
         Select your account to continue
       </p>
       <div
-        className={classNames('flex flex-col border border-gray-200 rounded-sm bg-gray-50 shadow-lg overflow-hidden', {
-          'mt-3': isMobile,
-          'mt-4': !isMobile,
-        })}
+        className={classNames(
+          'flex flex-col border border-gray-200 rounded-sm bg-gray-50 shadow-lg overflow-hidden',
+          {
+            'mt-3': isMobile,
+            'mt-4': !isMobile,
+          }
+        )}
       >
         {characters.map((character, index) => {
           const isSelected = playerId === character.id

@@ -17,7 +17,6 @@ const signs = [
   'Scorpio',
   'Taurus',
   'Virgo',
-  'Unknown',
 ]
 
 const defaultSign = 'Aries'
@@ -27,7 +26,7 @@ export const ZodiacContent = ({
   cancelAdvance,
   layout,
 }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow: isMobile, isShort } = layout
   const [activeDropdownId, setActiveDropdownId] = useState<string>()
 
   const [selectedSun, setSelectedSun] = useState(defaultSign)
@@ -73,6 +72,7 @@ export const ZodiacContent = ({
           onOptionSelect={(option) => handleZodiacSelect(option, 'sun')}
           width={150}
           label={'Sun'}
+          compact={isShort}
         />
         <DropdownSelector
           id={'zodiac-moon'}
@@ -82,6 +82,7 @@ export const ZodiacContent = ({
           onOptionSelect={(option) => handleZodiacSelect(option, 'moon')}
           width={150}
           label={'Moon'}
+          compact={isShort}
         />
         <DropdownSelector
           id={'zodiac-rising'}
@@ -91,6 +92,7 @@ export const ZodiacContent = ({
           onOptionSelect={(option) => handleZodiacSelect(option, 'rising')}
           width={150}
           label={'Rising/Ascendant'}
+          compact={isShort}
         />
       </div>
     </>

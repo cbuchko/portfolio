@@ -24,9 +24,10 @@ const CATEGORIES: { id: CategoryIds; label: string; options: string[] }[] = [
 ]
 
 export const EinsteinContent = ({ validateAdvance, cancelAdvance, layout }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow, isShort, isCompact, fit } = layout
   const [activeDropdownId, setActiveDropdownId] = useState<string>()
-  const [cluesOpen, setCluesOpen] = useState(true)
+  // Phones start with the clues folded so the board is reachable without a long scroll.
+  const [cluesOpen, setCluesOpen] = useState(!isNarrow)
   const [picker, setPicker] = useState<PickerTarget | null>(null)
 
   const [selectedAnswers, setSelectedAnswers] = useState<Answer>({})
@@ -46,15 +47,32 @@ export const EinsteinContent = ({ validateAdvance, cancelAdvance, layout }: Cont
     }
   }, [selectedAnswers, cancelAdvance, validateAdvance])
 
-  const pickerCategory = picker ? CATEGORIES.find((category) => category.id === picker.category) : null
+  const pickerCategory = picker
+    ? CATEGORIES.find((category) => category.id === picker.category)
+    : null
 
   return (
     <>
-      <p className="text-lg">
+      <p
+        className={classNames({
+          'text-sm': isShort,
+          'text-base': isCompact && !isShort,
+          'text-lg': !isCompact,
+        })}
+      >
         As you may know, per our platforms terms, you must have an IQ of 130+ to enter.
       </p>
-      <p className="text-lg mb-4">Please prove you meet our standards by solving this puzzle.</p>
-      {isMobile ? (
+      <p
+        className={classNames({
+          'text-sm mb-2': isShort,
+          'text-base mb-2': isCompact && !isShort,
+          'text-lg mb-4': !isCompact,
+        })}
+      >
+        Please prove you meet our standards by solving this puzzle.
+      </p>
+      {/* Clues collapse whenever height or width is tight; the board still needs the room. */}
+      {isCompact ? (
         <div className="mb-3 border">
           <button
             type="button"
@@ -69,7 +87,15 @@ export const EinsteinContent = ({ validateAdvance, cancelAdvance, layout }: Cont
             <span aria-hidden>{cluesOpen ? '−' : '+'}</span>
           </button>
           {cluesOpen && (
-            <ul className="list-disc space-y-1 px-3 py-3 pl-7 text-sm">
+            <ul
+              className={classNames('list-disc px-3 py-2 pl-7', {
+                // Phones: full list, one column.
+                'space-y-1 text-sm': isNarrow,
+                // Wide but short: two-column, capped and scrollable so the board stays on screen.
+                'grid grid-cols-2 gap-x-8 gap-y-0.5 text-xs max-h-[max(64px,13dvh)] overflow-y-auto':
+                  !isNarrow,
+              })}
+            >
               {rules.map((rule, idx) => (
                 <li key={idx}>{rule}</li>
               ))}
@@ -83,16 +109,29 @@ export const EinsteinContent = ({ validateAdvance, cancelAdvance, layout }: Cont
           ))}
         </ul>
       )}
-      <p className="text-lg mt-3">
+      <p
+        className={classNames({
+          'text-sm mt-1': isShort,
+          'text-base mt-2': isCompact && !isShort,
+          'text-lg mt-3': !isCompact,
+        })}
+      >
         Submit only after <span className="font-bold">all</span> dropdowns are correctly filled.
       </p>
-      {isMobile ? (
+      {isNarrow ? (
         <MobileStreetBoard
           selectedAnswers={selectedAnswers}
           onCellClick={(house, category) => setPicker({ house, category })}
         />
       ) : (
-        <div className="mt-8 grid w-full max-w-[min(56rem,calc(100vw-3rem))] grid-cols-[minmax(5.5rem,auto)_repeat(5,minmax(0,1fr))] items-center gap-2 select-none">
+        <div
+          className={classNames(
+            'tfa-gap grid w-full max-w-[min(56rem,calc(100vw-3rem))] grid-cols-[minmax(5.5rem,auto)_repeat(5,minmax(0,1fr))] items-center select-none',
+            { 'gap-2': !isShort, 'gap-1': isShort }
+          )}
+          // Short desktops: zoom the board down a notch (floored so labels stay legible).
+          style={isShort ? { zoom: Math.max(0.8, fit) } : undefined}
+        >
           <div />
           <h5 className="text-center text-sm font-medium sm:text-base">House #1</h5>
           <h5 className="text-center text-sm font-medium sm:text-base">House #2</h5>
@@ -191,7 +230,9 @@ const MobileCategoryRow = ({
 }) => {
   return (
     <>
-      <div className="flex items-center text-[10px] font-medium leading-tight">{category.label}</div>
+      <div className="flex items-center text-[10px] font-medium leading-tight">
+        {category.label}
+      </div>
       {HOUSES.map((house) => {
         const value = selectedAnswers[house]?.[category.id]
         return (

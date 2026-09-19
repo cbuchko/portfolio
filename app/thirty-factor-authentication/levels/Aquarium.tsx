@@ -23,7 +23,7 @@ const generateMaxFish = () => Math.floor(Math.random() * (55 - 40) + 40)
 
 const swimOffMs = (isMobile: boolean) => {
   const { moveMs, minJump, glideMs } = isMobile ? aquariumMotion.mobile : aquariumMotion.desktop
-  const distance = window.innerWidth + 100
+  const distance = (window.visualViewport?.width ?? window.innerWidth) + 100
   const hops = Math.ceil(distance / minJump)
   return hops * moveMs + glideMs
 }
@@ -40,8 +40,7 @@ const snapshotYBounds = (isMobile: boolean): YBounds => {
   return { minY, maxY: Math.max(minY, height - FISH_SIZE - pad) }
 }
 
-const clampFishY = (y: number, bounds: YBounds) =>
-  Math.min(bounds.maxY, Math.max(bounds.minY, y))
+const clampFishY = (y: number, bounds: YBounds) => Math.min(bounds.maxY, Math.max(bounds.minY, y))
 
 const FishOptions = [
   'Anchovy',
@@ -68,7 +67,8 @@ export const AquariumContent = ({
   handleLevelAdvance,
   layout,
 }: ContentProps) => {
-  const { isMobile } = layout
+  // The hop-style motion profile is tuned for narrow screens (less horizontal room).
+  const { isNarrow: isMobile } = layout
   const [phase, setPhase] = useState<'idle' | 'running' | 'done'>('idle')
   const [maxFish, setMaxFish] = useState(0)
   const [fishCount, setFishCount] = useState(0)
@@ -189,7 +189,7 @@ export const AquariumContent = ({
           isMobile={isMobile}
         />
       )}
-      <div className="fixed top-0 left-0 h-screen w-screen bg-blue-500/30 pointer-events-none" />
+      <div className="fixed top-0 left-0 h-dvh w-screen bg-blue-500/30 pointer-events-none" />
     </>
   )
 }
@@ -229,15 +229,10 @@ const FishTank = ({
 
 const Fish = ({ isMobile, yBounds }: { isMobile: boolean; yBounds: YBounds }) => {
   const motion = isMobile ? aquariumMotion.mobile : aquariumMotion.desktop
-  const { initialPosition, isLeft } = useMemo(
-    () => getInitialPosition(yBounds),
-    [yBounds]
-  )
+  const { initialPosition, isLeft } = useMemo(() => getInitialPosition(yBounds), [yBounds])
   const positionRef = useRef(initialPosition)
   const nodeRef = useRef<HTMLDivElement>(null)
-  const [fishType] = useState(
-    () => FishOptions[Math.floor(Math.random() * FishOptions.length)]
-  )
+  const [fishType] = useState(() => FishOptions[Math.floor(Math.random() * FishOptions.length)])
   const [painted, setPainted] = useState(false)
   const imgRef = useRef<HTMLImageElement>(null)
   const yDirRef = useRef<1 | -1>(Math.random() < 0.5 ? 1 : -1)

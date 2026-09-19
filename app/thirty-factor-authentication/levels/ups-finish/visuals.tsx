@@ -127,9 +127,7 @@ export const ShovelVisual = ({
   context: PropDisplayContext
   mobile?: boolean
   className?: string
-}) => (
-  <AssetVisual assetId="shovel" context={context} mobile={mobile} className={className} />
-)
+}) => <AssetVisual assetId="shovel" context={context} mobile={mobile} className={className} />
 
 export const BushVisual = ({
   boxFreed,
@@ -158,9 +156,7 @@ export const ScenePropVisual = ({
   assetId: ScenePropAssetId
   mobile?: boolean
   className?: string
-}) => (
-  <AssetVisual assetId={assetId} context="world" mobile={mobile} className={className} />
-)
+}) => <AssetVisual assetId={assetId} context="world" mobile={mobile} className={className} />
 
 const renderItemVisual = (
   id: ItemId,
@@ -204,10 +200,11 @@ type DecoPropVisualProps = {
   style: CSSProperties
   ctx: DecoCopyContext
   mobile?: boolean
+  scale?: number
 }
 
 export const DecoPropVisual = forwardRef<HTMLDivElement, DecoPropVisualProps>(
-  function DecoPropVisual({ id, style, ctx, mobile }, ref) {
+  function DecoPropVisual({ id, style, ctx, mobile, scale = 1 }, ref) {
     const decoAssetId = DECO_ASSET_IDS[id]
     if (decoAssetId) {
       return (
@@ -216,7 +213,7 @@ export const DecoPropVisual = forwardRef<HTMLDivElement, DecoPropVisualProps>(
           className={classNames('nm-prop-visual', 'nm-deco', 'nm-deco--sprite')}
           style={{
             ...style,
-            ...worldPropOuterStyle(getAssetDisplay(decoAssetId), mobile),
+            ...worldPropOuterStyle(getAssetDisplay(decoAssetId), mobile, scale),
           }}
           aria-hidden
         >
@@ -266,7 +263,6 @@ export const DecoPropVisual = forwardRef<HTMLDivElement, DecoPropVisualProps>(
             <span className="nm-deco-pizza-pep nm-deco-pizza-pep--3" />
           </>
         )}
-
       </div>
     )
   }

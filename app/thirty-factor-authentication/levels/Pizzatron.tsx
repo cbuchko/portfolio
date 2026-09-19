@@ -32,7 +32,8 @@ type RoundState = {
 type Phase = 'idle' | 'running' | 'ejecting' | 'miss'
 
 export const PizzatronContent = ({ handleLevelAdvance, layout }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow, isShort } = layout
+  const isMobile = isNarrow
   const [completed, setCompleted] = useState(0)
   const [mistakes, setMistakes] = useState(0)
   const [round, setRound] = useState<RoundState | null>(null)
@@ -190,7 +191,7 @@ export const PizzatronContent = ({ handleLevelAdvance, layout }: ContentProps) =
   return (
     <div className={classNames({ 'min-w-[580px]': !isMobile })}>
       <p className="text-lg">It&apos;s time for our lunch break. Can you help make the pizzas?</p>
-      <div className="pizzatron-scoreboard my-5">
+      <div className={classNames('pizzatron-scoreboard', { 'my-5': !isShort, 'my-3': isShort })}>
         <div className="pizzatron-score">
           <span className="pizzatron-score-label">Served</span>
           <span className="pizzatron-score-value">
@@ -349,7 +350,9 @@ const IngredientStation = ({
   isMobile?: boolean
 }) => {
   return (
-    <div className={classNames('pizzatron-station mt-3', { 'pizzatron-station--mobile': isMobile })}>
+    <div
+      className={classNames('pizzatron-station mt-3', { 'pizzatron-station--mobile': isMobile })}
+    >
       <IngredientGroup label="Sauce">
         {SAUCES.map((ing) => (
           <button

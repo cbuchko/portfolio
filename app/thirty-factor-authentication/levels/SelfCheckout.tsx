@@ -83,7 +83,7 @@ export const SelfCheckoutContent = ({
   cancelAdvance,
   layout,
 }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow, isCompact, fit } = layout
   const [items, setItems] = useState(ShoppingItems)
   const scannedIdsRef = useRef<Set<string>>(new Set())
   const [isAgeVerified, setIsAgeVerified] = useState(false)
@@ -141,64 +141,71 @@ export const SelfCheckoutContent = ({
         To verify yourself as a member of our Walmart Rewards Program, please demonstrate how to use
         a Self-Checkout.
       </p>
-      <div className={classNames('flex gap-10 mt-8', { 'flex-col items-center': isMobile })}>
+      <div
+        className={classNames('flex tfa-gap', {
+          'flex-col items-center gap-4': isNarrow,
+          'gap-10': !isNarrow && !isCompact,
+          'gap-4': !isNarrow && isCompact,
+        })}
+      >
         <DropArea
           title="Shopping Cart"
           handleDrop={(item) => handleDrop(item, false)}
           items={cartItems}
+          fit={fit}
         />
         <div>
-          <Scanner handleScan={handleScan} scannedIds={scannedIdsRef} />
-          {!isMobile && (
-            <div className="mt-4">
-              <h5 className="text-center">Summary</h5>
-              <div className="border p-2 h-[160px]">
-                {scannedItems.map((item) => {
-                  return (
-                    <div key={item.id} className="text-xs flex justify-between">
-                      <p>{item.title}</p>
-                      <p>{`$${item.cost.toFixed(2)}`}</p>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          )}
+          <Scanner handleScan={handleScan} scannedIds={scannedIdsRef} fit={fit} />
+          {!isNarrow && <Summary items={scannedItems} fit={fit} />}
         </div>
         <DropArea
           title="Bagging Area"
           handleDrop={(item) => handleDrop(item, true)}
           items={baggedItems}
+          fit={fit}
         />
-        {isMobile && (
-          <div className="mt-4">
-            <h5 className="text-center">Summary</h5>
-            <div className="border p-2 h-[160px] w-[200px]">
-              {scannedItems.map((item) => {
-                return (
-                  <div key={item.id} className="text-xs flex justify-between">
-                    <p>{item.title}</p>
-                    <p>{`$${item.cost.toFixed(2)}`}</p>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
+        {isNarrow && <Summary items={scannedItems} fit={fit} className="w-[200px]" />}
       </div>
       {isAnyError && (
         <ErrorContainer
           text={getErrorText(isUnexpectedItemError, isUnbaggedItemError, isAgeVerificationError)}
           isAgeVerificationError={isAgeVerificationError}
           setIsAgeVerified={setIsAgeVerified}
-          isMobile={isMobile}
+          isCompact={isCompact}
         />
       )}
     </>
   )
 }
 
-const CheckoutItem = ({ item }: { item: ShoppingItem }) => {
+const Summary = ({
+  items,
+  fit,
+  className,
+}: {
+  items: ShoppingItem[]
+  fit: number
+  className?: string
+}) => (
+  <div className="mt-4">
+    <h5 className="text-center">Summary</h5>
+    <div
+      className={classNames('border p-2 overflow-y-auto', className)}
+      style={{ height: Math.round(160 * fit) }}
+    >
+      {items.map((item) => {
+        return (
+          <div key={item.id} className="text-xs flex justify-between">
+            <p>{item.title}</p>
+            <p>{`$${item.cost.toFixed(2)}`}</p>
+          </div>
+        )
+      })}
+    </div>
+  </div>
+)
+
+const CheckoutItem = ({ item, size }: { item: ShoppingItem; size: number }) => {
   const dragRef = useRef<HTMLImageElement>(null)
 
   const [{ opacity }, drag] = useDrag(
@@ -221,12 +228,12 @@ const CheckoutItem = ({ item }: { item: ShoppingItem }) => {
     <div className="flex items-center justify-center cursor-pointer">
       <Image
         ref={dragRef}
-        height={'80'}
-        width={'80'}
+        height={80}
+        width={80}
         alt={item.title}
         src={item.url}
-        className={classNames('h-20 w-max p-2 m-1')}
-        style={{ opacity }}
+        className="w-max p-2 m-1"
+        style={{ opacity, height: size }}
       />
     </div>
   )
@@ -236,10 +243,12 @@ const DropArea = ({
   title,
   items,
   handleDrop,
+  fit,
 }: {
   title: string
   items: ShoppingItem[]
   handleDrop: (item: ShoppingItem) => void
+  fit: number
 }) => {
   const dropRef = useRef<HTMLDivElement>(null)
 
@@ -252,12 +261,13 @@ const DropArea = ({
       drop(dropRef)
     }
   }, [drop])
+  const size = Math.round(300 * fit)
   return (
     <div ref={dropRef}>
       <h5 className="text-center">{title}</h5>
-      <div className="border h-[300px] w-[300px] grid grid-cols-3">
+      <div className="border grid grid-cols-3" style={{ height: size, width: size }}>
         {items.map((item) => (
-          <CheckoutItem key={item.id} item={item} />
+          <CheckoutItem key={item.id} item={item} size={Math.round(80 * fit)} />
         ))}
       </div>
     </div>
@@ -267,9 +277,11 @@ const DropArea = ({
 const Scanner = ({
   scannedIds,
   handleScan,
+  fit,
 }: {
   scannedIds: RefObject<Set<string>>
   handleScan: (item: ShoppingItem) => void
+  fit: number
 }) => {
   const dropRef = useRef<HTMLDivElement>(null)
 
@@ -330,9 +342,10 @@ const Scanner = ({
   return (
     <div
       ref={dropRef}
-      className={classNames('border h-[100px] w-[200px] mt-6 bg-gray-500 opacity-50', {
+      className={classNames('border w-[200px] mt-6 bg-gray-500 opacity-50', {
         '!bg-green-400': isSuccess,
       })}
+      style={{ height: Math.round(100 * fit) }}
     >
       {isScanning && <div className="bg-green-400 w-3 h-full scan-swipe pointer-events-none" />}
     </div>
@@ -343,12 +356,12 @@ const ErrorContainer = ({
   text,
   isAgeVerificationError,
   setIsAgeVerified,
-  isMobile,
+  isCompact,
 }: {
   text?: string
   isAgeVerificationError?: boolean
   setIsAgeVerified: (isVerified: boolean) => void
-  isMobile?: boolean
+  isCompact?: boolean
 }) => {
   // Siren loops for as long as the error overlay is mounted; useMusic stops it on unmount.
   const siren = useMusic('siren')
@@ -358,11 +371,11 @@ const ErrorContainer = ({
 
   return (
     <>
-      <div className="fixed w-screen h-screen top-0 left-0 bg-red-500 error-container pointer-events-none" />
+      <div className="fixed w-screen h-dvh top-0 left-0 bg-red-500 error-container pointer-events-none" />
       <div
         className={classNames(
           'fixed flex flex-col items-center text-[100px] top-[75%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-center text-black z-100 pointer-events-none',
-          { '!text-[50px] !top-[50%]': isMobile }
+          { '!text-[50px] !top-[50%]': isCompact }
         )}
       >
         {text}

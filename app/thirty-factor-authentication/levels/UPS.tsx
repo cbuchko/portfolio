@@ -10,7 +10,7 @@ export const UPSContent = ({
   setUPSTrackingCode: setCode,
   layout,
 }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow, isShort, fit } = layout
   const [deliveryStart, deliveryEnd] = useMemo(() => {
     const dateNow = new Date()
     const formattedNow = getFormattedDate(dateNow)
@@ -28,17 +28,22 @@ export const UPSContent = ({
 
   return (
     <>
-      <p className="text-lg">
+      <p className={isShort ? 'text-base' : 'text-lg'}>
         To ensure the most secure authentication possible, we will be mailing a physical
         authentication key to you.
       </p>
-      <p className="text-lg">
+      <p className={isShort ? 'text-base' : 'text-lg'}>
         You may proceed with the next levels while you wait. We appreciate your patience.
       </p>
       <div
-        className={classNames('flex gap-12 mt-8 p-8 bg-gray-100 w-max mx-auto', {
-          'flex-col !mx-0 !w-full !max-w-full !p-4 !gap-6': isMobile,
+        className={classNames('flex gap-12 tfa-gap bg-gray-100 w-max mx-auto', {
+          'flex-col !mx-0 !w-full !max-w-full !p-4 !gap-6': isNarrow,
+          'p-8': !isShort,
+          'p-4': isShort,
         })}
+        // The shipment card is pure copy; zoom it down a notch on short desktops
+        // (floored so the small print stays legible).
+        style={isShort && !isNarrow ? { zoom: Math.max(0.8, fit) } : undefined}
       >
         <div>
           <small>Your shipment</small>
@@ -48,7 +53,7 @@ export const UPSContent = ({
           <div className="border-b border-gray-400 my-4" />
           <small className="font-medium">Ship To</small>
           <h5 className="blur-xs select-none">TORONTO, ON CA</h5>
-          <h5 className="mt-8">1x Thirty Factor Authentication Key</h5>
+          <h5 className={isShort ? 'mt-4' : 'mt-8'}>1x Thirty Factor Authentication Key</h5>
           <div className="flex justify-between">
             <small>Express Shipping</small>
             <small className="mono">$39.99</small>
@@ -58,10 +63,10 @@ export const UPSContent = ({
             alt="ups"
             height={32}
             width={32}
-            className="mt-10"
+            className={isShort ? 'mt-4' : 'mt-10'}
           />
         </div>
-        {!isMobile && (
+        {!isNarrow && (
           <div className="my-6 ml-3">
             <DeliveryNode title="Label Created" isComplete dateString={deliveryStart} />
             <DeliveryNode

@@ -5,6 +5,7 @@ import { clampPositionsToScreen } from '../utils'
 import { TextInput } from '../components/TextInput'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 import { useElementDrag } from '../useElementDrag'
+import { readViewportSize } from '../useTfaLayout'
 
 const selectCode = () => {
   const index = Math.floor(Math.random() * codes.length)
@@ -17,7 +18,9 @@ export const PostItContent = ({
   handleLevelAdvance,
   layout,
 }: ContentProps) => {
-  const { isMobile } = layout
+  const { isNarrow, fit } = layout
+  // Phone-only: smaller notes so they fit a narrow screen. Desktop keeps 1:1.
+  const noteScale = isNarrow ? Math.min(0.6, fit) : 1
   const [code, setCode] = useState<string>('')
   const [keywordInput, setKeywordInput] = useState('')
 
@@ -34,11 +37,11 @@ export const PostItContent = ({
     }
   }
 
-  //use way less post its on mobile because its so much harder there
+  // Fewer notes on phones only — short desktops still get the full pile.
   const postItNotes = useMemo(() => {
-    if (!isMobile) return notes
+    if (!isNarrow) return notes
     return notes.slice(0, 50)
-  }, [isMobile])
+  }, [isNarrow])
 
   return (
     <>
@@ -54,41 +57,47 @@ export const PostItContent = ({
         onSubmit={handleLevelAdvance}
       />
       {postItNotes.map((note, idx) => (
-        <PostIt key={idx} message={note} isMobile={isMobile} />
+        <PostIt key={idx} message={note} scale={noteScale} isNarrow={isNarrow} />
       ))}
-      <PostIt code={code} isMobile={isMobile} />
+      <PostIt code={code} scale={noteScale} isNarrow={isNarrow} />
     </>
   )
 }
 
-const getRandomPosition = (height: number, width: number, isMobile?: boolean) => {
-  const halfwayDown = window.innerHeight / 2
-  const viewportHeight = window.innerHeight
+const noteHeight = 225
+const noteWidth = 200
 
-  const y = Math.random() * (viewportHeight - halfwayDown) + halfwayDown - height
-  const x = Math.random() * window.innerWidth - width
-  const { newX, newY } = clampPositionsToScreen(x, y, width, height, 1, isMobile)
+const getRandomPosition = (height: number, width: number, allowPartialOffscreen: boolean) => {
+  const { width: vw, height: vh } = readViewportSize()
+  const halfwayDown = vh / 2
+
+  const y = Math.random() * (vh - halfwayDown) + halfwayDown - height
+  const x = Math.random() * vw - width
+  const { newX, newY } = clampPositionsToScreen(x, y, width, height, 1, allowPartialOffscreen)
   return { x: newX, y: newY }
 }
 
 const PostIt = ({
   message,
   code,
-  isMobile,
+  scale,
+  isNarrow,
 }: {
   message?: string
   code?: string
-  isMobile?: boolean
+  scale: number
+  isNarrow: boolean
 }) => {
   const [postStyles, setPostStyles] = useState<CSSProperties>()
   const noteRef = useRef<HTMLDivElement>(null)
 
-  const { position, handlePointerDown, setPosition } = useElementDrag(noteRef, undefined, 0.6)
+  const { position, handlePointerDown, setPosition } = useElementDrag(noteRef, undefined, {
+    scale,
+    allowPartialOffscreen: isNarrow,
+  })
 
   useEffectInitializer(() => {
-    const height = isMobile ? 225 * 0.6 : 225
-    const width = isMobile ? 200 * 0.6 : 200
-    setPosition(getRandomPosition(height, width, isMobile))
+    setPosition(getRandomPosition(noteHeight * scale, noteWidth * scale, isNarrow))
     const randomizedTextPosition = Math.floor(Math.random() * (100 - 50) + 50)
     const randomizedFontSize = Math.floor(Math.random() * (36 - 24) + 24)
     const randomizedTextAlign = Math.random() > 0.2 ? 'left' : 'right'
@@ -97,7 +106,7 @@ const PostIt = ({
       fontSize: randomizedFontSize,
       textAlign: randomizedTextAlign,
     })
-  }, [isMobile])
+  }, [])
 
   if (!position) return null
 
@@ -109,10 +118,12 @@ const PostIt = ({
         left: position.x,
         top: position.y,
         touchAction: 'none',
+        scale,
+        transformOrigin: 'top left',
       }}
       className={classNames(
         'h-[225px] w-[200px] flex p-4 bg-yellow-200 rounded-lg shadow-md text-black select-none !cursor-grab z-2 post-it liebe-heide overflow-hidden',
-        { '!z-1': !!code, 'scale-60': isMobile }
+        { '!z-1': !!code }
       )}
       onPointerDown={handlePointerDown}
     >

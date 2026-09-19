@@ -104,14 +104,14 @@ export const BrainScanContent = ({ handleLevelAdvance, validateAdvance }: Conten
       </div>
       {isStarted && !isCompleted && (
         <div
-          className={classNames('fixed inset-0 top-0 left-0 h-screen w-screen bg-red-500')}
+          className={classNames('fixed inset-0 top-0 left-0 h-dvh w-screen bg-red-500')}
           style={{ opacity: Math.max((100 - health) / 100, 0.3) }}
         />
       )}
       {isStarted && !isCompleted && (
         <div
           className={classNames(
-            'fixed top-0 left-0 h-screen w-screen bg-black z-1000 pointer-events-none transition-opacity duration-1000',
+            'fixed top-0 left-0 h-dvh w-screen bg-black z-1000 pointer-events-none transition-opacity duration-1000',
             {
               'opacity-0': !isScreenBlackedOut,
               'opacity-100': isScreenBlackedOut,
@@ -146,7 +146,8 @@ const Scanner = ({
     if (isComplete || isDead) return
 
     const interval = setInterval(() => {
-      const { innerWidth, innerHeight } = window
+      const innerWidth = window.visualViewport?.width ?? window.innerWidth
+      const innerHeight = window.visualViewport?.height ?? window.innerHeight
       const { x: oldX, y: oldY } = position
 
       const midX = innerWidth / 2

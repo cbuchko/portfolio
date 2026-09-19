@@ -38,7 +38,7 @@ export const AuthContainer = ({
   variant = 'run',
   layout,
 }: AuthContainerProps) => {
-  const { isMobile, isCompact } = layout
+  const { isNarrow, isShort, isCompact } = layout
   const isPregame = variant === 'pregame'
 
   const [isLoading, setIsLoading] = useState(false)
@@ -99,7 +99,7 @@ export const AuthContainer = ({
     const observer = new ResizeObserver(syncWidth)
     observer.observe(card)
     return () => observer.disconnect()
-  }, [isCompact, isMobile, level, isPregame])
+  }, [isCompact, isNarrow, level, isPregame])
 
   const validateAdvance = useCallback(() => setIsAdvanceVerified(true), [])
   const cancelAdvance = useCallback(() => setIsAdvanceVerified(false), [])
@@ -118,11 +118,14 @@ export const AuthContainer = ({
     <>
       <div
         id="auth-container"
-        className={classNames('relative mt-28 mb-4 shadow-md', {
+        className={classNames('relative mb-4 shadow-md', {
           'opacity-0 pointer-events-none': isLoading && requiresLoad,
-          '!mt-24': isCompact,
-          'mx-auto': !isMobile,
-          'w-full': isMobile,
+          // Logo band sits at top-8 (roomy) or top-3 (short); card clears it.
+          'mt-28': !isShort && !isNarrow,
+          'mt-24': !isShort && isNarrow,
+          'mt-16': isShort,
+          'mx-auto': !isNarrow,
+          'w-full': isNarrow,
           'auth-strike-locked': strikeLocked,
         })}
         style={
@@ -136,8 +139,8 @@ export const AuthContainer = ({
           className={classNames(
             'flex justify-between items-center py-1 px-4 rounded-t-md border transition-colors duration-200',
             {
-              'min-w-[400px]': !isMobile,
-              'w-full': isMobile,
+              'min-w-[400px]': !isNarrow,
+              'w-full': isNarrow,
               'bg-red-400': headerThreatened,
               'bg-blue-300': !headerThreatened,
               'auth-header-strike-flash': strikeLocked,
@@ -186,8 +189,8 @@ export const AuthContainer = ({
               <Image
                 src="/thirty-factor-authentication/icons/x.svg"
                 alt=""
-                width={isMobile ? 56 : 64}
-                height={isMobile ? 56 : 64}
+                width={isCompact ? 56 : 64}
+                height={isCompact ? 56 : 64}
                 className="auth-strike-overlay-x"
               />
               <p className="auth-strike-overlay-title">Incorrect</p>

@@ -22,7 +22,7 @@ const toValue = (slots: string[]) => slots.map((slot) => slot || EMPTY).join('')
 
 export const PinInput = ({ value, onChange, onSubmit, length = 6 }: PinInputProps) => {
   const captureRef = useRef<HTMLInputElement | null>(null)
-  const { isMobile, isTouch, viewportWidth } = useTfaLayout()
+  const { isNarrow: isMobile, isTouch, viewportWidth } = useTfaLayout()
   const [focused, setFocused] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const [draft, setDraft] = useState('')
