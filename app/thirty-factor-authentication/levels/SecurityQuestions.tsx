@@ -3,6 +3,7 @@ import { ContentProps, ControlProps } from './types'
 import { EasyTriviaQuestion, PlayerInformation } from '../player-constants'
 import { shuffle } from '../utils'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { setTfaAttemptContext } from '../analytics'
 
 type PreparedQuestion = EasyTriviaQuestion & { options: string[] }
 
@@ -22,11 +23,13 @@ export const SecurityQuestionsContent = ({
     })
     setSelected(undefined)
     cancelAdvance()
+    setTfaAttemptContext({ question: picked.prompt, selected: '(none)' })
   }, [playerId, cancelAdvance])
 
   const handleSelect = (option: string) => {
     setSelected(option)
     if (!question) return
+    setTfaAttemptContext({ question: question.prompt, selected: option })
 
     if (option === question.answer) {
       validateAdvance()

@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import { ContentProps, ControlProps } from './types'
 import { fallbackPassKey } from '../constants'
 import { TextInput } from '../components/TextInput'
+import { setTfaAttemptContext } from '../analytics'
 
 const monthRe =
   /(January|February|March|April|May|June|July|August|September|October|November|December)/i
@@ -35,6 +36,14 @@ const evaluatePassword = (input: string): PasswordRules => ({
 const isPasswordValid = (rules: PasswordRules) =>
   rules.length && rules.uppercase && rules.symbols && rules.month && rules.consonants
 
+const syncPasswordAttempt = (rules: PasswordRules) => {
+  const failed = RULES.filter((rule) => !rules[rule.key]).map((rule) => rule.key)
+  setTfaAttemptContext({
+    failed_rules: failed.join(','),
+    rule_fail_count: failed.length,
+  })
+}
+
 const passwordSubmit: { attempt: (() => void) | null } = { attempt: null }
 
 export const FallbackOneContent = ({
@@ -47,6 +56,7 @@ export const FallbackOneContent = ({
 
   const syncValidity = (input: string) => {
     const next = evaluatePassword(input)
+    syncPasswordAttempt(next)
     if (isPasswordValid(next)) {
       sessionStorage.setItem(fallbackPassKey, input)
       validateAdvance()
@@ -62,6 +72,7 @@ export const FallbackOneContent = ({
 
   const attemptAdvance = () => {
     const next = evaluatePassword(passInput)
+    syncPasswordAttempt(next)
     if (!isPasswordValid(next)) setFailedAtSubmit(next)
     handleLevelAdvance()
   }

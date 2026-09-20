@@ -33,7 +33,13 @@ import { DartboardContent } from './Dartboard'
 import { SecurityQuestionsContent, SecurityQuestionsControls } from './SecurityQuestions'
 import { PizzatronContent } from './Pizzatron'
 import { ContentProps, ControlProps } from './types'
-import { captureTfaEvent, sessionProps } from '../analytics'
+import {
+  captureTfaEvent,
+  clearTfaLevelAttemptState,
+  getTfaAttemptContext,
+  getTfaHelperCompleteProps,
+  sessionProps,
+} from '../analytics'
 
 type LevelContent = (props: ContentProps) => React.JSX.Element | null
 type LevelControls = (props: ControlProps) => React.JSX.Element | null
@@ -215,6 +221,7 @@ export const useLevels = () => {
     const meta = getLevelMeta(currentLevel)
     captureTfaEvent('tfa_strike', {
       ...sessionProps(),
+      ...getTfaAttemptContext(),
       level: currentLevel,
       level_id: meta.id,
       level_title: meta.title,
@@ -246,12 +253,15 @@ export const useLevels = () => {
     if (completed) {
       captureTfaEvent('tfa_level_completed', {
         ...sessionProps(),
+        ...getTfaAttemptContext(),
+        ...getTfaHelperCompleteProps(),
         level: completed.level,
         level_id: completed.id,
         level_title: completed.title,
         duration_ms: completed.durationMs,
         strikes: completed.strikes,
       })
+      clearTfaLevelAttemptState()
     }
     clearStrikes()
     const enteredAt = Date.now()
@@ -279,6 +289,7 @@ export const useLevels = () => {
     setUPSTrackingCode('')
     setUPSTrackingTime(0)
     setSelectedSSOIds(new Set())
+    clearTfaLevelAttemptState()
   }, [clearStrikes])
 
   const baseProps = {

@@ -67,6 +67,10 @@ export type TfaSession = {
 let initialized = false
 let flushedPendingAbandon = false
 let session: TfaSession = {}
+/** Live “why this submit failed” props; copied onto tfa_strike, cleared on level change. */
+let attemptContext: TfaEventProps = {}
+/** Helpers opened this level (google search, sms resend). Copied onto tfa_level_completed. */
+let helperFlags: Record<string, true> = {}
 
 const isLocalHost = () => {
   const host = window.location.hostname
@@ -157,6 +161,35 @@ export const sessionProps = (): TfaEventProps => ({
   ...layoutProps(session.layout),
   run_index: session.runIndex,
 })
+
+export const setTfaAttemptContext = (props: TfaEventProps) => {
+  attemptContext = { ...attemptContext, ...props }
+}
+
+export const getTfaAttemptContext = (): TfaEventProps => attemptContext
+
+export const getTfaHelperCompleteProps = (): TfaEventProps => {
+  const helpers = Object.keys(helperFlags)
+  if (helpers.length === 0) return {}
+  return { helper_used: true, helper: helpers.join(',') }
+}
+
+export const clearTfaLevelAttemptState = () => {
+  attemptContext = {}
+  helperFlags = {}
+}
+
+export const captureTfaHelperUsed = (helper: string, extra: TfaEventProps = {}) => {
+  helperFlags[helper] = true
+  captureTfaEvent('tfa_helper_used', {
+    ...sessionProps(),
+    level: session.level,
+    level_id: session.levelId,
+    level_title: session.levelTitle,
+    helper,
+    ...extra,
+  })
+}
 
 /** Layout facts attached to every tfa event (is_mobile kept for continuity; it is isNarrow). */
 export const layoutProps = (layout?: TfaSession['layout']): TfaEventProps => ({

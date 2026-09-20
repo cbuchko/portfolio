@@ -5,6 +5,7 @@ import { useMessageSpam } from '../useMessageSpam'
 import { TextInput } from '../components/TextInput'
 import { ExtrasPortal } from '../components/ExtrasPortal'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { captureTfaHelperUsed, setTfaAttemptContext } from '../analytics'
 
 const messages = [
   'hey what you up to?',
@@ -23,16 +24,27 @@ export const MessageSpamContent = ({
 }: ContentProps) => {
   const [codeInput, setCodeInput] = useState('')
   const [code, setCode] = useState('')
+  const [resends, setResends] = useState(0)
 
   useEffectInitializer(() => {
     setCode(makeCode(10))
+    setTfaAttemptContext({ code_len: 0, resends_this_level: 0 })
   }, [])
 
   const authMessage = code ? `Your authentication code is: ${code}` : undefined
   const { message, handleResendCode } = useMessageSpam(messages, authMessage)
 
+  const onResend = () => {
+    const next = resends + 1
+    setResends(next)
+    setTfaAttemptContext({ code_len: codeInput.length, resends_this_level: next })
+    captureTfaHelperUsed('sms_resend', { resends_this_level: next })
+    handleResendCode()
+  }
+
   const handleInputChange = (input: string) => {
     setCodeInput(input)
+    setTfaAttemptContext({ code_len: input.length, resends_this_level: resends })
     if (code === input) {
       validateAdvance()
     } else {
@@ -45,7 +57,7 @@ export const MessageSpamContent = ({
       <p className="text-lg">{`We've sent a code to your mobile device.`}</p>
       <div className="flex justify-between mt-2">
         <small>{`Don't tell this code to anyone.`}</small>
-        <button className="text-xs underline cursor-pointer" onClick={handleResendCode}>
+        <button className="text-xs underline cursor-pointer" onClick={onResend}>
           Resend Code
         </button>
       </div>

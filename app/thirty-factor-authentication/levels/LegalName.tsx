@@ -4,8 +4,10 @@ import { PlayerInformation } from '../player-constants'
 import { TextInput } from '../components/TextInput'
 import Image from 'next/image'
 import classNames from 'classnames'
+import { captureTfaHelperUsed, setTfaAttemptContext } from '../analytics'
 
 const NAME_SUFFIXES = new Set(['jr', 'jr.', 'sr', 'sr.', 'ii', 'iii', 'iv', 'junior', 'senior'])
+const NAME_ATTEMPT_MAX = 80
 
 /** Same-width redaction per word so letter counts never leak. Suffixes get a shorter block. */
 const redactNameTokens = (fullName: string) =>
@@ -24,6 +26,13 @@ const foldLegalName = (value: string) =>
     .replace(/\s+/g, ' ')
     .trim()
     .toLocaleLowerCase()
+
+const syncNameAttempt = (input: string) => {
+  setTfaAttemptContext({
+    name_attempt: foldLegalName(input).slice(0, NAME_ATTEMPT_MAX),
+    name_len: input.length,
+  })
+}
 
 const legalNameAdvanceRef = { current: () => {} }
 
@@ -44,12 +53,14 @@ export const LegalNameContent = ({
     !!inputTarget.find((alias) => foldLegalName(alias) === foldLegalName(input))
 
   const openLegalNameSearch = () => {
+    captureTfaHelperUsed('legal_name_google')
     const query = encodeURIComponent(`${player.name} legal name`)
     window.open(`https://www.google.com/search?q=${query}`, '_blank', 'noopener,noreferrer')
   }
 
   const handleInputChange = (input: string) => {
     setNameInput(input)
+    syncNameAttempt(input)
     if (nameMatches(input)) {
       validateAdvance()
     } else {
@@ -58,6 +69,7 @@ export const LegalNameContent = ({
   }
 
   const tryAdvance = () => {
+    syncNameAttempt(nameInput)
     if (!nameMatches(nameInput)) setMisses((n) => n + 1)
     handleLevelAdvance()
   }
