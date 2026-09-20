@@ -25,25 +25,43 @@ const foldLegalName = (value: string) =>
     .trim()
     .toLocaleLowerCase()
 
+const legalNameAdvanceRef = { current: () => {} }
+
 export const LegalNameContent = ({
   playerId,
   validateAdvance,
   cancelAdvance,
   handleLevelAdvance,
+  layout,
 }: ContentProps) => {
   const [nameInput, setNameInput] = useState('')
+  const [misses, setMisses] = useState(0)
   const player = PlayerInformation[playerId]
   const inputTarget = player.fullNameAliases
+  const showForgotName = misses >= 2
+
+  const nameMatches = (input: string) =>
+    !!inputTarget.find((alias) => foldLegalName(alias) === foldLegalName(input))
+
+  const openLegalNameSearch = () => {
+    const query = encodeURIComponent(`${player.name} legal name`)
+    window.open(`https://www.google.com/search?q=${query}`, '_blank', 'noopener,noreferrer')
+  }
 
   const handleInputChange = (input: string) => {
     setNameInput(input)
-    const typed = foldLegalName(input)
-    if (inputTarget.find((alias) => foldLegalName(alias) === typed)) {
+    if (nameMatches(input)) {
       validateAdvance()
     } else {
       cancelAdvance()
     }
   }
+
+  const tryAdvance = () => {
+    if (!nameMatches(nameInput)) setMisses((n) => n + 1)
+    handleLevelAdvance()
+  }
+  legalNameAdvanceRef.current = tryAdvance
 
   return (
     <>
@@ -77,17 +95,28 @@ export const LegalNameContent = ({
         value={nameInput}
         placeholder="Enter your full legal name..."
         onChange={handleInputChange}
-        onSubmit={handleLevelAdvance}
+        onSubmit={tryAdvance}
       />
+      {showForgotName && (
+        <button
+          type="button"
+          className={classNames('mt-4 text-sm underline cursor-pointer text-left', {
+            'min-h-11': layout.isNarrow,
+          })}
+          onClick={openLegalNameSearch}
+        >
+          Forgot your name?
+        </button>
+      )}
     </>
   )
 }
 
-export const LegalNameControls = ({ handleLevelAdvance }: ControlProps) => {
+export const LegalNameControls = (_props: ControlProps) => {
   return (
     <>
       <div className="grow" />
-      <button className="auth-button auth-button-primary" onClick={() => handleLevelAdvance()}>
+      <button className="auth-button auth-button-primary" onClick={() => legalNameAdvanceRef.current()}>
         Submit
       </button>
     </>
