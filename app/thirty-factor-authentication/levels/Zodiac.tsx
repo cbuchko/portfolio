@@ -3,6 +3,8 @@ import { ContentProps, ControlProps } from './types'
 import { PlayerInformation } from '../player-constants'
 import { DropdownSelector } from '../components/dropdown-selector'
 import classNames from 'classnames'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { setTfaAttemptContext } from '../analytics'
 
 const signs = [
   'Aries',
@@ -20,6 +22,16 @@ const signs = [
 ]
 
 const defaultSign = 'Aries'
+
+const syncZodiacAttempt = (sun: string, moon: string, rising: string) => {
+  setTfaAttemptContext({
+    sun,
+    moon,
+    rising,
+    zodiac_attempt: `${sun}-${moon}-${rising}`.toLocaleLowerCase(),
+  })
+}
+
 export const ZodiacContent = ({
   playerId,
   validateAdvance,
@@ -34,6 +46,10 @@ export const ZodiacContent = ({
   const [selectedRising, setSelectedRising] = useState(defaultSign)
 
   const targetZodiac = PlayerInformation[playerId].zodiac
+
+  useEffectInitializer(() => {
+    syncZodiacAttempt(defaultSign, defaultSign, defaultSign)
+  }, [])
 
   const handleZodiacSelect = (option: string, type: 'sun' | 'moon' | 'rising') => {
     let sunRes = selectedSun
@@ -50,6 +66,7 @@ export const ZodiacContent = ({
       setSelectedRising(option)
     }
 
+    syncZodiacAttempt(sunRes, moonRes, risingRes)
     const optionResult = `${sunRes}-${moonRes}-${risingRes}`
     if (targetZodiac.toLocaleLowerCase() === optionResult.toLocaleLowerCase()) {
       validateAdvance()

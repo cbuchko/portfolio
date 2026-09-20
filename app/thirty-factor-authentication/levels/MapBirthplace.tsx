@@ -3,18 +3,34 @@ import { ContentProps, ControlProps } from './types'
 import { PlayerInformation } from '../player-constants'
 import dynamic from 'next/dynamic'
 import { MapProps } from './Map'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { setTfaAttemptContext } from '../analytics'
 
 //have to lazy load map because leaflet does not support SSR
 const Map = dynamic<MapProps>(() => import('./Map').then((mod) => mod.default), {
   ssr: false,
 })
 
+const foldCity = (city?: string) => city?.normalize('NFKC').trim().toLocaleLowerCase() ?? ''
+
+const syncCityAttempt = (city?: string) => {
+  const folded = foldCity(city)
+  setTfaAttemptContext({
+    city_attempt: folded || '(none)',
+  })
+}
+
 export const MapContent = ({ playerId, validateAdvance, cancelAdvance, layout }: ContentProps) => {
   const { isNarrow } = layout
   const [selectedCity, setSelectedCity] = useState<string>()
 
+  useEffectInitializer(() => {
+    syncCityAttempt(undefined)
+  }, [])
+
   const handleCitySelect = (city?: string) => {
     setSelectedCity(city)
+    syncCityAttempt(city)
     const targetCity = PlayerInformation[playerId].birthCity
     if (targetCity.toLowerCase() === city?.toLowerCase()) {
       validateAdvance()
