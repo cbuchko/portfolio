@@ -5,9 +5,23 @@ import { fallbackPassKey } from '../constants'
 import { TextInput } from '../components/TextInput'
 import { setTfaAttemptContext } from '../analytics'
 
-const monthRe =
-  /(January|February|March|April|May|June|July|August|September|October|November|December)/i
-const consecutiveConsonantsRe = /[B-DF-HJ-NP-TV-X]{2}/i
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+] as const
+
+const monthRe = new RegExp(`(${MONTHS.join('|')})`, 'i')
+const consecutiveConsonantsRe = /[B-DF-HJ-NP-TV-XZ]{2}/i
 
 type PasswordRules = {
   length: boolean
@@ -20,18 +34,22 @@ type PasswordRules = {
 const RULES: { key: keyof PasswordRules; label: string }[] = [
   { key: 'length', label: 'At least 10 total characters' },
   { key: 'uppercase', label: 'Exactly four uppercase characters' },
-  { key: 'symbols', label: 'Exactly two symbols' },
-  { key: 'consonants', label: 'No consecutive consonants' },
+  { key: 'symbols', label: 'As many symbols as there are vowels' },
   { key: 'month', label: 'A month of the year' },
+  { key: 'consonants', label: 'No consonants next to each other' },
 ]
 
-const evaluatePassword = (input: string): PasswordRules => ({
-  length: input.length >= 10,
-  uppercase: (input.match(/[A-Z]/g) || []).length === 4,
-  symbols: (input.match(/[^A-Za-z0-9]/g) || []).length === 2,
-  month: monthRe.test(input),
-  consonants: !consecutiveConsonantsRe.test(input),
-})
+const evaluatePassword = (input: string): PasswordRules => {
+  const vowelCount = (input.match(/[aeiouy]/gi) || []).length
+  const symbolCount = (input.match(/[^A-Za-z0-9]/g) || []).length
+  return {
+    length: input.length >= 10,
+    uppercase: (input.match(/[A-Z]/g) || []).length === 4,
+    symbols: vowelCount === symbolCount,
+    month: monthRe.test(input),
+    consonants: !consecutiveConsonantsRe.test(input),
+  }
+}
 
 const isPasswordValid = (rules: PasswordRules) =>
   rules.length && rules.uppercase && rules.symbols && rules.month && rules.consonants
