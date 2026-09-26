@@ -3,7 +3,10 @@ import classNames from 'classnames'
 import { ContentProps, ControlProps } from './types'
 import { fallbackPassKey } from '../constants'
 import { TextInput } from '../components/TextInput'
+import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 import { setTfaAttemptContext } from '../analytics'
+
+const PASSWORD_ATTEMPT_MAX = 80
 
 const MONTHS = [
   'January',
@@ -54,9 +57,14 @@ const evaluatePassword = (input: string): PasswordRules => {
 const isPasswordValid = (rules: PasswordRules) =>
   rules.length && rules.uppercase && rules.symbols && rules.month && rules.consonants
 
-const syncPasswordAttempt = (rules: PasswordRules) => {
+const foldPasswordAttempt = (input: string) =>
+  input.normalize('NFKC').slice(0, PASSWORD_ATTEMPT_MAX) || '(none)'
+
+const syncPasswordAttempt = (input: string, rules: PasswordRules) => {
   const failed = RULES.filter((rule) => !rules[rule.key]).map((rule) => rule.key)
   setTfaAttemptContext({
+    password_attempt: foldPasswordAttempt(input),
+    password_len: input.length,
     failed_rules: failed.join(','),
     rule_fail_count: failed.length,
   })
@@ -72,9 +80,13 @@ export const FallbackOneContent = ({
   const [passInput, setPassInput] = useState('')
   const [failedAtSubmit, setFailedAtSubmit] = useState<PasswordRules | null>(null)
 
+  useEffectInitializer(() => {
+    syncPasswordAttempt('', evaluatePassword(''))
+  }, [])
+
   const syncValidity = (input: string) => {
     const next = evaluatePassword(input)
-    syncPasswordAttempt(next)
+    syncPasswordAttempt(input, next)
     if (isPasswordValid(next)) {
       sessionStorage.setItem(fallbackPassKey, input)
       validateAdvance()
@@ -90,7 +102,7 @@ export const FallbackOneContent = ({
 
   const attemptAdvance = () => {
     const next = evaluatePassword(passInput)
-    syncPasswordAttempt(next)
+    syncPasswordAttempt(passInput, next)
     if (!isPasswordValid(next)) setFailedAtSubmit(next)
     handleLevelAdvance()
   }
