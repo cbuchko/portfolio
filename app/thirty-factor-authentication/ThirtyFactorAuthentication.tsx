@@ -156,7 +156,7 @@ export default function ThirtyFactorAuthentication() {
       >
         <Image
           src="/thirty-factor-authentication/horizontal-logo.png"
-          alt="logo"
+          alt="Thirty Factor Authentication"
           height={48}
           width={516}
           className={classNames('!max-w-none', {

@@ -1,25 +1,41 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-
-const GAME_HOST = 'thirtyfactorauthentication.com'
-const PORTFOLIO_ORIGIN = 'https://www.connorbuchko.com'
-
-const staysOnGameHost = (pathname: string) =>
-  pathname === '/thirty-factor-authentication' ||
-  pathname.startsWith('/thirty-factor-authentication/') ||
-  pathname.startsWith('/factor-relay') ||
-  pathname.startsWith('/_next')
+import {
+  PORTFOLIO_ORIGIN,
+  gameForHost,
+  gameForPagePath,
+  gameForWwwHost,
+  gameKeepsPath,
+  PORTFOLIO_HOSTS,
+  portfolioHostName,
+} from './app/game-sites'
 
 export function middleware(request: NextRequest) {
-  const host = request.headers.get('host')?.split(':')[0]?.toLowerCase()
-  if (host !== GAME_HOST) return NextResponse.next()
-
+  const host = portfolioHostName(request.headers.get('host'))
   const { pathname } = request.nextUrl
-  if (staysOnGameHost(pathname)) return NextResponse.next()
+
+  const wwwGame = gameForWwwHost(host)
+  if (wwwGame) {
+    return NextResponse.redirect(new URL(pathname + request.nextUrl.search, `https://${wwwGame.host}`), 308)
+  }
+
+  const dedicatedPage = gameForPagePath(pathname)
+  if (dedicatedPage?.host && host && PORTFOLIO_HOSTS.has(host)) {
+    return NextResponse.redirect(new URL(`/${request.nextUrl.search}`, `https://${dedicatedPage.host}`), 308)
+  }
+
+  const game = gameForHost(host)
+  if (!game) return NextResponse.next()
+
+  if (gameForPagePath(pathname) === game) {
+    return NextResponse.redirect(new URL(`/${request.nextUrl.search}`, `https://${game.host}`), 308)
+  }
+
+  if (gameKeepsPath(game, pathname)) return NextResponse.next()
 
   if (pathname === '/') {
     const url = request.nextUrl.clone()
-    url.pathname = '/thirty-factor-authentication'
+    url.pathname = game.path
     return NextResponse.rewrite(url)
   }
 

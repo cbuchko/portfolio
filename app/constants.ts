@@ -79,8 +79,8 @@ export const Projects: ProjectProps[] = [
 export const WebsiteProjects: ProjectProps[] = [
   {
     img: '/thirty-factor-authentication/full-logo.png',
-    body: 'Verify yourself by completing thirty different authentication challenges. Each challenge increasingly more bizarre than the last. ',
-    link: 'https://thirtyfactorauthentication.com',
+    body: 'Thirty Factor Authentication. Verify yourself by completing thirty different authentication challenges. Each challenge increasingly more bizarre than the last. ',
+    link: '/thirty-factor-authentication',
     allowMobileNavigation: true,
   },
   {
