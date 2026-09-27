@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { IdentityLockContent, IdentityLockControls } from './IdentityLock'
 import { LegalNameContent, LegalNameControls } from './LegalName'
-import { MessageSpamContent, MessageSpamControls } from './MessageSpam'
+import { MessageSpamContent } from './MessageSpam'
 import { ZodiacContent, ZodiacControls } from './Zodiac'
 import { FallbackOneContent, FallbackOneControls } from './Fallback1'
 import { forceLevel, maxLevel } from '../constants'
@@ -107,7 +107,6 @@ export const LEVELS: LevelDefinition[] = [
   {
     id: 'message-spam',
     content: MessageSpamContent,
-    controls: MessageSpamControls,
     title: 'Message Spam',
   },
   { id: 'biometrics', content: BiometricContent, controls: BiometricControls, title: 'Biometrics' },

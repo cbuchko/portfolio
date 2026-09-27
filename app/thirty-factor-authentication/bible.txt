@@ -1,31 +1,18 @@
-Should the authenticator have more personality? Should it get more deranged and start justifying why the game turns into chaos?
-Should other levels leave artifacts? A rogue post-it? A fish that swims by? Honestly hard to not make that look like a bug
-Funny easter egg: If you don't accept the "three mistakes" checkbox, the game enters an infinite mode where you can't fail? lol
-
-Mr Potato Head?
-Excel Spreadsheet
-Escape Room
-
-Levels that NEED to be better:
-"Feel" Ideas:
-    - Aquarium add sfx and ocean element
-    - Bomb Defusal has opportunity
-    - Maintenance has opportunity
-
-Sign In screen needs more love as the first impression to the game
-
-Identity Lock could be more?
-
-August 16th revisit notes:
-- Mobile "Easyness" 
-- Test more
-- Handpick Quotes and Films for new characters
-
-
 September 11th Notes:
-
-* I think there's an opportunity for there to generally be more sounds. Lots of button press that don't feel good.
+I think there's an opportunity for there to generally be more sounds. Lots of button press that don't feel good.
 
 
 September 19th:
 Audit character stuff liek Quotes
+
+
+
+I wonder if there's something about message spam that turns people off? 
+Are the texts too invasive? 
+People lose their code and immediately dont even try to resend it? 
+I could actually see this level being a thematic turn off without more deliberate message copy
+And I do think the path to reset has to be clearing
+
+I also saw two people crash out because they just were barely too slow to submit the App Code - Might still be too hard! 
+They were to slow to click the submit button which is an interesting observation
+Maybe there even needs to be a buffer so they are forced to clearly miss it

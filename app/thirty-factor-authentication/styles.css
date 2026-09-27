@@ -409,6 +409,61 @@ small {
   animation: notification-wiggle 1s ease;
 }
 
+/* --- Message Spam lock screen --- */
+
+@keyframes lock-banner-in {
+  0% {
+    opacity: 0;
+    translate: 0 -40px;
+    scale: 1.12;
+  }
+  70% {
+    opacity: 1;
+    translate: 0 2px;
+    scale: 0.99;
+  }
+  100% {
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+.lock-banner {
+  animation: lock-banner-in 280ms ease-out;
+}
+
+.lock-banner.notification-wiggle {
+  animation: notification-wiggle 0.4s ease;
+}
+
+@keyframes lock-takeover-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.lock-takeover {
+  animation: lock-takeover-in 200ms ease-out;
+}
+
+@keyframes lock-progress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.lock-progress {
+  animation-name: lock-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
 .boon {
   background: linear-gradient(to right, #47474c, #000000);
 }

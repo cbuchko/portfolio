@@ -48,6 +48,8 @@ export type TfaPendingAbandon = {
   duration_on_level_ms: number
   total_duration_ms: number
   strikes_this_level: number
+  /** Level-specific attempt context at the moment the tab was hidden. */
+  attempt?: TfaEventProps
   hiddenAt: number
 }
 
@@ -258,6 +260,7 @@ const abandonEventProps = (
   pending: TfaPendingAbandon,
   deliveredVia: 'live' | 'beacon' | 'flush'
 ): TfaEventProps => ({
+  ...pending.attempt,
   abandon_id: pending.abandon_id,
   delivered_via: deliveredVia,
   reason: pending.reason,

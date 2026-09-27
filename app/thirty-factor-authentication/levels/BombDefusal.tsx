@@ -183,10 +183,19 @@ export const BombDefusalContent = ({
       <p className={isShort ? 'text-base' : 'text-lg'}>
         {`We've sent instructions to defuse this bomb to your mobile device.`}
       </p>
-      <div className={classNames('flex justify-between', { 'mt-2': !isShort, 'mt-1': isShort })}>
+      <div
+        className={classNames('flex justify-between items-center gap-3', {
+          'mt-2': !isShort,
+          'mt-1': isShort,
+        })}
+      >
         <small>{`Don't tell the instructions to anyone.`}</small>
-        <button className="text-xs underline cursor-pointer" onClick={handleResendCode}>
-          Resend Instructions
+        <button
+          className="auth-button shrink-0 text-sm"
+          style={layout.isTouch ? { maxHeight: 'none', minHeight: 44 } : undefined}
+          onClick={handleResendCode}
+        >
+          Resend instructions
         </button>
       </div>
       <div

@@ -16,6 +16,7 @@ import {
   clearPendingAbandon,
   clearPendingEnd,
   flushPendingAbandon,
+  getTfaAttemptContext,
   getTfaSession,
   incrementRunIndex,
   initTfaAnalytics,
@@ -105,6 +106,7 @@ export const useTfaAnalytics = ({
         duration_on_level_ms: levelEnteredAt ? Math.max(0, Date.now() - levelEnteredAt) : 0,
         total_duration_ms: runStartedAt ? Math.max(0, Date.now() - runStartedAt) : 0,
         strikes_this_level: strikesThisLevel,
+        attempt: getTfaAttemptContext(),
         hiddenAt: Date.now(),
       }
     }
