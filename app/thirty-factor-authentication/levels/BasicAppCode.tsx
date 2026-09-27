@@ -57,7 +57,7 @@ export const BasicAppCodeContent = ({
             codeDefault={targetCode}
             isTarget={true}
             setTargetCode={handleTargetSet}
-            duration={8}
+            duration={12}
           />
         </div>
       </ExtrasPortal>

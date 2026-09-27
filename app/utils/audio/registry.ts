@@ -35,9 +35,9 @@ export const SOUND_REGISTRY = {
   // --- level one-shots ---
   place: { src: `${SOUNDS}/place.mp3`, kind: 'sfx', volume: 1 },
   osuClick: { src: `${SOUNDS}/osu-click.mp3`, kind: 'sfx', volume: 0.25 },
-  dartThrow: { src: `${SOUNDS}/dart-throw.mp3`, kind: 'sfx', volume: 1 },
-  niceThrow: { src: `${SOUNDS}/nice-throw.mp3`, kind: 'sfx', volume: 1 },
-  miss: { src: `${SOUNDS}/miss.mp3`, kind: 'sfx', volume: 1 },
+  dartThrow: { src: `${SOUNDS}/dart-throw.mp3`, kind: 'sfx', volume: 0.5 },
+  niceThrow: { src: `${SOUNDS}/nice-throw.mp3`, kind: 'sfx', volume: 0.5 },
+  miss: { src: `${SOUNDS}/miss.mp3`, kind: 'sfx', volume: 0.5 },
   undertaleDamage: { src: `${SOUNDS}/undertale-damage.mp3`, kind: 'sfx', volume: 0.5 },
   splatter: { src: `${SOUNDS}/splatter.mp3`, kind: 'sfx', volume: 0.3 },
   thud: { src: `${SOUNDS}/sfx_thud03.mp3`, kind: 'sfx', volume: 0.2 },
