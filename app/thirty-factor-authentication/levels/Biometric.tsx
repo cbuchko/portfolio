@@ -3,7 +3,7 @@ import { ContentProps, ControlProps } from './types'
 import classNames from 'classnames'
 import { clampPositionsToScreen } from '../utils'
 
-export const BiometricContent = ({ validateAdvance }: ContentProps) => {
+export const BiometricContent = ({ validateAdvance, layout }: ContentProps) => {
   const startRef = useRef<HTMLDivElement>(null)
   const [startPosition, setStartPosition] = useState<{ x: number; y: number }>()
   const [progress, setProgress] = useState(0)
@@ -14,11 +14,32 @@ export const BiometricContent = ({ validateAdvance }: ContentProps) => {
   }, [isComplete, validateAdvance])
 
   useEffect(() => {
-    if (startRef.current && !startPosition) {
-      const rect = startRef.current.getBoundingClientRect()
-      setStartPosition({ x: rect.left, y: rect.top })
+    // The first paint can still be the desktop layout. Wait until the viewport
+    // is known, and keep matching the placeholder until the player touches it.
+    if (layout.viewportWidth <= 0 || progress > 0) return
+
+    const measure = () => {
+      const spot = startRef.current
+      if (!spot) return
+      const rect = spot.getBoundingClientRect()
+      const viewport = window.visualViewport
+      setStartPosition({
+        x: rect.left - (viewport?.offsetLeft ?? 0),
+        y: rect.top - (viewport?.offsetTop ?? 0),
+      })
     }
-  }, [startPosition])
+
+    measure()
+    const viewport = window.visualViewport
+    viewport?.addEventListener('resize', measure)
+    viewport?.addEventListener('scroll', measure)
+    window.addEventListener('resize', measure)
+    return () => {
+      viewport?.removeEventListener('resize', measure)
+      viewport?.removeEventListener('scroll', measure)
+      window.removeEventListener('resize', measure)
+    }
+  }, [layout.viewportWidth, layout.viewportHeight, layout.isNarrow, progress])
 
   return (
     <>
@@ -27,6 +48,7 @@ export const BiometricContent = ({ validateAdvance }: ContentProps) => {
       </p>
       {startPosition && (
         <Scanner
+          key={`${Math.round(startPosition.x)},${Math.round(startPosition.y)}`}
           setProgress={setProgress}
           isProgressing={progress > 0}
           startPosition={startPosition}

@@ -10,15 +10,31 @@ export function LeafletMarker({ message, children, ...props }: LeafletMarkerProp
   const markerRef = useRef<L.Marker | null>(null)
 
   useEffect(() => {
-    if (markerRef.current) {
-      markerRef.current.openPopup()
+    const marker = markerRef.current
+    if (!marker || !message) return
+
+    // Leaflet toggles a popup shut when its pin is clicked. That listener is
+    // attached when the popup binds, which is after this effect, so retry once.
+    const stopToggle = () => {
+      const toggle = (marker as L.Marker & { _openPopup?: L.LeafletEventHandlerFn })._openPopup
+      if (toggle) marker.off('click', toggle)
+      marker.openPopup()
     }
-  }, [])
+    stopToggle()
+    const retry = window.setTimeout(stopToggle, 0)
+    return () => window.clearTimeout(retry)
+  }, [message])
 
   return (
     <Marker ref={markerRef} {...props}>
       {message && (
-        <Popup autoClose={false} closeOnClick={false} autoPan={false}>
+        <Popup
+          autoClose={false}
+          closeOnClick={false}
+          closeOnEscapeKey={false}
+          closeButton={false}
+          autoPan={false}
+        >
           {message ?? children}
         </Popup>
       )}

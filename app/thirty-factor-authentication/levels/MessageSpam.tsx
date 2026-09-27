@@ -25,7 +25,7 @@ const ONSLAUGHT_MS = 350
  * Phones can't hover, so the burst starts on a timer instead.
  * Long enough to read the prompt before it gets buried.
  */
-const TOUCH_ONSLAUGHT_DELAY_MS = 2000
+const TOUCH_ONSLAUGHT_DELAY_MS = 3000
 const TAKEOVER_EVERY = 5
 
 const isTakeover = (item: PileItem) => item.template.kind === 'takeover'
