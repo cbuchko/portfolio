@@ -108,16 +108,15 @@ export const LEVELS: LevelDefinition[] = [
     content: MessageSpamContent,
     title: 'Message Spam',
   },
-  { id: 'legal-name', content: LegalNameContent, controls: LegalNameControls, title: 'Legal Name' },
-  { id: 'biometrics', content: BiometricContent, controls: BiometricControls, title: 'Biometrics' },
   {
     id: 'password-reset',
     content: FallbackOneContent,
     controls: FallbackOneControls,
     title: 'Password Reset',
   },
+  { id: 'biometrics', content: BiometricContent, controls: BiometricControls, title: 'Biometrics' },
+  { id: 'legal-name', content: LegalNameContent, controls: LegalNameControls, title: 'Legal Name' },
   { id: 'post-it-code', content: PostItContent, controls: PostItControls, title: 'Post-it Code' },
-
   {
     id: 'package-tracking',
     content: UPSContent,

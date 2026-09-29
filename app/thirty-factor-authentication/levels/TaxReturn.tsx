@@ -204,6 +204,8 @@ const FormLineItem = ({ label, amount, number, narrow }: LineItemProps) => {
         <input
           className={classNames('bg-white px-2 field-sizing-content', { 'w-[60px]': narrow })}
           value={amount?.toLocaleString('en-us')}
+          spellCheck={false}
+          autoCorrect="off"
           onChange={() => {}}
         />
         <div className="translate-x-3 font-bold">{number}</div>

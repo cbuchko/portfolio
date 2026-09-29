@@ -159,6 +159,124 @@ small {
   animation: text-float-in 2s ease;
 }
 
+/* --- Password Reset: styled after neal.fun's The Password Game --- */
+
+.pg-password-field {
+  position: relative;
+}
+
+.pg-password-mirror {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border-color: transparent;
+  background: transparent;
+  color: #171717;
+  white-space: pre;
+}
+
+.pg-error-highlight {
+  background: #ffd9d9;
+}
+
+.pg-password-field .pg-password-input,
+.pg-password-mirror {
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.pg-password-input {
+  position: relative;
+  z-index: 1;
+  transition:
+    border-color 0.3s ease-in-out,
+    background-color 0.3s ease-in-out;
+}
+
+html:has(.tfa-shell) .tfa-shell .pg-password-field--marks input.pg-password-input {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  caret-color: #171717;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.pg-password-field--valid .pg-password-input,
+html:has(.tfa-shell) .tfa-shell .pg-password-field--valid input.pg-password-input {
+  border-color: #267b30;
+  background-color: #e3ffe3;
+  box-shadow: 0 0 0 1000px #e3ffe3 inset;
+  padding-right: 1.75rem;
+}
+
+.pg-password-check {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  right: 8px;
+  display: flex;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.pg-rule {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 22px auto;
+  padding: 6px 12px;
+  overflow: hidden;
+  border: 1px solid #267b30;
+  border-radius: 10px;
+  background-color: #e3ffe3;
+  box-shadow: 3px 3px 5px 2px rgba(60, 155, 71, 0.2);
+  color: #000;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.35;
+  text-align: left;
+  opacity: 0;
+  animation: pg-rule-fade-in 0.5s ease-in-out forwards;
+  transition:
+    background-color 0.7s ease-in-out,
+    border-color 0.7s ease-in-out,
+    box-shadow 0.7s ease-in-out;
+}
+
+.pg-rule-error {
+  border-color: red;
+  background-color: #ffecec;
+  box-shadow: 2px 2px 5px 2px rgba(255, 0, 0, 0.12);
+}
+
+.pg-rule-icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.pg-level--short .pg-rule {
+  margin: 14px auto;
+}
+
+@keyframes pg-rule-fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .pg-rule {
+    margin: 20px 0;
+  }
+}
+
 /* --- Responsive layout tokens (set by the shell from useTfaLayout) --- */
 
 .tfa-shell {

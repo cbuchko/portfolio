@@ -5,14 +5,6 @@ I think there's an opportunity for there to generally be more sounds. Lots of bu
 September 19th:
 Audit character stuff liek Quotes
 
-
-
-I wonder if there's something about message spam that turns people off? 
-Are the texts too invasive? 
-People lose their code and immediately dont even try to resend it? 
-I could actually see this level being a thematic turn off without more deliberate message copy
-And I do think the path to reset has to be clearing
-
 I also saw two people crash out because they just were barely too slow to submit the App Code - Might still be too hard! 
 They were to slow to click the submit button which is an interesting observation
 Maybe there even needs to be a buffer so they are forced to clearly miss it

@@ -104,6 +104,9 @@ export const Twitter = ({ handleLevelAdvance }: ContentProps) => {
             className="w-[350px] resize-none border-none focus:border-none focus:outline-none p-2 text-xl mt-1 h-max field-sizing-content"
             placeholder="What's happening?"
             draggable={false}
+            spellCheck={false}
+            autoCorrect="off"
+            autoCapitalize="off"
             onChange={(e) => setTweetText(e.target.value)}
             value={tweetText}
           />
