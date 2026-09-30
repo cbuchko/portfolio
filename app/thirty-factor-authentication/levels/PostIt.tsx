@@ -79,19 +79,25 @@ const noteHeight = 200
 const noteWidth = 200
 
 /**
- * Notes land under the auth card. A few may tuck into its bottom edge so the
- * pile still looks messy, but the keyword field stays clear. If the card
- * already fills the screen, they sit as low as they can.
+ * Scatter a note across the open screen under the auth card, edge to edge.
+ * The old `random * width - note` range was built to hang off a desktop
+ * monitor; on a phone it collapses into one pile. If the card leaves only a
+ * sliver, the pile still spreads through the lower part of the screen instead
+ * of sharing a single line.
  */
 const getRandomPosition = (height: number, width: number) => {
   const { width: vw, height: vh } = readViewportSize()
   const cardBottom = document.getElementById('auth-container')?.getBoundingClientRect().bottom
-  const floor = cardBottom ?? vh / 2
-  const tuckUnderCard = Math.random() < 0.2
-  const minY = tuckUnderCard ? floor - height * 0.4 : floor
-  const maxY = Math.max(minY, vh - height)
-  const y = minY + Math.random() * (maxY - minY)
-  const x = Math.random() * vw - width
+  const floor = cardBottom ?? vh * 0.4
+  const maxX = Math.max(0, vw - width)
+  const maxY = Math.max(0, vh - height)
+  const x = Math.random() * maxX
+
+  const below = Math.min(Math.max(floor, 0), maxY)
+  let minY = below
+  if (maxY - below < 48) minY = Math.max(0, maxY - Math.min(height, vh * 0.4))
+  const y = minY + Math.random() * Math.max(0, maxY - minY)
+
   const { newX, newY } = clampPositionsToScreen(x, y, width, height, 1)
   return { x: newX, y: newY }
 }
@@ -167,7 +173,7 @@ const PostIt = ({
   const [codeTilt, setCodeTilt] = useState<{ heading: string; code: string }>()
   const [look, setLook] = useState<{ color: string; tilt: number }>()
   const noteRef = useRef<HTMLDivElement>(null)
-  const placedRef = useRef(false)
+  const draggedRef = useRef(false)
 
   const { position, handlePointerDown, setPosition, isDragging } = useElementDrag(
     noteRef,
@@ -184,12 +190,20 @@ const PostIt = ({
     })
   }, [])
 
-  // The first paint can still be the desktop layout. Place notes only after
-  // the viewport is known, so the card's mobile size is what we measure.
   useEffectInitializer(() => {
-    if (placedRef.current || viewportWidth <= 0) return
-    setPosition(getRandomPosition(noteHeight * scale, noteWidth * scale))
-    placedRef.current = true
+    if (isDragging) draggedRef.current = true
+  }, [isDragging])
+
+  // Keep replacing until the player drags one. The first viewport measurement
+  // can still be the desktop layout, and locking that position leaves the
+  // pile in the middle of the phone.
+  useEffectInitializer(() => {
+    if (draggedRef.current || viewportWidth <= 0) return
+    const id = requestAnimationFrame(() => {
+      if (draggedRef.current) return
+      setPosition(getRandomPosition(noteHeight * scale, noteWidth * scale))
+    })
+    return () => cancelAnimationFrame(id)
   }, [viewportWidth, viewportHeight, scale])
 
   if (!position) return null
