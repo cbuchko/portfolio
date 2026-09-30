@@ -57,9 +57,20 @@ export const PostItContent = ({
         onSubmit={handleLevelAdvance}
       />
       {postItNotes.map((note, idx) => (
-        <PostIt key={idx} message={note} scale={noteScale} isNarrow={isNarrow} />
+        <PostIt
+          key={idx}
+          message={note}
+          scale={noteScale}
+          viewportWidth={layout.viewportWidth}
+          viewportHeight={layout.viewportHeight}
+        />
       ))}
-      <PostIt code={code} scale={noteScale} isNarrow={isNarrow} />
+      <PostIt
+        code={code}
+        scale={noteScale}
+        viewportWidth={layout.viewportWidth}
+        viewportHeight={layout.viewportHeight}
+      />
     </>
   )
 }
@@ -72,7 +83,7 @@ const noteWidth = 200
  * pile still looks messy, but the keyword field stays clear. If the card
  * already fills the screen, they sit as low as they can.
  */
-const getRandomPosition = (height: number, width: number, allowPartialOffscreen: boolean) => {
+const getRandomPosition = (height: number, width: number) => {
   const { width: vw, height: vh } = readViewportSize()
   const cardBottom = document.getElementById('auth-container')?.getBoundingClientRect().bottom
   const floor = cardBottom ?? vh / 2
@@ -81,7 +92,7 @@ const getRandomPosition = (height: number, width: number, allowPartialOffscreen:
   const maxY = Math.max(minY, vh - height)
   const y = minY + Math.random() * (maxY - minY)
   const x = Math.random() * vw - width
-  const { newX, newY } = clampPositionsToScreen(x, y, width, height, 1, allowPartialOffscreen)
+  const { newX, newY } = clampPositionsToScreen(x, y, width, height, 1)
   return { x: newX, y: newY }
 }
 
@@ -143,29 +154,28 @@ const PostIt = ({
   message,
   code,
   scale,
-  isNarrow,
+  viewportWidth,
+  viewportHeight,
 }: {
   message?: string
   code?: string
   scale: number
-  isNarrow: boolean
+  viewportWidth: number
+  viewportHeight: number
 }) => {
   const [hand, setHand] = useState<Hand>()
   const [codeTilt, setCodeTilt] = useState<{ heading: string; code: string }>()
   const [look, setLook] = useState<{ color: string; tilt: number }>()
   const noteRef = useRef<HTMLDivElement>(null)
+  const placedRef = useRef(false)
 
   const { position, handlePointerDown, setPosition, isDragging } = useElementDrag(
     noteRef,
     undefined,
-    {
-      scale,
-      allowPartialOffscreen: isNarrow,
-    }
+    { scale }
   )
 
   useEffectInitializer(() => {
-    setPosition(getRandomPosition(noteHeight * scale, noteWidth * scale, isNarrow))
     if (message) setHand(makeHand(message))
     setLook({ color: pick(NOTE_COLORS), tilt: between(-5, 5) })
     setCodeTilt({
@@ -173,6 +183,14 @@ const PostIt = ({
       code: `rotate(${between(-4, 4)}deg) translateX(${between(0, 14)}px)`,
     })
   }, [])
+
+  // The first paint can still be the desktop layout. Place notes only after
+  // the viewport is known, so the card's mobile size is what we measure.
+  useEffectInitializer(() => {
+    if (placedRef.current || viewportWidth <= 0) return
+    setPosition(getRandomPosition(noteHeight * scale, noteWidth * scale))
+    placedRef.current = true
+  }, [viewportWidth, viewportHeight, scale])
 
   if (!position) return null
 
