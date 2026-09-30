@@ -6,7 +6,8 @@ import './light-lock.css'
 
 const GAME = GAMES.find((game) => game.path === '/thirty-factor-authentication')!
 const GAME_URL = gameCanonicalUrl(GAME)
-const DESCRIPTION = 'Verify yourself by completing thirty different authentication challenges.'
+const DESCRIPTION =
+  'A puzzle game where you verify yourself by completing thirty different authentication challenges.'
 
 export const generateMetadata = async () => {
   const host = portfolioHostName((await headers()).get('host'))
