@@ -64,17 +64,79 @@ export const PostItContent = ({
   )
 }
 
-const noteHeight = 225
+const noteHeight = 200
 const noteWidth = 200
 
+/**
+ * Notes land under the auth card. A few may tuck into its bottom edge so the
+ * pile still looks messy, but the keyword field stays clear. If the card
+ * already fills the screen, they sit as low as they can.
+ */
 const getRandomPosition = (height: number, width: number, allowPartialOffscreen: boolean) => {
   const { width: vw, height: vh } = readViewportSize()
-  const halfwayDown = vh / 2
-
-  const y = Math.random() * (vh - halfwayDown) + halfwayDown - height
+  const cardBottom = document.getElementById('auth-container')?.getBoundingClientRect().bottom
+  const floor = cardBottom ?? vh / 2
+  const tuckUnderCard = Math.random() < 0.2
+  const minY = tuckUnderCard ? floor - height * 0.4 : floor
+  const maxY = Math.max(minY, vh - height)
+  const y = minY + Math.random() * (maxY - minY)
   const x = Math.random() * vw - width
   const { newX, newY } = clampPositionsToScreen(x, y, width, height, 1, allowPartialOffscreen)
   return { x: newX, y: newY }
+}
+
+const between = (min: number, max: number) => min + Math.random() * (max - min)
+const pick = <T,>(options: T[]) => options[Math.floor(Math.random() * options.length)]
+
+type Hand = { block: CSSProperties; words: CSSProperties[] }
+
+/** Mostly canary yellow, like a real desk, with the odd neon pad mixed in. */
+const NOTE_COLORS = [
+  '#fef68a',
+  '#fef68a',
+  '#fef68a',
+  '#fdf28b',
+  '#ffd7e8',
+  '#ffc2dc',
+  '#c9f2ff',
+  '#d4f7b4',
+  '#ffdcae',
+]
+
+/**
+ * One person's scrawl for one note: a tilted, slanted block with uneven
+ * spacing, and words that drift off the line a little. Some notes run out of
+ * room and cram the last word.
+ */
+const makeHand = (message: string): Hand => {
+  const words = message.split(' ')
+  const drift = between(0.6, 2.2)
+  const wobble = between(0.5, 3)
+  const cramLast = words.length > 2 && Math.random() < 0.25
+
+  return {
+    block: {
+      marginTop: between(14, 54),
+      marginLeft: between(-4, 10),
+      marginRight: between(-4, 8),
+      fontSize: between(22, 32),
+      lineHeight: between(1.05, 1.45),
+      letterSpacing: `${between(-0.6, 1.4)}px`,
+      wordSpacing: `${between(0, 6)}px`,
+      textAlign: pick<CSSProperties['textAlign']>(['left', 'left', 'left', 'center', 'right']),
+      color: pick(['#171717', '#171717', '#1f2a44', '#1e3a8a', '#3f3f46']),
+      transform: `rotate(${between(-4.5, 4.5)}deg) skewX(${between(-7, 4)}deg)`,
+      transformOrigin: 'top left',
+    },
+    words: words.map((_, i) => {
+      const last = i === words.length - 1
+      return {
+        display: 'inline-block',
+        transform: `translateY(${between(-drift, drift)}px) rotate(${between(-wobble, wobble)}deg)`,
+        ...(cramLast && last ? { fontSize: '0.78em', letterSpacing: '-0.8px' } : null),
+      }
+    }),
+  }
 }
 
 const PostIt = ({
@@ -88,23 +150,27 @@ const PostIt = ({
   scale: number
   isNarrow: boolean
 }) => {
-  const [postStyles, setPostStyles] = useState<CSSProperties>()
+  const [hand, setHand] = useState<Hand>()
+  const [codeTilt, setCodeTilt] = useState<{ heading: string; code: string }>()
+  const [look, setLook] = useState<{ color: string; tilt: number }>()
   const noteRef = useRef<HTMLDivElement>(null)
 
-  const { position, handlePointerDown, setPosition } = useElementDrag(noteRef, undefined, {
-    scale,
-    allowPartialOffscreen: isNarrow,
-  })
+  const { position, handlePointerDown, setPosition, isDragging } = useElementDrag(
+    noteRef,
+    undefined,
+    {
+      scale,
+      allowPartialOffscreen: isNarrow,
+    }
+  )
 
   useEffectInitializer(() => {
     setPosition(getRandomPosition(noteHeight * scale, noteWidth * scale, isNarrow))
-    const randomizedTextPosition = Math.floor(Math.random() * (100 - 50) + 50)
-    const randomizedFontSize = Math.floor(Math.random() * (36 - 24) + 24)
-    const randomizedTextAlign = Math.random() > 0.2 ? 'left' : 'right'
-    setPostStyles({
-      marginTop: randomizedTextPosition,
-      fontSize: randomizedFontSize,
-      textAlign: randomizedTextAlign,
+    if (message) setHand(makeHand(message))
+    setLook({ color: pick(NOTE_COLORS), tilt: between(-5, 5) })
+    setCodeTilt({
+      heading: `rotate(${between(-3, 2)}deg)`,
+      code: `rotate(${between(-4, 4)}deg) translateX(${between(0, 14)}px)`,
     })
   }, [])
 
@@ -119,22 +185,39 @@ const PostIt = ({
         top: position.y,
         touchAction: 'none',
         scale,
+        rotate: `${look?.tilt ?? 0}deg`,
         transformOrigin: 'top left',
+        ...({ '--note': look?.color } as CSSProperties),
       }}
       className={classNames(
-        'h-[225px] w-[200px] flex p-4 bg-yellow-200 rounded-lg shadow-md text-black select-none !cursor-grab z-2 post-it liebe-heide overflow-hidden',
-        { '!z-1': !!code }
+        'h-[200px] w-[200px] flex p-4 text-black select-none !cursor-grab z-2 post-it liebe-heide overflow-hidden',
+        { '!z-1': !!code, 'post-it--lifted': isDragging }
       )}
       onPointerDown={handlePointerDown}
     >
       {!!code ? (
         <div>
-          <p className="text-2xl liebe-heide">**Recovery Keyword:**</p>
-          <p className="mt-8 text-md">{code}</p>
+          <p
+            className="text-2xl liebe-heide"
+            style={{ transform: codeTilt?.heading, transformOrigin: 'top left' }}
+          >
+            **Recovery Keyword:**
+          </p>
+          <p
+            className="mt-8 text-md"
+            style={{ transform: codeTilt?.code, transformOrigin: 'top left' }}
+          >
+            {code}
+          </p>
         </div>
       ) : (
-        <div className="leading-8" style={postStyles}>
-          {message}
+        <div style={hand?.block}>
+          {message?.split(' ').map((word, i) => (
+            <span key={i}>
+              {i > 0 && ' '}
+              <span style={hand?.words[i]}>{word}</span>
+            </span>
+          ))}
         </div>
       )}
     </div>

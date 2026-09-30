@@ -639,20 +639,37 @@ html:has(.tfa-shell) .tfa-shell .pg-password-field--valid input.pg-password-inpu
   font-family: var(--liebe-heide);
 }
 
+/*
+ * A 3×3 sticky note: square corners, a slightly darker adhesive strip along
+ * the top, light falling off toward the bottom, and the bottom-right corner
+ * curling up off the surface (the long flat radius plus a shadow pushed that way).
+ */
 .post-it {
-  --note: #fffb7d; /* base Post-it color (change to any color) */
+  --note: #fef68a;
 
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0) 14%),
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0 8px, transparent 8px 16px),
-    var(--note);
-
+  border-radius: 2px 2px 60px 2px / 2px 2px 7px 2px;
+  background-color: var(--note);
+  background-image:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.07) 0,
+      rgba(0, 0, 0, 0.035) 15%,
+      rgba(0, 0, 0, 0) 22%,
+      rgba(0, 0, 0, 0) 72%,
+      rgba(0, 0, 0, 0.05) 100%
+    ),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 45%);
   box-shadow:
-    0 12px 18px -6px rgba(0, 0, 0, 0.25),
-    /* bottom drop shadow (bigger) */ 0 4px 6px -4px rgba(0, 0, 0, 0.15); /* subtle mid shadow */
+    0 1px 2px rgba(0, 0, 0, 0.14),
+    8px 9px 8px -7px rgba(0, 0, 0, 0.34);
+}
 
-  /* Darker-at-top gradient */
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0) 18%);
+/*
+ * The note under the finger gets its own compositor layer, so sliding it
+ * doesn't repaint every note beneath it each frame.
+ */
+.post-it--lifted {
+  will-change: transform;
 }
 
 .leaf {
