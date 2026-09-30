@@ -1,4 +1,6 @@
 import posthog from 'posthog-js'
+// Ships the recorder in the game bundle. A separate /static/lazy-recorder.js request is what ad blockers drop.
+import 'posthog-js/dist/posthog-recorder'
 import { devMode, forceLevel } from './constants'
 import type { TfaLayout } from './useTfaLayout'
 
