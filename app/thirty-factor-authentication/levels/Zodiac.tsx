@@ -142,31 +142,33 @@ const HoroscopeClipping = ({ playerId }: { playerId: ContentProps['playerId'] })
       : { href: 'https://astro-charts.com/persons/', label: 'astro-charts.com' }
   return (
     <div className="horoscope-clipping-shadow">
-      <article className="horoscope-clipping">
-        <div className="horoscope-nameplate">The Evening Almanac</div>
-        <div className="horoscope-folio">
-          <span>Section C</span>
-          <span>Stars &amp; Signs</span>
-          <span>Page 14</span>
-        </div>
-        <div className="horoscope-kicker">Astrology</div>
-        <h2 className="horoscope-headline">
-          Horoscope for Birthdate <span className="horoscope-date">{date}</span>
-        </h2>
-        <div className="horoscope-byline">Your stars, as they stood the day you arrived</div>
-        {paragraphs.map((text, idx) => (
-          <p key={idx} className="horoscope-body">
-            {text}
+      <div className="horoscope-clipping-tear">
+        <article className="horoscope-clipping">
+          <div className="horoscope-nameplate">The Evening Almanac</div>
+          <div className="horoscope-folio">
+            <span>Section C</span>
+            <span>Stars &amp; Signs</span>
+            <span>Page 14</span>
+          </div>
+          <div className="horoscope-kicker">Astrology</div>
+          <h2 className="horoscope-headline">
+            Horoscope for Birthdate <span className="horoscope-date">{date}</span>
+          </h2>
+          <div className="horoscope-byline">Your stars, as they stood the day you arrived</div>
+          {paragraphs.map((text, idx) => (
+            <p key={idx} className="horoscope-body">
+              {text}
+            </p>
+          ))}
+          <p className="horoscope-fine-print">
+            Chart readings courtesy of{' '}
+            <a href={source.href} target="_blank" rel="noopener noreferrer">
+              {source.label}
+            </a>
+            .
           </p>
-        ))}
-        <p className="horoscope-fine-print">
-          Chart readings courtesy of{' '}
-          <a href={source.href} target="_blank" rel="noopener noreferrer">
-            {source.label}
-          </a>
-          .
-        </p>
-      </article>
+        </article>
+      </div>
     </div>
   )
 }
