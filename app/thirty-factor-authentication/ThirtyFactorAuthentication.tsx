@@ -18,13 +18,14 @@ import { VictoryScreen } from './VictoryScreen'
 import { RunStats } from './components/RunStats'
 import { audioEngine, preloadAll, useSfx } from '../utils/audio'
 import { useEffectInitializer } from '../utils/useEffectUnsafe'
-import { useTfaLayout } from './useTfaLayout'
+import { computePropFit, useTfaLayout } from './useTfaLayout'
 import classNames from 'classnames'
 import { useTfaAnalytics } from './useTfaAnalytics'
 
 export default function ThirtyFactorAuthentication() {
   const layout = useTfaLayout()
-  const { isNarrow, isShort, isTouch, fit } = layout
+  const { isNarrow, isShort, isTouch, fit, viewportHeight } = layout
+  const propFit = computePropFit(viewportHeight)
   const [playerId, setPlayerId] = useState<PlayerIds>()
   const [hasStarted, setHasStarted] = useState(forceLevel > 0)
   const [devHudReady, setDevHudReady] = useState(false)
@@ -106,16 +107,18 @@ export default function ThirtyFactorAuthentication() {
   useEffect(() => {
     const root = document.documentElement
     root.style.setProperty('--tfa-fit', String(fit))
+    root.style.setProperty('--tfa-prop-fit', String(propFit))
     root.toggleAttribute('data-tfa-short', isShort)
     root.toggleAttribute('data-tfa-narrow', isNarrow)
     root.toggleAttribute('data-tfa-touch', isTouch)
     return () => {
       root.style.removeProperty('--tfa-fit')
+      root.style.removeProperty('--tfa-prop-fit')
       root.removeAttribute('data-tfa-short')
       root.removeAttribute('data-tfa-narrow')
       root.removeAttribute('data-tfa-touch')
     }
-  }, [fit, isShort, isNarrow, isTouch])
+  }, [fit, propFit, isShort, isNarrow, isTouch])
 
   const dragBackend = useMemo(() => {
     if (typeof window === 'undefined') {
@@ -139,7 +142,7 @@ export default function ThirtyFactorAuthentication() {
       data-short={isShort || undefined}
       data-narrow={isNarrow || undefined}
       data-touch={isTouch || undefined}
-      style={{ '--tfa-fit': fit } as React.CSSProperties}
+      style={{ '--tfa-fit': fit, '--tfa-prop-fit': propFit } as React.CSSProperties}
     >
       <div
         id="tfa-logo"

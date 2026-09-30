@@ -282,6 +282,8 @@ html:has(.tfa-shell) .tfa-shell .pg-password-field--valid input.pg-password-inpu
 .tfa-shell {
   /* Continuous scale for fixed-size play areas; overridden inline by the shell. */
   --tfa-fit: 1;
+  /* Steeper scale for props that sit under the card. */
+  --tfa-prop-fit: 1;
   /* Vertical breathing room between the level copy and its play area. */
   --tfa-gap: 2rem;
 }
@@ -1418,7 +1420,8 @@ html:has(.tfa-shell) .tfa-shell .pg-password-field--valid input.pg-password-inpu
 
 /* Zodiac: a horoscope torn out of an old newspaper and kept in a drawer. */
 .horoscope-clipping-shadow {
-  width: min(340px, calc(100vw - 32px));
+  zoom: var(--tfa-prop-fit);
+  width: min(520px, calc(100vw - 32px));
   margin: 4px auto 32px;
   rotate: -1.6deg;
   /* drop-shadow on the parent follows the torn clip-path below. */
@@ -1568,6 +1571,7 @@ html:has(.tfa-shell) .tfa-shell .pg-password-field--valid input.pg-password-inpu
   padding: 3px 0;
   border-top: 1px solid rgb(42 36 28 / 0.7);
   border-bottom: 3px double rgb(42 36 28 / 0.7);
+  font-family: var(--horoscope-body), Georgia, 'Times New Roman', serif;
   font-size: 10px;
   font-variant: small-caps;
   letter-spacing: 0.1em;
@@ -1576,6 +1580,7 @@ html:has(.tfa-shell) .tfa-shell .pg-password-field--valid input.pg-password-inpu
 
 .horoscope-kicker {
   margin-top: 12px;
+  font-family: var(--horoscope-body), Georgia, 'Times New Roman', serif;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.32em;
@@ -1607,6 +1612,7 @@ html:has(.tfa-shell) .tfa-shell .pg-password-field--valid input.pg-password-inpu
   margin-bottom: 10px;
   padding-bottom: 8px;
   border-bottom: 1px solid rgb(42 36 28 / 0.5);
+  font-family: var(--horoscope-body), Georgia, 'Times New Roman', serif;
   font-size: 13px;
   font-style: italic;
   text-align: center;
@@ -1614,6 +1620,7 @@ html:has(.tfa-shell) .tfa-shell .pg-password-field--valid input.pg-password-inpu
 
 .horoscope-body {
   margin: 0;
+  font-family: var(--horoscope-body), Georgia, 'Times New Roman', serif;
   font-size: 16px;
   line-height: 1.34;
   text-align: justify;
@@ -1638,6 +1645,7 @@ html:has(.tfa-shell) .tfa-shell .pg-password-field--valid input.pg-password-inpu
   margin-top: 14px;
   padding-top: 6px;
   border-top: 1px solid rgb(42 36 28 / 0.35);
+  font-family: var(--horoscope-body), Georgia, 'Times New Roman', serif;
   font-size: 10.5px;
   font-style: italic;
   line-height: 1.3;
@@ -1652,4 +1660,807 @@ html:has(.tfa-shell) .tfa-shell .pg-password-field--valid input.pg-password-inpu
   padding: 16px 6px;
   color: inherit;
   text-decoration: underline;
+}
+
+/* Filmography: a movie database page on a terrible connection. */
+.film-page {
+  position: relative;
+  zoom: var(--tfa-prop-fit);
+  width: min(720px, calc(100vw - 24px));
+  margin: 4px auto 32px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #121212;
+  color: #f2f2f2;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: left;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.3);
+}
+
+.film-page-progress {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  height: 3px;
+  transition: opacity 600ms ease;
+}
+
+.film-page-progress-bar {
+  height: 100%;
+  background: #f5c518;
+  box-shadow: 0 0 8px rgb(245 197 24 / 0.7);
+  transition: width 950ms linear;
+}
+
+.film-page-nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  background: #1f1f1f;
+}
+
+.film-page-logo {
+  padding: 3px 7px;
+  border-radius: 4px;
+  background: #f5c518;
+  color: #000;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.film-page-nav-links {
+  font-size: 13px;
+  color: #bdbdbd;
+}
+
+.film-page-body {
+  padding: 16px;
+}
+
+.film-page-hero {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.film-page-poster {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 142px;
+  border-radius: 4px;
+  background: #2a2a2a;
+}
+
+.film-page-poster-broken {
+  padding: 6px;
+  font-size: 11px;
+  color: #8a8a8a;
+  text-align: center;
+}
+
+.film-page-heading {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.film-page-title {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.film-page-redacted {
+  display: inline-block;
+  width: 150px;
+  height: 26px;
+  border-radius: 2px;
+  background: #000;
+  box-shadow: inset 0 0 0 1px #333;
+}
+
+.film-page-redacted--short {
+  width: 80px;
+}
+
+.film-page-meta {
+  font-size: 14px;
+  color: #bdbdbd;
+}
+
+.film-page-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.film-page-chip {
+  padding: 4px 12px;
+  border: 1px solid #555;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+.film-page-section {
+  margin-bottom: 14px;
+}
+
+.film-page-section:last-of-type {
+  margin-bottom: 0;
+}
+
+.film-page-label {
+  margin-bottom: 6px;
+  padding-left: 8px;
+  border-left: 3px solid #f5c518;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.film-page-plot {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.film-page-credits {
+  padding-top: 12px;
+  border-top: 1px solid #2e2e2e;
+}
+
+.film-page-credit-line {
+  font-size: 14px;
+  color: #5799ef;
+}
+
+.film-page-cast {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.film-page-cast-member {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #5799ef;
+}
+
+.film-page-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #2f2f2f;
+}
+
+.film-page-status {
+  margin-top: 16px;
+  font-size: 12px;
+  font-style: italic;
+  color: #8a8a8a;
+}
+
+.film-page-skeleton-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.film-skeleton {
+  display: block;
+  height: 12px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #262626 0%, #363636 45%, #262626 90%) 0 0 / 220% 100%;
+  animation: film-shimmer 1.4s linear infinite;
+}
+
+.film-skeleton--inline {
+  display: inline-block;
+  width: 48px;
+  height: 11px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.film-page-skeleton-group .film-spinner {
+  position: absolute;
+  top: -2px;
+  right: 0;
+}
+
+.film-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #3a3a3a;
+  border-top-color: #f5c518;
+  border-radius: 50%;
+  animation: film-spin 800ms linear infinite;
+}
+
+.film-spinner-failed {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #b3261e;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.film-page-skeleton-group .film-spinner-failed {
+  position: absolute;
+  top: -2px;
+  right: 0;
+}
+
+.film-pop {
+  animation: film-pop 320ms ease-out;
+}
+
+.film-page--narrow .film-page-body {
+  padding: 12px;
+}
+
+.film-page--narrow .film-page-hero {
+  gap: 12px;
+}
+
+.film-page--narrow .film-page-poster {
+  width: 72px;
+  height: 106px;
+}
+
+.film-page--narrow .film-page-redacted {
+  width: 110px;
+  height: 22px;
+}
+
+.film-page--narrow .film-page-redacted--short {
+  width: 60px;
+}
+
+@keyframes film-shimmer {
+  to {
+    background-position: -220% 0;
+  }
+}
+
+@keyframes film-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes film-pop {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-skeleton,
+  .film-pop {
+    animation: none;
+  }
+}
+
+/* Parlor Room */
+.parlor-room {
+  margin-top: 12px;
+}
+
+.parlor-letter {
+  position: relative;
+  /* A step gentler than the other under-card props. */
+  zoom: clamp(0.7, calc(var(--tfa-prop-fit) + 0.12), 1);
+  width: min(540px, calc(100vw - 32px));
+  margin: 8px auto 24px;
+  padding: 18px 22px 14px;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.55), transparent 14%), #f6f1e4;
+  box-shadow:
+    0 1px 1px rgb(255 255 255 / 0.8) inset,
+    1px 1px 0 #e4dcc8,
+    0 12px 28px rgb(40 28 12 / 0.18);
+  color: #2a241c;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: left;
+  rotate: -0.5deg;
+}
+
+.parlor-letter::before,
+.parlor-letter::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+  /* Crease shows in the margins only, so it never crosses a line of text. */
+  background: linear-gradient(
+    90deg,
+    rgb(90 70 40 / 0.28) 0 12px,
+    transparent 22px calc(100% - 22px),
+    rgb(90 70 40 / 0.28) calc(100% - 12px)
+  );
+}
+
+.parlor-letter::before {
+  top: 33%;
+}
+
+.parlor-letter::after {
+  top: 66%;
+}
+
+.parlor-letter p,
+.parlor-letter li {
+  font-family: var(--horoscope-body), Georgia, 'Times New Roman', serif;
+}
+
+.parlor-letter p + p,
+.parlor-letter p + ol,
+.parlor-letter ol + p {
+  margin-top: 8px;
+}
+
+.parlor-letter--compact {
+  padding: 14px 16px 12px;
+  font-size: 14px;
+}
+
+.parlor-letter-date {
+  color: #5c5348;
+  font-size: 13px;
+  font-style: italic;
+  text-align: right;
+}
+
+.parlor-letter p.parlor-letter-date + p {
+  margin-top: 12px;
+}
+
+.parlor-letter-rules {
+  padding-left: 1.25em;
+  list-style: decimal;
+}
+
+.parlor-letter-rules li + li {
+  margin-top: 0.35em;
+}
+
+.parlor-letter p.parlor-letter-signoff {
+  margin-top: 10px;
+  font-style: italic;
+  text-align: right;
+}
+
+.parlor-letter p.parlor-letter-signature {
+  margin-top: 0;
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.2;
+  text-align: right;
+}
+
+.parlor-letter--narrow {
+  width: 100%;
+  max-width: 100%;
+  margin: 4px 0 0;
+  rotate: none;
+}
+
+.parlor-floor {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 8px;
+}
+
+.parlor-room--narrow .parlor-floor {
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.parlor-chest {
+  --chest-wood: #2c4a7a;
+  --chest-lid-height: 38px;
+  position: relative;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  padding-top: var(--chest-lid-height);
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform-origin: 50% 100%;
+  transition: transform 220ms cubic-bezier(0.3, 1.4, 0.5, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.parlor-room--narrow .parlor-chest {
+  --chest-lid-height: 30px;
+  width: min(100%, 320px);
+}
+
+.parlor-chest--blue {
+  --chest-wood: #2b4b7e;
+}
+
+.parlor-chest--black {
+  --chest-wood: #1f1b1a;
+}
+
+.parlor-chest--red {
+  --chest-wood: #7c2622;
+}
+
+.parlor-chest:focus-visible {
+  outline: 3px solid #f5d27a;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+@media (hover: hover) {
+  .parlor-chest:not(.parlor-chest--locked):hover {
+    z-index: 1;
+    transform: perspective(600px) translateY(-6px) scale(1.07) rotateX(-7deg);
+  }
+}
+
+.parlor-chest:not(.parlor-chest--locked):active {
+  z-index: 1;
+  transform: perspective(600px) translateY(-4px) scale(1.05) rotateX(-7deg);
+}
+
+.parlor-chest--locked {
+  cursor: default;
+}
+
+.parlor-chest-lid,
+.parlor-chest-body {
+  display: block;
+  border: 3px solid #1a0f08;
+  background:
+    repeating-linear-gradient(
+      178deg,
+      rgb(255 255 255 / 0.05) 0 2px,
+      transparent 2px 7px,
+      rgb(0 0 0 / 0.12) 7px 8px,
+      transparent 8px 13px
+    ),
+    linear-gradient(
+      90deg,
+      #b8862e 0 7px,
+      transparent 7px calc(100% - 7px),
+      #b8862e calc(100% - 7px)
+    ),
+    var(--chest-wood);
+}
+
+.parlor-chest-lid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: var(--chest-lid-height);
+  border-radius: 14px 14px 3px 3px;
+  box-shadow: inset 0 -4px 0 rgb(0 0 0 / 0.3);
+  transform-origin: 50% 0;
+  transition: transform 450ms cubic-bezier(0.2, 0.9, 0.3, 1.1);
+  animation: parlor-lid-peek 11s ease-in-out var(--parlor-idle-delay, 4s) infinite;
+}
+
+.parlor-chest-mouth {
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  right: 4px;
+  height: calc(var(--chest-lid-height) - 2px);
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(180deg, #0b0604, #1d120b);
+}
+
+.parlor-chest-latch {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  width: 16px;
+  height: 20px;
+  margin-left: -8px;
+  border: 2px solid #5a3d10;
+  border-radius: 3px 3px 7px 7px;
+  background:
+    radial-gradient(circle at 50% 62%, #2a1a06 0 2px, transparent 3px),
+    linear-gradient(180deg, #f0cf72, #a8792a);
+  transform-origin: 50% 0;
+}
+
+@media (hover: hover) {
+  .parlor-chest:not(.parlor-chest--locked):hover .parlor-chest-latch {
+    animation: parlor-latch-rattle 420ms ease-in-out;
+  }
+}
+
+.parlor-chest:not(.parlor-chest--locked):active .parlor-chest-latch {
+  animation: parlor-latch-rattle 420ms ease-in-out;
+}
+
+.parlor-chest-body {
+  flex: 1;
+  padding: 18px 14px 14px;
+  border-radius: 3px 3px 6px 6px;
+  box-shadow:
+    inset 0 6px 8px rgb(0 0 0 / 0.35),
+    0 10px 12px -4px rgb(0 0 0 / 0.6);
+}
+
+.parlor-plaque {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 10px;
+  border: 2px solid #6b4a14;
+  border-radius: 3px;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.35), transparent 40%),
+    linear-gradient(135deg, #e6c56d, #b88b32 60%, #d8b25a);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 240 190 / 0.6),
+    0 2px 3px rgb(0 0 0 / 0.5);
+  color: #3a2508;
+  font-family: var(--horoscope-body), Georgia, serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  text-shadow: 0 1px 0 rgb(255 240 200 / 0.55);
+  animation: parlor-plaque-in 400ms ease-out;
+}
+
+.parlor-room--narrow .parlor-plaque {
+  font-size: 16px;
+}
+
+.parlor-plaque-line {
+  display: block;
+  padding: 5px 0;
+  overflow-wrap: anywhere;
+}
+
+.parlor-plaque-line + .parlor-plaque-line {
+  border-top: 1px solid rgb(90 60 15 / 0.45);
+  box-shadow: inset 0 1px 0 rgb(255 240 200 / 0.4);
+}
+
+.parlor-chest--open .parlor-chest-lid {
+  animation: none;
+  transform: perspective(500px) rotateX(-105deg);
+}
+
+.parlor-chest--slammed .parlor-chest-lid {
+  animation: none;
+  transition-duration: 140ms;
+  transition-timing-function: ease-in;
+}
+
+.parlor-chest--slammed {
+  animation: parlor-slam 260ms ease-out 140ms;
+}
+
+.parlor-chest--prize .parlor-chest-mouth {
+  background: radial-gradient(ellipse at 50% 90%, #fff2c2, #f3b64b 45%, #7a4310);
+  box-shadow: 0 -18px 40px 10px rgb(255 200 90 / 0.7);
+  transition: box-shadow 500ms ease;
+}
+
+.parlor-chest-dust {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 3;
+  width: 140%;
+  height: 90px;
+  margin-left: -70%;
+  background:
+    radial-gradient(circle at 30% 70%, rgb(190 170 140 / 0.55), transparent 30%),
+    radial-gradient(circle at 55% 55%, rgb(200 180 150 / 0.5), transparent 32%),
+    radial-gradient(circle at 75% 72%, rgb(180 160 130 / 0.45), transparent 28%);
+  opacity: 0;
+  pointer-events: none;
+  animation: parlor-dust 1100ms ease-out 250ms forwards;
+}
+
+@keyframes parlor-lid-peek {
+  0%,
+  90%,
+  100% {
+    transform: perspective(500px) rotateX(0deg);
+  }
+  93% {
+    transform: perspective(500px) rotateX(-22deg);
+  }
+  96% {
+    transform: perspective(500px) rotateX(-3deg);
+  }
+}
+
+@keyframes parlor-latch-rattle {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  20% {
+    rotate: 9deg;
+  }
+  45% {
+    rotate: -8deg;
+  }
+  70% {
+    rotate: 5deg;
+  }
+}
+
+@keyframes parlor-slam {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  30% {
+    translate: -3px 1px;
+  }
+  60% {
+    translate: 3px 0;
+  }
+}
+
+@keyframes parlor-dust {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.5);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(1.4);
+  }
+}
+
+@keyframes parlor-plaque-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parlor-chest-lid {
+    animation: none;
+  }
+
+  .parlor-chest-dust {
+    display: none;
+  }
+}
+
+/* Dartboard: a pub wall behind the whole screen, and you've had a few. */
+.dart-pub-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 0%, rgb(255 204 130 / 0.38), transparent 75%),
+    radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, rgb(0 0 0 / 0.45)),
+    repeating-linear-gradient(90deg, rgb(0 0 0 / 0.22) 0 2px, transparent 2px 88px),
+    linear-gradient(180deg, #4d3020, #2e1c12);
+}
+
+.dart-wall {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 36px 0;
+  overflow: hidden;
+}
+
+.dart-wall--short {
+  padding: 20px 0;
+}
+
+.dart-board-frame {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.35);
+}
+
+.dart-board-blur {
+  position: absolute;
+  inset: 0;
+}
+
+.dart-board-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dart-board-ghost {
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.dart-reticle {
+  position: absolute;
+  z-index: 3;
+  width: 48px;
+  height: 48px;
+  translate: -50% -50%;
+  pointer-events: none;
+  filter: drop-shadow(0 0 2px rgb(0 0 0 / 0.6));
+}
+
+.dart-stuck {
+  position: absolute;
+  z-index: 2;
+  width: 13%;
+  height: 13%;
+  translate: -10% -90%;
+  filter: drop-shadow(1px 2px 1px rgb(0 0 0 / 0.55));
+  animation: dart-stick 140ms ease-out;
+}
+
+.dart-board-frame--wobble {
+  animation: dart-board-wobble 420ms ease-out;
+}
+
+@keyframes dart-stick {
+  from {
+    scale: 1.8;
+    opacity: 0;
+  }
+}
+
+@keyframes dart-board-wobble {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  20% {
+    rotate: 1.6deg;
+  }
+  45% {
+    rotate: -1.1deg;
+  }
+  70% {
+    rotate: 0.5deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dart-board-frame--wobble {
+    animation: none;
+  }
 }

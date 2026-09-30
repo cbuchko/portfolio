@@ -41,6 +41,8 @@ export const SOUND_REGISTRY = {
   undertaleDamage: { src: `${SOUNDS}/undertale-damage.mp3`, kind: 'sfx', volume: 0.5 },
   splatter: { src: `${SOUNDS}/splatter.mp3`, kind: 'sfx', volume: 0.3 },
   thud: { src: `${SOUNDS}/sfx_thud03.mp3`, kind: 'sfx', volume: 0.2 },
+  chestUnlock: { src: `${SOUNDS}/chest-unlock.wav`, kind: 'sfx', volume: 0.45 },
+  chestPrize: { src: `${SOUNDS}/chest-prize.wav`, kind: 'sfx', volume: 0.4 },
   explosion: { src: `${SOUNDS}/explosion.mp3`, kind: 'sfx', volume: 0.3 },
 
   // --- streamed music / loops ---

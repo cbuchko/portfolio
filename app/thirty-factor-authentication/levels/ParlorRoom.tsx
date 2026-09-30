@@ -1,155 +1,181 @@
-import { useState } from 'react'
+import { CSSProperties, useEffect, useRef, useState } from 'react'
 import { ContentProps } from './types'
 import classNames from 'classnames'
 import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
+import { PlayerInformation } from '../player-constants'
+import { useSfx } from '@/app/utils/audio'
+import { ExtrasPortal } from '../components/ExtrasPortal'
+
+type ChestColor = 'blue' | 'black' | 'red'
+type Reveal = { color: ChestColor; outcome: 'prize' | 'empty'; slammed: boolean }
+
+const winRevealMs = 1100
+const emptySlamMs = 1350
+const emptySettleMs = 1600
 
 const selectInitialPuzzleIndex = () => {
   return Math.floor(Math.random() * Statements.length)
 }
-export const ParlorRoomContent = ({ handleLevelAdvance, setIsLoading, layout }: ContentProps) => {
+export const ParlorRoomContent = ({
+  playerId,
+  handleLevelAdvance,
+  setIsLoading,
+  layout,
+}: ContentProps) => {
   const { isNarrow, isCompact, fit } = layout
+  const firstName = PlayerInformation[playerId].name.split(' ')[0]
   const [puzzleIndex, setPuzzleIndex] = useState<number | null>(null)
+  const [reveal, setReveal] = useState<Reveal | null>(null)
+  const timeouts = useRef<NodeJS.Timeout[]>([])
+  const playUnlock = useSfx('chestUnlock')
+  const playPrize = useSfx('chestPrize')
 
   useEffectInitializer(() => {
     setPuzzleIndex(selectInitialPuzzleIndex())
     setIsLoading(false)
   }, [])
 
+  useEffect(() => {
+    const pending = timeouts.current
+    return () => pending.forEach(clearTimeout)
+  }, [])
+
   const puzzle = Statements[puzzleIndex || 0]
-  const onCorrectSelect = (type: 'blue' | 'black' | 'red') => {
+  const onCorrectSelect = (type: ChestColor) => {
+    if (reveal) return
     const isSuccess = type === puzzle.solution
-    handleLevelAdvance(isSuccess)
-    if (!isSuccess) setPuzzleIndex((prevIndex) => ((prevIndex || 0) + 1) % Statements.length)
+    if (isSuccess) {
+      playPrize()
+    } else {
+      playUnlock()
+    }
+    setReveal({ color: type, outcome: isSuccess ? 'prize' : 'empty', slammed: false })
+    if (isSuccess) {
+      timeouts.current.push(setTimeout(() => handleLevelAdvance(true), winRevealMs))
+      return
+    }
+    timeouts.current.push(
+      setTimeout(() => setReveal((prev) => prev && { ...prev, slammed: true }), emptySlamMs),
+      setTimeout(() => {
+        handleLevelAdvance(false)
+        setPuzzleIndex((prevIndex) => ((prevIndex || 0) + 1) % Statements.length)
+        setReveal(null)
+      }, emptySettleMs)
+    )
   }
+
+  const chestWidth = isNarrow ? undefined : Math.round(190 * Math.max(fit, 0.8))
+
+  const letter = (
+    <div
+      className={classNames('parlor-letter', {
+        'parlor-letter--compact': isCompact && !isNarrow,
+        'parlor-letter--narrow': isNarrow,
+      })}
+    >
+      <p className="parlor-letter-date">Sunday evening</p>
+      <p>Dear {firstName},</p>
+      <p>
+        Do you remember this game? We used to play it in the parlor when you were little. You would
+        sit there for ages.
+      </p>
+      <p>In case it has been a while, the rules never changed:</p>
+      <ol className="parlor-letter-rules">
+        <li>There will always be at least one box which displays only true statements.</li>
+        <li>There will always be at least one box which displays only false statements.</li>
+        <li>Only one box has a prize within. The other 2 are always empty.</li>
+      </ol>
+      <p>Take your time.</p>
+      <p className="parlor-letter-signoff">With love,</p>
+      <p className="parlor-letter-signature">Mom</p>
+    </div>
+  )
+
   return (
     <>
-      <p className="text-lg">
-        In front of you sits three boxes. Select the box that contains the prize.
-      </p>
-      <div
-        className={classNames('font-bold', {
-          'my-4 text-sm': isCompact,
-          'my-8 text-lg': !isCompact,
-        })}
-      >
-        <p className={classNames('mono', { 'mb-2': isCompact, 'mb-4': !isCompact })}>RULES:</p>
-        <p className="font-bold">
-          1. THERE WILL ALWAYS BE AT LEAST ONE BOX WHICH DISPLAYS ONLY TRUE STATEMENTS.
-        </p>
-        <p className={classNames('font-bold', { 'my-2': isCompact, 'my-4': !isCompact })}>
-          2. THERE WILL ALWAYS BE AT LEAST ONE BOX WHICH DISPLAYS ONLY FALSE STATEMENTS.
-        </p>
-        <p className="font-bold">
-          3. ONLY ONE BOX HAS A PRIZE WITHIN. THE OTHER 2 ARE ALWAYS EMPTY.
-        </p>
-      </div>
-      <div
-        className={classNames({
-          'grid w-full grid-cols-2 gap-2': isNarrow,
-          'flex w-full justify-between gap-4 px-4': !isNarrow,
-        })}
-      >
-        <ParlorBox
-          color="bg-blue-300"
-          statements={puzzle.blueStatements}
-          title={'Select Blue'}
-          onClick={() => onCorrectSelect('blue')}
-          isNarrow={isNarrow}
-          fit={fit}
-        />
-        <ParlorBox
-          color="bg-black"
-          statements={puzzle.blackStatements}
-          title={'Select Black'}
-          onClick={() => onCorrectSelect('black')}
-          isNarrow={isNarrow}
-          fit={fit}
-        />
-        <ParlorBox
-          color="bg-red-300"
-          statements={puzzle.redStatements}
-          title={'Select Red'}
-          onClick={() => onCorrectSelect('red')}
-          isNarrow={isNarrow}
-          fit={fit}
-          className={isNarrow ? 'col-span-2' : undefined}
-        />
+      <p className="text-lg">We contacted your family and asked them to set up a game for you.</p>
+      <p className="text-lg">Select the box that contains the prize.</p>
+      {isNarrow ? letter : <ExtrasPortal>{letter}</ExtrasPortal>}
+      <div className={classNames('parlor-room !mt-8', { 'parlor-room--narrow': isNarrow })}>
+        <div className="parlor-floor">
+          {CHESTS.map(({ color, title, idleDelay }) => (
+            <ParlorChest
+              key={color}
+              color={color}
+              title={title}
+              statements={puzzle[`${color}Statements`]}
+              puzzleKey={puzzleIndex ?? 0}
+              reveal={reveal?.color === color ? reveal : null}
+              isLocked={!!reveal}
+              onClick={() => onCorrectSelect(color)}
+              width={chestWidth}
+              idleDelay={idleDelay}
+            />
+          ))}
+        </div>
       </div>
     </>
   )
 }
 
-const ParlorBox = ({
-  title,
+const CHESTS: { color: ChestColor; title: string; idleDelay: number }[] = [
+  { color: 'blue', title: 'Select Blue', idleDelay: 3.5 },
+  { color: 'black', title: 'Select Black', idleDelay: 9 },
+  { color: 'red', title: 'Select Red', idleDelay: 6 },
+]
+
+const ParlorChest = ({
   color,
+  title,
   statements,
+  puzzleKey,
+  reveal,
+  isLocked,
   onClick,
-  isNarrow,
-  fit,
-  className,
+  width,
+  idleDelay,
 }: {
+  color: ChestColor
   title: string
-  color: string
   statements: string[]
+  puzzleKey: number
+  reveal: Reveal | null
+  isLocked: boolean
   onClick: () => void
-  isNarrow: boolean
-  fit: number
-  className?: string
+  width?: number
+  idleDelay: number
 }) => {
-  const referenceSize = 200
-  const boxScale = isNarrow ? 1 : fit
-  const boxSize = Math.round(referenceSize * boxScale)
+  const isOpen = !!reveal && !reveal.slammed
   return (
-    <div
-      className={classNames(
-        'flex flex-col items-stretch',
-        {
-          'min-w-0 w-full max-w-[150px] justify-self-center': isNarrow,
-        },
-        className
-      )}
-      style={isNarrow ? undefined : { width: boxSize }}
+    <button
+      type="button"
+      className={classNames('parlor-chest', `parlor-chest--${color}`, {
+        'parlor-chest--open': isOpen,
+        'parlor-chest--prize': reveal?.outcome === 'prize',
+        'parlor-chest--empty': reveal?.outcome === 'empty',
+        'parlor-chest--slammed': reveal?.slammed,
+        'parlor-chest--locked': isLocked,
+      })}
+      style={{ width, '--parlor-idle-delay': `${idleDelay}s` } as CSSProperties}
+      onClick={onClick}
+      disabled={isLocked}
     >
-      <div className="w-full overflow-hidden" style={isNarrow ? undefined : { height: boxSize }}>
-        <div
-          className={classNames(
-            'flex items-center justify-center border-[#673400] border-3 aspect-square',
-            { 'w-full': isNarrow, 'origin-top-left': !isNarrow },
-            color
-          )}
-          style={
-            isNarrow
-              ? undefined
-              : { width: referenceSize, height: referenceSize, transform: `scale(${boxScale})` }
-          }
-        >
-          <div
-            className={classNames(
-              'flex min-h-0 min-w-0 flex-col justify-center gap-1 overflow-hidden bg-white border-[#673400] text-center uppercase select-none',
-              {
-                'h-[78%] w-[88%] border-4 px-1 py-1 text-[10px] leading-snug': isNarrow,
-                'h-[75%] w-[87.5%] border-6 px-1 py-2 text-sm leading-tight': !isNarrow,
-              }
-            )}
-          >
-            {statements.map((statement, idx) => (
-              <p key={idx} className="break-words">
-                {statement}
-              </p>
-            ))}
-          </div>
-        </div>
-      </div>
-      <button
-        type="button"
-        className={classNames('relative z-10 mt-2 w-full border py-2 cursor-pointer', {
-          'min-h-11 text-xs': isNarrow,
-        })}
-        onClick={onClick}
-      >
-        {title}
-      </button>
-    </div>
+      <span className="sr-only">{title}.</span>
+      <span className="parlor-chest-mouth" />
+      <span className="parlor-chest-lid">
+        <span className="parlor-chest-latch" />
+      </span>
+      {reveal?.outcome === 'empty' && <span className="parlor-chest-dust" />}
+      <span className="parlor-chest-body">
+        <span key={puzzleKey} className="parlor-plaque">
+          {statements.map((statement, idx) => (
+            <span key={idx} className="parlor-plaque-line">
+              {statement}
+            </span>
+          ))}
+        </span>
+      </span>
+    </button>
   )
 }
 

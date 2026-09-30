@@ -124,12 +124,6 @@ export const LEVELS: LevelDefinition[] = [
     title: 'Package Tracking',
   },
   { id: 'birthplace', content: MapContent, controls: MapControls, title: 'Birthplace' },
-  {
-    id: 'authenticator-app',
-    content: AppCodeContent,
-    controls: AppCodeControls,
-    title: 'Authenticator App',
-  },
   { id: 'aquarium', content: AquariumContent, controls: AquariumControls, title: 'Aquarium' },
   {
     id: 'password-confirm',
@@ -138,6 +132,12 @@ export const LEVELS: LevelDefinition[] = [
     title: 'Password Confirm',
   },
   { id: 'zodiac', content: ZodiacContent, controls: ZodiacControls, title: 'Zodiac' },
+  {
+    id: 'authenticator-app',
+    content: AppCodeContent,
+    controls: AppCodeControls,
+    title: 'Authenticator App',
+  },
   { id: 'fishing', content: FishingContent, title: 'Fishing' },
   { id: 'filmography', content: IMDBContent, title: 'Filmography' },
   { id: 'parlor-room', content: ParlorRoomContent, requiresLoad: true, title: 'Parlor Room' },

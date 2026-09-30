@@ -47,6 +47,14 @@ export const computeFit = (height: number) => {
   return Math.round(clamped * 100) / 100
 }
 
+// Props under the card shrink sooner than play areas, but stay readable.
+// Full size near 1200px tall, about 3/4 at 900px, and no smaller than 0.55.
+export const computePropFit = (height: number) => {
+  if (height <= 0) return 1
+  const raw = (height + 80) / 1280
+  return Math.round(Math.min(1, Math.max(0.55, raw)) * 100) / 100
+}
+
 export const readViewportSize = () => {
   const viewport = window.visualViewport
   return {

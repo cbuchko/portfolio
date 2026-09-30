@@ -2,6 +2,7 @@ import classNames from 'classnames'
 import { type Ref, type UIEventHandler } from 'react'
 
 export const TextInput = ({
+  id,
   value,
   placeholder,
   className = 'mt-1',
@@ -12,6 +13,7 @@ export const TextInput = ({
   onScroll,
   inputRef,
 }: {
+  id?: string
   value: string
   placeholder: string
   className?: string
@@ -25,6 +27,7 @@ export const TextInput = ({
   return (
     <input
       ref={inputRef}
+      id={id}
       className={classNames('border w-full rounded-md px-2 py-1', className)}
       placeholder={placeholder}
       value={value}
