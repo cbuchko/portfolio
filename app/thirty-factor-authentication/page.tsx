@@ -9,6 +9,19 @@ const GAME_URL = gameCanonicalUrl(GAME)
 const DESCRIPTION =
   'A puzzle game where you verify yourself by completing thirty different authentication challenges.'
 
+const gameJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoGame',
+  name: 'Thirty Factor Authentication',
+  url: GAME_URL,
+  description: DESCRIPTION,
+  genre: 'Puzzle',
+  gamePlatform: 'Web browser',
+  playMode: 'SinglePlayer',
+  inLanguage: 'en',
+  image: `${GAME_URL}/thirty-factor-authentication/full-logo.png`,
+}
+
 export const generateMetadata = async () => {
   const host = portfolioHostName((await headers()).get('host'))
   const onGameDomain = host === GAME.host
@@ -48,5 +61,13 @@ export const viewport: Viewport = {
 }
 
 export default function ThirtyFactorAuthenticationContainer() {
-  return <ThirtyFactorAuthentication />
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(gameJsonLd) }}
+      />
+      <ThirtyFactorAuthentication />
+    </>
+  )
 }
