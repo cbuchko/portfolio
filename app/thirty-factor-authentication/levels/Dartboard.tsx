@@ -30,6 +30,7 @@ export const DartboardContent = ({ handleLevelAdvance, layout }: ContentProps) =
   const playMiss = useSfx('miss')
 
   const aimRef = useRef<Position>({ x: 0, y: 0 })
+  const soberStartRef = useRef(0)
   const frameRef = useRef<HTMLDivElement>(null)
   const blurRef = useRef<HTMLDivElement>(null)
   const ghostRef = useRef<HTMLDivElement>(null)
@@ -37,15 +38,15 @@ export const DartboardContent = ({ handleLevelAdvance, layout }: ContentProps) =
   const timeouts = useRef<NodeJS.Timeout[]>([])
 
   useEffect(() => {
-    const start = performance.now()
-    let last = start
+    soberStartRef.current = performance.now()
+    let last = soberStartRef.current
     let phase = 0
     let rafId = 0
 
     const tick = (now: number) => {
       const dt = (now - last) / 1000
       last = now
-      const drunk = drunkennessAt((now - start) / 1000)
+      const drunk = drunkennessAt((now - soberStartRef.current) / 1000)
       phase += dt * swaySpeed(drunk)
       const amplitude = swayAmplitude(drunk)
       const x = amplitude * (0.72 * Math.sin(1.3 * phase + 0.4) + 0.28 * Math.sin(3.1 * phase))
@@ -108,6 +109,7 @@ export const DartboardContent = ({ handleLevelAdvance, layout }: ContentProps) =
         }
       }, 500),
       setTimeout(() => {
+        if (!isBullseye) soberStartRef.current = performance.now()
         setIsPlaying(true)
         handleLevelAdvance(isBullseye)
       }, 2500)
