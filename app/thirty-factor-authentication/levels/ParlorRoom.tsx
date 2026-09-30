@@ -73,7 +73,6 @@ export const ParlorRoomContent = ({
         'parlor-letter--narrow': isNarrow,
       })}
     >
-      <p className="parlor-letter-date">Sunday evening</p>
       <p>Dear {firstName},</p>
       <p>
         Do you remember this game? We used to play it in the parlor when you were little. You would
