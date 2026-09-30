@@ -48,6 +48,7 @@ export const MapContent = ({ playerId, validateAdvance, cancelAdvance, layout }:
           selectedCity={selectedCity}
           markers={cities}
           className="map"
+          labels
         />
       </div>
     </>

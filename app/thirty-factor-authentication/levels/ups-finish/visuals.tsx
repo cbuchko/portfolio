@@ -247,10 +247,12 @@ export const DecoPropVisual = forwardRef<HTMLDivElement, DecoPropVisualProps>(
               <span className="nm-deco-zodiac-label">MOON</span>
               <span className="nm-deco-zodiac-sign">{ctx.zodiac.moon}</span>
             </span>
-            <span className="nm-deco-zodiac-row">
-              <span className="nm-deco-zodiac-label">RISING</span>
-              <span className="nm-deco-zodiac-sign">{ctx.zodiac.rising}</span>
-            </span>
+            {ctx.zodiac.ascendant && (
+              <span className="nm-deco-zodiac-row">
+                <span className="nm-deco-zodiac-label">ASCENDANT</span>
+                <span className="nm-deco-zodiac-sign">{ctx.zodiac.ascendant}</span>
+              </span>
+            )}
           </>
         )}
 

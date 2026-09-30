@@ -3,7 +3,14 @@
  */
 
 import { DECO_PROP_ORDER } from './prop-config'
-import type { DecoCopyContext, DecoSpawnId, ItemId, KioskState, TargetId, WorldPickup } from './types'
+import type {
+  DecoCopyContext,
+  DecoSpawnId,
+  ItemId,
+  KioskState,
+  TargetId,
+  WorldPickup,
+} from './types'
 
 /** Quiet wrong-house tell on the tracking slip. */
 export const NEIGHBOR_UNIT = '14B'
@@ -61,7 +68,7 @@ export const SCENE_PROP_COPY = {
   hedge: {
     blocked: 'A dense hedge. A UPS package is wedged deep inside.',
     freed: 'The package comes loose. The label is facing you now.',
-    taken: 'You take the package. You try to tear it open but it\'s sealed securely.',
+    taken: "You take the package. You try to tear it open but it's sealed securely.",
     emptied: 'The bush is trimmed back. The package is gone.',
   },
   mat: {
@@ -113,13 +120,17 @@ export const POST_IT_DECOY_CODES = [
 ] as const
 
 export const DECO_COPY: Record<DecoSpawnId, (ctx: DecoCopyContext) => string> = {
-  filmDvd: (ctx) =>
-    `A DVD: “${ctx.dvdTitles.filmDvd}.” Now's not the time to watch it.`,
+  filmDvd: (ctx) => `A DVD: “${ctx.dvdTitles.filmDvd}.” Now's not the time to watch it.`,
   postItNote: () => `A yellow Post-it, half unstuck. It says "Call mom".`,
   nightManorDvd: (ctx) =>
     `A DVD: “${ctx.dvdTitles.nightManorDvd}.” Now's not the time to watch it.`,
-  zodiacChart: (ctx) =>
-    `A crumpled zodiac chart. Sun: ${ctx.zodiac.sun}. Moon: ${ctx.zodiac.moon}. Rising: ${ctx.zodiac.rising}.`,
+  zodiacChart: (ctx) => {
+    const { sun, moon, ascendant } = ctx.zodiac
+    const placements = ascendant
+      ? `Sun: ${sun}. Moon: ${moon}. Ascendant: ${ascendant}.`
+      : `Sun: ${sun}. Moon: ${moon}.`
+    return `A crumpled zodiac chart. ${placements}`
+  },
   pizzaSlice: () => 'A cold slice. Leftovers from lunch.',
   fishBowl: () => 'An empty fish bowl. The fish are nowhere to be found.',
 }
@@ -130,11 +141,11 @@ export const formatZodiacSign = (sign: string) =>
   sign ? sign.charAt(0).toUpperCase() + sign.slice(1) : 'Unknown'
 
 export const parsePlayerZodiac = (zodiac: string) => {
-  const [sun, moon, rising] = zodiac.split('-')
+  const [sun, moon, ascendant] = zodiac.split('-')
   return {
     sun: formatZodiacSign(sun),
     moon: formatZodiacSign(moon),
-    rising: formatZodiacSign(rising),
+    ...(ascendant ? { ascendant: formatZodiacSign(ascendant) } : {}),
   }
 }
 
@@ -144,7 +155,7 @@ export const parsePlayerZodiac = (zodiac: string) => {
 
 export const ACTION_COPY = {
   openPackage:
-    'You open the package but you don\'t find the authentication key. Instead, a screwdriver, and a tracking slip for your neighbors address. This was not your package to open.',
+    "You open the package but you don't find the authentication key. Instead, a screwdriver, and a tracking slip for your neighbors address. This was not your package to open.",
   cutHedge: 'The trimmers tear through the hedge. The UPS package comes loose.',
   tapeTrimmer: 'You wrap duct tape around the join. It might actually hold.',
   trimmersNeedTape: 'The halves wobble apart. You need something to hold them together.',

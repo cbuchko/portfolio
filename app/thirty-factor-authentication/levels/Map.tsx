@@ -12,6 +12,7 @@ export type MapProps = {
   className: string
   onLoad?: () => void
   touchZoom?: boolean
+  labels?: boolean
 }
 
 export type Marker = { name: string; coordinates: number[]; message?: string }
@@ -43,6 +44,7 @@ export default function Map({
   className,
   onLoad,
   touchZoom = true,
+  labels = false,
 }: MapProps) {
   useEffect(() => {
     onLoad?.()
@@ -61,7 +63,7 @@ export default function Map({
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
-        url={`https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png?key=${process.env.NEXT_PUBLIC_CARTO_API_KEY ?? ''}`}
+        url={`https://{s}.basemaps.cartocdn.com/${labels ? 'light_all' : 'light_nolabels'}/{z}/{x}/{y}.png?key=${process.env.NEXT_PUBLIC_CARTO_API_KEY ?? ''}`}
       />
       {markers.map((city, idx) => (
         <LeafletMarker

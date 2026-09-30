@@ -1,5 +1,12 @@
 import type { Metadata } from 'next'
-import { Source_Sans_3, IBM_Plex_Mono, Poppins } from 'next/font/google'
+import {
+  Source_Sans_3,
+  IBM_Plex_Mono,
+  Poppins,
+  Crimson_Pro,
+  Playfair_Display,
+  UnifrakturMaguntia,
+} from 'next/font/google'
 import localFont from 'next/font/local'
 import './globals.css'
 import Script from 'next/script'
@@ -20,6 +27,32 @@ const poppins = Poppins({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   display: 'swap',
+})
+
+// Zodiac newspaper clipping. Not preloaded: only one level uses them.
+const horoscopeNameplate = UnifrakturMaguntia({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  preload: false,
+  variable: '--horoscope-nameplate',
+})
+
+const horoscopeHeadline = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['700', '900'],
+  display: 'swap',
+  preload: false,
+  variable: '--horoscope-headline',
+})
+
+const horoscopeBody = Crimson_Pro({
+  subsets: ['latin'],
+  weight: ['400', '600'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  preload: false,
+  variable: '--horoscope-body',
 })
 
 const liebeHeide = localFont({
@@ -53,7 +86,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossOrigin=""
       />
-      <body className={`${sourceSansPro.className} ${liebeHeide.variable} antialiased`}>
+      <body
+        className={`${sourceSansPro.className} ${liebeHeide.variable} ${horoscopeNameplate.variable} ${horoscopeHeadline.variable} ${horoscopeBody.variable} antialiased`}
+      >
         {children}
       </body>
     </html>

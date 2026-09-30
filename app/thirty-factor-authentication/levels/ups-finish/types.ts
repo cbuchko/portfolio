@@ -65,7 +65,8 @@ export type WorldPickup = {
 export type ZodiacDisplay = {
   sun: string
   moon: string
-  rising: string
+  /** Absent when the birth time isn't reliable enough to name one. */
+  ascendant?: string
 }
 
 export type DecoCopyContext = {
