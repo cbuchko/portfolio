@@ -87,38 +87,6 @@ const playJumpYelp = (progress: number, tired: boolean) => {
   }
 }
 
-/** Cartoon brake screech: a short burst of band-passed noise sliding down. */
-const playSkid = () => {
-  const ctx = audioEngine.getContext()
-  if (!ctx || ctx.state !== 'running') return
-  const length = Math.floor(ctx.sampleRate * 0.16)
-  const buffer = ctx.createBuffer(1, length, ctx.sampleRate)
-  const data = buffer.getChannelData(0)
-  for (let i = 0; i < length; i++) data[i] = Math.random() * 2 - 1
-  const source = ctx.createBufferSource()
-  source.buffer = buffer
-  const filter = ctx.createBiquadFilter()
-  filter.type = 'bandpass'
-  filter.Q.value = 6
-  const gain = ctx.createGain()
-  const now = ctx.currentTime
-  filter.frequency.setValueAtTime(3200, now)
-  filter.frequency.exponentialRampToValueAtTime(1400, now + 0.15)
-  gain.gain.setValueAtTime(0.0001, now)
-  gain.gain.exponentialRampToValueAtTime(0.12, now + 0.01)
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15)
-  source.connect(filter)
-  filter.connect(gain)
-  gain.connect(ctx.destination)
-  source.start(now)
-  source.stop(now + 0.16)
-  source.onended = () => {
-    source.disconnect()
-    filter.disconnect()
-    gain.disconnect()
-  }
-}
-
 /** Viewport box the oval is allowed to land in. Anything inside is fair game. */
 const screenBox = () => {
   const viewport = window.visualViewport
@@ -485,7 +453,6 @@ const Scanner = ({
         later(travelMs * 0.85, () => {
           if (completeRef.current) return
           setLandCount((count) => count + 1)
-          playSkid()
         })
       }, windMs)
     }
