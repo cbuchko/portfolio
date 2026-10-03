@@ -18,12 +18,11 @@ export const GAMES: GameSite[] = [
   {
     path: '/thirty-factor-authentication',
     host: 'thirtyfactorauthentication.com',
-    extraPaths: ['/factor-relay'],
+    extraPaths: ['/factor-relay', '/api/movies'],
   },
 ]
 
-export const portfolioHostName = (header: string | null) =>
-  header?.split(':')[0]?.toLowerCase()
+export const portfolioHostName = (header: string | null) => header?.split(':')[0]?.toLowerCase()
 
 /** Only these hosts should send a dedicated game path to its public domain. */
 export const PORTFOLIO_HOSTS = new Set(['connorbuchko.com', 'www.connorbuchko.com'])

@@ -226,13 +226,11 @@ const MovieSearch = ({
         className=""
       />
       {movieResults.length > 0 && isDropdownVisible && (
-        <ul
-          className="absolute bottom-full z-10 mb-1 max-h-[240px] w-full overflow-y-auto rounded-md border bg-white"
-        >
+        <ul className="absolute bottom-full z-10 mb-1 max-h-[240px] w-full overflow-y-auto rounded-md border bg-white">
           {movieResults.map((title, idx) => (
             <li
               key={idx}
-              className="p-2 py-3 min-h-11 hover:bg-gray-100 cursor-pointer"
+              className="min-h-11 cursor-pointer p-2 py-3 hover:bg-gray-100"
               onPointerDown={(e) => {
                 e.preventDefault()
                 pickTitle(title)
