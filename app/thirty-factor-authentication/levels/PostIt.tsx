@@ -7,6 +7,8 @@ import { useEffectInitializer } from '@/app/utils/useEffectUnsafe'
 import { useElementDrag } from '../useElementDrag'
 import { readViewportSize } from '../useTfaLayout'
 
+const normalizeKeyword = (value: string) => value.trim().toLocaleLowerCase()
+
 const selectCode = () => {
   const index = Math.floor(Math.random() * codes.length)
   return codes[index]
@@ -30,7 +32,8 @@ export const PostItContent = ({
 
   const handleInputChange = (input: string) => {
     setKeywordInput(input)
-    if (code.toLocaleLowerCase() === input.toLocaleLowerCase()) {
+    // Phones often commit a trailing space when the keyboard closes on Submit.
+    if (normalizeKeyword(code) === normalizeKeyword(input)) {
       validateAdvance()
     } else {
       cancelAdvance()
